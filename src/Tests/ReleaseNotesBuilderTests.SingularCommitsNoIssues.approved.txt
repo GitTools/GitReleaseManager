@@ -1,0 +1,5 @@
+﻿As part of this release we had [1 commit](https://github.com/TestUser/FakeRepo/commits/1.2.3).
+
+
+## Where to get it
+You can download this release from [nuget](https://www.nuget.org/profiles/nservicebus/)

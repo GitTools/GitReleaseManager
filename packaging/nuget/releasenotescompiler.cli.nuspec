@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <id>GitHubReleaseNotes</id>
+    <title>Generates release notes</title>
+    <version>$version$</version>
+    <authors>NServiceBus Ltd</authors>
+    <owners>Particular et al</owners>
+    <projectUrl>https://github.com/Particular/GitHubReleaseNotes</projectUrl>
+    <description>Create release notes in markdown given a GH milestone</description>
+    <tags>github release nptes</tags>
+  </metadata>
+  <files>
+    <file src="..\..\src\App\bin\release\*.exe" target="tools" />
+  </files>
+</package>

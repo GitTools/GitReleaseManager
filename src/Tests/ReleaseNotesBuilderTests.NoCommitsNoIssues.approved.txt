@@ -1,0 +1,5 @@
+﻿
+
+
+## Where to get it
+You can download this release from [nuget](https://www.nuget.org/profiles/nservicebus/)
