@@ -1,15 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Octokit;
+﻿//-----------------------------------------------------------------------
+// <copyright file="ReleaseManager.cs" company="gep13">
+//     Copyright (c) gep13. All rights reserved.
+// </copyright>
+//-----------------------------------------------------------------------
 
 namespace ReleaseNotesCompiler
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using Octokit;
+
     public class ReleaseManager
     {
-        GitHubClient gitHubClient;
-        string organization;
+        private GitHubClient gitHubClient;
+        private string organization;
 
         public ReleaseManager(GitHubClient gitHubClient, string organization)
         {
@@ -19,43 +25,39 @@ namespace ReleaseNotesCompiler
 
         public async Task<List<ReleaseUpdateRequired>> GetReleasesInNeedOfUpdates()
         {
-            var repositories = await gitHubClient.Repository.GetAllForOrg(organization);
-
+            var repositories = await this.gitHubClient.Repository.GetAllForOrg(this.organization);
 
             var releases = new List<ReleaseUpdateRequired>();
 
             foreach (var repository in repositories.Where(r =>
-                r.Name != "NServiceBus" &&  //until we can patch octokit
-                r.Name != "ServiceInsight" && //until we can patch octokit
+                r.Name != "NServiceBus" &&  // until we can patch octokit
+                r.Name != "ServiceInsight" && // until we can patch octokit
                 r.HasIssues))
             {
                 Console.Out.WriteLine("Checking " + repository.Name);
 
-                var milestones = await GetMilestones(repository.Name);
+                var milestones = await this.GetMilestones(repository.Name);
 
-                var releasesForThisRepo = await gitHubClient.Release.GetAll(organization, repository.Name);
+                var releasesForThisRepo = await this.gitHubClient.Release.GetAll(this.organization, repository.Name);
 
                 foreach (var milestone in milestones)
                 {
-                    var potentialRelease = milestone.Title.Replace(" ", "");
+                    var potentialRelease = milestone.Title.Replace(" ", string.Empty);
 
                     var release = releasesForThisRepo.SingleOrDefault(r => r.Name == potentialRelease);
 
                     if (release != null)
                     {
+                        var releaseUpdatedAt = this.GetUpdatedAt(release).ToUniversalTime();
 
-                        var releaseUpdatedAt = GetUpdatedAt(release).ToUniversalTime();
+                        var allIssues = await this.gitHubClient.AllIssuesForMilestone(milestone);
 
-                        var allIssues = await gitHubClient.AllIssuesForMilestone(milestone);
-
-                        var latestIssueModification =
-                            allIssues.Where(i => i.State == ItemState.Closed).Max(i => i.ClosedAt.Value).UtcDateTime;
+                        var latestIssueModification = allIssues.Where(i => i.State == ItemState.Closed).Max(i => i.ClosedAt.Value).UtcDateTime;
 
                         Console.Out.WriteLine("Release exists for milestone {0} - Last updated at: {1}, Issues updated at:{2}", potentialRelease, releaseUpdatedAt, latestIssueModification);
 
                         if (releaseUpdatedAt < latestIssueModification)
                         {
-
                             releases.Add(new ReleaseUpdateRequired
                             {
                                 Release = release.Name,
@@ -75,18 +77,15 @@ namespace ReleaseNotesCompiler
                             NeedsToBeCreated = true
                         });
                     }
-
                 }
-
-
             }
 
             return releases;
         }
 
-        DateTime GetUpdatedAt(Release release)
+        private DateTime GetUpdatedAt(Release release)
         {
-            //we try to parse our footer
+            // we try to parse our footer
             var temp = release.Body.Split(new[] { " at " }, StringSplitOptions.RemoveEmptyEntries);
 
             if (!temp.Any())
@@ -104,10 +103,10 @@ namespace ReleaseNotesCompiler
             return result;
         }
 
-        async Task<List<Milestone>> GetMilestones(string repository)
+        private async Task<List<Milestone>> GetMilestones(string repository)
         {
-            var milestonesClient = gitHubClient.Issue.Milestone;
-            var openList = await milestonesClient.GetForRepository(organization, repository, new MilestoneRequest { State = ItemState.Open });
+            var milestonesClient = this.gitHubClient.Issue.Milestone;
+            var openList = await milestonesClient.GetForRepository(this.organization, repository, new MilestoneRequest { State = ItemState.Open });
 
             return openList.ToList();
         }

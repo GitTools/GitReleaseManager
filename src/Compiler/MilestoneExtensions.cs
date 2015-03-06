@@ -1,10 +1,15 @@
-using System;
+//-----------------------------------------------------------------------
+// <copyright file="MilestoneExtensions.cs" company="gep13">
+//     Copyright (c) gep13. All rights reserved.
+// </copyright>
+//-----------------------------------------------------------------------
 
 namespace ReleaseNotesCompiler
 {
+    using System;
     using Octokit;
 
-    static class MilestoneExtensions
+    public static class MilestoneExtensions
     {
         internal static Version Version(this Milestone ver)
         {

@@ -1,9 +1,12 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="AssemblyInfo.cs" company="gep13">
+// <copyright file="PublishSubOptions.cs" company="gep13">
 //     Copyright (c) gep13. All rights reserved.
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System.Reflection;
-
-[assembly: AssemblyCompany("Particular")]
+namespace ReleaseNotesCompiler.CLI
+{
+    public class PublishSubOptions : CommonSubOptions
+    {
+    }
+}

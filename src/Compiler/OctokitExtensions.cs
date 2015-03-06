@@ -1,10 +1,16 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Octokit;
+﻿//-----------------------------------------------------------------------
+// <copyright file="OctokitExtensions.cs" company="gep13">
+//     Copyright (c) gep13. All rights reserved.
+// </copyright>
+//-----------------------------------------------------------------------
 
 namespace ReleaseNotesCompiler
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using Octokit;
+
     public static class OctokitExtensions
     {
         public static bool IsPullRequest(this Issue issue)
@@ -32,7 +38,7 @@ namespace ReleaseNotesCompiler
             return openIssues.Union(closedIssues);
         }
 
-        public static string HtmlUrl(this  Milestone milestone)
+        public static string HtmlUrl(this Milestone milestone)
         {
             var parts = milestone.Url.AbsolutePath.Split('/');
             var user = parts[2];
@@ -40,7 +46,7 @@ namespace ReleaseNotesCompiler
             return string.Format("https://github.com/{0}/{1}/issues?milestone={2}&state=closed", user, repository, milestone.Number);
         }
 
-        static IEnumerable<string> FixHeaders(IEnumerable<string> lines)
+        private static IEnumerable<string> FixHeaders(IEnumerable<string> lines)
         {
             var inCode = false;
             foreach (var line in lines)
@@ -49,6 +55,7 @@ namespace ReleaseNotesCompiler
                 {
                     inCode = !inCode;
                 }
+
                 if (!inCode && line.StartsWith("#"))
                 {
                     yield return "###" + line;

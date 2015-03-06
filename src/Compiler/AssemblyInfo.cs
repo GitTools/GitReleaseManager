@@ -1,4 +1,10 @@
-﻿using System.Reflection;
+﻿//-----------------------------------------------------------------------
+// <copyright file="AssemblyInfo.cs" company="gep13">
+//     Copyright (c) gep13. All rights reserved.
+// </copyright>
+//-----------------------------------------------------------------------
+
+using System.Reflection;
 
 [assembly: AssemblyTitle("ReleaseNotesCompiler")]
 [assembly: AssemblyProduct("ReleaseNotesCompiler")]
