@@ -95,7 +95,7 @@
             Append(issues, "Bug", stringBuilder);
         }
 
-        static async Task AddFooter(StringBuilder stringBuilder)
+        async Task AddFooter(StringBuilder stringBuilder)
         {
             var file = new FileInfo("footer.md");
 
@@ -106,8 +106,8 @@
 
             if (!file.Exists)
             {
-                stringBuilder.Append(@"## Where to get it
-You can download this release from [chocolatey](https://chocolatey.org/packages/ChocolateyGUI)");
+                stringBuilder.AppendFormat(@"### Where to get it
+You can download this release from [chocolatey](https://chocolatey.org/packages/ChocolateyGUI/{0})", this.milestoneTitle);
                 return;
             }
 
