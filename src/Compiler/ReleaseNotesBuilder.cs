@@ -178,7 +178,7 @@ namespace ReleaseNotesCompiler
 
             if (this.targetMilestone == null)
             {
-                throw new Exception(string.Format("Could not find milestone for '{0}'.", this.milestoneTitle));
+                throw new InvalidOperationException(string.Format("Could not find milestone for '{0}'.", this.milestoneTitle));
             }
         }
     }
