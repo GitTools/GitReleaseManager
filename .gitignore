@@ -36,3 +36,13 @@ logs
 run-git.cmd
 src/Chocolatey/Build/*
 App_Packages
+
+# =========================
+# Custom Additions
+# =========================
+
+# Where everything from the build is put
+BuildArtifacts
+
+# Temporary files that kdiff generates
+*.orig
