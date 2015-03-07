@@ -57,10 +57,8 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="DefaultGitHubClient.cs" />
     <Compile Include="IGitHubClient.cs" />
-    <Compile Include="ReleaseManager.cs" />
     <Compile Include="ReleaseNotesBuilder.cs" />
     <Compile Include="OctokitExtensions.cs" />
-    <Compile Include="ReleaseUpdateRequired.cs" />
     <Compile Include="MilestoneExtensions.cs" />
   </ItemGroup>
   <ItemGroup>

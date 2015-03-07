@@ -61,7 +61,6 @@
     <Compile Include="ClipBoardHelper.cs" />
     <Compile Include="FakeGitHubClient.cs" />
     <Compile Include="Helper.cs" />
-    <Compile Include="ReleaseManagerTests.cs" />
     <Compile Include="ReleaseNotesBuilderIntegrationTests.cs" />
     <Compile Include="ClientBuilder.cs" />
     <Compile Include="ReleaseNotesBuilderTests.cs" />
