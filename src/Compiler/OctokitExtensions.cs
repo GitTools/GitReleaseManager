@@ -6,6 +6,7 @@
 
 namespace ReleaseNotesCompiler
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -15,6 +16,11 @@ namespace ReleaseNotesCompiler
     {
         public static bool IsPullRequest(this Issue issue)
         {
+            if (issue == null)
+            {
+                throw new ArgumentNullException("issue");
+            }
+
             return issue.PullRequest != null;
         }
 
@@ -38,33 +44,18 @@ namespace ReleaseNotesCompiler
             return openIssues.Union(closedIssues);
         }
 
-        public static string HtmlUrl(this Milestone milestone)
+        public static Uri HtmlUrl(this Milestone milestone)
         {
+            if (milestone == null)
+            {
+                throw new ArgumentNullException("milestone");
+            }
+
             var parts = milestone.Url.AbsolutePath.Split('/');
             var user = parts[2];
             var repository = parts[3];
-            return string.Format("https://github.com/{0}/{1}/issues?milestone={2}&state=closed", user, repository, milestone.Number);
-        }
 
-        private static IEnumerable<string> FixHeaders(IEnumerable<string> lines)
-        {
-            var inCode = false;
-            foreach (var line in lines)
-            {
-                if (line.StartsWith("```"))
-                {
-                    inCode = !inCode;
-                }
-
-                if (!inCode && line.StartsWith("#"))
-                {
-                    yield return "###" + line;
-                }
-                else
-                {
-                    yield return line;
-                }
-            }
+            return new Uri(string.Format("https://github.com/{0}/{1}/issues?milestone={2}&state=closed", user, repository, milestone.Number));
         }
     }
 }

@@ -12,7 +12,7 @@ namespace ReleaseNotesCompiler.CLI
     public abstract class CommonSubOptions
     {
         [Option('u', "username", HelpText = "The username to access GitHub with.", Required = true)]
-        public string Username { get; set; }
+        public string UserName { get; set; }
         [Option('p', "password", HelpText = "The password to access GitHub with.", Required = true)]
         public string Password { get; set; }
         [Option('o', "owner", HelpText = "The owner of the repository.", Required = true)]
@@ -24,7 +24,7 @@ namespace ReleaseNotesCompiler.CLI
 
         public GitHubClient CreateGitHubClient()
         {
-            var creds = new Credentials(this.Username, this.Password);
+            var creds = new Credentials(this.UserName, this.Password);
             var github = new GitHubClient(new ProductHeaderValue("ReleaseNotesCompiler")) { Credentials = creds };
             return github;
         }

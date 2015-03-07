@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReleaseNotesCompiler", "Compiler\ReleaseNotesCompiler.csproj", "{B02A026E-CA3A-48F4-BBA9-EB337B0A2035}"
 EndProject
@@ -17,6 +17,14 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuSpecs", "NuSpecs", "{87E2E61F-5F5D-45F1-8C4A-98E0BF8CA01D}"
 	ProjectSection(SolutionItems) = preProject
 		..\packaging\nuget\releasenotescompiler.cli.nuspec = ..\packaging\nuget\releasenotescompiler.cli.nuspec
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BuildScripts", "BuildScripts", "{2C8F25C5-0009-409B-8935-37BF6A5ED656}"
+	ProjectSection(SolutionItems) = preProject
+		..\BuildScripts\CodeAnalysis.props = ..\BuildScripts\CodeAnalysis.props
+		..\BuildScripts\CodeAnalysisReport.xsl = ..\BuildScripts\CodeAnalysisReport.xsl
+		..\BuildScripts\StyleCop.props = ..\BuildScripts\StyleCop.props
+		..\BuildScripts\StyleCopReport.xsl = ..\BuildScripts\StyleCopReport.xsl
 	EndProjectSection
 EndProject
 Global

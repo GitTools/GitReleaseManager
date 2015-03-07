@@ -48,7 +48,7 @@ namespace ReleaseNotesCompiler
 
                     if (release != null)
                     {
-                        var releaseUpdatedAt = this.GetUpdatedAt(release).ToUniversalTime();
+                        var releaseUpdatedAt = GetUpdatedAt(release).ToUniversalTime();
 
                         var allIssues = await this.gitHubClient.AllIssuesForMilestone(milestone);
 
@@ -83,7 +83,7 @@ namespace ReleaseNotesCompiler
             return releases;
         }
 
-        private DateTime GetUpdatedAt(Release release)
+        private static DateTime GetUpdatedAt(Release release)
         {
             // we try to parse our footer
             var temp = release.Body.Split(new[] { " at " }, StringSplitOptions.RemoveEmptyEntries);

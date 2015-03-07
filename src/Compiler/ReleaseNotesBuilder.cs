@@ -69,7 +69,7 @@ namespace ReleaseNotesCompiler
             stringBuilder.AppendLine(this.targetMilestone.Description);
             stringBuilder.AppendLine();
 
-            this.AddIssues(stringBuilder, issues);
+            AddIssues(stringBuilder, issues);
 
             await this.AddFooter(stringBuilder);
 
@@ -87,7 +87,7 @@ namespace ReleaseNotesCompiler
             if (count != 1)
             {
                 var message = string.Format("Bad Issue {0} expected to find a single label with either 'Bug', 'Internal refactoring', 'Improvement' or 'Feature'.", issue.HtmlUrl);
-                throw new Exception(message);
+                throw new InvalidOperationException(message);
             }
         }
 
@@ -111,11 +111,11 @@ namespace ReleaseNotesCompiler
             return string.Format("https://github.com/{0}/{1}/compare/{2}...{3}", this.user, this.repository, previousMilestone.Title, this.targetMilestone.Title);
         }
 
-        private void AddIssues(StringBuilder stringBuilder, List<Issue> issues)
+        private static void AddIssues(StringBuilder stringBuilder, List<Issue> issues)
         {
-            this.Append(issues, "Feature", stringBuilder);
-            this.Append(issues, "Improvement", stringBuilder);
-            this.Append(issues, "Bug", stringBuilder);
+            Append(issues, "Feature", stringBuilder);
+            Append(issues, "Improvement", stringBuilder);
+            Append(issues, "Bug", stringBuilder);
         }
 
         private async Task AddFooter(StringBuilder stringBuilder)
@@ -155,7 +155,7 @@ namespace ReleaseNotesCompiler
             return issues;
         }
 
-        private void Append(IEnumerable<Issue> issues, string label, StringBuilder stringBuilder)
+        private static void Append(IEnumerable<Issue> issues, string label, StringBuilder stringBuilder)
         {
             var features = issues.Where(x => x.Labels.Any(l => l.Name == label)).ToList();
 
