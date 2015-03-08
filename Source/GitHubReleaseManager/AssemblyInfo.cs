@@ -6,6 +6,7 @@
 
 using System;
 using System.Reflection;
+using System.Resources;
 using System.Runtime.InteropServices;
 
 [assembly: AssemblyTitle("GitHubReleaseManager")]
@@ -14,6 +15,12 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyFileVersion("1.0.0.0")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyInformationalVersion("1.0.0.0")]
+[assembly: AssemblyConfiguration("")]
+[assembly: AssemblyCompany("gep13")]
+[assembly: AssemblyCopyright("Copyright 2015 - Gary Ewan Park")]
+[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCulture("")]
+[assembly: NeutralResourcesLanguage("en-GB")]
 [assembly: CLSCompliant(false)]
 [assembly: ComVisible(false)]
 
