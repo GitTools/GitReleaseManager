@@ -11,7 +11,6 @@ namespace GitHubReleaseManager.Cli
     using System.Linq;
     using System.Threading.Tasks;
     using CommandLine;
-    using CommandLine.Text;
     using Octokit;
     using FileMode = System.IO.FileMode;
 
