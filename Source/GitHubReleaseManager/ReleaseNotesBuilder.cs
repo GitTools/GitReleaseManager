@@ -8,6 +8,8 @@ namespace GitHubReleaseManager
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Globalization;
     using System.IO;
     using System.Linq;
     using System.Text;
@@ -20,7 +22,7 @@ namespace GitHubReleaseManager
         private string user;
         private string repository;
         private string milestoneTitle;
-        private List<Milestone> milestones;
+        private ReadOnlyCollection<Milestone> milestones;
         private Milestone targetMilestone;
 
         public ReleaseNotesBuilder(IGitHubClient gitHubClient, string user, string repository, string milestoneTitle)
@@ -86,9 +88,33 @@ namespace GitHubReleaseManager
 
             if (count != 1)
             {
-                var message = string.Format("Bad Issue {0} expected to find a single label with either 'Bug', 'Internal refactoring', 'Improvement' or 'Feature'.", issue.HtmlUrl);
+                var message = string.Format(CultureInfo.InvariantCulture, "Bad Issue {0} expected to find a single label with either 'Bug', 'Internal refactoring', 'Improvement' or 'Feature'.", issue.HtmlUrl);
                 throw new InvalidOperationException(message);
             }
+        }
+
+        private static void Append(IEnumerable<Issue> issues, string label, StringBuilder stringBuilder)
+        {
+            var features = issues.Where(x => x.Labels.Any(l => l.Name == label)).ToList();
+
+            if (features.Count > 0)
+            {
+                stringBuilder.AppendFormat(features.Count == 1 ? "__{0}__\r\n\r\n" : "__{0}s__\r\n\r\n", label);
+
+                foreach (var issue in features)
+                {
+                    stringBuilder.AppendFormat("- [__#{0}__]({1}) {2}\r\n", issue.Number, issue.HtmlUrl, issue.Title);
+                }
+
+                stringBuilder.AppendLine();
+            }
+        }
+
+        private static void AddIssues(StringBuilder stringBuilder, List<Issue> issues)
+        {
+            Append(issues, "Feature", stringBuilder);
+            Append(issues, "Improvement", stringBuilder);
+            Append(issues, "Bug", stringBuilder);
         }
 
         private Milestone GetPreviousMilestone()
@@ -105,19 +131,12 @@ namespace GitHubReleaseManager
         {
             if (previousMilestone == null)
             {
-                return string.Format("https://github.com/{0}/{1}/commits/{2}", this.user, this.repository, this.targetMilestone.Title);
+                return string.Format(CultureInfo.InvariantCulture, "https://github.com/{0}/{1}/commits/{2}", this.user, this.repository, this.targetMilestone.Title);
             }
 
-            return string.Format("https://github.com/{0}/{1}/compare/{2}...{3}", this.user, this.repository, previousMilestone.Title, this.targetMilestone.Title);
+            return string.Format(CultureInfo.InvariantCulture, "https://github.com/{0}/{1}/compare/{2}...{3}", this.user, this.repository, previousMilestone.Title, this.targetMilestone.Title);
         }
-
-        private static void AddIssues(StringBuilder stringBuilder, List<Issue> issues)
-        {
-            Append(issues, "Feature", stringBuilder);
-            Append(issues, "Improvement", stringBuilder);
-            Append(issues, "Bug", stringBuilder);
-        }
-
+        
         private async Task AddFooter(StringBuilder stringBuilder)
         {
             var file = new FileInfo("footer.md");
@@ -155,30 +174,13 @@ namespace GitHubReleaseManager
             return issues;
         }
 
-        private static void Append(IEnumerable<Issue> issues, string label, StringBuilder stringBuilder)
-        {
-            var features = issues.Where(x => x.Labels.Any(l => l.Name == label)).ToList();
-
-            if (features.Count > 0)
-            {
-                stringBuilder.AppendFormat(features.Count == 1 ? "__{0}__\r\n\r\n" : "__{0}s__\r\n\r\n", label);
-
-                foreach (var issue in features)
-                {
-                    stringBuilder.AppendFormat("- [__#{0}__]({1}) {2}\r\n", issue.Number, issue.HtmlUrl, issue.Title);
-                }
-
-                stringBuilder.AppendLine();
-            }
-        }
-
         private void GetTargetMilestone()
         {
             this.targetMilestone = this.milestones.FirstOrDefault(x => x.Title == this.milestoneTitle);
 
             if (this.targetMilestone == null)
             {
-                throw new InvalidOperationException(string.Format("Could not find milestone for '{0}'.", this.milestoneTitle));
+                throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "Could not find milestone for '{0}'.", this.milestoneTitle));
             }
         }
     }

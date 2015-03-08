@@ -1,4 +1,10 @@
-﻿namespace GitHubReleaseManager.Tests
+﻿//-----------------------------------------------------------------------
+// <copyright file="ClientBuilder.cs" company="gep13">
+//     Copyright (c) gep13. All rights reserved.
+// </copyright>
+//-----------------------------------------------------------------------
+
+namespace GitHubReleaseManager.Tests
 {
     using Octokit;
     using Octokit.Internal;

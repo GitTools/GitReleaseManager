@@ -8,6 +8,7 @@ namespace GitHubReleaseManager
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
     using System.Threading.Tasks;
     using Octokit;
@@ -55,7 +56,7 @@ namespace GitHubReleaseManager
             var user = parts[2];
             var repository = parts[3];
 
-            return new Uri(string.Format("https://github.com/{0}/{1}/issues?milestone={2}&state=closed", user, repository, milestone.Number));
+            return new Uri(string.Format(CultureInfo.InvariantCulture, "https://github.com/{0}/{1}/issues?milestone={2}&state=closed", user, repository, milestone.Number));
         }
     }
 }

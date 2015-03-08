@@ -7,6 +7,7 @@
 namespace GitHubReleaseManager
 {
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Threading.Tasks;
     using Octokit;
 
@@ -16,6 +17,7 @@ namespace GitHubReleaseManager
 
         Task<List<Issue>> GetIssues(Milestone targetMilestone);
 
-        List<Milestone> GetMilestones();
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Not appropriate")]
+        ReadOnlyCollection<Milestone> GetMilestones();
     }
 }

@@ -7,6 +7,7 @@
 namespace GitHubReleaseManager
 {
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Linq;
     using System.Threading.Tasks;
     using Octokit;
@@ -51,7 +52,7 @@ namespace GitHubReleaseManager
             return allIssues.Where(x => x.State == ItemState.Closed).ToList();
         }
 
-        public List<Milestone> GetMilestones()
+        public ReadOnlyCollection<Milestone> GetMilestones()
         {
             var milestonesClient = this.gitHubClient.Issue.Milestone;
             var closed = milestonesClient.GetForRepository(
@@ -70,7 +71,7 @@ namespace GitHubReleaseManager
                         State = ItemState.Open
                     }).Result;
 
-            return closed.Concat(open).ToList();
+            return new ReadOnlyCollection<Milestone>(closed.Concat(open).ToList());
         }
     }
 }

@@ -1,8 +1,14 @@
-﻿namespace GitHubReleaseManager.Tests
+﻿//-----------------------------------------------------------------------
+// <copyright file="ReleaseNotesBuilderIntegrationTests.cs" company="gep13">
+//     Copyright (c) gep13. All rights reserved.
+// </copyright>
+//-----------------------------------------------------------------------
+
+namespace GitHubReleaseManager.Tests
 {
     using System.Diagnostics;
-    using NUnit.Framework;
     using GitHubReleaseManager;
+    using NUnit.Framework;
 
     [TestFixture]
     public class ReleaseNotesBuilderIntegrationTests

@@ -1,4 +1,10 @@
-﻿namespace GitHubReleaseManager.Tests
+﻿//-----------------------------------------------------------------------
+// <copyright file="ReleaseNotesBuilderTests.cs" company="gep13">
+//     Copyright (c) gep13. All rights reserved.
+// </copyright>
+//-----------------------------------------------------------------------
+
+namespace GitHubReleaseManager.Tests
 {
     using System;
     using System.Linq;
@@ -63,7 +69,7 @@
             AcceptTest(5, CreateIssue(1, "Bug"));
         }
 
-        static void AcceptTest(int commits, params Issue[] issues)
+        private static void AcceptTest(int commits, params Issue[] issues)
         {
             var fakeClient = new FakeGitHubClient();
 
@@ -83,7 +89,7 @@
             Approvals.Verify(notes);
         }
 
-        static Milestone CreateMilestone(string version)
+        private static Milestone CreateMilestone(string version)
         {
             return new Milestone
                 {
@@ -92,7 +98,7 @@
                 };
         }
 
-        static Issue CreateIssue(int number, params string[] labels)
+        private static Issue CreateIssue(int number, params string[] labels)
         {
             return new Issue
                 {

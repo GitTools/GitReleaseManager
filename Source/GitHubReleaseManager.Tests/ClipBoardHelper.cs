@@ -1,9 +1,15 @@
-﻿namespace GitHubReleaseManager.Tests
+﻿//-----------------------------------------------------------------------
+// <copyright file="ClipBoardHelper.cs" company="gep13">
+//     Copyright (c) gep13. All rights reserved.
+// </copyright>
+//-----------------------------------------------------------------------
+
+namespace GitHubReleaseManager.Tests
 {
     using System.Threading;
     using System.Windows.Forms;
 
-    class ClipBoardHelper
+    public class ClipBoardHelper
     {
         public static void SetClipboard(string result)
         {
