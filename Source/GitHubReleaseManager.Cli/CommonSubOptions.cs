@@ -4,7 +4,7 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-namespace ReleaseNotesCompiler.CLI
+namespace GitHubReleaseManager.Cli
 {
     using CommandLine;
     using Octokit;
@@ -25,7 +25,7 @@ namespace ReleaseNotesCompiler.CLI
         public GitHubClient CreateGitHubClient()
         {
             var creds = new Credentials(this.UserName, this.Password);
-            var github = new GitHubClient(new ProductHeaderValue("ReleaseNotesCompiler")) { Credentials = creds };
+            var github = new GitHubClient(new ProductHeaderValue("GitHubReleaseManager")) { Credentials = creds };
             return github;
         }
     }

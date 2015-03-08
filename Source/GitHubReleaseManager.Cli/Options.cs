@@ -4,7 +4,7 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-namespace ReleaseNotesCompiler.CLI
+namespace GitHubReleaseManager.Cli
 {
     using CommandLine;
     using CommandLine.Text;

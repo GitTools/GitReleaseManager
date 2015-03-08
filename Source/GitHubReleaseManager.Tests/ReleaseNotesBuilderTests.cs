@@ -1,4 +1,4 @@
-﻿namespace ReleaseNotesCompiler.Tests
+﻿namespace GitHubReleaseManager.Tests
 {
     using System;
     using System.Linq;

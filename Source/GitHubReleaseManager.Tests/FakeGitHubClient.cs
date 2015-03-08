@@ -1,9 +1,9 @@
-﻿namespace ReleaseNotesCompiler.Tests
+﻿namespace GitHubReleaseManager.Tests
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using Octokit;
-    using IGitHubClient = ReleaseNotesCompiler.IGitHubClient;
+    using IGitHubClient = GitHubReleaseManager.IGitHubClient;
 
     public class FakeGitHubClient : IGitHubClient
     {

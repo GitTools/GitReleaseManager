@@ -4,7 +4,7 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-namespace ReleaseNotesCompiler
+namespace GitHubReleaseManager
 {
     using System;
     using Octokit;

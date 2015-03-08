@@ -1,8 +1,8 @@
-﻿namespace ReleaseNotesCompiler.Tests
+﻿namespace GitHubReleaseManager.Tests
 {
     using System.Diagnostics;
     using NUnit.Framework;
-    using ReleaseNotesCompiler;
+    using GitHubReleaseManager;
 
     [TestFixture]
     public class ReleaseNotesBuilderIntegrationTests

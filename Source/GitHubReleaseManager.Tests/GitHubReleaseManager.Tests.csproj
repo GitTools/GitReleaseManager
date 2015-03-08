@@ -7,8 +7,8 @@
     <ProjectGuid>{FAD045A3-CF63-48CA-BA49-8F4D79E3EF4F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ReleaseNotesCompiler.Tests</RootNamespace>
-    <AssemblyName>ReleaseNotesCompiler.Tests</AssemblyName>
+    <RootNamespace>GitHubReleaseManager.Tests</RootNamespace>
+    <AssemblyName>GitHubReleaseManager.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
@@ -71,9 +71,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Compiler\ReleaseNotesCompiler.csproj">
+    <ProjectReference Include="..\GitHubReleaseManager\GitHubReleaseManager.csproj">
       <Project>{B02A026E-CA3A-48F4-BBA9-EB337B0A2035}</Project>
-      <Name>ReleaseNotesCompiler</Name>
+      <Name>GitHubReleaseManager</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

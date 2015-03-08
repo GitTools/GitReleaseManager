@@ -1,4 +1,4 @@
-﻿namespace ReleaseNotesCompiler.Tests
+﻿namespace GitHubReleaseManager.Tests
 {
     using Octokit;
     using Octokit.Internal;
@@ -12,7 +12,7 @@
             var httpClient = new HttpClientAdapter(Helper.Proxy);
 
             var connection = new Connection(
-                new ProductHeaderValue("ReleaseNotesCompiler"),
+                new ProductHeaderValue("GitHubReleaseManager"),
                 GitHubClient.GitHubApiUrl,
                 credentialStore,
                 httpClient,

@@ -1,10 +1,12 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="AssemblyInfo.cs" company="gep13">
+// <copyright file="PublishSubOptions.cs" company="gep13">
 //     Copyright (c) gep13. All rights reserved.
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System.Reflection;
-
-[assembly: AssemblyTitle("ReleaseNotesCompiler")]
-[assembly: AssemblyProduct("ReleaseNotesCompiler")]
+namespace GitHubReleaseManager.Cli
+{
+    public class PublishSubOptions : CommonSubOptions
+    {
+    }
+}
