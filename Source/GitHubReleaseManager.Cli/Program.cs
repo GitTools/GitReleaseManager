@@ -11,6 +11,8 @@ namespace GitHubReleaseManager.Cli
     using System.Linq;
     using System.Threading.Tasks;
     using CommandLine;
+    using GitHubReleaseManager.Configuration;
+    using GitHubReleaseManager.Helpers;
     using Octokit;
     using FileMode = System.IO.FileMode;
 
@@ -28,6 +30,10 @@ namespace GitHubReleaseManager.Cli
                 options,
                 (verb, subOptions) =>
                     {
+                        var fileSystem = new FileSystem();
+                        var currentFilePath = System.Reflection.Assembly.GetExecutingAssembly().Location;
+                        var currentDirectory = Path.GetDirectoryName(currentFilePath);
+
                         if (verb == "create")
                         {
                             result = CreateReleaseAsync((CreateSubOptions)subOptions).Result;
@@ -36,6 +42,18 @@ namespace GitHubReleaseManager.Cli
                         if (verb == "publish")
                         {
                             result = PublishReleaseAsync((PublishSubOptions)subOptions).Result;
+                        }
+
+                        if (verb == "init")
+                        {
+                            ConfigurationProvider.WriteSample(currentDirectory, fileSystem);
+                            result = 0;
+                        }
+
+                        if (verb == "showconfig")
+                        {
+                            Console.WriteLine(ConfigurationProvider.GetEffectiveConfigAsString(currentDirectory, fileSystem));
+                            result = 0;
                         }
                     }))
             {

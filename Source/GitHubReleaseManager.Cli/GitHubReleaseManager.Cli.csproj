@@ -77,9 +77,11 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="CommonSubOptions.cs" />
     <Compile Include="CreateSubOptions.cs" />
+    <Compile Include="InitSubOptions.cs" />
     <Compile Include="Options.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="PublishSubOptions.cs" />
+    <Compile Include="ShowConfigSubOptions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

@@ -17,6 +17,12 @@ namespace GitHubReleaseManager.Cli
         [VerbOption("publish", HelpText = "Publishes the release notes and closes the milestone.")]
         public PublishSubOptions PublishVerb { get; set; }
 
+        [VerbOption("init", HelpText = "Creates a sample Yaml Configuration file in root directory")]
+        public InitSubOptions InitVerb { get; set; }
+
+        [VerbOption("showconfig", HelpText = "Shows the current configuration")]
+        public ShowConfigSubOptions ShowConfigVerb { get; set; }
+
         [HelpVerbOption]
         public string DoHelpForVerb(string verbName)
         {
