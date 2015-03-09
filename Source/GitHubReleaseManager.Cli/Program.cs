@@ -49,6 +49,11 @@ namespace GitHubReleaseManager.Cli
                             result = CloseAndPublishReleaseAsync((PublishSubOptions)subOptions).Result;
                         }
 
+                        if (verb == "export")
+                        {
+                            result = ExportReleasesAsync((ExportSubOptions)subOptions).Result;
+                        }
+
                         if (verb == "init")
                         {
                             ConfigurationProvider.WriteSample(currentDirectory, fileSystem);
@@ -124,6 +129,29 @@ namespace GitHubReleaseManager.Cli
             }
         }
 
+        private static async Task<int> ExportReleasesAsync(ExportSubOptions options)
+        {
+            try
+            {
+                var github = options.CreateGitHubClient();
+
+                var releasesMarkdown = await ExportReleases(github, options.RepositoryOwner, options.RepositoryName);
+
+                using (var sw = new StreamWriter(File.Open(options.FileOutputPath, FileMode.OpenOrCreate)))
+                {
+                    sw.Write(releasesMarkdown);
+                }
+
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+
+                return 1;
+            }
+        }
+
         private static async Task CreateRelease(GitHubClient github, string owner, string repository, string milestone, string targetCommitish, string asset)
         {
             var releaseNotesBuilder = new ReleaseNotesBuilder(new DefaultGitHubClient(github, owner, repository), owner, repository, milestone);
@@ -149,6 +177,15 @@ namespace GitHubReleaseManager.Cli
 
                 await github.Release.UploadAsset(release, upload);
             }
+        }
+
+        private static async Task<string> ExportReleases(GitHubClient github, string owner, string repository)
+        {
+            var releaseNotesExporter = new ReleaseNotesExporter(new DefaultGitHubClient(github, owner, repository));
+
+            var result = await releaseNotesExporter.GetReleases();
+
+            return result;
         }
 
         private static async Task CloseMilestone(GitHubClient github, string owner, string repository, string milestoneTitle)

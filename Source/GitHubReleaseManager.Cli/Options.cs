@@ -20,6 +20,9 @@ namespace GitHubReleaseManager.Cli
         [VerbOption("publish", HelpText = "Publishes the release notes and closes the milestone.")]
         public PublishSubOptions PublishVerb { get; set; }
 
+        [VerbOption("export", HelpText = "Exports all the Release Notes in markdown format.")]
+        public ExportSubOptions ExportVerb { get; set; }
+
         [VerbOption("init", HelpText = "Creates a sample Yaml Configuration file in root directory")]
         public InitSubOptions InitVerb { get; set; }
 

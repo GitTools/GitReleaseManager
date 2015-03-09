@@ -18,6 +18,9 @@ namespace GitHubReleaseManager
         Task<List<Issue>> GetIssues(Milestone targetMilestone);
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Not appropriate")]
+        Task<List<Release>> GetReleases();
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Not appropriate")]
         ReadOnlyCollection<Milestone> GetMilestones();
     }
 }

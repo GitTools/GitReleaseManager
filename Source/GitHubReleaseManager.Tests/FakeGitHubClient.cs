@@ -36,6 +36,11 @@ namespace GitHubReleaseManager.Tests
             return Task.FromResult(this.Issues);
         }
 
+        public Task<List<Release>> GetReleases()
+        {
+            throw new System.NotImplementedException();
+        }
+
         public ReadOnlyCollection<Milestone> GetMilestones()
         {
             return new ReadOnlyCollection<Milestone>(this.Milestones);

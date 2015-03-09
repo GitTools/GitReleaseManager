@@ -71,6 +71,7 @@
     <Compile Include="ReleaseNotesBuilder.cs" />
     <Compile Include="OctokitExtensions.cs" />
     <Compile Include="MilestoneExtensions.cs" />
+    <Compile Include="ReleaseNotesExporter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">

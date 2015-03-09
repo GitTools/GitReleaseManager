@@ -52,6 +52,12 @@ namespace GitHubReleaseManager
             return allIssues.Where(x => x.State == ItemState.Closed).ToList();
         }
 
+        public async Task<List<Release>> GetReleases()
+        {
+            var allReleases = await this.gitHubClient.Release.GetAll(this.user, this.repository);
+            return allReleases.OrderByDescending(r => r.CreatedAt).ToList();
+        }
+
         public ReadOnlyCollection<Milestone> GetMilestones()
         {
             var milestonesClient = this.gitHubClient.Issue.Milestone;
