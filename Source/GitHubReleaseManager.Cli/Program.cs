@@ -14,8 +14,9 @@ namespace GitHubReleaseManager.Cli
     using Octokit;
     using FileMode = System.IO.FileMode;
 
-    public class Program
+    public static class Program
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "Not required")]
         private static int Main(string[] args)
         {
             var options = new Options();
@@ -23,8 +24,8 @@ namespace GitHubReleaseManager.Cli
             var result = 1;
 
             if (!Parser.Default.ParseArgumentsStrict(
-                args, 
-                options, 
+                args,
+                options,
                 (verb, subOptions) =>
                     {
                         if (verb == "create")

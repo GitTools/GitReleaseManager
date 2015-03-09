@@ -8,7 +8,7 @@
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>GitHubReleaseManager.Cli</RootNamespace>
-    <AssemblyName>GitHubReleaseManager</AssemblyName>
+    <AssemblyName>GitHubReleaseManager.Cli</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>7ec2b379</NuGetPackageImportStamp>
@@ -53,7 +53,7 @@
     <DefineConstants>TRACE;CODE_ANALYSIS;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
     <CodeAnalysisRuleSet>..\GitHubReleaseManager.ruleset</CodeAnalysisRuleSet>
     <CodeAnalysisTreatWarningsAsErrors>True</CodeAnalysisTreatWarningsAsErrors>
   </PropertyGroup>
@@ -88,12 +88,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GitHubReleaseManager\GitHubReleaseManager.csproj">
-      <Project>{b02a026e-ca3a-48f4-bba9-eb337b0a2035}</Project>
-      <Name>GitHubReleaseManager</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <CodeAnalysisDictionary Include="..\CustomDictionary.xml">
       <Link>CustomDictionary.xml</Link>
     </CodeAnalysisDictionary>
@@ -117,6 +111,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="FodyWeavers.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GitHubReleaseManager\GitHubReleaseManager.csproj">
+      <Project>{b02a026e-ca3a-48f4-bba9-eb337b0a2035}</Project>
+      <Name>GitHubReleaseManager</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

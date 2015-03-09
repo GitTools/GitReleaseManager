@@ -4,6 +4,7 @@
       <Word />
     </Unrecognized>
     <Recognized>
+      <Word>Cli</Word>
       <Word>commitish</Word>
       <Word>Git</Word>
       <Word>Octokit</Word>

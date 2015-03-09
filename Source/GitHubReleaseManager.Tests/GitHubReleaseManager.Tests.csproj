@@ -73,7 +73,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GitHubReleaseManager\GitHubReleaseManager.csproj">
-      <Project>{B02A026E-CA3A-48F4-BBA9-EB337B0A2035}</Project>
+      <Project>{b02a026e-ca3a-48f4-bba9-eb337b0a2035}</Project>
       <Name>GitHubReleaseManager</Name>
     </ProjectReference>
   </ItemGroup>
