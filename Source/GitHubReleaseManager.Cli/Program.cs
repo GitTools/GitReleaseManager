@@ -39,9 +39,14 @@ namespace GitHubReleaseManager.Cli
                             result = CreateReleaseAsync((CreateSubOptions)subOptions).Result;
                         }
 
+                        if (verb == "close")
+                        {
+                            result = CloseMilestoneAsync((CloseSubOptions)subOptions).Result;
+                        }
+
                         if (verb == "publish")
                         {
-                            result = PublishReleaseAsync((PublishSubOptions)subOptions).Result;
+                            result = CloseAndPublishReleaseAsync((PublishSubOptions)subOptions).Result;
                         }
 
                         if (verb == "init")
@@ -81,7 +86,25 @@ namespace GitHubReleaseManager.Cli
             }
         }
 
-        private static async Task<int> PublishReleaseAsync(PublishSubOptions options)
+        private static async Task<int> CloseMilestoneAsync(CloseSubOptions options)
+        {
+            try
+            {
+                var github = options.CreateGitHubClient();
+
+                await CloseMilestone(github, options.RepositoryOwner, options.RepositoryName, options.Milestone);
+
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+
+                return 1;
+            }
+        }
+
+        private static async Task<int> CloseAndPublishReleaseAsync(PublishSubOptions options)
         {
             try
             {

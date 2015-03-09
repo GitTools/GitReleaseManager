@@ -14,6 +14,9 @@ namespace GitHubReleaseManager.Cli
         [VerbOption("create", HelpText = "Creates a draft release notes from a milestone.")]
         public CreateSubOptions CreateVerb { get; set; }
 
+        [VerbOption("close", HelpText = "Closes the milestone.")]
+        public CloseSubOptions CloseVerb { get; set; }
+
         [VerbOption("publish", HelpText = "Publishes the release notes and closes the milestone.")]
         public PublishSubOptions PublishVerb { get; set; }
 
