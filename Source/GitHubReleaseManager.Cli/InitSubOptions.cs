@@ -6,7 +6,15 @@
 
 namespace GitHubReleaseManager.Cli
 {
-    public class InitSubOptions
+    using CommandLine;
+    using CommandLine.Text;
+
+    public class InitSubOptions : BaseSubOptions
     {
+        [HelpVerbOption]
+        public string GetUsage(string verb)
+        {
+            return HelpText.AutoBuild(this, verb);
+        }
     }
 }

@@ -1,6 +1,10 @@
 ﻿As part of this release we had [1 commit](https://github.com/TestUser/FakeRepo/commits/1.2.3) which resulted in [3 issues](https://github.com/FakeRepo/issues/issues?milestone=0&state=closed) being closed.
 
 
+__Bug__
+
+- [__#1__](http://example.com/1) Issue 1
+
 __Feature__
 
 - [__#2__](http://example.com/2) Issue 2
@@ -8,10 +12,6 @@ __Feature__
 __Improvement__
 
 - [__#3__](http://example.com/3) Issue 3
-
-__Bug__
-
-- [__#1__](http://example.com/1) Issue 1
 
 ### Where to get it
 You can download this release from [chocolatey](https://chocolatey.org/packages/ChocolateyGUI/1.2.3)

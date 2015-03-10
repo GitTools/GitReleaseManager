@@ -14,6 +14,9 @@ namespace GitHubReleaseManager
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
+
+    using GitHubReleaseManager.Configuration;
+
     using Octokit;
 
     public class ReleaseNotesBuilder
@@ -24,13 +27,15 @@ namespace GitHubReleaseManager
         private string milestoneTitle;
         private ReadOnlyCollection<Milestone> milestones;
         private Milestone targetMilestone;
+        private Config configuration;
 
-        public ReleaseNotesBuilder(IGitHubClient gitHubClient, string user, string repository, string milestoneTitle)
+        public ReleaseNotesBuilder(IGitHubClient gitHubClient, string user, string repository, string milestoneTitle, Config configuration)
         {
             this.gitHubClient = gitHubClient;
             this.user = user;
             this.repository = repository;
             this.milestoneTitle = milestoneTitle;
+            this.configuration = configuration;
         }
 
         public async Task<string> BuildReleaseNotes()
@@ -71,28 +76,13 @@ namespace GitHubReleaseManager
             stringBuilder.AppendLine(this.targetMilestone.Description);
             stringBuilder.AppendLine();
 
-            AddIssues(stringBuilder, issues);
+            this.AddIssues(stringBuilder, issues);
 
             await this.AddFooter(stringBuilder);
 
             return stringBuilder.ToString();
         }
-
-        private static void CheckForValidLabels(Issue issue)
-        {
-            var count = issue.Labels.Count(l =>
-                l.Name == "Bug" ||
-                l.Name == "Internal refactoring" ||
-                l.Name == "Feature" ||
-                l.Name == "Improvement");
-
-            if (count != 1)
-            {
-                var message = string.Format(CultureInfo.InvariantCulture, "Bad Issue {0} expected to find a single label with either 'Bug', 'Internal refactoring', 'Improvement' or 'Feature'.", issue.HtmlUrl);
-                throw new InvalidOperationException(message);
-            }
-        }
-
+        
         private static void Append(IEnumerable<Issue> issues, string label, StringBuilder stringBuilder)
         {
             var features = issues.Where(x => x.Labels.Any(l => l.Name == label)).ToList();
@@ -110,11 +100,29 @@ namespace GitHubReleaseManager
             }
         }
 
-        private static void AddIssues(StringBuilder stringBuilder, List<Issue> issues)
+        private void CheckForValidLabels(Issue issue)
         {
-            Append(issues, "Feature", stringBuilder);
-            Append(issues, "Improvement", stringBuilder);
-            Append(issues, "Bug", stringBuilder);
+            var count = this.configuration.IssueLabelsInclude.Sum(issueLabel => issue.Labels.Count(l => l.Name == issueLabel));
+
+            if (count != 1)
+            {
+                var allIssueLabels = this.configuration.IssueLabelsInclude.Union(this.configuration.IssueLabelsExclude);
+                var allIssuesExceptLast = allIssueLabels.Take(allIssueLabels.Count() - 1);
+                var lastLabel = allIssueLabels.Last();
+
+                var allIssuesExceptLastString = string.Join(", ", allIssuesExceptLast);
+
+                var message = string.Format(CultureInfo.InvariantCulture, "Bad Issue {0} expected to find a single label with either {1} or {2}.", issue.HtmlUrl, allIssuesExceptLastString, lastLabel);
+                throw new InvalidOperationException(message);
+            }
+        }
+
+        private void AddIssues(StringBuilder stringBuilder, List<Issue> issues)
+        {
+            foreach (var issueLabel in this.configuration.IssueLabelsInclude)
+            {
+                Append(issues, issueLabel, stringBuilder);
+            }
         }
 
         private Milestone GetPreviousMilestone()
@@ -168,7 +176,7 @@ namespace GitHubReleaseManager
             var issues = await this.gitHubClient.GetIssues(milestone);
             foreach (var issue in issues)
             {
-                CheckForValidLabels(issue);
+                this.CheckForValidLabels(issue);
             }
 
             return issues;

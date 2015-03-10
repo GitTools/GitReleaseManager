@@ -9,6 +9,10 @@ namespace GitHubReleaseManager.Tests
     using System;
     using System.Linq;
     using ApprovalTests;
+
+    using GitHubReleaseManager.Configuration;
+    using GitHubReleaseManager.Helpers;
+
     using NUnit.Framework;
     using Octokit;
 
@@ -69,9 +73,26 @@ namespace GitHubReleaseManager.Tests
             AcceptTest(5, CreateIssue(1, "Bug"));
         }
 
+        [Test]
+        [ExpectedException(typeof(AggregateException))]
+        public void NoCommitsWrongIssueLabel()
+        {
+            AcceptTest(0, CreateIssue(1, "Test"));
+        }
+
+        [Test]
+        [ExpectedException(typeof(AggregateException))]
+        public void SomeCommitsWrongIssueLabel()
+        {
+            AcceptTest(5, CreateIssue(1, "Test"));
+        }
+
         private static void AcceptTest(int commits, params Issue[] issues)
         {
             var fakeClient = new FakeGitHubClient();
+            var fileSystem = new FileSystem();
+            var currentDirectory = Environment.CurrentDirectory;
+            var configuration = ConfigurationProvider.Provide(currentDirectory, fileSystem);
 
             fakeClient.Milestones.Add(CreateMilestone("1.2.3"));
 
@@ -82,8 +103,7 @@ namespace GitHubReleaseManager.Tests
                 fakeClient.Issues.Add(issue);
             }
 
-            var builder = new ReleaseNotesBuilder(fakeClient, "TestUser", "FakeRepo", "1.2.3");
-
+            var builder = new ReleaseNotesBuilder(fakeClient, "TestUser", "FakeRepo", "1.2.3", configuration);
             var notes = builder.BuildReleaseNotes().Result;
 
             Approvals.Verify(notes);

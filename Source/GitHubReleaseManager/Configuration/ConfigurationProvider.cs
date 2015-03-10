@@ -15,14 +15,14 @@ namespace GitHubReleaseManager.Configuration
     public static class ConfigurationProvider
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "Not required, as direct return of object")]
-        public static Config Provide(string currentDirectory, IFileSystem fileSystem)
+        public static Config Provide(string gitDirectory, IFileSystem fileSystem)
         {
             if (fileSystem == null)
             {
                 throw new ArgumentNullException("fileSystem");
             }
 
-            var configFilePath = GetConfigFilePath(currentDirectory);
+            var configFilePath = GetConfigFilePath(gitDirectory);
 
             if (fileSystem.Exists(configFilePath))
             {
@@ -48,14 +48,14 @@ namespace GitHubReleaseManager.Configuration
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times", Justification = "Works as expected")]
-        public static void WriteSample(string currentDirectory, IFileSystem fileSystem)
+        public static void WriteSample(string targetDirectory, IFileSystem fileSystem)
         {
             if (fileSystem == null)
             {
                 throw new ArgumentNullException("fileSystem");
             }
 
-            var configFilePath = GetConfigFilePath(currentDirectory);
+            var configFilePath = GetConfigFilePath(targetDirectory);
 
             if (!fileSystem.Exists(configFilePath))
             {
@@ -71,9 +71,9 @@ namespace GitHubReleaseManager.Configuration
             }
         }
 
-        private static string GetConfigFilePath(string currentDirectory)
+        private static string GetConfigFilePath(string targetDirectory)
         {
-            return Path.Combine(currentDirectory, "GitHubReleaseManager.yaml");
+            return Path.Combine(targetDirectory, "GitHubReleaseManager.yaml");
         }
     }
 }

@@ -6,7 +6,7 @@
 
 namespace GitHubReleaseManager.Cli
 {
-    public class ShowConfigSubOptions
+    public class ShowConfigSubOptions : BaseSubOptions
     {
     }
 }

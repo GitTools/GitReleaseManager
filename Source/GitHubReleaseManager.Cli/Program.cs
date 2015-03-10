@@ -7,8 +7,11 @@
 namespace GitHubReleaseManager.Cli
 {
     using System;
+    using System.Collections.Generic;
+    using System.Globalization;
     using System.IO;
     using System.Linq;
+    using System.Text;
     using System.Threading.Tasks;
     using CommandLine;
     using GitHubReleaseManager.Configuration;
@@ -18,6 +21,8 @@ namespace GitHubReleaseManager.Cli
 
     public static class Program
     {
+        private static StringBuilder log = new StringBuilder();
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "Not required")]
         private static int Main(string[] args)
         {
@@ -30,13 +35,21 @@ namespace GitHubReleaseManager.Cli
                 options,
                 (verb, subOptions) =>
                     {
+                        if (subOptions != null)
+                        {
+                            if (string.IsNullOrEmpty(((BaseSubOptions)subOptions).TargetPath))
+                            {
+                                ((BaseSubOptions)subOptions).TargetPath = Environment.CurrentDirectory;
+                            }
+
+                            ConfigureLogging(((BaseSubOptions)subOptions).LogFilePath);
+                        }
+
                         var fileSystem = new FileSystem();
-                        var currentFilePath = System.Reflection.Assembly.GetExecutingAssembly().Location;
-                        var currentDirectory = Path.GetDirectoryName(currentFilePath);
 
                         if (verb == "create")
                         {
-                            result = CreateReleaseAsync((CreateSubOptions)subOptions).Result;
+                            result = CreateReleaseAsync((CreateSubOptions)subOptions, fileSystem).Result;
                         }
 
                         if (verb == "close")
@@ -56,13 +69,13 @@ namespace GitHubReleaseManager.Cli
 
                         if (verb == "init")
                         {
-                            ConfigurationProvider.WriteSample(currentDirectory, fileSystem);
+                            ConfigurationProvider.WriteSample(((InitSubOptions)subOptions).TargetPath, fileSystem);
                             result = 0;
                         }
 
                         if (verb == "showconfig")
                         {
-                            Console.WriteLine(ConfigurationProvider.GetEffectiveConfigAsString(currentDirectory, fileSystem));
+                            Console.WriteLine(ConfigurationProvider.GetEffectiveConfigAsString(((ShowConfigSubOptions)subOptions).TargetPath, fileSystem));
                             result = 0;
                         }
                     }))
@@ -73,13 +86,14 @@ namespace GitHubReleaseManager.Cli
             return result;
         }
 
-        private static async Task<int> CreateReleaseAsync(CreateSubOptions options)
+        private static async Task<int> CreateReleaseAsync(CreateSubOptions subOptions, IFileSystem fileSystem)
         {
             try
             {
-                var github = options.CreateGitHubClient();
+                var github = subOptions.CreateGitHubClient();
+                var configuration = ConfigurationProvider.Provide(subOptions.TargetPath, fileSystem);
 
-                await CreateRelease(github, options.RepositoryOwner, options.RepositoryName, options.Milestone, options.TargetCommitish, options.AssetPath);
+                await CreateRelease(github, subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone, subOptions.TargetCommitish, subOptions.AssetPath, configuration);
 
                 return 0;
             }
@@ -91,13 +105,13 @@ namespace GitHubReleaseManager.Cli
             }
         }
 
-        private static async Task<int> CloseMilestoneAsync(CloseSubOptions options)
+        private static async Task<int> CloseMilestoneAsync(CloseSubOptions subOptions)
         {
             try
             {
-                var github = options.CreateGitHubClient();
+                var github = subOptions.CreateGitHubClient();
 
-                await CloseMilestone(github, options.RepositoryOwner, options.RepositoryName, options.Milestone);
+                await CloseMilestone(github, subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone);
 
                 return 0;
             }
@@ -109,15 +123,15 @@ namespace GitHubReleaseManager.Cli
             }
         }
 
-        private static async Task<int> CloseAndPublishReleaseAsync(PublishSubOptions options)
+        private static async Task<int> CloseAndPublishReleaseAsync(PublishSubOptions subOptions)
         {
             try
             {
-                var github = options.CreateGitHubClient();
+                var github = subOptions.CreateGitHubClient();
 
-                await CloseMilestone(github, options.RepositoryOwner, options.RepositoryName, options.Milestone);
+                await CloseMilestone(github, subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone);
 
-                await PublishRelease(github, options.RepositoryOwner, options.RepositoryName, options.Milestone);
+                await PublishRelease(github, subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone);
 
                 return 0;
             }
@@ -129,15 +143,15 @@ namespace GitHubReleaseManager.Cli
             }
         }
 
-        private static async Task<int> ExportReleasesAsync(ExportSubOptions options)
+        private static async Task<int> ExportReleasesAsync(ExportSubOptions subOptions)
         {
             try
             {
-                var github = options.CreateGitHubClient();
+                var github = subOptions.CreateGitHubClient();
 
-                var releasesMarkdown = await ExportReleases(github, options.RepositoryOwner, options.RepositoryName);
+                var releasesMarkdown = await ExportReleases(github, subOptions.RepositoryOwner, subOptions.RepositoryName);
 
-                using (var sw = new StreamWriter(File.Open(options.FileOutputPath, FileMode.OpenOrCreate)))
+                using (var sw = new StreamWriter(File.Open(subOptions.FileOutputPath, FileMode.OpenOrCreate)))
                 {
                     sw.Write(releasesMarkdown);
                 }
@@ -152,9 +166,9 @@ namespace GitHubReleaseManager.Cli
             }
         }
 
-        private static async Task CreateRelease(GitHubClient github, string owner, string repository, string milestone, string targetCommitish, string asset)
+        private static async Task CreateRelease(GitHubClient github, string owner, string repository, string milestone, string targetCommitish, string asset, Config configuration)
         {
-            var releaseNotesBuilder = new ReleaseNotesBuilder(new DefaultGitHubClient(github, owner, repository), owner, repository, milestone);
+            var releaseNotesBuilder = new ReleaseNotesBuilder(new DefaultGitHubClient(github, owner, repository), owner, repository, milestone, configuration);
 
             var result = await releaseNotesBuilder.BuildReleaseNotes();
 
@@ -218,6 +232,49 @@ namespace GitHubReleaseManager.Cli
             };
 
             await github.Release.Edit(owner, repository, release.Id, releaseUpdate);
+        }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "This is required here")]
+        private static void ConfigureLogging(string logFilePath)
+        {
+            var writeActions = new List<Action<string>>
+            {
+                s => log.AppendLine(s)
+            };
+
+            if (logFilePath == "console")
+            {
+                writeActions.Add(Console.WriteLine);
+            }
+            else if (!string.IsNullOrEmpty(logFilePath))
+            {
+                try
+                {
+                    Directory.CreateDirectory(Path.GetDirectoryName(logFilePath));
+                    if (File.Exists(logFilePath))
+                    {
+                        using (File.CreateText(logFilePath))
+                        {
+                        }
+                    }
+
+                    writeActions.Add(x => WriteLogEntry(logFilePath, x));
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Failed to configure logging: " + ex.Message);
+                }
+            }
+
+            Logger.WriteInfo = s => writeActions.ForEach(a => a(s));
+            Logger.WriteWarning = s => writeActions.ForEach(a => a(s));
+            Logger.WriteError = s => writeActions.ForEach(a => a(s));
+        }
+
+        private static void WriteLogEntry(string logFilePath, string s)
+        {
+            var contents = string.Format(CultureInfo.InvariantCulture, "{0}\t\t{1}\r\n", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture), s);
+            File.AppendAllText(logFilePath, contents);
         }
     }
 }
