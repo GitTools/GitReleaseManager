@@ -13,7 +13,7 @@ namespace GitHubReleaseManager.Cli
         [Option('a', "asset", HelpText = "Path to the file to include in the release.", Required = false)]
         public string AssetPath { get; set; }
 
-        [Option('t', "targetcommitish", HelpText = "The commit to tag. Can be a branch or SHA. Defaults to repo's default branch.", Required = false)]
+        [Option('t', "targetcommitish", HelpText = "The commit to tag. Can be a branch or SHA. Defaults to repository's default branch.", Required = false)]
         public string TargetCommitish { get; set; }
     }
 }

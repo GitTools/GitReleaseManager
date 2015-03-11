@@ -20,11 +20,11 @@ namespace GitHubReleaseManager.Tests
             this.Issues = new List<Issue>();
         }
 
-        public List<Milestone> Milestones { get; set; }
+        public List<Milestone> Milestones { get; private set; }
 
-        public List<Issue> Issues { get; set; }
+        public List<Issue> Issues { get; private set; }
 
-        public int NumberOfCommits { get; set; }
+        public int NumberOfCommits { private get; set; }
 
         public Task<int> GetNumberOfCommitsBetween(Milestone previousMilestone, Milestone currentMilestone)
         {

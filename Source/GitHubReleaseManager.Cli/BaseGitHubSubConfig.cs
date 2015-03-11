@@ -24,8 +24,8 @@ namespace GitHubReleaseManager.Cli
 
         public GitHubClient CreateGitHubClient()
         {
-            var creds = new Credentials(this.UserName, this.Password);
-            var github = new GitHubClient(new ProductHeaderValue("GitHubReleaseManager")) { Credentials = creds };
+            var credentials = new Credentials(this.UserName, this.Password);
+            var github = new GitHubClient(new ProductHeaderValue("GitHubReleaseManager")) { Credentials = credentials };
             return github;
         }
     }

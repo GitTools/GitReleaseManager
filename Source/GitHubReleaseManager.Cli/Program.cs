@@ -35,48 +35,75 @@ namespace GitHubReleaseManager.Cli
                 options,
                 (verb, subOptions) =>
                     {
-                        if (subOptions != null)
+                        result = 1;
+
+                        var baseSubOptions = subOptions as BaseSubOptions;
+                        if (baseSubOptions != null)
                         {
-                            if (string.IsNullOrEmpty(((BaseSubOptions)subOptions).TargetPath))
+                            if (string.IsNullOrEmpty(baseSubOptions.TargetPath))
                             {
-                                ((BaseSubOptions)subOptions).TargetPath = Environment.CurrentDirectory;
+                                baseSubOptions.TargetPath = Environment.CurrentDirectory;
                             }
 
-                            ConfigureLogging(((BaseSubOptions)subOptions).LogFilePath);
+                            ConfigureLogging(baseSubOptions.LogFilePath);
                         }
 
                         var fileSystem = new FileSystem();
 
                         if (verb == "create")
                         {
-                            result = CreateReleaseAsync((CreateSubOptions)subOptions, fileSystem).Result;
+                            var createSubOptions = baseSubOptions as CreateSubOptions;
+                            if (createSubOptions != null)
+                            {
+                                result = CreateReleaseAsync(createSubOptions, fileSystem).Result;
+                            }
                         }
 
                         if (verb == "close")
                         {
-                            result = CloseMilestoneAsync((CloseSubOptions)subOptions).Result;
+                            var closeSubOptions = baseSubOptions as CloseSubOptions;
+                            if (closeSubOptions != null)
+                            {
+                                result = CloseMilestoneAsync(closeSubOptions).Result;
+                            }
                         }
 
                         if (verb == "publish")
                         {
-                            result = CloseAndPublishReleaseAsync((PublishSubOptions)subOptions).Result;
+                            var publishSubOptions = baseSubOptions as PublishSubOptions;
+                            if (publishSubOptions != null)
+                            {
+                                result = CloseAndPublishReleaseAsync(publishSubOptions).Result;
+                            }
                         }
 
                         if (verb == "export")
                         {
-                            result = ExportReleasesAsync((ExportSubOptions)subOptions).Result;
+                            var exportSubOptions = baseSubOptions as ExportSubOptions;
+                            if (exportSubOptions != null)
+                            {
+                                result = ExportReleasesAsync(exportSubOptions).Result;
+                            }
                         }
 
                         if (verb == "init")
                         {
-                            ConfigurationProvider.WriteSample(((InitSubOptions)subOptions).TargetPath, fileSystem);
-                            result = 0;
+                            var initSubOptions = baseSubOptions as InitSubOptions;
+                            if (initSubOptions != null)
+                            {
+                                ConfigurationProvider.WriteSample(initSubOptions.TargetPath, fileSystem);
+                                result = 0;
+                            }
                         }
 
                         if (verb == "showconfig")
                         {
-                            Console.WriteLine(ConfigurationProvider.GetEffectiveConfigAsString(((ShowConfigSubOptions)subOptions).TargetPath, fileSystem));
-                            result = 0;
+                            var showConfigSubOptions = baseSubOptions as ShowConfigSubOptions;
+                            if (showConfigSubOptions != null)
+                            {
+                                Console.WriteLine(ConfigurationProvider.GetEffectiveConfigAsString(showConfigSubOptions.TargetPath, fileSystem));
+                                result = 0;
+                            }
                         }
                     }))
             {

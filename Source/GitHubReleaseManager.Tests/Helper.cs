@@ -1,4 +1,10 @@
-﻿namespace GitHubReleaseManager.Tests
+﻿//-----------------------------------------------------------------------
+// <copyright file="Helper.cs" company="gep13">
+//     Copyright (c) gep13. All rights reserved.
+// </copyright>
+//-----------------------------------------------------------------------
+
+namespace GitHubReleaseManager.Tests
 {
     using System;
     using System.Net;
@@ -7,27 +13,30 @@
     public static class Helper
     {
         // From https://github.com/octokit/octokit.net/blob/master/Octokit.Tests.Integration/Helper.cs
-
-        static readonly Lazy<Credentials> _credentialsThunk = new Lazy<Credentials>(() =>
+        private static readonly Lazy<Credentials> CredentialsThunk = new Lazy<Credentials>(() =>
         {
             var githubUsername = Environment.GetEnvironmentVariable("OCTOKIT_GITHUBUSERNAME");
 
             var githubToken = Environment.GetEnvironmentVariable("OCTOKIT_OAUTHTOKEN");
 
             if (githubToken != null)
+            {
                 return new Credentials(githubToken);
+            }
 
             var githubPassword = Environment.GetEnvironmentVariable("OCTOKIT_GITHUBPASSWORD");
 
             if (githubUsername == null || githubPassword == null)
+            {
                 return Credentials.Anonymous;
+            }
 
             return new Credentials(githubUsername, githubPassword);
         });
 
         public static Credentials Credentials
         {
-            get { return _credentialsThunk.Value; }
+            get { return CredentialsThunk.Value; }
         }
 
         public static IWebProxy Proxy

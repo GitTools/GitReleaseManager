@@ -9,10 +9,8 @@ namespace GitHubReleaseManager.Tests
     using System;
     using System.Linq;
     using ApprovalTests;
-
     using GitHubReleaseManager.Configuration;
     using GitHubReleaseManager.Helpers;
-
     using NUnit.Framework;
     using Octokit;
 
@@ -103,7 +101,7 @@ namespace GitHubReleaseManager.Tests
                 fakeClient.Issues.Add(issue);
             }
 
-            var builder = new ReleaseNotesBuilder(fakeClient, "TestUser", "FakeRepo", "1.2.3", configuration);
+            var builder = new ReleaseNotesBuilder(fakeClient, "TestUser", "FakeRepository", "1.2.3", configuration);
             var notes = builder.BuildReleaseNotes().Result;
 
             Approvals.Verify(notes);

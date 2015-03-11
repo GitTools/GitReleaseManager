@@ -29,12 +29,12 @@ namespace GitHubReleaseManager
         {
             var closedIssueRequest = new RepositoryIssueRequest
             {
-                Milestone = milestone.Number.ToString(),
+                Milestone = milestone.Number.ToString(CultureInfo.InvariantCulture),
                 State = ItemState.Closed
             };
             var openIssueRequest = new RepositoryIssueRequest
             {
-                Milestone = milestone.Number.ToString(),
+                Milestone = milestone.Number.ToString(CultureInfo.InvariantCulture),
                 State = ItemState.Open
             };
             var parts = milestone.Url.AbsolutePath.Split('/');

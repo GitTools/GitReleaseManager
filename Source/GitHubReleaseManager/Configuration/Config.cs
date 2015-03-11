@@ -32,9 +32,9 @@ namespace GitHubReleaseManager.Configuration
         public string ExportRegex { get; set; }
 
         [YamlMember(Alias = "issue-labels-include")]
-        public IList<string> IssueLabelsInclude { get; set; }
+        public IList<string> IssueLabelsInclude { get; private set; }
 
         [YamlMember(Alias = "issue-labels-exclude")]
-        public IList<string> IssueLabelsExclude { get; set; }
+        public IList<string> IssueLabelsExclude { get; private set; }
     }
 }

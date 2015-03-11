@@ -21,7 +21,7 @@ namespace GitHubReleaseManager
 
         public static Action<string> WriteError { get; set; }
 
-        public static void Reset()
+        private static void Reset()
         {
             WriteInfo = s => { throw new Exception("Logger not defined."); };
             WriteWarning = s => { throw new Exception("Logger not defined."); };

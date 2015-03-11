@@ -11,7 +11,6 @@ namespace GitHubReleaseManager.Tests
     using GitHubReleaseManager;
     using GitHubReleaseManager.Configuration;
     using GitHubReleaseManager.Helpers;
-
     using NUnit.Framework;
 
     [TestFixture]
