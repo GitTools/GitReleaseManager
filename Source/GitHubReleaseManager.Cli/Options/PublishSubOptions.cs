@@ -4,7 +4,7 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-namespace GitHubReleaseManager.Cli
+namespace GitHubReleaseManager.Cli.Options
 {
     public class PublishSubOptions : CommonSubOptions
     {

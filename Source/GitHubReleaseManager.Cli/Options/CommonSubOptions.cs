@@ -4,11 +4,11 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-namespace GitHubReleaseManager.Cli
+namespace GitHubReleaseManager.Cli.Options
 {
     using CommandLine;
 
-    public abstract class CommonSubOptions : BaseGitHubSubConfig
+    public abstract class CommonSubOptions : BaseGitHubSubOptions
     {
         [Option('m', "milestone", HelpText = "The milestone to use.", Required = true)]
         public string Milestone { get; set; }

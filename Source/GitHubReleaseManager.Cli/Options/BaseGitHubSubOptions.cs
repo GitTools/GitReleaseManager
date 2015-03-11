@@ -1,14 +1,14 @@
-﻿// <copyright file="BaseGitHubSubConfig.cs" company="gep13">
+﻿// <copyright file="BaseGitHubSubOptions.cs" company="gep13">
 //     Copyright (c) gep13. All rights reserved.
 // </copyright>
 //-----------------------------------------------------------------------
 
-namespace GitHubReleaseManager.Cli
+namespace GitHubReleaseManager.Cli.Options
 {
     using CommandLine;
     using Octokit;
 
-    public abstract class BaseGitHubSubConfig : BaseSubOptions
+    public abstract class BaseGitHubSubOptions : BaseSubOptions
     {
         [Option('u', "username", HelpText = "The username to access GitHub with.", Required = true)]
         public string UserName { get; set; }

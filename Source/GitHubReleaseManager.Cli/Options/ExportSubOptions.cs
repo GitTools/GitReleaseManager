@@ -4,11 +4,11 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-namespace GitHubReleaseManager.Cli
+namespace GitHubReleaseManager.Cli.Options
 {
     using CommandLine;
 
-    public class ExportSubOptions : BaseGitHubSubConfig
+    public class ExportSubOptions : BaseGitHubSubOptions
     {
         [Option('f', "fileOutputPath", HelpText = "Path to the file export releases.", Required = true)]
         public string FileOutputPath { get; set; }

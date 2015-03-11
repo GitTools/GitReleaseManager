@@ -14,6 +14,7 @@ namespace GitHubReleaseManager.Cli
     using System.Text;
     using System.Threading.Tasks;
     using CommandLine;
+    using GitHubReleaseManager.Cli.Options;
     using GitHubReleaseManager.Configuration;
     using GitHubReleaseManager.Helpers;
     using Octokit;
@@ -26,7 +27,7 @@ namespace GitHubReleaseManager.Cli
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "Not required")]
         private static int Main(string[] args)
         {
-            var options = new Options();
+            var options = new MainOptions();
 
             var result = 1;
 
@@ -56,6 +57,15 @@ namespace GitHubReleaseManager.Cli
                             if (createSubOptions != null)
                             {
                                 result = CreateReleaseAsync(createSubOptions, fileSystem).Result;
+                            }
+                        }
+
+                        if (verb == "addasset")
+                        {
+                            var addAssetSubOptions = baseSubOptions as AddAssetSubOptions;
+                            if (addAssetSubOptions != null)
+                            {
+                                result = AddAssetAsync(addAssetSubOptions).Result;
                             }
                         }
 
@@ -121,6 +131,24 @@ namespace GitHubReleaseManager.Cli
                 var configuration = ConfigurationProvider.Provide(subOptions.TargetPath, fileSystem);
 
                 await CreateRelease(github, subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone, subOptions.TargetCommitish, subOptions.AssetPath, configuration);
+
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+
+                return 1;
+            }
+        }
+
+        private static async Task<int> AddAssetAsync(AddAssetSubOptions subOptions)
+        {
+            try
+            {
+                var github = subOptions.CreateGitHubClient();
+
+                await AddAsset(github, subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone, subOptions.AssetPath);
 
                 return 0;
             }
@@ -217,6 +245,25 @@ namespace GitHubReleaseManager.Cli
             {
                 var upload = new ReleaseAssetUpload { FileName = Path.GetFileName(asset), ContentType = "application/octet-stream", RawData = File.Open(asset, FileMode.Open) };
 
+                await github.Release.UploadAsset(release, upload);
+            }
+        }
+
+        private static async Task AddAsset(GitHubClient github, string owner, string repository, string milestone, string assetPath)
+        {
+            var releases = await github.Release.GetAll(owner, repository);
+
+            var release = releases.FirstOrDefault(r => r.TagName == milestone);
+
+            if (release == null)
+            {
+                Logger.WriteError("Unable to find Release with specified milestone");
+                return;
+            }
+
+            if (File.Exists(assetPath))
+            {
+                var upload = new ReleaseAssetUpload { FileName = Path.GetFileName(assetPath), ContentType = "application/octet-stream", RawData = File.Open(assetPath, FileMode.Open) };
                 await github.Release.UploadAsset(release, upload);
             }
         }

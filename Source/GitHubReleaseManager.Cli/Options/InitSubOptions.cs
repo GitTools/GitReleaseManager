@@ -1,12 +1,12 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="ShowConfigSubOptions.cs" company="gep13">
+// <copyright file="InitSubOptions.cs" company="gep13">
 //     Copyright (c) gep13. All rights reserved.
 // </copyright>
 //-----------------------------------------------------------------------
 
-namespace GitHubReleaseManager.Cli
+namespace GitHubReleaseManager.Cli.Options
 {
-    public class ShowConfigSubOptions : BaseSubOptions
+    public class InitSubOptions : BaseSubOptions
     {
     }
 }

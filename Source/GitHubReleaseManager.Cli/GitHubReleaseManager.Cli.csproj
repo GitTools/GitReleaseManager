@@ -75,17 +75,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="BaseGitHubSubConfig.cs" />
-    <Compile Include="BaseSubOptions.cs" />
-    <Compile Include="CloseSubOptions.cs" />
-    <Compile Include="CommonSubOptions.cs" />
-    <Compile Include="CreateSubOptions.cs" />
-    <Compile Include="ExportSubOptions.cs" />
-    <Compile Include="InitSubOptions.cs" />
-    <Compile Include="Options.cs" />
+    <Compile Include="Options\AddAssetSubOptions.cs" />
+    <Compile Include="Options\BaseGitHubSubOptions.cs" />
+    <Compile Include="Options\BaseSubOptions.cs" />
+    <Compile Include="Options\CloseSubOptions.cs" />
+    <Compile Include="Options\CommonSubOptions.cs" />
+    <Compile Include="Options\CreateSubOptions.cs" />
+    <Compile Include="Options\ExportSubOptions.cs" />
+    <Compile Include="Options\InitSubOptions.cs" />
+    <Compile Include="Options\MainOptions.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="PublishSubOptions.cs" />
-    <Compile Include="ShowConfigSubOptions.cs" />
+    <Compile Include="Options\PublishSubOptions.cs" />
+    <Compile Include="Options\ShowConfigSubOptions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

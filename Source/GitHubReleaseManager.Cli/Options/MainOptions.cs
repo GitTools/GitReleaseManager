@@ -1,18 +1,21 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="Options.cs" company="gep13">
+// <copyright file="MainOptions.cs" company="gep13">
 //     Copyright (c) gep13. All rights reserved.
 // </copyright>
 //-----------------------------------------------------------------------
 
-namespace GitHubReleaseManager.Cli
+namespace GitHubReleaseManager.Cli.Options
 {
     using CommandLine;
     using CommandLine.Text;
 
-    public class Options
+    public class MainOptions
     {
         [VerbOption("create", HelpText = "Creates a draft release notes from a milestone.")]
         public CreateSubOptions CreateVerb { get; set; }
+
+        [VerbOption("addasset", HelpText = "Adds an asset to an existing release.")]
+        public AddAssetSubOptions AddAssetVerb { get; set; }
 
         [VerbOption("close", HelpText = "Closes the milestone.")]
         public CloseSubOptions CloseVerb { get; set; }
