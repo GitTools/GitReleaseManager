@@ -11,6 +11,6 @@
     <tags>github release notes</tags>
   </metadata>
   <files>
-    <file src="..\..\BuildArtifacts\GitHubReleaseManager.exe" target="tools" />
+    <file src="..\..\BuildArtifacts\GitHubReleaseManager.Cli.exe" target="tools" />
   </files>
 </package>
