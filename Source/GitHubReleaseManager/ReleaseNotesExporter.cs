@@ -11,13 +11,17 @@ namespace GitHubReleaseManager
     using System.Text.RegularExpressions;
     using System.Threading.Tasks;
 
+    using GitHubReleaseManager.Configuration;
+
     public class ReleaseNotesExporter
     {
         private IGitHubClient gitHubClient;
+        private Config configuration;
 
-        public ReleaseNotesExporter(IGitHubClient gitHubClient)
+        public ReleaseNotesExporter(IGitHubClient gitHubClient, Config configuration)
         {
             this.gitHubClient = gitHubClient;
+            this.configuration = configuration;
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Not appropriate.")]
@@ -31,13 +35,28 @@ namespace GitHubReleaseManager
             {
                 foreach (var release in releases)
                 {
-                    stringBuilder.AppendLine(string.Format("## {0} ({1})", release.TagName, release.CreatedAt.ToString("MMMM dd, yyyy")));
+                    if (this.configuration.Export.IncludeCreatedDateInTitle)
+                    {
+                        stringBuilder.AppendLine(string.Format("## {0} ({1})", release.TagName, release.CreatedAt.ToString(this.configuration.Export.CreatedDateStringFormat)));
+                    }
+                    else
+                    {
+                        stringBuilder.AppendLine(string.Format("## {0}", release.TagName));
+                    }
+                    
                     stringBuilder.AppendLine(Environment.NewLine);
 
-                    var regexPattern = new Regex(@"### Where to get it(\r\n)*You can .*\)", RegexOptions.Multiline);
-                    var replacement = string.Empty;
-                    var replacedBody = regexPattern.Replace(release.Body, replacement);
-                    stringBuilder.AppendLine(replacedBody);
+                    if (this.configuration.Export.PerformRegexRemoval)
+                    {
+                        var regexPattern = new Regex(this.configuration.Export.RegexText, this.configuration.Export.IsMultilineRegex ? RegexOptions.Multiline : RegexOptions.Singleline);
+                        var replacement = string.Empty;
+                        var replacedBody = regexPattern.Replace(release.Body, replacement);
+                        stringBuilder.AppendLine(replacedBody);
+                    }
+                    else
+                    {
+                        stringBuilder.AppendLine(release.Body);
+                    }
                 }
             }
 

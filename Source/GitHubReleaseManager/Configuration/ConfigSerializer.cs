@@ -32,6 +32,7 @@ namespace GitHubReleaseManager.Configuration
             serializer.Serialize(writer, config);
         }
 
+        // TODO: Need to expand this to include all options
         public static void WriteSample(TextWriter writer)
         {
             if (writer == null)

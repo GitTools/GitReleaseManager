@@ -82,7 +82,7 @@ namespace GitHubReleaseManager.Cli
                             var exportSubOptions = baseSubOptions as ExportSubOptions;
                             if (exportSubOptions != null)
                             {
-                                result = ExportReleasesAsync(exportSubOptions).Result;
+                                result = ExportReleasesAsync(exportSubOptions, fileSystem).Result;
                             }
                         }
 
@@ -170,13 +170,14 @@ namespace GitHubReleaseManager.Cli
             }
         }
 
-        private static async Task<int> ExportReleasesAsync(ExportSubOptions subOptions)
+        private static async Task<int> ExportReleasesAsync(ExportSubOptions subOptions, IFileSystem fileSystem)
         {
             try
             {
                 var github = subOptions.CreateGitHubClient();
+                var configuration = ConfigurationProvider.Provide(subOptions.TargetPath, fileSystem);
 
-                var releasesMarkdown = await ExportReleases(github, subOptions.RepositoryOwner, subOptions.RepositoryName);
+                var releasesMarkdown = await ExportReleases(github, subOptions.RepositoryOwner, subOptions.RepositoryName, configuration);
 
                 using (var sw = new StreamWriter(File.Open(subOptions.FileOutputPath, FileMode.OpenOrCreate)))
                 {
@@ -220,9 +221,9 @@ namespace GitHubReleaseManager.Cli
             }
         }
 
-        private static async Task<string> ExportReleases(GitHubClient github, string owner, string repository)
+        private static async Task<string> ExportReleases(GitHubClient github, string owner, string repository, Config configuration)
         {
-            var releaseNotesExporter = new ReleaseNotesExporter(new DefaultGitHubClient(github, owner, repository));
+            var releaseNotesExporter = new ReleaseNotesExporter(new DefaultGitHubClient(github, owner, repository), configuration);
 
             var result = await releaseNotesExporter.GetReleases();
 

@@ -7,14 +7,30 @@
 namespace GitHubReleaseManager.Configuration
 {
     using System.Collections.Generic;
-
     using YamlDotNet.Serialization;
 
     public class Config
     {
         public Config()
         {
-            this.ExportRegex = @"### Where to get it(\r\n)*You can .*\)";
+            this.Create = new CreateConfig
+                              {
+                                  IncludeFooter = true,
+                                  FooterHeading = "Where to get it",
+                                  FooterContent = "You can download this release from [chocolatey](https://chocolatey.org/packages/ChocolateyGUI/{milestone})",
+                                  FooterIncludesMilestone = true,
+                                  MilestoneReplaceText = "{milestone}"
+                              };
+
+            this.Export = new ExportConfig
+                              {
+                                  IncludeCreatedDateInTitle = true,
+                                  CreatedDateStringFormat = "MMMM dd, yyyy",
+                                  PerformRegexRemoval = true,
+                                  RegexText = @"### Where to get it(\r\n)*You can .*\)",
+                                  IsMultilineRegex = true
+                              };
+
             this.IssueLabelsInclude = new List<string>
                                    {
                                        "Bug",
@@ -28,8 +44,11 @@ namespace GitHubReleaseManager.Configuration
                                    };
         }
 
-        [YamlMember(Alias = "export-regex")]
-        public string ExportRegex { get; set; }
+        [YamlMember(Alias = "create")]
+        public CreateConfig Create { get; private set; }
+
+        [YamlMember(Alias = "export")]
+        public ExportConfig Export { get; private set; }
 
         [YamlMember(Alias = "issue-labels-include")]
         public IList<string> IssueLabelsInclude { get; private set; }

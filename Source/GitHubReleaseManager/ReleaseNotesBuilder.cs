@@ -78,11 +78,14 @@ namespace GitHubReleaseManager
 
             this.AddIssues(stringBuilder, issues);
 
-            await this.AddFooter(stringBuilder);
+            if (this.configuration.Create.IncludeFooter)
+            {
+                this.AddFooter(stringBuilder);
+            }
 
             return stringBuilder.ToString();
         }
-        
+
         private static void Append(IEnumerable<Issue> issues, string label, StringBuilder stringBuilder)
         {
             var features = issues.Where(x => x.Labels.Any(l => l.Name == label)).ToList();
@@ -144,26 +147,22 @@ namespace GitHubReleaseManager
 
             return string.Format(CultureInfo.InvariantCulture, "https://github.com/{0}/{1}/compare/{2}...{3}", this.user, this.repository, previousMilestone.Title, this.targetMilestone.Title);
         }
-        
-        private async Task AddFooter(StringBuilder stringBuilder)
+
+        private void AddFooter(StringBuilder stringBuilder)
         {
-            var file = new FileInfo("footer.md");
+            stringBuilder.AppendLine(string.Format(CultureInfo.InvariantCulture, "### {0}", this.configuration.Create.FooterHeading));
 
-            if (!file.Exists)
+            var footerContent = this.configuration.Create.FooterContent;
+
+            if (this.configuration.Create.FooterIncludesMilestone)
             {
-                file = new FileInfo("footer.txt");
+                if (!string.IsNullOrEmpty(this.configuration.Create.MilestoneReplaceText))
+                {
+                    footerContent = footerContent.Replace(this.configuration.Create.MilestoneReplaceText, this.milestoneTitle);
+                }
             }
 
-            if (!file.Exists)
-            {
-                stringBuilder.AppendFormat(@"### Where to get it{0}You can download this release from [chocolatey](https://chocolatey.org/packages/ChocolateyGUI/{1})", Environment.NewLine, this.milestoneTitle);
-                return;
-            }
-
-            using (var reader = file.OpenText())
-            {
-                stringBuilder.Append(await reader.ReadToEndAsync());
-            }
+            stringBuilder.Append(footerContent);
         }
 
         private void LoadMilestones()

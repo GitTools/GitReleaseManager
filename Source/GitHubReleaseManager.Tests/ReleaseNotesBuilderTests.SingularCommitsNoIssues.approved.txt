@@ -1,4 +1,4 @@
-﻿As part of this release we had [1 commit](https://github.com/TestUser/FakeRepo/commits/1.2.3).
+﻿As part of this release we had [1 commit](https://github.com/TestUser/FakeRepository/commits/1.2.3).
 
 
 ### Where to get it
