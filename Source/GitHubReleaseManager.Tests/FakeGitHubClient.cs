@@ -18,11 +18,14 @@ namespace GitHubReleaseManager.Tests
         {
             this.Milestones = new List<Milestone>();
             this.Issues = new List<Issue>();
+            this.Releases = new List<Release>();
         }
 
         public List<Milestone> Milestones { get; private set; }
 
         public List<Issue> Issues { get; private set; }
+
+        public List<Release> Releases { get; private set; }
 
         public int NumberOfCommits { private get; set; }
 
@@ -38,7 +41,7 @@ namespace GitHubReleaseManager.Tests
 
         public Task<List<Release>> GetReleases()
         {
-            throw new System.NotImplementedException();
+            return Task.FromResult(this.Releases);
         }
 
         public ReadOnlyCollection<Milestone> GetMilestones()

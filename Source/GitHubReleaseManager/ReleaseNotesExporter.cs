@@ -25,7 +25,7 @@ namespace GitHubReleaseManager
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Not appropriate.")]
-        public async Task<string> GetReleases()
+        public async Task<string> ExportReleaseNotes()
         {
             var releases = await this.gitHubClient.GetReleases();
 
@@ -58,6 +58,10 @@ namespace GitHubReleaseManager
                         stringBuilder.AppendLine(release.Body);
                     }
                 }
+            }
+            else
+            {
+                stringBuilder.Append("Unable to find any releases for specified repository.");
             }
 
             return stringBuilder.ToString();

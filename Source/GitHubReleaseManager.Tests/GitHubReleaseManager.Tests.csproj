@@ -65,6 +65,7 @@
     <Compile Include="ReleaseNotesBuilderIntegrationTests.cs" />
     <Compile Include="ClientBuilder.cs" />
     <Compile Include="ReleaseNotesBuilderTests.cs" />
+    <Compile Include="ReleaseNotesExporterTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">

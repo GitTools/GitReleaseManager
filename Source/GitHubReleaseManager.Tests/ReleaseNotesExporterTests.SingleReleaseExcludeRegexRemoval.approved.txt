@@ -1,0 +1,20 @@
+﻿## 0.1.0 (March 12, 2015)
+
+
+As part of this release we had [3 issues](https://github.com/FakeRepository/issues/issues?milestone=0&state=closed) closed.
+
+
+__Bug__
+
+- [__#1__](http://example.com/1) Issue 1
+
+__Feature__
+
+- [__#2__](http://example.com/2) Issue 2
+
+__Improvement__
+
+- [__#3__](http://example.com/3) Issue 3
+
+### Where to get it
+You can download this release from [chocolatey](https://chocolatey.org/packages/ChocolateyGUI/0.1.0)

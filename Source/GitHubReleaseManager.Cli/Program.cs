@@ -272,7 +272,7 @@ namespace GitHubReleaseManager.Cli
         {
             var releaseNotesExporter = new ReleaseNotesExporter(new DefaultGitHubClient(github, owner, repository), configuration);
 
-            var result = await releaseNotesExporter.GetReleases();
+            var result = await releaseNotesExporter.ExportReleaseNotes();
 
             return result;
         }
