@@ -112,7 +112,7 @@ namespace GitHubReleaseManager.Tests
             return new Milestone
                 {
                     Title = version,
-                    Url = new Uri("https://github.com/Particular/FakeRepo/issues?q=milestone%3A" + version)
+                    Url = new Uri("https://github.com/gep13/FakeRepository/issues?q=milestone%3A" + version)
                 };
         }
 

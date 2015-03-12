@@ -25,7 +25,7 @@ namespace GitHubReleaseManager.Tests
             var currentDirectory = Environment.CurrentDirectory;
             var configuration = ConfigurationProvider.Provide(currentDirectory, fileSystem);
 
-            var releaseNotesBuilder = new ReleaseNotesBuilder(new DefaultGitHubClient(gitHubClient, "Particular", "NServiceBus"), "Particular", "NServiceBus", "5.1.0", configuration);
+            var releaseNotesBuilder = new ReleaseNotesBuilder(new DefaultGitHubClient(gitHubClient, "Chocolatey", "ChocolateyGUI"), "Chocolatey", "ChocolateyGUI", "0.12.4", configuration);
             var result = await releaseNotesBuilder.BuildReleaseNotes();
             Debug.WriteLine(result);
             ClipBoardHelper.SetClipboard(result);
@@ -40,7 +40,7 @@ namespace GitHubReleaseManager.Tests
             var currentDirectory = Environment.CurrentDirectory;
             var configuration = ConfigurationProvider.Provide(currentDirectory, fileSystem);
 
-            var releaseNotesBuilder = new ReleaseNotesBuilder(new DefaultGitHubClient(gitHubClient, "Particular", "ServiceControl"), "Particular", "ServiceControl", "1.0.0-Beta4", configuration);
+            var releaseNotesBuilder = new ReleaseNotesBuilder(new DefaultGitHubClient(gitHubClient, "Chocolatey", "ChocolateyGUI"), "Chocolatey", "ChocolateyGUI", "0.13.0", configuration);
             var result = await releaseNotesBuilder.BuildReleaseNotes();
             Debug.WriteLine(result);
             ClipBoardHelper.SetClipboard(result);

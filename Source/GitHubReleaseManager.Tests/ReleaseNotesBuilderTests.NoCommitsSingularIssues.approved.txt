@@ -1,4 +1,4 @@
-﻿As part of this release we had [1 issue](https://github.com/FakeRepo/issues/issues?milestone=0&state=closed) closed.
+﻿As part of this release we had [1 issue](https://github.com/FakeRepository/issues/issues?milestone=0&state=closed) closed.
 
 
 __Bug__
