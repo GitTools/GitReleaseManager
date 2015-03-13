@@ -11,8 +11,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuSpecs", "NuSpecs", "{87E2
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BuildScripts", "BuildScripts", "{2C8F25C5-0009-409B-8935-37BF6A5ED656}"
 	ProjectSection(SolutionItems) = preProject
+		..\BuildScripts\build.ps1 = ..\BuildScripts\build.ps1
 		..\BuildScripts\CodeAnalysis.props = ..\BuildScripts\CodeAnalysis.props
 		..\BuildScripts\CodeAnalysisReport.xsl = ..\BuildScripts\CodeAnalysisReport.xsl
+		..\BuildScripts\default.ps1 = ..\BuildScripts\default.ps1
+		..\BuildScripts\dupfinder.config = ..\BuildScripts\dupfinder.config
+		..\BuildScripts\dupfinder.xsl = ..\BuildScripts\dupfinder.xsl
+		..\BuildScripts\inspectcode.config = ..\BuildScripts\inspectcode.config
+		..\BuildScripts\inspectcode.xsl = ..\BuildScripts\inspectcode.xsl
 		..\BuildScripts\StyleCop.props = ..\BuildScripts\StyleCop.props
 		..\BuildScripts\StyleCopReport.xsl = ..\BuildScripts\StyleCopReport.xsl
 	EndProjectSection
