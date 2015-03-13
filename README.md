@@ -1,6 +1,8 @@
 ReleaseNotesCompiler
 ====================
 
+[![Join the chat at https://gitter.im/gep13/GitHubReleaseManager](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/gep13/GitHubReleaseManager?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 In order to improve the quality for our release notes we'll generate them based on the relevant github issues.
 
 ### Conventions
