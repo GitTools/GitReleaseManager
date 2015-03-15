@@ -393,7 +393,7 @@ Task -Name DeployDevelopSolutionToMyGet -Depends InspectCodeForProblems, DeployD
 
 Task -Name DeployMasterSolutionToMyGet -Depends InspectCodeForProblems, DeployMasterPackageToMyGet -Description "Complete build, including creation of Chocolatey Package and Deployment to MyGet.org"
 
-Task -Name DeploySolutionToChocolatey -Depends InspectCodeForProblems, DeployPackageToChocolatey -Description "Complete build, including creation of Chocolatey Package and Deployment to Chocolatey.org."
+Task -Name DeploySolutionToChocolatey -Depends InspectCodeForProblems, DeployPackageToChocolateyAndNuget -Description "Complete build, including creation of Chocolatey Package and Deployment to Chocolatey.org."
 
 # build tasks
 
@@ -620,7 +620,9 @@ Task -Name DeployDevelopPackageToMyGet -Description "Takes the packaged Chocolat
 		Write-Output "Deploying to MyGet..."
 
 		exec {
-			& $nugetExe push "$buildArtifactsDirectory\*.nupkg" $env:MyGetDevelopApiKey -source $env:MyGetDevelopFeedUrl
+      Get-ChildItem $buildArtifactsDirectory -Filter *.nupkg | Foreach-Object {
+        & $nugetExe push $_ $env:MyGetDevelopApiKey -source $env:MyGetDevelopFeedUrl
+      }
 		}
 
 		Write-Output ("************ MyGet Deployment Successful ************")
@@ -638,7 +640,9 @@ Task -Name DeployMasterPackageToMyGet -Description "Takes the packaged Chocolate
 		Write-Output "Deploying to MyGet..."
 
 		exec {
-			& $nugetExe push "$buildArtifactsDirectory\*.nupkg" $env:MyGetMasterApiKey -source $env:MyGetMasterFeedUrl
+      Get-ChildItem $buildArtifactsDirectory -Filter *.nupkg | Foreach-Object {
+        & $nugetExe push $_ $env:MyGetMasterApiKey -source $env:MyGetMasterFeedUrl
+      }
 		}
 
 		Write-Output ("************ MyGet Deployment Successful ************")
@@ -649,20 +653,26 @@ Task -Name DeployMasterPackageToMyGet -Description "Takes the packaged Chocolate
 	}
 }
 
-Task -Name DeployPackageToChocolatey -Description "Takes the packaged Chocolatey package and deploys to Chocolatey.org" -Action {
+Task -Name DeployPackageToChocolateyAndNuget -Description "Takes the packages and deploys to Chocolatey.org and nuget.org" -Action {
 	$buildArtifactsDirectory = get-buildArtifactsDirectory;
 				
 	try {
-		Write-Output "Deploying to Chocolatey..."
+		Write-Output "Deploying to Chocolatey and Nuget..."
 
 		exec {
-			& $nugetExe push "$buildArtifactsDirectory\*.nupkg" $env:ChocolateyApiKey -source $env:ChocolateyFeedUrl
+      Get-ChildItem $buildArtifactsDirectory -Filter *.nupkg | Foreach-Object {
+        if(&_ -like '*cli*') {
+          & $nugetExe push $_ $env:ChocolateyApiKey -source $env:ChocolateyFeedUrl
+        } else {
+          & $nugetExe push $_ $env:NugetApiKey -source $env:NugetFeedUrl
+        }        
+      }
 		}
 
-		Write-Output ("************ Chocolatey Deployment Successful ************")
+		Write-Output ("************ Chocolatey and Nuget Deployment Successful ************")
 	}
 	catch {
 		Write-Error $_
-		Write-Output ("************ Chocolatey Deployment Failed ************")
+		Write-Output ("************ Chocolatey and Nuget Deployment Failed ************")
 	}
 }
