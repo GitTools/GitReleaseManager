@@ -1,5 +1,5 @@
 ﻿// <copyright file="BaseGitHubSubOptions.cs" company="gep13">
-//     Copyright (c) gep13. All rights reserved.
+//     Copyright (c) 2015 - Present gep13
 // </copyright>
 //-----------------------------------------------------------------------
 
