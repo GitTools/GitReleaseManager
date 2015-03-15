@@ -75,6 +75,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Options\AddAssetSubOptions.cs" />
     <Compile Include="Options\BaseGitHubSubOptions.cs" />
     <Compile Include="Options\BaseSubOptions.cs" />
