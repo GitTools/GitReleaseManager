@@ -547,9 +547,9 @@ Task -Name BuildSolution -Depends __RemoveBuildArtifactsDirectory, __VerifyConfi
 			}
 
 			if(isAppVeyor) {
-				$expectedMsiFile = Join-Path -Path $buildArtifactsDirectory -ChildPath "GitHubReleaseManager.exe"
-				if(Test-Path $expectedMsiFile) {
-					Push-AppveyorArtifact $expectedMsiFile;
+				$expectedExeFile = Join-Path -Path $buildArtifactsDirectory -ChildPath "GitHubReleaseManager.Cli.exe"
+				if(Test-Path $expectedExeFile) {
+					Push-AppveyorArtifact $expectedExeFile;
 				}
 			}
 		}
@@ -598,10 +598,9 @@ Task -Name PackageChocolatey -Description "Packs the module and example package"
 			.$nugetExe pack "$sourceDirectory\..\Packaging\nuget\GitHubReleaseManager.nuspec" -OutputDirectory "$buildArtifactsDirectory" -NoPackageAnalysis -version $script:version 
 
 			if(isAppVeyor) {
-				$expectedNupkgFile = Join-Path -Path $buildArtifactsDirectory -ChildPath "GitHubReleaseManager*.nupkg"
-				if(Test-Path $expectedNupkgFile) {
-					Push-AppveyorArtifact ($expectedNupkgFile | Resolve-Path).Path;
-				}
+        Get-ChildItem $buildArtifactsDirectory -Filter *.nupkg | Foreach-Object {
+          Push-AppveyorArtifact ($_ | Resolve-Path).Path;
+        }
 			}
 		}
 
