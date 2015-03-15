@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CoverageSession xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Summary numSequencePoints="0" visitedSequencePoints="0" numBranchPoints="0" visitedBranchPoints="0" sequenceCoverage="0" branchCoverage="0" maxCyclomaticComplexity="0" minCyclomaticComplexity="0" />
+  <Modules>
+    <Module skippedDueTo="Filter" hash="4C-39-F2-37-40-B1-C4-8A-F9-84-DB-18-56-B5-F9-F6-90-0B-5C-58">
+      <FullName>C:\WINDOWS\assembly\GAC_64\mscorlib\2.0.0.0__b77a5c561934e089\mscorlib.dll</FullName>
+      <ModuleName>mscorlib</ModuleName>
+      <Classes />
+    </Module>
+    <Module skippedDueTo="Filter" hash="F9-04-A8-31-CD-FB-23-72-95-63-5D-14-9A-A0-66-8E-7F-44-93-7A">
+      <FullName>C:\WINDOWS\assembly\GAC_64\mscorlib\2.0.0.0__b77a5c561934e089\sorttbls.nlp</FullName>
+      <ModuleName>mscorlib</ModuleName>
+      <Classes />
+    </Module>
+    <Module skippedDueTo="Filter" hash="9F-C3-2E-51-B5-EB-69-B9-60-21-42-1F-17-25-12-07-16-11-20-50">
+      <FullName>D:\github\gep13\GitHubReleaseManager\Source\packages\NUnit.Runners.2.6.4\tools\nunit-console.exe</FullName>
+      <ModuleName>nunit-console</ModuleName>
+      <Classes />
+    </Module>
+    <Module skippedDueTo="Filter" hash="6E-30-2E-50-36-FB-60-2C-8E-50-C0-83-54-8B-CC-EA-A8-91-B6-CC">
+      <FullName>C:\WINDOWS\assembly\GAC_64\mscorlib\2.0.0.0__b77a5c561934e089\sortkey.nlp</FullName>
+      <ModuleName>mscorlib</ModuleName>
+      <Classes />
+    </Module>
+    <Module skippedDueTo="Filter" hash="F2-ED-FF-09-01-C9-D7-BC-29-AC-A6-93-C5-97-8A-0D-43-DD-8D-F2">
+      <FullName>D:\github\gep13\GitHubReleaseManager\Source\packages\NUnit.Runners.2.6.4\tools\lib\nunit-console-runner.dll</FullName>
+      <ModuleName>nunit-console-runner</ModuleName>
+      <Classes />
+    </Module>
+    <Module skippedDueTo="Filter" hash="36-B9-FF-C0-07-EA-59-4D-23-2E-FD-CD-5A-45-CF-C0-2C-42-2A-98">
+      <FullName>D:\github\gep13\GitHubReleaseManager\Source\packages\NUnit.Runners.2.6.4\tools\lib\nunit.core.dll</FullName>
+      <ModuleName>nunit.core</ModuleName>
+      <Classes />
+    </Module>
+    <Module skippedDueTo="Filter" hash="14-C3-4B-3E-39-7A-EE-C0-B9-2F-83-44-2F-04-8A-F7-48-7B-67-DE">
+      <FullName>D:\github\gep13\GitHubReleaseManager\Source\packages\NUnit.Runners.2.6.4\tools\lib\nunit.util.dll</FullName>
+      <ModuleName>nunit.util</ModuleName>
+      <Classes />
+    </Module>
+    <Module skippedDueTo="Filter" hash="5E-95-A6-AD-88-48-98-B1-62-7F-4E-5A-C1-0E-F3-B7-85-56-44-E8">
+      <FullName>D:\github\gep13\GitHubReleaseManager\Source\packages\NUnit.Runners.2.6.4\tools\lib\nunit.core.interfaces.dll</FullName>
+      <ModuleName>nunit.core.interfaces</ModuleName>
+      <Classes />
+    </Module>
+    <Module skippedDueTo="Filter" hash="55-BA-A4-A1-F6-E9-77-45-55-59-ED-C2-F7-90-65-6A-E2-0A-F0-D1">
+      <FullName>C:\WINDOWS\assembly\GAC_MSIL\System.Configuration\2.0.0.0__b03f5f7f11d50a3a\System.Configuration.dll</FullName>
+      <ModuleName>System.Configuration</ModuleName>
+      <Classes />
+    </Module>
+    <Module skippedDueTo="Filter" hash="5B-58-14-72-A0-28-85-4B-B5-A1-BA-11-BB-9D-9D-05-65-A3-5E-54">
+      <FullName>C:\WINDOWS\assembly\GAC_MSIL\System\2.0.0.0__b77a5c561934e089\System.dll</FullName>
+      <ModuleName>System</ModuleName>
+      <Classes />
+    </Module>
+    <Module skippedDueTo="Filter" hash="06-27-0C-FC-C3-23-F5-AA-2C-D5-FE-4B-08-2E-CE-01-09-7B-2F-D1">
+      <FullName>C:\WINDOWS\assembly\GAC_MSIL\System.Xml\2.0.0.0__b77a5c561934e089\System.Xml.dll</FullName>
+      <ModuleName>System.Xml</ModuleName>
+      <Classes />
+    </Module>
+    <Module skippedDueTo="Filter" hash="CB-29-2C-91-2E-AE-28-D8-A5-84-C7-B9-DB-F2-0B-51-CC-CD-72-80">
+      <FullName>C:\WINDOWS\assembly\GAC_MSIL\System.Runtime.Remoting\2.0.0.0__b77a5c561934e089\System.Runtime.Remoting.dll</FullName>
+      <ModuleName>System.Runtime.Remoting</ModuleName>
+      <Classes />
+    </Module>
+    <Module skippedDueTo="Filter" hash="1C-14-EF-7D-5A-01-7B-5A-59-2C-0B-20-CA-15-5F-9F-6F-18-E5-6C">
+      <FullName>C:\WINDOWS\Microsoft.Net\assembly\GAC_64\mscorlib\v4.0_4.0.0.0__b77a5c561934e089\mscorlib.dll</FullName>
+      <ModuleName>mscorlib</ModuleName>
+      <Classes />
+    </Module>
+    <Module skippedDueTo="Filter" hash="E8-07-A4-A1-06-33-5B-A6-17-CF-DC-6F-28-47-58-85-D6-9F-6B-46">
+      <FullName>D:\github\gep13\GitHubReleaseManager\Source\packages\NUnit.Runners.2.6.4\tools\nunit-agent.exe</FullName>
+      <ModuleName>nunit-agent</ModuleName>
+      <Classes />
+    </Module>
+    <Module skippedDueTo="Filter" hash="36-B9-FF-C0-07-EA-59-4D-23-2E-FD-CD-5A-45-CF-C0-2C-42-2A-98">
+      <FullName>D:\github\gep13\GitHubReleaseManager\Source\packages\NUnit.Runners.2.6.4\tools\lib\nunit.core.dll</FullName>
+      <ModuleName>nunit.core</ModuleName>
+      <Classes />
+    </Module>
+    <Module skippedDueTo="Filter" hash="14-C3-4B-3E-39-7A-EE-C0-B9-2F-83-44-2F-04-8A-F7-48-7B-67-DE">
+      <FullName>D:\github\gep13\GitHubReleaseManager\Source\packages\NUnit.Runners.2.6.4\tools\lib\nunit.util.dll</FullName>
+      <ModuleName>nunit.util</ModuleName>
+      <Classes />
+    </Module>
+    <Module skippedDueTo="Filter" hash="5E-95-A6-AD-88-48-98-B1-62-7F-4E-5A-C1-0E-F3-B7-85-56-44-E8">
+      <FullName>D:\github\gep13\GitHubReleaseManager\Source\packages\NUnit.Runners.2.6.4\tools\lib\nunit.core.interfaces.dll</FullName>
+      <ModuleName>nunit.core.interfaces</ModuleName>
+      <Classes />
+    </Module>
+    <Module skippedDueTo="Filter" hash="04-DF-13-16-0B-F4-57-A9-D9-9C-5A-63-DC-51-CD-BF-FD-3A-AF-DA">
+      <FullName>C:\WINDOWS\Microsoft.Net\assembly\GAC_MSIL\System\v4.0_4.0.0.0__b77a5c561934e089\System.dll</FullName>
+      <ModuleName>System</ModuleName>
+      <Classes />
+    </Module>
+    <Module skippedDueTo="Filter" hash="ED-BE-5C-45-66-32-AB-2E-1E-B4-6F-0D-47-35-C3-3C-95-AA-09-B3">
+      <FullName>C:\WINDOWS\Microsoft.Net\assembly\GAC_MSIL\System.Runtime.Remoting\v4.0_4.0.0.0__b77a5c561934e089\System.Runtime.Remoting.dll</FullName>
+      <ModuleName>System.Runtime.Remoting</ModuleName>
+      <Classes />
+    </Module>
+    <Module skippedDueTo="Filter" hash="3B-FD-DC-EB-D9-C6-34-64-C7-D5-6A-D1-A0-04-93-80-2B-B0-C7-73">
+      <FullName>C:\WINDOWS\Microsoft.Net\assembly\GAC_MSIL\System.Configuration\v4.0_4.0.0.0__b03f5f7f11d50a3a\System.Configuration.dll</FullName>
+      <ModuleName>System.Configuration</ModuleName>
+      <Classes />
+    </Module>
+    <Module skippedDueTo="Filter" hash="2C-B8-8B-0E-27-14-38-8E-71-A5-1D-A0-EE-33-D9-22-5F-A4-AF-79">
+      <FullName>C:\WINDOWS\Microsoft.Net\assembly\GAC_MSIL\System.Xml\v4.0_4.0.0.0__b77a5c561934e089\System.Xml.dll</FullName>
+      <ModuleName>System.Xml</ModuleName>
+      <Classes />
+    </Module>
+    <Module skippedDueTo="Filter" hash="A0-EF-61-A3-E0-AA-4F-02-A5-74-1C-C7-2D-F5-57-D4-F9-D4-9B-36">
+      <FullName>C:\WINDOWS\Microsoft.Net\assembly\GAC_64\System.Web\v4.0_4.0.0.0__b03f5f7f11d50a3a\System.Web.dll</FullName>
+      <ModuleName>System.Web</ModuleName>
+      <Classes />
+    </Module>
+    <Module skippedDueTo="Filter" hash="FE-AE-8A-61-F6-E2-C4-E9-F9-8F-B6-D5-A6-16-A8-9E-91-46-80-33">
+      <FullName>C:\WINDOWS\assembly\GAC_64\System.Web\2.0.0.0__b03f5f7f11d50a3a\System.Web.dll</FullName>
+      <ModuleName>System.Web</ModuleName>
+      <Classes />
+    </Module>
+    <Module skippedDueTo="Filter" hash="36-B9-FF-C0-07-EA-59-4D-23-2E-FD-CD-5A-45-CF-C0-2C-42-2A-98">
+      <FullName>D:\github\gep13\GitHubReleaseManager\Source\packages\NUnit.Runners.2.6.4\tools\lib\nunit.core.dll</FullName>
+      <ModuleName>nunit.core</ModuleName>
+      <Classes />
+    </Module>
+    <Module skippedDueTo="Filter" hash="04-DF-13-16-0B-F4-57-A9-D9-9C-5A-63-DC-51-CD-BF-FD-3A-AF-DA">
+      <FullName>C:\WINDOWS\Microsoft.Net\assembly\GAC_MSIL\System\v4.0_4.0.0.0__b77a5c561934e089\System.dll</FullName>
+      <ModuleName>System</ModuleName>
+      <Classes />
+    </Module>
+    <Module skippedDueTo="Filter" hash="53-25-23-C6-63-70-35-C6-0C-82-04-1A-0A-BF-1A-E7-1F-EA-74-A3">
+      <FullName>D:\github\gep13\GitHubReleaseManager\Source\packages\NUnit.Runners.2.6.4\tools\pnunit.framework.dll</FullName>
+      <ModuleName>pnunit.framework</ModuleName>
+      <Classes />
+    </Module>
+    <Module skippedDueTo="Filter" hash="21-69-E9-47-C6-F8-02-12-31-E6-18-DE-8E-43-24-C9-AB-F7-C2-BE">
+      <FullName>D:\github\gep13\GitHubReleaseManager\Source\packages\NUnit.Runners.2.6.4\tools\pnunit-agent.exe</FullName>
+      <ModuleName>pnunit-agent</ModuleName>
+      <Classes />
+    </Module>
+    <Module skippedDueTo="Filter" hash="5E-95-A6-AD-88-48-98-B1-62-7F-4E-5A-C1-0E-F3-B7-85-56-44-E8">
+      <FullName>D:\github\gep13\GitHubReleaseManager\Source\packages\NUnit.Runners.2.6.4\tools\lib\nunit.core.interfaces.dll</FullName>
+      <ModuleName>nunit.core.interfaces</ModuleName>
+      <Classes />
+    </Module>
+    <Module skippedDueTo="Filter" hash="E5-54-D9-FB-06-7C-CC-D2-8C-73-5A-A8-2D-0B-58-5A-2B-F3-5A-DD">
+      <FullName>C:\Users\gep13\AppData\Local\Temp\nunit20\ShadowCopyCache\5440_635620499277706852\Tests_265525656\assembly\dl3\91317714\65879365_615fd001\GitHubReleaseManager.Tests.dll</FullName>
+      <ModuleName>GitHubReleaseManager.Tests</ModuleName>
+      <Classes />
+    </Module>
+    <Module skippedDueTo="MissingPdb" hash="7E-0F-E7-14-31-F7-20-AE-55-EF-E0-BD-70-68-3D-BD-AF-61-33-7A">
+      <FullName>C:\Users\gep13\AppData\Local\Temp\nunit20\ShadowCopyCache\5440_635620499277706852\Tests_265525656\assembly\dl3\bf7fd20d\7a917265_615fd001\GitHubReleaseManager.dll</FullName>
+      <ModuleName>GitHubReleaseManager</ModuleName>
+      <Classes />
+    </Module>
+    <Module skippedDueTo="Filter" hash="2C-87-5B-F2-8C-45-9F-14-A6-16-85-58-4C-68-E2-9D-BC-86-A7-67">
+      <FullName>C:\Users\gep13\AppData\Local\Temp\nunit20\ShadowCopyCache\5440_635620499277706852\Tests_265525656\assembly\dl3\cb440458\a2d169c1_115dd001\Octokit.dll</FullName>
+      <ModuleName>Octokit</ModuleName>
+      <Classes />
+    </Module>
+    <Module skippedDueTo="Filter" hash="42-83-FE-A6-9F-01-8E-2C-E8-41-E9-25-3E-1E-0D-99-81-76-6B-C9">
+      <FullName>C:\Users\gep13\AppData\Local\Temp\nunit20\ShadowCopyCache\5440_635620499277706852\Tests_265525656\assembly\dl3\1db3d791\3c715fc1_115dd001\nunit.framework.dll</FullName>
+      <ModuleName>nunit.framework</ModuleName>
+      <Classes />
+    </Module>
+    <Module skippedDueTo="Filter" hash="E3-F7-3A-61-73-75-A6-38-6E-1A-EE-E7-A1-45-1B-30-57-79-67-C2">
+      <FullName>C:\Users\gep13\AppData\Local\Temp\nunit20\ShadowCopyCache\5440_635620499277706852\Tests_265525656\assembly\dl3\f43cfd03\e83755c1_115dd001\ApprovalTests.dll</FullName>
+      <ModuleName>ApprovalTests</ModuleName>
+      <Classes />
+    </Module>
+    <Module skippedDueTo="Filter" hash="79-A8-94-78-12-5A-20-71-0A-77-F6-BF-44-4F-76-CD-EE-98-04-1B">
+      <FullName>C:\WINDOWS\Microsoft.Net\assembly\GAC_MSIL\System.Core\v4.0_4.0.0.0__b77a5c561934e089\System.Core.dll</FullName>
+      <ModuleName>System.Core</ModuleName>
+      <Classes />
+    </Module>
+    <Module skippedDueTo="Filter" hash="F2-ED-FF-09-01-C9-D7-BC-29-AC-A6-93-C5-97-8A-0D-43-DD-8D-F2">
+      <FullName>D:\github\gep13\GitHubReleaseManager\Source\packages\NUnit.Runners.2.6.4\tools\lib\nunit-console-runner.dll</FullName>
+      <ModuleName>nunit-console-runner</ModuleName>
+      <Classes />
+    </Module>
+    <Module skippedDueTo="Filter" hash="ED-BE-5C-45-66-32-AB-2E-1E-B4-6F-0D-47-35-C3-3C-95-AA-09-B3">
+      <FullName>C:\WINDOWS\Microsoft.Net\assembly\GAC_MSIL\System.Runtime.Remoting\v4.0_4.0.0.0__b77a5c561934e089\System.Runtime.Remoting.dll</FullName>
+      <ModuleName>System.Runtime.Remoting</ModuleName>
+      <Classes />
+    </Module>
+    <Module skippedDueTo="Filter" hash="3B-FD-DC-EB-D9-C6-34-64-C7-D5-6A-D1-A0-04-93-80-2B-B0-C7-73">
+      <FullName>C:\WINDOWS\Microsoft.Net\assembly\GAC_MSIL\System.Configuration\v4.0_4.0.0.0__b03f5f7f11d50a3a\System.Configuration.dll</FullName>
+      <ModuleName>System.Configuration</ModuleName>
+      <Classes />
+    </Module>
+    <Module skippedDueTo="Filter" hash="2C-B8-8B-0E-27-14-38-8E-71-A5-1D-A0-EE-33-D9-22-5F-A4-AF-79">
+      <FullName>C:\WINDOWS\Microsoft.Net\assembly\GAC_MSIL\System.Xml\v4.0_4.0.0.0__b77a5c561934e089\System.Xml.dll</FullName>
+      <ModuleName>System.Xml</ModuleName>
+      <Classes />
+    </Module>
+    <Module skippedDueTo="Filter" hash="DA-94-45-F1-E6-05-68-5A-6E-7B-70-92-69-DC-F9-12-54-17-E5-FC">
+      <FullName>C:\Users\gep13\AppData\Local\Temp\nunit20\ShadowCopyCache\5440_635620499277706852\Tests_265525656\assembly\dl3\4af7a546\b55659c1_115dd001\ApprovalUtilities.dll</FullName>
+      <ModuleName>ApprovalUtilities</ModuleName>
+      <Classes />
+    </Module>
+  </Modules>
+</CoverageSession>

@@ -8,6 +8,10 @@ properties {
 	$config = 'Debug';
 	$nugetExe = "..\Tools\NuGet\NuGet.exe";
 	$projectName = "GitHubReleaseManager";
+  $openCoverExe = "..\Source\packages\OpenCover.4.5.3723\OpenCover.Console.exe";
+  $nunitConsoleExe = "..\Source\packages\NUnit.Runners.2.6.4\tools\nunit-console.exe";
+  $reportGeneratorExe = "..\Source\packages\ReportGenerator.2.1.3.0\ReportGenerator.exe";
+  $coverallsExe = "..\Source\packages\coveralls.io.1.2.2\tools\coveralls.net.exe";
 }
 
 $private = "This is a private task not meant for external use!";
@@ -562,7 +566,36 @@ Task -Name BuildSolution -Depends __RemoveBuildArtifactsDirectory, __VerifyConfi
 	}
 }
 
-Task -Name RebuildSolution -Depends CleanSolution, __CreateBuildArtifactsDirectory, BuildSolution -Description "Rebuilds the main solution for the package"
+Task -Name RunCodeCoverage -Description "Use OpenCover, NUnit and Coveralls to analyze all code files and produce a report" -Action {
+  $buildArtifactsDirectory = get-buildArtifactsDirectory;
+  
+	try {
+		Write-Output "Running RunCodeCoverage...";
+
+		exec {
+      Write-Output "Running OpenCover...";
+      & $openCoverExe -target:$nunitConsoleExe -targetargs:"$buildArtifactsDirectory\GitHubReleaseManager.Tests.dll /noshadow /nologo" -filter:"+[GitHubReleaseManager]GitHubReleaseManager*" -excludebyattribute:"System.CodeDom.Compiler.GeneratedCodeAttribute" -register:user -output:"$buildArtifactsDirectory\coverage.xml";
+      Write-Output "OpenCover Complete";
+      
+      Write-Output "Running ReportGenerator...";
+      & $reportGeneratorExe -reports:$buildArtifactsDirectory\coverage.xml -targetdir:$buildArtifactsDirectory\_CodeCoverageReport;
+      Write-Output "ReportGenerator Complete";
+      
+      if(isAppVeyor) {
+        Write-Output "Running Coveralls...";
+        & $coverallsExe --opencover $buildArtifactsDirectory\coverage.xml
+        Write-Output "Coveralls Complete";
+      }
+		}
+
+		Write-Output ("************ RunCodeCoverage Successful ************");
+  }	catch {
+    Write-Error $_
+    Write-Output ("************ PackageChocolatey Failed ************")
+  }
+}
+
+Task -Name RebuildSolution -Depends CleanSolution, __CreateBuildArtifactsDirectory, BuildSolution, RunCodeCoverage -Description "Rebuilds the main solution for the package"
 
 # clean tasks
 
