@@ -636,7 +636,7 @@ Task -Name PackageChocolatey -Description "Packs the module and example package"
           
           if(Test-Path $nugetPath) {
             Write-Output "Pushing artifact to AppVeyor...";
-            Push-AppveyorArtifact $nugetPath;
+            Push-AppveyorArtifact (Convert-Path $nugetPath);
             Write-Output "AppVeyor Upload completed.";
           } else {
             Write-Output "Unable to find path of artifact, so can't upload."
