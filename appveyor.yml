@@ -35,6 +35,10 @@ environment:
     secure: 9zbEIVfl69s/qhei6qkdeA==
   GitHubPassword:
     secure: XSuLygmr83zEpWcXIXMXGocN0QbooLud1eIMA3mQWKkT9LAU4TyrijLBcJIo7bD7
+  CoverityProjectToken:
+    secure: B9diAS20/XucFCQ8vPg02br0VukNjo5+nbFx121Arac=
+  CoverityEmailDistribution:
+    secure: FuJy6Wqvw19/VBYyE0hHY+lNbkKxlN1Jsr8OiTdAgkQ=
    
 #---------------------------------#
 #       build configuration       #

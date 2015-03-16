@@ -12,6 +12,7 @@ properties {
   $nunitConsoleExe = "..\Source\packages\NUnit.Runners.2.6.4\tools\nunit-console.exe";
   $reportGeneratorExe = "..\Source\packages\ReportGenerator.2.1.3.0\ReportGenerator.exe";
   $coverallsExe = "..\Source\packages\coveralls.io.1.2.2\tools\coveralls.net.exe";
+  $publishCoverityExe = "..\Source\packages\PublishCoverity.0.9.0\PublishCoverity.exe";
 }
 
 $private = "This is a private task not meant for external use!";
@@ -531,8 +532,24 @@ Task -Name BuildSolution -Depends __RemoveBuildArtifactsDirectory, __VerifyConfi
 	try {
 		Write-Output "Running BuildSolution..."
 
-		exec { 
-			Invoke-MSBuild "$sourceDirectory\GitHubReleaseManager.sln" -NoLogo -Configuration $config -Targets Build -DetailedSummary -VisualStudioVersion 12.0 -Properties (@{'Platform'='Any CPU'})
+		exec {
+      if ($env:APPVEYOR_SCHEDULED_BUILD -ne "True") {    
+        Invoke-MSBuild "$sourceDirectory\GitHubReleaseManager.sln" -NoLogo -Configuration $config -Targets Build -DetailedSummary -VisualStudioVersion 12.0 -Properties (@{'Platform'='Any CPU'})
+      } else {
+        $buildCmd = "C:\Program Files (x86)\MSBuild\12.0\bin\msbuild.exe";
+        $buildArgs = @(
+                      "$sourceDirectory\GitHubReleaseManager.sln"
+                      "/l:C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll",
+                      "/m",
+                      "/p:Configuration=$config",
+                      "/p:Platform=Any CPU");
+                      
+        & cov-build --dir $buildArtifactsDirectory\cov-int $buildCmd $buildArgs;
+        
+        & $publishCoverityExe compress -o $buildArtifactsDirectory\coverity.zip -i $buildArtifactsDirectory\cov-int;
+        
+        & $publishCoverityExe publish -z $buildArtifactsDirectory\coverity.zip -r $env:APPVEYOR_REPO_NAME -t $env:CoverityProjectToken -e $env:CoverityEmailDistribution -d "AppVeyor scheduled build." --codeVersion $script:version;
+      }
 						
 			$styleCopResultsFiles = Get-ChildItem $buildArtifactsDirectory -Filter "StyleCop*.xml"
 			foreach ($styleCopResultsFile in $styleCopResultsFiles) {
