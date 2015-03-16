@@ -650,14 +650,9 @@ Task -Name PackageChocolatey -Description "Packs the module and example package"
 			if(isAppVeyor) {
         Get-ChildItem $buildArtifactsDirectory -Filter *.nupkg | Foreach-Object {
           $nugetPath = ($_ | Resolve-Path).Path;
+          $convertedPath = Convert-Path $nugetPath;
           
-          if(Test-Path $nugetPath) {
-            Write-Output "Pushing artifact to AppVeyor...";
-            Push-AppveyorArtifact (Convert-Path $nugetPath);
-            Write-Output "AppVeyor Upload completed.";
-          } else {
-            Write-Output "Unable to find path of artifact, so can't upload."
-          }
+          Push-AppveyorArtifact (Convert-Path $convertedPath);
         }
 			}
 		}
@@ -678,7 +673,10 @@ Task -Name DeployDevelopPackageToMyGet -Description "Takes the packaged Chocolat
 
 		exec {
       Get-ChildItem $buildArtifactsDirectory -Filter *.nupkg | Foreach-Object {
-        & $nugetExe push $_ $env:MyGetDevelopApiKey -source $env:MyGetDevelopFeedUrl
+        $nugetPath = ($_ | Resolve-Path).Path;
+        $convertedPath = Convert-Path $nugetPath;
+        
+        & $nugetExe push $convertedPath $env:MyGetDevelopApiKey -source $env:MyGetDevelopFeedUrl
       }
 		}
 
@@ -698,7 +696,10 @@ Task -Name DeployMasterPackageToMyGet -Description "Takes the packaged Chocolate
 
 		exec {
       Get-ChildItem $buildArtifactsDirectory -Filter *.nupkg | Foreach-Object {
-        & $nugetExe push $_ $env:MyGetMasterApiKey -source $env:MyGetMasterFeedUrl
+        $nugetPath = ($_ | Resolve-Path).Path;
+        $convertedPath = Convert-Path $nugetPath;
+        
+        & $nugetExe push $convertedPath $env:MyGetMasterApiKey -source $env:MyGetMasterFeedUrl
       }
 		}
 
@@ -718,10 +719,13 @@ Task -Name DeployPackageToChocolateyAndNuget -Description "Takes the packages an
 
 		exec {
       Get-ChildItem $buildArtifactsDirectory -Filter *.nupkg | Foreach-Object {
+        $nugetPath = ($_ | Resolve-Path).Path;
+        $convertedPath = Convert-Path $nugetPath;
+        
         if(&_ -like '*cli*') {
-          & $nugetExe push $_ $env:ChocolateyApiKey -source $env:ChocolateyFeedUrl
+          & $nugetExe push $convertedPath $env:ChocolateyApiKey -source $env:ChocolateyFeedUrl
         } else {
-          & $nugetExe push $_ $env:NugetApiKey -source $env:NugetFeedUrl
+          & $nugetExe push $convertedPath $env:NugetApiKey -source $env:NugetFeedUrl
         }        
       }
 		}
