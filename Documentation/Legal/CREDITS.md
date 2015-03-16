@@ -37,8 +37,14 @@ GitHubReleaseManager is tested and analyzed with the following rockstar framewor
  * [StyleCop](http://stylecop.codeplex.com/)
  * [InspectCode](https://confluence.jetbrains.com/display/NETCOM/Introducing+InspectCode)
  * [DupFinder](https://confluence.jetbrains.com/display/NETCOM/Introducing+dupFinder)
+ * [Coveralls](https://coveralls.io/)
+ * [Coverity Scan](https://scan.coverity.com/)
+ * [NUnit](http://www.nunit.org/)
+ * [OpenCover](https://github.com/opencover/opencover)
 
 We would like to credit other super sweet tools/frameworks that aid in the development of GitHubReleaseManager:
 
  * [ReSharper](https://www.jetbrains.com/resharper/)
  * [NuGet Framework](https://www.nuget.org/)
+ * [ReportGenerator](http://danielpalme.github.io/ReportGenerator/)
+ * [PublishCoverity](http://www.nuget.org/packages/PublishCoverity/)
