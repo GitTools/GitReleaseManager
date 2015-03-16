@@ -39,6 +39,8 @@ environment:
     secure: B9diAS20/XucFCQ8vPg02br0VukNjo5+nbFx121Arac=
   CoverityEmailDistribution:
     secure: FuJy6Wqvw19/VBYyE0hHY+lNbkKxlN1Jsr8OiTdAgkQ=
+  COVERALLS_REPO_TOKEN:
+    secure: Z5cvhf8uoT2AqN/yfurbwty0RwNMSZA6l+nhINv+uNxVbdCkBDyPjeFUCNCnujs3
    
 #---------------------------------#
 #       build configuration       #
