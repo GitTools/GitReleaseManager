@@ -261,7 +261,7 @@ Task -Name __InstallChocolatey -Description $private -Action {
     }
     
     exec {
-			Invoke-Expression "$script:chocolateyCommand upgrade chocolatey";
+			Invoke-Expression "$script:chocolateyCommand upgrade chocolatey -y";
 		}
     
     Write-Output "Latest Chocolatey installed."
@@ -315,7 +315,7 @@ Task -Name __UpdateReSharperCommandLineTools -Description $private -Action {
 		Write-Output "Running Upgrade Command Line Tools..."
 
 		exec {
-			Invoke-Expression "$script:chocolateyCommand upgrade resharper-clt";
+			Invoke-Expression "$script:chocolateyCommand upgrade resharper-clt -y";
 		}
 
 		Write-Output ("************ Upgrade Command Line Tools Successful ************")
@@ -376,7 +376,7 @@ Task -Name __UpdateGitVersion -Description $private -Action {
 		Write-Output "Running Upgrade GitVersion.Portable..."
 
 		exec {
-			Invoke-Expression "$script:chocolateyCommand upgrade GitVersion.Portable";
+			Invoke-Expression "$script:chocolateyCommand upgrade GitVersion.Portable -y";
 		}
 
 		Write-Output ("************ Upgrade GitVersion.Portable Successful ************")
@@ -574,7 +574,7 @@ Task -Name RunCodeCoverage -Description "Use OpenCover, NUnit and Coveralls to a
 
 		exec {
       Write-Output "Running OpenCover...";
-      & $openCoverExe -target:$nunitConsoleExe -targetargs:"$buildArtifactsDirectory\GitHubReleaseManager.Tests.dll /noshadow /nologo" -filter:"+[GitHubReleaseManager]GitHubReleaseManager*" -excludebyattribute:"System.CodeDom.Compiler.GeneratedCodeAttribute" -register:user -output:"$buildArtifactsDirectory\coverage.xml";
+      & $openCoverExe -target:$nunitConsoleExe -targetargs:`"$buildArtifactsDirectory\GitHubReleaseManager.Tests.dll /noshadow /nologo`" -filter:`"+[GitHubReleaseManager]GitHubReleaseManager*`" -excludebyattribute:`"System.CodeDom.Compiler.GeneratedCodeAttribute`" -register:user -output:`"$buildArtifactsDirectory\coverage.xml`";
       Write-Output "OpenCover Complete";
       
       Write-Output "Running ReportGenerator...";
