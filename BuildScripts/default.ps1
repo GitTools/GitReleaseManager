@@ -646,7 +646,7 @@ Task -Name PackageChocolatey -Description "Packs the module and example package"
 		Write-Output "Running PackageChocolatey..."
 
 		exec { 
-			.$nugetExe pack "$sourceDirectory\..\Packaging\nuget\GitHubReleaseManager.Cli.nuspec" -OutputDirectory "$buildArtifactsDirectory" -NoPackageAnalysis -version $script:version 
+			.$nugetExe pack "$sourceDirectory\..\Packaging\nuget\GitHubReleaseManager.Portable.nuspec" -OutputDirectory "$buildArtifactsDirectory" -NoPackageAnalysis -version $script:version 
 			.$nugetExe pack "$sourceDirectory\..\Packaging\nuget\GitHubReleaseManager.nuspec" -OutputDirectory "$buildArtifactsDirectory" -NoPackageAnalysis -version $script:version 
 
 			if(isAppVeyor) {
