@@ -233,6 +233,8 @@ Task -Name __EchoAppVeyorEnvironmentVariables -Description $private -Action {
 		testEnvironmentVariable "APPVEYOR_REPO_COMMIT_AUTHOR" $env:APPVEYOR_REPO_COMMIT_AUTHOR;
 		testEnvironmentVariable "APPVEYOR_REPO_COMMIT_TIMESTAMP" $env:APPVEYOR_REPO_COMMIT_TIMESTAMP;
 		testEnvironmentVariable "APPVEYOR_SCHEDULED_BUILD" $env:APPVEYOR_SCHEDULED_BUILD;
+    testEnvironmentVariable "APPVEYOR_FORCED_BUILD" $env:APPVEYOR_FORCED_BUILD;
+    testEnvironmentVariable "APPVEYOR_RE_BUILD" $env:APPVEYOR_RE_BUILD;
 		testEnvironmentVariable "PLATFORM" $env:PLATFORM;
 		testEnvironmentVariable "CONFIGURATION" $env:CONFIGURATION;
 	}
