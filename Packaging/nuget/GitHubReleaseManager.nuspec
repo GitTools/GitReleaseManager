@@ -8,7 +8,7 @@
     <owners>gep13</owners>
 	<licenseUrl>https://github.com/gep13/GitHubReleaseManager/blob/develop/LICENSE</licenseUrl>
     <projectUrl>https://github.com/gep13/GitHubReleaseManager</projectUrl>
-    <iconUrl></iconUrl>
+    <iconUrl>http://cdn.rawgit.com/gep13/GitHubReleaseManager/9c547452a10afaf83fce1b5833f4762487b017b7/Icons/package_icon.svg</iconUrl>
 	<requireLicenseAcceptance>false</requireLicenseAcceptance>
 	<description>Tool for creating and exporting releases for software applications hosted on Github</description>
 	<summary>Tool for creating and exporting releases for software applications hosted on Github</summary>
