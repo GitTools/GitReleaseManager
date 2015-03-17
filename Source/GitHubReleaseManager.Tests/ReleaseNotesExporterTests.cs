@@ -88,9 +88,6 @@ namespace GitHubReleaseManager.Tests
             stringBuilder.AppendLine("__Improvement__");
             stringBuilder.AppendLine();
             stringBuilder.AppendLine("- [__#3__](http://example.com/3) Issue 3");
-            stringBuilder.AppendLine();
-            stringBuilder.AppendLine("### Where to get it");
-            stringBuilder.AppendFormat("You can download this release from [chocolatey](https://chocolatey.org/packages/ChocolateyGUI/{0})", milestone);
 
             return new Release
             {

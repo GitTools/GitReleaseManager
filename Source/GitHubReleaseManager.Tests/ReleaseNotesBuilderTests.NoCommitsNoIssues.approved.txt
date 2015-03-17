@@ -1,5 +1,3 @@
 ﻿
 
 
-### Where to get it
-You can download this release from [chocolatey](https://chocolatey.org/packages/ChocolateyGUI/1.2.3)
