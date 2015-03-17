@@ -24,7 +24,7 @@ if($Help){
 }
 
 if(Test-Path -Path env:\APPVEYOR) {
-    if ($env:APPVEYOR_SCHEDULED_BUILD -ne "True") {
+    if ($env:APPVEYOR_SCHEDULED_BUILD -eq "True") {
       Write-Output "Since this is a scheduled build, simply run a build, with deployment of Coverity Artifacts, but no other deployment"
       invoke-psake "$here/default.ps1" -task RebuildSolution -properties @{ 'config'='Release'; }
     } elseif($env:APPVEYOR_REPO_BRANCH -eq "develop" -And $env:APPVEYOR_PULL_REQUEST_NUMBER -eq $null) {
