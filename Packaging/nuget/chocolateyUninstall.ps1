@@ -1,0 +1,1 @@
+Remove-BinFile "ghrm" "$packageFolder\Tools\GitHubReleaseManager.Cli.exe"

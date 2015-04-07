@@ -1,0 +1,1 @@
+Generate-BinFile "ghrm" "$packageFolder\Tools\GitHubReleaseManager.Cli.exe"

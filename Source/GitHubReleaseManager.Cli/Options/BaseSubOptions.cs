@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="BaseSubOptions.cs" company="gep13">
-//     Copyright (c) gep13. All rights reserved.
+//     Copyright (c) 2015 - Present Gary Ewan Park
 // </copyright>
 //-----------------------------------------------------------------------
 

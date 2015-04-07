@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="Config.cs" company="gep13">
-//     Copyright (c) gep13. All rights reserved.
+//     Copyright (c) 2015 - Present gep13
 // </copyright>
 //-----------------------------------------------------------------------
 
@@ -15,20 +15,20 @@ namespace GitHubReleaseManager.Configuration
         {
             this.Create = new CreateConfig
                               {
-                                  IncludeFooter = true,
-                                  FooterHeading = "Where to get it",
-                                  FooterContent = "You can download this release from [chocolatey](https://chocolatey.org/packages/ChocolateyGUI/{milestone})",
-                                  FooterIncludesMilestone = true,
-                                  MilestoneReplaceText = "{milestone}"
+                                  IncludeFooter = false,
+                                  FooterHeading = string.Empty,
+                                  FooterContent = string.Empty,
+                                  FooterIncludesMilestone = false,
+                                  MilestoneReplaceText = string.Empty
                               };
 
             this.Export = new ExportConfig
                               {
-                                  IncludeCreatedDateInTitle = true,
-                                  CreatedDateStringFormat = "MMMM dd, yyyy",
-                                  PerformRegexRemoval = true,
-                                  RegexText = @"### Where to get it(\r\n)*You can .*\)",
-                                  IsMultilineRegex = true
+                                  IncludeCreatedDateInTitle = false,
+                                  CreatedDateStringFormat = string.Empty,
+                                  PerformRegexRemoval = false,
+                                  RegexText = string.Empty,
+                                  IsMultilineRegex = false
                               };
 
             this.IssueLabelsInclude = new List<string>

@@ -5,5 +5,3 @@ __Bug__
 
 - [__#1__](http://example.com/1) Issue 1
 
-### Where to get it
-You can download this release from [chocolatey](https://chocolatey.org/packages/ChocolateyGUI/1.2.3)

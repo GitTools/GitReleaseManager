@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="CreateSubOptions.cs" company="gep13">
-//     Copyright (c) gep13. All rights reserved.
+//     Copyright (c) 2015 - Present Gary Ewan Park
 // </copyright>
 //-----------------------------------------------------------------------
 
@@ -13,7 +13,7 @@ namespace GitHubReleaseManager.Cli.Options
         [Option('a', "asset", HelpText = "Path to the file to include in the release.", Required = false)]
         public string AssetPath { get; set; }
 
-        [Option('t', "targetcommitish", HelpText = "The commit to tag. Can be a branch or SHA. Defaults to repository's default branch.", Required = false)]
+        [Option('c', "targetcommitish", HelpText = "The commit to tag. Can be a branch or SHA. Defaults to repository's default branch.", Required = false)]
         public string TargetCommitish { get; set; }
     }
 }

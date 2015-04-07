@@ -1,22 +1,24 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
-    <id>githubreleasemanager</id>
+    <id>githubreleasemanager.portable</id>
     <title>GitHubReleaseManager</title>
     <version>$version$</version>
     <authors>gep13</authors>
     <owners>gep13</owners>
 	<licenseUrl>https://github.com/gep13/GitHubReleaseManager/blob/develop/LICENSE</licenseUrl>
     <projectUrl>https://github.com/gep13/GitHubReleaseManager</projectUrl>
-    <iconUrl>http://cdn.rawgit.com/gep13/GitHubReleaseManager/9c547452a10afaf83fce1b5833f4762487b017b7/Icons/package_icon.svg</iconUrl>
+	<iconUrl>http://cdn.rawgit.com/gep13/GitHubReleaseManager/9c547452a10afaf83fce1b5833f4762487b017b7/Icons/package_icon.svg</iconUrl>
 	<requireLicenseAcceptance>false</requireLicenseAcceptance>
-	<description>Tool for creating and exporting releases for software applications hosted on Github</description>
+    <description>Tool for creating and exporting releases for software applications hosted on Github</description>
 	<summary>Tool for creating and exporting releases for software applications hosted on Github</summary>
 	<copyright>Copyright 2015</copyright>
 	<language>en-GB</language>
     <tags>github release notes create export</tags>
   </metadata>
   <files>
-    <file src="..\..\BuildArtifacts\GitHubReleaseManager.dll" target="tools" />
+    <file src="..\..\BuildArtifacts\GitHubReleaseManager.Cli.exe" target="tools" />
+    <file src="chocolateyInstall.ps1" target="tools"/>
+    <file src="chocolateyUninstall.ps1" target="tools"/>
   </files>
 </package>

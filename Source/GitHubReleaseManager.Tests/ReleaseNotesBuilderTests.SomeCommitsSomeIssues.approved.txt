@@ -13,5 +13,3 @@ __Improvement__
 
 - [__#3__](http://example.com/3) Issue 3
 
-### Where to get it
-You can download this release from [chocolatey](https://chocolatey.org/packages/ChocolateyGUI/1.2.3)

@@ -1,4 +1,4 @@
-﻿## 0.1.0 (March 12, 2015)
+﻿## 0.1.0
 
 
 As part of this release we had [3 issues](https://github.com/FakeRepository/issues/issues?milestone=0&state=closed) closed.
@@ -15,5 +15,4 @@ __Feature__
 __Improvement__
 
 - [__#3__](http://example.com/3) Issue 3
-
 

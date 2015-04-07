@@ -8,6 +8,11 @@ properties {
 	$config = 'Debug';
 	$nugetExe = "..\Tools\NuGet\NuGet.exe";
 	$projectName = "GitHubReleaseManager";
+  $openCoverExe = "..\Source\packages\OpenCover.4.5.3723\OpenCover.Console.exe";
+  $nunitConsoleExe = "..\Source\packages\NUnit.Runners.2.6.4\tools\nunit-console.exe";
+  $reportGeneratorExe = "..\Source\packages\ReportGenerator.2.1.3.0\ReportGenerator.exe";
+  $coverallsExe = "..\Source\packages\coveralls.io.1.2.2\tools\coveralls.net.exe";
+  $publishCoverityExe = "..\Source\packages\PublishCoverity.0.9.0\PublishCoverity.exe";
 }
 
 $private = "This is a private task not meant for external use!";
@@ -228,6 +233,8 @@ Task -Name __EchoAppVeyorEnvironmentVariables -Description $private -Action {
 		testEnvironmentVariable "APPVEYOR_REPO_COMMIT_AUTHOR" $env:APPVEYOR_REPO_COMMIT_AUTHOR;
 		testEnvironmentVariable "APPVEYOR_REPO_COMMIT_TIMESTAMP" $env:APPVEYOR_REPO_COMMIT_TIMESTAMP;
 		testEnvironmentVariable "APPVEYOR_SCHEDULED_BUILD" $env:APPVEYOR_SCHEDULED_BUILD;
+    testEnvironmentVariable "APPVEYOR_FORCED_BUILD" $env:APPVEYOR_FORCED_BUILD;
+    testEnvironmentVariable "APPVEYOR_RE_BUILD" $env:APPVEYOR_RE_BUILD;
 		testEnvironmentVariable "PLATFORM" $env:PLATFORM;
 		testEnvironmentVariable "CONFIGURATION" $env:CONFIGURATION;
 	}
@@ -249,10 +256,15 @@ Task -Name __InstallChocolatey -Description $private -Action {
 	if(isChocolateyInstalled) {
 		Write-Output "Chocolatey already installed";
     Write-Output "Updating to latest Chocolatey..."
-    $choco = Join-Path $script:chocolateyDir -ChildPath "choco.exe";
+
+    if(Test-Path -Path (Join-Path -Path $script:chocolateyDir -ChildPath "choco.exe")) {
+      $script:chocolateyCommand = Join-Path $script:chocolateyDir -ChildPath "choco.exe"
+    } else {
+      $script:chocolateyCommand = Join-Path (Join-Path $script:chocolateyDir "chocolateyInstall") -ChildPath "chocolatey.cmd";
+    }
     
     exec {
-			Invoke-Expression "$choco upgrade chocolatey";
+			Invoke-Expression "$script:chocolateyCommand upgrade chocolatey -y";
 		}
     
     Write-Output "Latest Chocolatey installed."
@@ -281,14 +293,13 @@ Task -Name __InstallChocolatey -Description $private -Action {
 Task -Name __InstallReSharperCommandLineTools -Depends __InstallChocolatey -Description $private -Action {
 	$chocolateyBinDir = Join-Path $script:chocolateyDir -ChildPath "bin";
 	$inspectCodeExe = Join-Path $chocolateyBinDir -ChildPath "inspectcode.exe";
-	$choco = Join-Path $script:chocolateyDir -ChildPath "choco.exe";
 
 	try {
 		Write-Output "Running Install Command Line Tools..."
 
 		if (-not (Test-Path $inspectCodeExe)) {
 			exec {
-				Invoke-Expression "$choco install resharper-clt -y";
+				Invoke-Expression "$script:chocolateyCommand install resharper-clt -y";
 			}
 		} else {
 			Write-Output "resharper-clt already installed";
@@ -303,13 +314,11 @@ Task -Name __InstallReSharperCommandLineTools -Depends __InstallChocolatey -Desc
 }
 
 Task -Name __UpdateReSharperCommandLineTools -Description $private -Action {
-	$choco = Join-Path $script:chocolateyDir -ChildPath "choco.exe";
-
 	try {
 		Write-Output "Running Upgrade Command Line Tools..."
 
 		exec {
-			Invoke-Expression "$choco upgrade resharper-clt";
+			Invoke-Expression "$script:chocolateyCommand upgrade resharper-clt -y";
 		}
 
 		Write-Output ("************ Upgrade Command Line Tools Successful ************")
@@ -325,12 +334,13 @@ Task -Name __InstallPSBuild -Description $private -Action {
 		Write-Output "Running Install PSBuild..."
 
 		exec {
-			if (-not (test-CommandExists Invoke-MSBuild)) {
-        Write-Output "PSBuild is not already installed";
+      # This test works locally, but not on AppVeyor
+			# if (-not (test-CommandExists Invoke-MSBuild)) {
+      #   Write-Output "PSBuild is not already installed";
         (new-object Net.WebClient).DownloadString("https://raw.github.com/ligershark/psbuild/master/src/GetPSBuild.ps1") | Invoke-Expression;
-      } else {
-        Write-Output "PSBuild is already installed";
-      }
+      # } else {
+      #   Write-Output "PSBuild is already installed";
+      # }
 		}
 
 		Write-Output ("************ Install PSBuild Successful ************")
@@ -344,14 +354,13 @@ Task -Name __InstallPSBuild -Description $private -Action {
 Task -Name __InstallGitVersion -Depends __InstallChocolatey -Description $private -Action {
 	$chocolateyBinDir = Join-Path $script:chocolateyDir -ChildPath "bin";
 	$gitVersionExe = Join-Path $chocolateyBinDir -ChildPath "GitVersion.exe";
-	$choco = Join-Path $script:chocolateyDir -ChildPath "choco.exe";
 
 	try {
 		Write-Output "Running Install GitVersion.Portable..."
 
 		if (-not (Test-Path $gitVersionExe)) {
 			exec {
-				Invoke-Expression "$choco install GitVersion.Portable -pre -y";
+				Invoke-Expression "$script:chocolateyCommand install GitVersion.Portable -pre -y";
 			}
 		} else {
 			Write-Output "GitVersion.Portable already installed";
@@ -366,13 +375,11 @@ Task -Name __InstallGitVersion -Depends __InstallChocolatey -Description $privat
 }
 
 Task -Name __UpdateGitVersion -Description $private -Action {
-	$choco = Join-Path $script:chocolateyDir -ChildPath "choco.exe";
-
 	try {
 		Write-Output "Running Upgrade GitVersion.Portable..."
 
 		exec {
-			Invoke-Expression "$choco upgrade GitVersion.Portable";
+			Invoke-Expression "$script:chocolateyCommand upgrade GitVersion.Portable -y";
 		}
 
 		Write-Output ("************ Upgrade GitVersion.Portable Successful ************")
@@ -393,7 +400,7 @@ Task -Name DeployDevelopSolutionToMyGet -Depends InspectCodeForProblems, DeployD
 
 Task -Name DeployMasterSolutionToMyGet -Depends InspectCodeForProblems, DeployMasterPackageToMyGet -Description "Complete build, including creation of Chocolatey Package and Deployment to MyGet.org"
 
-Task -Name DeploySolutionToChocolatey -Depends InspectCodeForProblems, DeployPackageToChocolatey -Description "Complete build, including creation of Chocolatey Package and Deployment to Chocolatey.org."
+Task -Name DeploySolutionToChocolatey -Depends InspectCodeForProblems, DeployPackageToChocolateyAndNuget -Description "Complete build, including creation of Chocolatey Package and Deployment to Chocolatey.org."
 
 # build tasks
 
@@ -449,6 +456,9 @@ Task -Name RunInspectCode -Depends __InstallReSharperCommandLineTools -Descripti
       applyXslTransform $inspectCodeXmlFile $inspectCodeXslFile $inspectCodeHtmlFile;
 			$inspectCodeXmlFile | analyseInspectCodeResults;
 		}
+    
+    # Reset the inspectcode.config file
+    git checkout $inspectCodeConfigFile;
 	}
 }
 
@@ -473,6 +483,9 @@ Task -Name RunDupFinder -Depends __InstallReSharperCommandLineTools -Description
 			applyXslTransform $dupFinderXmlFile $dupFinderXslFile $dupFinderHtmlFile;
       $dupFinderXmlFile | analyseDupFinderResults;
 		}
+    
+    # Reset the dupfinder.config file
+    git checkout $dupFinderConfigFile;
 	}
 }
 
@@ -521,8 +534,24 @@ Task -Name BuildSolution -Depends __RemoveBuildArtifactsDirectory, __VerifyConfi
 	try {
 		Write-Output "Running BuildSolution..."
 
-		exec { 
-			Invoke-MSBuild "$sourceDirectory\GitHubReleaseManager.sln" -NoLogo -Configuration $config -Targets Build -DetailedSummary -VisualStudioVersion 12.0 -Properties (@{'Platform'='Any CPU'})
+		exec {
+      if ($env:APPVEYOR_SCHEDULED_BUILD -ne "True") {    
+        Invoke-MSBuild "$sourceDirectory\GitHubReleaseManager.sln" -NoLogo -Configuration $config -Targets Build -DetailedSummary -VisualStudioVersion 12.0 -Properties (@{'Platform'='Any CPU'})
+      } else {
+        $buildCmd = "C:\Program Files (x86)\MSBuild\12.0\bin\msbuild.exe";
+        $buildArgs = @(
+                      "$sourceDirectory\GitHubReleaseManager.sln"
+                      "/l:C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll",
+                      "/m",
+                      "/p:Configuration=$config",
+                      "/p:Platform=Any CPU");
+                      
+        & cov-build --dir $buildArtifactsDirectory\cov-int $buildCmd $buildArgs;
+        
+        & $publishCoverityExe compress -o $buildArtifactsDirectory\coverity.zip -i $buildArtifactsDirectory\cov-int;
+        
+        & $publishCoverityExe publish -z $buildArtifactsDirectory\coverity.zip -r GitHubReleaseManager -t $env:CoverityProjectToken -e $env:CoverityEmailDistribution -d "AppVeyor scheduled build." --codeVersion $script:version;
+      }
 						
 			$styleCopResultsFiles = Get-ChildItem $buildArtifactsDirectory -Filter "StyleCop*.xml"
 			foreach ($styleCopResultsFile in $styleCopResultsFiles) {
@@ -541,9 +570,9 @@ Task -Name BuildSolution -Depends __RemoveBuildArtifactsDirectory, __VerifyConfi
 			}
 
 			if(isAppVeyor) {
-				$expectedMsiFile = Join-Path -Path $buildArtifactsDirectory -ChildPath "GitHubReleaseManager.exe"
-				if(Test-Path $expectedMsiFile) {
-					Push-AppveyorArtifact $expectedMsiFile;
+				$expectedExeFile = Join-Path -Path $buildArtifactsDirectory -ChildPath "GitHubReleaseManager.Cli.exe"
+				if(Test-Path $expectedExeFile) {
+					Push-AppveyorArtifact $expectedExeFile;
 				}
 			}
 		}
@@ -556,7 +585,36 @@ Task -Name BuildSolution -Depends __RemoveBuildArtifactsDirectory, __VerifyConfi
 	}
 }
 
-Task -Name RebuildSolution -Depends CleanSolution, __CreateBuildArtifactsDirectory, BuildSolution -Description "Rebuilds the main solution for the package"
+Task -Name RunCodeCoverage -Description "Use OpenCover, NUnit and Coveralls to analyze all code files and produce a report" -Action {
+  $buildArtifactsDirectory = get-buildArtifactsDirectory;
+  
+	try {
+		Write-Output "Running RunCodeCoverage...";
+
+		exec {
+      Write-Output "Running OpenCover...";
+      & $openCoverExe -target:$nunitConsoleExe -targetargs:`"$buildArtifactsDirectory\GitHubReleaseManager.Tests.dll /noshadow /nologo`" -filter:`"+[GitHubReleaseManager]GitHubReleaseManager*`" -excludebyattribute:`"System.CodeDom.Compiler.GeneratedCodeAttribute`" -register:user -output:`"$buildArtifactsDirectory\coverage.xml`";
+      Write-Output "OpenCover Complete";
+      
+      Write-Output "Running ReportGenerator...";
+      & $reportGeneratorExe -reports:$buildArtifactsDirectory\coverage.xml -targetdir:$buildArtifactsDirectory\_CodeCoverageReport;
+      Write-Output "ReportGenerator Complete";
+      
+      if(isAppVeyor) {
+        Write-Output "Running Coveralls...";
+        & $coverallsExe --opencover $buildArtifactsDirectory\coverage.xml
+        Write-Output "Coveralls Complete";
+      }
+		}
+
+		Write-Output ("************ RunCodeCoverage Successful ************");
+  }	catch {
+    Write-Error $_
+    Write-Output ("************ RunCodeCoverage Failed ************")
+  }
+}
+
+Task -Name RebuildSolution -Depends CleanSolution, __CreateBuildArtifactsDirectory, BuildSolution, RunCodeCoverage -Description "Rebuilds the main solution for the package"
 
 # clean tasks
 
@@ -588,14 +646,16 @@ Task -Name PackageChocolatey -Description "Packs the module and example package"
 		Write-Output "Running PackageChocolatey..."
 
 		exec { 
-			.$nugetExe pack "$sourceDirectory\..\Packaging\nuget\GitHubReleaseManager.Cli.nuspec" -OutputDirectory "$buildArtifactsDirectory" -NoPackageAnalysis -version $script:version 
+			.$nugetExe pack "$sourceDirectory\..\Packaging\nuget\GitHubReleaseManager.Portable.nuspec" -OutputDirectory "$buildArtifactsDirectory" -NoPackageAnalysis -version $script:version 
 			.$nugetExe pack "$sourceDirectory\..\Packaging\nuget\GitHubReleaseManager.nuspec" -OutputDirectory "$buildArtifactsDirectory" -NoPackageAnalysis -version $script:version 
 
 			if(isAppVeyor) {
-				$expectedNupkgFile = Join-Path -Path $buildArtifactsDirectory -ChildPath "GitHubReleaseManager*.nupkg"
-				if(Test-Path $expectedNupkgFile) {
-					Push-AppveyorArtifact ($expectedNupkgFile | Resolve-Path).Path;
-				}
+        Get-ChildItem $buildArtifactsDirectory -Filter *.nupkg | Foreach-Object {
+          $nugetPath = ($_ | Resolve-Path).Path;
+          $convertedPath = Convert-Path $nugetPath;
+          
+          Push-AppveyorArtifact (Convert-Path $convertedPath);
+        }
 			}
 		}
 
@@ -614,7 +674,12 @@ Task -Name DeployDevelopPackageToMyGet -Description "Takes the packaged Chocolat
 		Write-Output "Deploying to MyGet..."
 
 		exec {
-			& $nugetExe push "$buildArtifactsDirectory\*.nupkg" $env:MyGetDevelopApiKey -source $env:MyGetDevelopFeedUrl
+      Get-ChildItem $buildArtifactsDirectory -Filter *.nupkg | Foreach-Object {
+        $nugetPath = ($_ | Resolve-Path).Path;
+        $convertedPath = Convert-Path $nugetPath;
+        
+        & $nugetExe push $convertedPath $env:MyGetDevelopApiKey -source $env:MyGetDevelopFeedUrl
+      }
 		}
 
 		Write-Output ("************ MyGet Deployment Successful ************")
@@ -632,7 +697,12 @@ Task -Name DeployMasterPackageToMyGet -Description "Takes the packaged Chocolate
 		Write-Output "Deploying to MyGet..."
 
 		exec {
-			& $nugetExe push "$buildArtifactsDirectory\*.nupkg" $env:MyGetMasterApiKey -source $env:MyGetMasterFeedUrl
+      Get-ChildItem $buildArtifactsDirectory -Filter *.nupkg | Foreach-Object {
+        $nugetPath = ($_ | Resolve-Path).Path;
+        $convertedPath = Convert-Path $nugetPath;
+        
+        & $nugetExe push $convertedPath $env:MyGetMasterApiKey -source $env:MyGetMasterFeedUrl
+      }
 		}
 
 		Write-Output ("************ MyGet Deployment Successful ************")
@@ -643,20 +713,29 @@ Task -Name DeployMasterPackageToMyGet -Description "Takes the packaged Chocolate
 	}
 }
 
-Task -Name DeployPackageToChocolatey -Description "Takes the packaged Chocolatey package and deploys to Chocolatey.org" -Action {
+Task -Name DeployPackageToChocolateyAndNuget -Description "Takes the packages and deploys to Chocolatey.org and nuget.org" -Action {
 	$buildArtifactsDirectory = get-buildArtifactsDirectory;
 				
 	try {
-		Write-Output "Deploying to Chocolatey..."
+		Write-Output "Deploying to Chocolatey and Nuget..."
 
 		exec {
-			& $nugetExe push "$buildArtifactsDirectory\*.nupkg" $env:ChocolateyApiKey -source $env:ChocolateyFeedUrl
+      Get-ChildItem $buildArtifactsDirectory -Filter *.nupkg | Foreach-Object {
+        $nugetPath = ($_ | Resolve-Path).Path;
+        $convertedPath = Convert-Path $nugetPath;
+        
+        if(&_ -like '*cli*') {
+          & $nugetExe push $convertedPath $env:ChocolateyApiKey -source $env:ChocolateyFeedUrl
+        } else {
+          & $nugetExe push $convertedPath $env:NugetApiKey -source $env:NugetFeedUrl
+        }        
+      }
 		}
 
-		Write-Output ("************ Chocolatey Deployment Successful ************")
+		Write-Output ("************ Chocolatey and Nuget Deployment Successful ************")
 	}
 	catch {
 		Write-Error $_
-		Write-Output ("************ Chocolatey Deployment Failed ************")
+		Write-Output ("************ Chocolatey and Nuget Deployment Failed ************")
 	}
 }
