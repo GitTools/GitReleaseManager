@@ -58,6 +58,12 @@ namespace GitHubReleaseManager
             return allReleases.OrderByDescending(r => r.CreatedAt).ToList();
         }
 
+        public async Task<Release> GetSpecificRelease(string tagName)
+        {
+            var allReleases = await this.gitHubClient.Release.GetAll(this.user, this.repository);
+            return allReleases.FirstOrDefault(r => r.TagName == tagName);
+        }
+
         public ReadOnlyCollection<Milestone> GetMilestones()
         {
             var milestonesClient = this.gitHubClient.Issue.Milestone;

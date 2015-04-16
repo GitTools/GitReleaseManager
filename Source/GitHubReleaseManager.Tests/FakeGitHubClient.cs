@@ -19,6 +19,7 @@ namespace GitHubReleaseManager.Tests
             this.Milestones = new List<Milestone>();
             this.Issues = new List<Issue>();
             this.Releases = new List<Release>();
+            this.Release = new Release();
         }
 
         public List<Milestone> Milestones { get; private set; }
@@ -26,6 +27,8 @@ namespace GitHubReleaseManager.Tests
         public List<Issue> Issues { get; private set; }
 
         public List<Release> Releases { get; private set; }
+
+        public Release Release { get; private set; }
 
         public int NumberOfCommits { private get; set; }
 
@@ -42,6 +45,11 @@ namespace GitHubReleaseManager.Tests
         public Task<List<Release>> GetReleases()
         {
             return Task.FromResult(this.Releases);
+        }
+
+        public Task<Release> GetSpecificRelease(string tagName)
+        {
+            return Task.FromResult(this.Release);
         }
 
         public ReadOnlyCollection<Milestone> GetMilestones()

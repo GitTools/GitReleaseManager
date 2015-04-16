@@ -132,11 +132,11 @@ namespace GitHubReleaseManager.Cli
 
                 if (string.IsNullOrEmpty(subOptions.Milestone))
                 {
-                    await CreateReleaseFromMilestone(github, subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone, subOptions.TargetCommitish, subOptions.AssetPaths, configuration);
+                    await CreateReleaseFromMilestone(github, subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone, subOptions.TargetCommitish, subOptions.AssetPaths, subOptions.PreRelease, configuration);
                 }
                 else
                 {
-                    await CreateReleaseFromInputFile(github, subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Name, subOptions.InputFilePath, subOptions.TargetCommitish, subOptions.AssetPaths, configuration);
+                    await CreateReleaseFromInputFile(github, subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Name, subOptions.InputFilePath, subOptions.TargetCommitish, subOptions.AssetPaths, subOptions.PreRelease, configuration);
                 }
 
                 return 0;
@@ -210,7 +210,7 @@ namespace GitHubReleaseManager.Cli
                 var github = subOptions.CreateGitHubClient();
                 var configuration = ConfigurationProvider.Provide(subOptions.TargetDirectory, fileSystem);
 
-                var releasesMarkdown = await ExportReleases(github, subOptions.RepositoryOwner, subOptions.RepositoryName, configuration);
+                var releasesMarkdown = await ExportReleases(github, subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.TagName, configuration);
 
                 using (var sw = new StreamWriter(File.Open(subOptions.FileOutputPath, FileMode.OpenOrCreate)))
                 {
@@ -337,11 +337,11 @@ namespace GitHubReleaseManager.Cli
             }
         }
 
-        private static async Task<string> ExportReleases(GitHubClient github, string owner, string repository, Config configuration)
+        private static async Task<string> ExportReleases(GitHubClient github, string owner, string repository, string tagName, Config configuration)
         {
             var releaseNotesExporter = new ReleaseNotesExporter(new DefaultGitHubClient(github, owner, repository), configuration);
 
-            var result = await releaseNotesExporter.ExportReleaseNotes();
+            var result = await releaseNotesExporter.ExportReleaseNotes(tagName);
 
             return result;
         }

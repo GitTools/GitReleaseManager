@@ -66,7 +66,7 @@ namespace GitHubReleaseManager.Tests
             }
 
             var builder = new ReleaseNotesExporter(fakeClient, configuration);
-            var notes = builder.ExportReleaseNotes().Result;
+            var notes = builder.ExportReleaseNotes(null).Result;
 
             Approvals.Verify(notes);
         }
