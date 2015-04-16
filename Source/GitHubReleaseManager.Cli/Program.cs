@@ -317,11 +317,7 @@ namespace GitHubReleaseManager.Cli
                 s => log.AppendLine(s)
             };
 
-            if (logFilePath == "console")
-            {
-                writeActions.Add(Console.WriteLine);
-            }
-            else if (!string.IsNullOrEmpty(logFilePath))
+            if (!string.IsNullOrEmpty(logFilePath))
             {
                 try
                 {
@@ -339,6 +335,11 @@ namespace GitHubReleaseManager.Cli
                 {
                     Console.WriteLine("Failed to configure logging: " + ex.Message);
                 }
+            }
+            else
+            {
+                // if nothing else is specified, write to console
+                writeActions.Add(Console.WriteLine);
             }
 
             Logger.WriteInfo = s => writeActions.ForEach(a => a(s));
