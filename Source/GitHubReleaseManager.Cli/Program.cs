@@ -65,7 +65,7 @@ namespace GitHubReleaseManager.Cli
                             var addAssetSubOptions = baseSubOptions as AddAssetSubOptions;
                             if (addAssetSubOptions != null)
                             {
-                                result = AddAssetAsync(addAssetSubOptions).Result;
+                                result = AddAssetsAsync(addAssetSubOptions).Result;
                             }
                         }
 
@@ -130,7 +130,7 @@ namespace GitHubReleaseManager.Cli
                 var github = subOptions.CreateGitHubClient();
                 var configuration = ConfigurationProvider.Provide(subOptions.TargetPath, fileSystem);
 
-                await CreateRelease(github, subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone, subOptions.TargetCommitish, subOptions.AssetPath, configuration);
+                await CreateRelease(github, subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone, subOptions.TargetCommitish, subOptions.AssetPaths, configuration);
 
                 return 0;
             }
@@ -142,13 +142,13 @@ namespace GitHubReleaseManager.Cli
             }
         }
 
-        private static async Task<int> AddAssetAsync(AddAssetSubOptions subOptions)
+        private static async Task<int> AddAssetsAsync(AddAssetSubOptions subOptions)
         {
             try
             {
                 var github = subOptions.CreateGitHubClient();
 
-                await AddAsset(github, subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone, subOptions.AssetPath);
+                await AddAssets(github, subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone, subOptions.AssetPaths);
 
                 return 0;
             }
@@ -222,7 +222,6 @@ namespace GitHubReleaseManager.Cli
             }
         }
 
-        private static async Task CreateRelease(GitHubClient github, string owner, string repository, string milestone, string targetCommitish, string asset, Config configuration)
         {
             var releaseNotesBuilder = new ReleaseNotesBuilder(new DefaultGitHubClient(github, owner, repository), owner, repository, milestone, configuration);
 
@@ -234,6 +233,7 @@ namespace GitHubReleaseManager.Cli
                 Body = result,
                 Name = milestone
             };
+
             if (!string.IsNullOrEmpty(targetCommitish))
             {
                 releaseUpdate.TargetCommitish = targetCommitish;
@@ -241,15 +241,24 @@ namespace GitHubReleaseManager.Cli
 
             var release = await github.Release.Create(owner, repository, releaseUpdate);
 
-            if (File.Exists(asset))
+            foreach (var asset in assets)
             {
-                var upload = new ReleaseAssetUpload { FileName = Path.GetFileName(asset), ContentType = "application/octet-stream", RawData = File.Open(asset, FileMode.Open) };
+                if (!File.Exists(asset))
+                {
+                    continue;
+                }
+
+                var upload = new ReleaseAssetUpload
+                                 {
+                                     FileName = Path.GetFileName(asset),
+                                     ContentType = "application/octet-stream",
+                                     RawData = File.Open(asset, FileMode.Open)
+                                 };
 
                 await github.Release.UploadAsset(release, upload);
             }
         }
 
-        private static async Task AddAsset(GitHubClient github, string owner, string repository, string milestone, string assetPath)
         {
             var releases = await github.Release.GetAll(owner, repository);
 
@@ -261,9 +270,19 @@ namespace GitHubReleaseManager.Cli
                 return;
             }
 
-            if (File.Exists(assetPath))
+            foreach (var assetPath in assetPaths)
             {
-                var upload = new ReleaseAssetUpload { FileName = Path.GetFileName(assetPath), ContentType = "application/octet-stream", RawData = File.Open(assetPath, FileMode.Open) };
+                if (!File.Exists(assetPath))
+                {
+                    continue;
+                }
+
+                var upload = new ReleaseAssetUpload
+                                 {
+                                     FileName = Path.GetFileName(assetPath),
+                                     ContentType = "application/octet-stream",
+                                     RawData = File.Open(assetPath, FileMode.Open)
+                                 };
                 await github.Release.UploadAsset(release, upload);
             }
         }
