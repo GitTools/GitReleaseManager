@@ -550,7 +550,7 @@ Task -Name BuildSolution -Depends __RemoveBuildArtifactsDirectory, __VerifyConfi
 
         & $publishCoverityExe compress -o $buildArtifactsDirectory\coverity.zip -i $buildArtifactsDirectory\cov-int;
 
-        & $publishCoverityExe publish -z $buildArtifactsDirectory\coverity.zip -r GitHubReleaseManager -t $env:CoverityProjectToken -e $env:CoverityEmailDistribution -d "AppVeyor scheduled build." --codeVersion $script:version;
+        & $publishCoverityExe publish -z $buildArtifactsDirectory\coverity.zip -r GitTools/GitHubReleaseManager -t $env:CoverityProjectToken -e $env:CoverityEmailDistribution -d "AppVeyor scheduled build." --codeVersion $script:version;
       }
 
 			$styleCopResultsFiles = Get-ChildItem $buildArtifactsDirectory -Filter "StyleCop*.xml"
