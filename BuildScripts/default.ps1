@@ -724,7 +724,7 @@ Task -Name DeployPackageToChocolateyAndNuget -Description "Takes the packages an
         $nugetPath = ($_ | Resolve-Path).Path;
         $convertedPath = Convert-Path $nugetPath;
 
-        if(&_ -like '*cli*') {
+        if($_ -like '*cli*') {
           & $nugetExe push $convertedPath $env:ChocolateyApiKey -source $env:ChocolateyFeedUrl
         } else {
           & $nugetExe push $convertedPath $env:NugetApiKey -source $env:NugetFeedUrl
