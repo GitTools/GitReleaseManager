@@ -26,5 +26,8 @@ namespace GitHubReleaseManager.Cli.Options
 
         [Option('i', "inputFilePath", HelpText = "The path to the file to be used as the content of the release notes.", Required = false)]
         public string InputFilePath { get; set; }
+
+        [Option('e', "pre", Required = false, HelpText = "Creates the release as a pre-release.")]
+        public bool PreRelease { get; set; }
     }
 }

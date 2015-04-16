@@ -227,7 +227,7 @@ namespace GitHubReleaseManager.Cli
             }
         }
 
-        private static async Task CreateReleaseFromMilestone(GitHubClient github, string owner, string repository, string milestone, string targetCommitish, IList<string> assets, Config configuration)
+        private static async Task CreateReleaseFromMilestone(GitHubClient github, string owner, string repository, string milestone, string targetCommitish, IList<string> assets, bool preRelease, Config configuration)
         {
             var releaseNotesBuilder = new ReleaseNotesBuilder(new DefaultGitHubClient(github, owner, repository), owner, repository, milestone, configuration);
 
@@ -237,7 +237,8 @@ namespace GitHubReleaseManager.Cli
             {
                 Draft = true,
                 Body = result,
-                Name = milestone
+                Name = milestone,
+                Prerelease = preRelease
             };
 
             if (!string.IsNullOrEmpty(targetCommitish))
@@ -265,7 +266,7 @@ namespace GitHubReleaseManager.Cli
             }
         }
 
-        private static async Task CreateReleaseFromInputFile(GitHubClient github, string owner, string repository, string name, string inputFilePath, string targetCommitish, IList<string> assets, Config configuration)
+        private static async Task CreateReleaseFromInputFile(GitHubClient github, string owner, string repository, string name, string inputFilePath, string targetCommitish, IList<string> assets, bool preRelease, Config configuration)
         {
             if (!File.Exists(inputFilePath))
             {
@@ -278,7 +279,8 @@ namespace GitHubReleaseManager.Cli
             {
                 Draft = true,
                 Body = inputFileContents,
-                Name = name
+                Name = name,
+                Prerelease = preRelease
             };
 
             if (!string.IsNullOrEmpty(targetCommitish))
