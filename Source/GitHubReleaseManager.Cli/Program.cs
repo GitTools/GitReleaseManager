@@ -222,6 +222,7 @@ namespace GitHubReleaseManager.Cli
             }
         }
 
+        private static async Task CreateRelease(GitHubClient github, string owner, string repository, string milestone, string targetCommitish, IList<string> assets, Config configuration)
         {
             var releaseNotesBuilder = new ReleaseNotesBuilder(new DefaultGitHubClient(github, owner, repository), owner, repository, milestone, configuration);
 
@@ -259,6 +260,7 @@ namespace GitHubReleaseManager.Cli
             }
         }
 
+        private static async Task AddAssets(GitHubClient github, string owner, string repository, string milestone, IList<string> assetPaths)
         {
             var releases = await github.Release.GetAll(owner, repository);
 
