@@ -130,7 +130,7 @@ namespace GitHubReleaseManager.Cli
                 var github = subOptions.CreateGitHubClient();
                 var configuration = ConfigurationProvider.Provide(subOptions.TargetDirectory, fileSystem);
 
-                if (string.IsNullOrEmpty(subOptions.Milestone))
+                if (!string.IsNullOrEmpty(subOptions.Milestone))
                 {
                     await CreateReleaseFromMilestone(github, subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone, subOptions.TargetCommitish, subOptions.AssetPaths, subOptions.Prerelease, configuration);
                 }
