@@ -6,7 +6,11 @@
 
 namespace GitHubReleaseManager.Cli.Options
 {
-    public class CloseSubOptions : CommonSubOptions
+    using CommandLine;
+
+    public class CloseSubOptions : BaseGitHubSubOptions
     {
+        [Option('m', "milestone", HelpText = "The milestone to use.", Required = true)]
+        public string Milestone { get; set; }
     }
 }

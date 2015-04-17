@@ -1,4 +1,4 @@
-# The creation of this build script (and associated files) was only possible using the 
+# The creation of this build script (and associated files) was only possible using the
 # work that was done on the BoxStarter Project on GitHub:
 # http://boxstarter.codeplex.com/
 # Big thanks to Matt Wrock (@mwrockx} for creating this project, thanks!
@@ -40,7 +40,7 @@ function create-PackageDirectory( [Parameter(ValueFromPipeline=$true)]$packageDi
 			Write-Verbose "creating package directory at $packageDirectory...";
 			mkdir $packageDirectory | Out-Null;
 		}
-	}    
+	}
 }
 
 function remove-PackageDirectory( [Parameter(ValueFromPipeline=$true)]$packageDirectory ) {
@@ -59,14 +59,14 @@ function test-CommandExists {
 
 	$ErrorActionPreference = 'stop';
 
-	try 
+	try
 	{
 		Write-Output "Testing command...";
 		if(Get-Command $command){
 			RETURN $true;
 		}
 	} catch {
-		Write-Output "$command does not exist"; 
+		Write-Output "$command does not exist";
 		RETURN $false;
 	} finally {
 		$ErrorActionPreference=$oldPreference;
@@ -92,9 +92,9 @@ function isChocolateyInstalled() {
 
 function analyseStyleCopResults( [Parameter(ValueFromPipeline=$true)]$styleCopResultsFile ) {
 	$styleCopViolations = [xml](Get-Content $styleCopResultsFile);
-		
-	foreach ($styleCopViolation in $styleCopViolations.StyleCopViolations.Violation) {        
-		Write-Output "Violation of Rule $($styleCopViolation.RuleId): $($styleCopViolation.Rule) Line Number: $($styleCopViolation.LineNumber) FileName: $($styleCopViolation.Source) ErrorMessage: $($styleCopViolation.InnerXml)";       
+
+	foreach ($styleCopViolation in $styleCopViolations.StyleCopViolations.Violation) {
+		Write-Output "Violation of Rule $($styleCopViolation.RuleId): $($styleCopViolation.Rule) Line Number: $($styleCopViolation.LineNumber) FileName: $($styleCopViolation.Source) ErrorMessage: $($styleCopViolation.InnerXml)";
 
 		if(isAppVeyor) {
 			Add-AppveyorTest "Violation of Rule $($styleCopViolation.RuleId): $($styleCopViolation.Rule) Line Number: $($styleCopViolation.LineNumber)" -Outcome Failed -FileName $styleCopViolation.Source -ErrorMessage $styleCopViolation.InnerXml;
@@ -126,10 +126,10 @@ function analyseCodeAnalysisResults( [Parameter(ValueFromPipeline=$true)]$codeAn
 function analyseDupFinderResults( [Parameter(ValueFromPipeline=$true)]$dupFinderResultsFile ) {
 	$dupFinderErrors = [xml](Get-Content $dupFinderResultsFile);
 	$anyFailures = $FALSE
-	
+
 	foreach ($duplicateCost in $dupFinderErrors.DuplicatesReport.Duplicates.Duplicate) {
 		Write-Output "Duplicate Located with a cost of $($duplicateCost.Cost), across $($duplicateCost.Fragment.Count) Fragments";
-		
+
 		foreach ($fragment in $duplicateCost.Fragment) {
 			Write-Output "File Name: $($fragment.FileName) Line Numbers: $($fragment.LineRange.Start) - $($fragment.LineRange.End)";
 			Write-Output "Offending Text: $($fragment.Text)";
@@ -141,11 +141,11 @@ function analyseDupFinderResults( [Parameter(ValueFromPipeline=$true)]$dupFinder
 			Add-AppveyorTest "Duplicate Located with a cost of $($duplicateCost.Cost), across $($duplicateCost.Fragment.Count) Fragments" -Outcome Failed -ErrorMessage "See dupFinder.html in build artifacts for full details of duplicates";
 		}
 	}
-	
+
 	if(isAppVeyor) {
 		Push-AppveyorArtifact $dupFinderResultsFile;
 	}
-	
+
 	if ($anyFailures -eq $TRUE){
 		Write-Output "Failing build as there are duplicates in the Code Base";
 		throw "Duplicates found in code base";
@@ -197,9 +197,9 @@ function applyXslTransform($xmlFile, $xslFile, $outputFile) {
 	$xslt = New-Object System.Xml.Xsl.XslCompiledTransform;
 	$xslt.Load($xslFile);
 	$xslt.Transform($xmlFile, $outputFile);
-	
+
 	Write-Output "XSL Transform completed."
-	
+
 	if(isAppVeyor) {
 			Push-AppveyorArtifact $outputFile;
 	}
@@ -262,20 +262,20 @@ Task -Name __InstallChocolatey -Description $private -Action {
     } else {
       $script:chocolateyCommand = Join-Path (Join-Path $script:chocolateyDir "chocolateyInstall") -ChildPath "chocolatey.cmd";
     }
-    
+
     exec {
 			Invoke-Expression "$script:chocolateyCommand upgrade chocolatey -y";
 		}
-    
+
     Write-Output "Latest Chocolatey installed."
 	}	else {
 		try {
 			Write-Output "Chocolatey is not installed, installing Chocolatey...";
-												
+
 			exec {
 				Invoke-Expression ((new-object net.webclient).DownloadString('https://chocolatey.org/install.ps1'));
 			}
-												
+
 			$script:chocolateyDir = Join-Path ([Environment]::GetFolderPath("CommonApplicationData")) Chocolatey
 			if (-not (Test-Path $script:chocolateyDir)) {
 				throw "Error installing Chocolatey"
@@ -310,7 +310,7 @@ Task -Name __InstallReSharperCommandLineTools -Depends __InstallChocolatey -Desc
 	catch {
 		Write-Error $_
 		Write-Output ("************ Install Command Line Tools Failed ************")
-	}	
+	}
 }
 
 Task -Name __UpdateReSharperCommandLineTools -Description $private -Action {
@@ -326,7 +326,7 @@ Task -Name __UpdateReSharperCommandLineTools -Description $private -Action {
 	catch {
 		Write-Error $_
 		Write-Output ("************ Upgrade Command Line Tools Failed ************")
-	}	
+	}
 }
 
 Task -Name __InstallPSBuild -Description $private -Action {
@@ -348,8 +348,8 @@ Task -Name __InstallPSBuild -Description $private -Action {
 	catch {
 		Write-Error $_
 		Write-Output ("************ Install PSBuild Failed ************")
-	}	
-}	
+	}
+}
 
 Task -Name __InstallGitVersion -Depends __InstallChocolatey -Description $private -Action {
 	$chocolateyBinDir = Join-Path $script:chocolateyDir -ChildPath "bin";
@@ -371,7 +371,7 @@ Task -Name __InstallGitVersion -Depends __InstallChocolatey -Description $privat
 	catch {
 		Write-Error $_
 		Write-Output ("************ Install GitVersion.Portable Failed ************")
-	}	
+	}
 }
 
 Task -Name __UpdateGitVersion -Description $private -Action {
@@ -387,7 +387,7 @@ Task -Name __UpdateGitVersion -Description $private -Action {
 	catch {
 		Write-Error $_
 		Write-Output ("************ Upgrade GitVersion.Portable Failed ************")
-	}	
+	}
 }
 
 # primary targets
@@ -408,7 +408,7 @@ Task -Name RunGitVersion -Depends __InstallGitVersion -Description "Execute the 
 	$rootDirectory = get-rootDirectory;
 	$chocolateyBinDir = Join-Path $script:chocolateyDir -ChildPath "bin";
 	$gitVersionExe = Join-Path $chocolateyBinDir -ChildPath "GitVersion.exe";
-				
+
 	try {
 		Write-Output "Running RunGitVersion..."
 
@@ -432,15 +432,15 @@ Task -Name RunGitVersion -Depends __InstallGitVersion -Description "Execute the 
 	catch {
 		Write-Error $_
 		Write-Output ("************ RunGitVersion Failed ************")
-	}	
+	}
 }
 
 Task -Name RunInspectCode -Depends __InstallReSharperCommandLineTools -Description "Execute the InspectCode Command Line Tool" -Action {
   $rootDirectory = get-rootDirectory;
-  $buildArtifactsDirectory = get-buildArtifactsDirectory;     
+  $buildArtifactsDirectory = get-buildArtifactsDirectory;
 	$buildScriptsDirectory = get-buildScriptsDirectory;
 	$chocolateyBinDir = Join-Path $script:chocolateyDir -ChildPath "bin";
-	
+
 	$inspectCodeExe = Join-Path $chocolateyBinDir -ChildPath "inspectcode.exe";
 	$inspectCodeConfigFile = Join-Path $buildScriptsDirectory -ChildPath "inspectcode.config";
 	$inspectCodeXmlFile = Join-Path -Path $buildArtifactsDirectory -ChildPath "inspectcode.xml";
@@ -448,15 +448,15 @@ Task -Name RunInspectCode -Depends __InstallReSharperCommandLineTools -Descripti
   $inspectCodeHtmlFile = $inspectCodeXmlFile -replace ".xml", ".html";
 
   (Get-Content -path $inspectCodeConfigFile) | % { $_ -Replace '%RootDirectory%', $rootDirectory } |  Out-File $inspectCodeConfigFile
-	
+
 	exec {
 		Invoke-Expression "$inspectCodeExe /config=$inspectCodeConfigFile";
-		
+
 		if(Test-Path $inspectCodeXmlFile) {
       applyXslTransform $inspectCodeXmlFile $inspectCodeXslFile $inspectCodeHtmlFile;
 			$inspectCodeXmlFile | analyseInspectCodeResults;
 		}
-    
+
     # Reset the inspectcode.config file
     git checkout $inspectCodeConfigFile;
 	}
@@ -464,26 +464,26 @@ Task -Name RunInspectCode -Depends __InstallReSharperCommandLineTools -Descripti
 
 Task -Name RunDupFinder -Depends __InstallReSharperCommandLineTools -Description "Execute the DupFinder Command Line Tool" -Action {
 	$rootDirectory = get-rootDirectory;
-	$buildArtifactsDirectory = get-buildArtifactsDirectory;     
+	$buildArtifactsDirectory = get-buildArtifactsDirectory;
 	$buildScriptsDirectory = get-buildScriptsDirectory;
 	$chocolateyBinDir = Join-Path $script:chocolateyDir -ChildPath "bin";
-		
+
 	$dupFinderExe = Join-Path $chocolateyBinDir -ChildPath "dupfinder.exe";
 	$dupFinderConfigFile = Join-Path $buildScriptsDirectory -ChildPath "dupfinder.config";
 	$dupFinderXmlFile = Join-Path -Path $buildArtifactsDirectory -ChildPath "dupfinder.xml";
 	$dupFinderXslFile = Join-Path -Path $buildScriptsDirectory -ChildPath "dupfinder.xsl";
 	$dupFinderHtmlFile = $dupFinderXmlFile -replace ".xml", ".html";
-	
+
 	(Get-Content -path $dupFinderConfigFile) | % { $_ -Replace '%RootDirectory%', $rootDirectory } |  Out-File $dupFinderConfigFile
-	
+
 	exec {
 		Invoke-Expression "$dupFinderExe /config=$dupFinderConfigFile";
-		
+
 		if(Test-Path $dupFinderXmlFile) {
 			applyXslTransform $dupFinderXmlFile $dupFinderXslFile $dupFinderHtmlFile;
       $dupFinderXmlFile | analyseDupFinderResults;
 		}
-    
+
     # Reset the dupfinder.config file
     git checkout $dupFinderConfigFile;
 	}
@@ -507,7 +507,7 @@ Task -Name OutputNugetVersion -Description "So that we are clear which version o
 
 Task -Name NugetPackageRestore -Depends OutputNugetVersion -Description "Restores all the required NuGet packages for this solution, before running the build" -Action {
 	$sourceDirectory = get-sourceDirectory;
-				
+
 	try {
 		Write-Output "Running NugetPackageRestore..."
 
@@ -527,7 +527,7 @@ Task -Name BuildSolution -Depends __RemoveBuildArtifactsDirectory, __VerifyConfi
 	$sourceDirectory = get-sourceDirectory;
 	$buildArtifactsDirectory = get-buildArtifactsDirectory;
 	$buildScriptsDirectory = get-buildScriptsDirectory;
-				
+
 	$styleCopXslFile = Join-Path -Path $buildScriptsDirectory -ChildPath "StyleCopReport.xsl";
 	$codeAnalysisXslFile = Join-Path -Path $buildScriptsDirectory -ChildPath "CodeAnalysisReport.xsl";
 
@@ -535,7 +535,7 @@ Task -Name BuildSolution -Depends __RemoveBuildArtifactsDirectory, __VerifyConfi
 		Write-Output "Running BuildSolution..."
 
 		exec {
-      if ($env:APPVEYOR_SCHEDULED_BUILD -ne "True") {    
+      if ($env:APPVEYOR_SCHEDULED_BUILD -ne "True") {
         Invoke-MSBuild "$sourceDirectory\GitHubReleaseManager.sln" -NoLogo -Configuration $config -Targets Build -DetailedSummary -VisualStudioVersion 12.0 -Properties (@{'Platform'='Any CPU'})
       } else {
         $buildCmd = "C:\Program Files (x86)\MSBuild\12.0\bin\msbuild.exe";
@@ -545,14 +545,14 @@ Task -Name BuildSolution -Depends __RemoveBuildArtifactsDirectory, __VerifyConfi
                       "/m",
                       "/p:Configuration=$config",
                       "/p:Platform=Any CPU");
-                      
+
         & cov-build --dir $buildArtifactsDirectory\cov-int $buildCmd $buildArgs;
-        
+
         & $publishCoverityExe compress -o $buildArtifactsDirectory\coverity.zip -i $buildArtifactsDirectory\cov-int;
-        
-        & $publishCoverityExe publish -z $buildArtifactsDirectory\coverity.zip -r GitHubReleaseManager -t $env:CoverityProjectToken -e $env:CoverityEmailDistribution -d "AppVeyor scheduled build." --codeVersion $script:version;
+
+        & $publishCoverityExe publish -z $buildArtifactsDirectory\coverity.zip -r GitTools/GitHubReleaseManager -t $env:CoverityProjectToken -e $env:CoverityEmailDistribution -d "AppVeyor scheduled build." --codeVersion $script:version;
       }
-						
+
 			$styleCopResultsFiles = Get-ChildItem $buildArtifactsDirectory -Filter "StyleCop*.xml"
 			foreach ($styleCopResultsFile in $styleCopResultsFiles) {
 				$reportXmlFile = Join-Path -Path $buildArtifactsDirectory -ChildPath $styleCopResultsFile | Resolve-Path;
@@ -587,7 +587,7 @@ Task -Name BuildSolution -Depends __RemoveBuildArtifactsDirectory, __VerifyConfi
 
 Task -Name RunCodeCoverage -Description "Use OpenCover, NUnit and Coveralls to analyze all code files and produce a report" -Action {
   $buildArtifactsDirectory = get-buildArtifactsDirectory;
-  
+
 	try {
 		Write-Output "Running RunCodeCoverage...";
 
@@ -595,11 +595,11 @@ Task -Name RunCodeCoverage -Description "Use OpenCover, NUnit and Coveralls to a
       Write-Output "Running OpenCover...";
       & $openCoverExe -target:$nunitConsoleExe -targetargs:`"$buildArtifactsDirectory\GitHubReleaseManager.Tests.dll /noshadow /nologo`" -filter:`"+[GitHubReleaseManager]GitHubReleaseManager*`" -excludebyattribute:`"System.CodeDom.Compiler.GeneratedCodeAttribute`" -register:user -output:`"$buildArtifactsDirectory\coverage.xml`";
       Write-Output "OpenCover Complete";
-      
+
       Write-Output "Running ReportGenerator...";
       & $reportGeneratorExe -reports:$buildArtifactsDirectory\coverage.xml -targetdir:$buildArtifactsDirectory\_CodeCoverageReport;
       Write-Output "ReportGenerator Complete";
-      
+
       if(isAppVeyor) {
         Write-Output "Running Coveralls...";
         & $coverallsExe --opencover $buildArtifactsDirectory\coverage.xml
@@ -620,7 +620,7 @@ Task -Name RebuildSolution -Depends CleanSolution, __CreateBuildArtifactsDirecto
 
 Task -Name CleanSolution -Depends __InstallPSBuild, __RemoveBuildArtifactsDirectory, __VerifyConfiguration -Description "Deletes all build artifacts" -Action {
 	$sourceDirectory = get-sourceDirectory;
-				
+
 	try {
 		Write-Output "Running CleanSolution..."
 
@@ -638,22 +638,22 @@ Task -Name CleanSolution -Depends __InstallPSBuild, __RemoveBuildArtifactsDirect
 
 # package tasks
 
-Task -Name PackageChocolatey -Description "Packs the module and example package" -Action { 
+Task -Name PackageChocolatey -Description "Packs the module and example package" -Action {
 	$sourceDirectory = get-sourceDirectory;
 	$buildArtifactsDirectory = get-buildArtifactsDirectory;
-				
+
 	try {
 		Write-Output "Running PackageChocolatey..."
 
-		exec { 
-			.$nugetExe pack "$sourceDirectory\..\Packaging\nuget\GitHubReleaseManager.Portable.nuspec" -OutputDirectory "$buildArtifactsDirectory" -NoPackageAnalysis -version $script:version 
-			.$nugetExe pack "$sourceDirectory\..\Packaging\nuget\GitHubReleaseManager.nuspec" -OutputDirectory "$buildArtifactsDirectory" -NoPackageAnalysis -version $script:version 
+		exec {
+			.$nugetExe pack "$sourceDirectory\..\Packaging\nuget\GitHubReleaseManager.Portable.nuspec" -OutputDirectory "$buildArtifactsDirectory" -NoPackageAnalysis -version $script:version
+			.$nugetExe pack "$sourceDirectory\..\Packaging\nuget\GitHubReleaseManager.nuspec" -OutputDirectory "$buildArtifactsDirectory" -NoPackageAnalysis -version $script:version
 
 			if(isAppVeyor) {
         Get-ChildItem $buildArtifactsDirectory -Filter *.nupkg | Foreach-Object {
           $nugetPath = ($_ | Resolve-Path).Path;
           $convertedPath = Convert-Path $nugetPath;
-          
+
           Push-AppveyorArtifact (Convert-Path $convertedPath);
         }
 			}
@@ -664,12 +664,12 @@ Task -Name PackageChocolatey -Description "Packs the module and example package"
 	catch {
 		Write-Error $_
 		Write-Output ("************ PackageChocolatey Failed ************")
-	}	
+	}
 }
 
 Task -Name DeployDevelopPackageToMyGet -Description "Takes the packaged Chocolatey package from develop branch and deploys to MyGet.org" -Action {
 	$buildArtifactsDirectory = get-buildArtifactsDirectory;
-				
+
 	try {
 		Write-Output "Deploying to MyGet..."
 
@@ -677,7 +677,7 @@ Task -Name DeployDevelopPackageToMyGet -Description "Takes the packaged Chocolat
       Get-ChildItem $buildArtifactsDirectory -Filter *.nupkg | Foreach-Object {
         $nugetPath = ($_ | Resolve-Path).Path;
         $convertedPath = Convert-Path $nugetPath;
-        
+
         & $nugetExe push $convertedPath $env:MyGetDevelopApiKey -source $env:MyGetDevelopFeedUrl
       }
 		}
@@ -692,7 +692,7 @@ Task -Name DeployDevelopPackageToMyGet -Description "Takes the packaged Chocolat
 
 Task -Name DeployMasterPackageToMyGet -Description "Takes the packaged Chocolatey package from master branch and deploys to MyGet.org" -Action {
 	$buildArtifactsDirectory = get-buildArtifactsDirectory;
-				
+
 	try {
 		Write-Output "Deploying to MyGet..."
 
@@ -700,7 +700,7 @@ Task -Name DeployMasterPackageToMyGet -Description "Takes the packaged Chocolate
       Get-ChildItem $buildArtifactsDirectory -Filter *.nupkg | Foreach-Object {
         $nugetPath = ($_ | Resolve-Path).Path;
         $convertedPath = Convert-Path $nugetPath;
-        
+
         & $nugetExe push $convertedPath $env:MyGetMasterApiKey -source $env:MyGetMasterFeedUrl
       }
 		}
@@ -715,7 +715,7 @@ Task -Name DeployMasterPackageToMyGet -Description "Takes the packaged Chocolate
 
 Task -Name DeployPackageToChocolateyAndNuget -Description "Takes the packages and deploys to Chocolatey.org and nuget.org" -Action {
 	$buildArtifactsDirectory = get-buildArtifactsDirectory;
-				
+
 	try {
 		Write-Output "Deploying to Chocolatey and Nuget..."
 
@@ -723,12 +723,12 @@ Task -Name DeployPackageToChocolateyAndNuget -Description "Takes the packages an
       Get-ChildItem $buildArtifactsDirectory -Filter *.nupkg | Foreach-Object {
         $nugetPath = ($_ | Resolve-Path).Path;
         $convertedPath = Convert-Path $nugetPath;
-        
-        if(&_ -like '*cli*') {
+
+        if($_ -like '*cli*') {
           & $nugetExe push $convertedPath $env:ChocolateyApiKey -source $env:ChocolateyFeedUrl
         } else {
           & $nugetExe push $convertedPath $env:NugetApiKey -source $env:NugetFeedUrl
-        }        
+        }
       }
 		}
 

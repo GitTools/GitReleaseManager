@@ -35,87 +35,87 @@ namespace GitHubReleaseManager.Cli
                 args,
                 options,
                 (verb, subOptions) =>
+                {
+                    result = 1;
+
+                    var baseSubOptions = subOptions as BaseSubOptions;
+                    if (baseSubOptions != null)
                     {
-                        result = 1;
-
-                        var baseSubOptions = subOptions as BaseSubOptions;
-                        if (baseSubOptions != null)
+                        if (string.IsNullOrEmpty(baseSubOptions.TargetDirectory))
                         {
-                            if (string.IsNullOrEmpty(baseSubOptions.TargetPath))
-                            {
-                                baseSubOptions.TargetPath = Environment.CurrentDirectory;
-                            }
-
-                            ConfigureLogging(baseSubOptions.LogFilePath);
+                            baseSubOptions.TargetDirectory = Environment.CurrentDirectory;
                         }
 
-                        var fileSystem = new FileSystem();
+                        ConfigureLogging(baseSubOptions.LogFilePath);
+                    }
 
-                        if (verb == "create")
-                        {
-                            var createSubOptions = baseSubOptions as CreateSubOptions;
-                            if (createSubOptions != null)
-                            {
-                                result = CreateReleaseAsync(createSubOptions, fileSystem).Result;
-                            }
-                        }
+                    var fileSystem = new FileSystem();
 
-                        if (verb == "addasset")
+                    if (verb == "create")
+                    {
+                        var createSubOptions = baseSubOptions as CreateSubOptions;
+                        if (createSubOptions != null)
                         {
-                            var addAssetSubOptions = baseSubOptions as AddAssetSubOptions;
-                            if (addAssetSubOptions != null)
-                            {
-                                result = AddAssetAsync(addAssetSubOptions).Result;
-                            }
+                            result = CreateReleaseAsync(createSubOptions, fileSystem).Result;
                         }
+                    }
 
-                        if (verb == "close")
+                    if (verb == "addasset")
+                    {
+                        var addAssetSubOptions = baseSubOptions as AddAssetSubOptions;
+                        if (addAssetSubOptions != null)
                         {
-                            var closeSubOptions = baseSubOptions as CloseSubOptions;
-                            if (closeSubOptions != null)
-                            {
-                                result = CloseMilestoneAsync(closeSubOptions).Result;
-                            }
+                            result = AddAssetsAsync(addAssetSubOptions).Result;
                         }
+                    }
 
-                        if (verb == "publish")
+                    if (verb == "close")
+                    {
+                        var closeSubOptions = baseSubOptions as CloseSubOptions;
+                        if (closeSubOptions != null)
                         {
-                            var publishSubOptions = baseSubOptions as PublishSubOptions;
-                            if (publishSubOptions != null)
-                            {
-                                result = CloseAndPublishReleaseAsync(publishSubOptions).Result;
-                            }
+                            result = CloseMilestoneAsync(closeSubOptions).Result;
                         }
+                    }
 
-                        if (verb == "export")
+                    if (verb == "publish")
+                    {
+                        var publishSubOptions = baseSubOptions as PublishSubOptions;
+                        if (publishSubOptions != null)
                         {
-                            var exportSubOptions = baseSubOptions as ExportSubOptions;
-                            if (exportSubOptions != null)
-                            {
-                                result = ExportReleasesAsync(exportSubOptions, fileSystem).Result;
-                            }
+                            result = PublishReleaseAsync(publishSubOptions).Result;
                         }
+                    }
 
-                        if (verb == "init")
+                    if (verb == "export")
+                    {
+                        var exportSubOptions = baseSubOptions as ExportSubOptions;
+                        if (exportSubOptions != null)
                         {
-                            var initSubOptions = baseSubOptions as InitSubOptions;
-                            if (initSubOptions != null)
-                            {
-                                ConfigurationProvider.WriteSample(initSubOptions.TargetPath, fileSystem);
-                                result = 0;
-                            }
+                            result = ExportReleasesAsync(exportSubOptions, fileSystem).Result;
                         }
+                    }
 
-                        if (verb == "showconfig")
+                    if (verb == "init")
+                    {
+                        var initSubOptions = baseSubOptions as InitSubOptions;
+                        if (initSubOptions != null)
                         {
-                            var showConfigSubOptions = baseSubOptions as ShowConfigSubOptions;
-                            if (showConfigSubOptions != null)
-                            {
-                                Console.WriteLine(ConfigurationProvider.GetEffectiveConfigAsString(showConfigSubOptions.TargetPath, fileSystem));
-                                result = 0;
-                            }
+                            ConfigurationProvider.WriteSample(initSubOptions.TargetDirectory, fileSystem);
+                            result = 0;
                         }
-                    }))
+                    }
+
+                    if (verb == "showconfig")
+                    {
+                        var showConfigSubOptions = baseSubOptions as ShowConfigSubOptions;
+                        if (showConfigSubOptions != null)
+                        {
+                            Console.WriteLine(ConfigurationProvider.GetEffectiveConfigAsString(showConfigSubOptions.TargetDirectory, fileSystem));
+                            result = 0;
+                        }
+                    }
+                }))
             {
                 return 1;
             }
@@ -128,9 +128,16 @@ namespace GitHubReleaseManager.Cli
             try
             {
                 var github = subOptions.CreateGitHubClient();
-                var configuration = ConfigurationProvider.Provide(subOptions.TargetPath, fileSystem);
+                var configuration = ConfigurationProvider.Provide(subOptions.TargetDirectory, fileSystem);
 
-                await CreateRelease(github, subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone, subOptions.TargetCommitish, subOptions.AssetPath, configuration);
+                if (!string.IsNullOrEmpty(subOptions.Milestone))
+                {
+                    await CreateReleaseFromMilestone(github, subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone, subOptions.TargetCommitish, subOptions.AssetPaths, subOptions.Prerelease, configuration);
+                }
+                else
+                {
+                    await CreateReleaseFromInputFile(github, subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Name, subOptions.InputFilePath, subOptions.TargetCommitish, subOptions.AssetPaths, subOptions.Prerelease);
+                }
 
                 return 0;
             }
@@ -142,13 +149,13 @@ namespace GitHubReleaseManager.Cli
             }
         }
 
-        private static async Task<int> AddAssetAsync(AddAssetSubOptions subOptions)
+        private static async Task<int> AddAssetsAsync(AddAssetSubOptions subOptions)
         {
             try
             {
                 var github = subOptions.CreateGitHubClient();
 
-                await AddAsset(github, subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone, subOptions.AssetPath);
+                await AddAssets(github, subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.TagName, subOptions.AssetPaths);
 
                 return 0;
             }
@@ -178,15 +185,13 @@ namespace GitHubReleaseManager.Cli
             }
         }
 
-        private static async Task<int> CloseAndPublishReleaseAsync(PublishSubOptions subOptions)
+        private static async Task<int> PublishReleaseAsync(PublishSubOptions subOptions)
         {
             try
             {
                 var github = subOptions.CreateGitHubClient();
 
-                await CloseMilestone(github, subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone);
-
-                await PublishRelease(github, subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone);
+                await PublishRelease(github, subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.TagName);
 
                 return 0;
             }
@@ -203,9 +208,9 @@ namespace GitHubReleaseManager.Cli
             try
             {
                 var github = subOptions.CreateGitHubClient();
-                var configuration = ConfigurationProvider.Provide(subOptions.TargetPath, fileSystem);
+                var configuration = ConfigurationProvider.Provide(subOptions.TargetDirectory, fileSystem);
 
-                var releasesMarkdown = await ExportReleases(github, subOptions.RepositoryOwner, subOptions.RepositoryName, configuration);
+                var releasesMarkdown = await ExportReleases(github, subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.TagName, configuration);
 
                 using (var sw = new StreamWriter(File.Open(subOptions.FileOutputPath, FileMode.OpenOrCreate)))
                 {
@@ -222,57 +227,69 @@ namespace GitHubReleaseManager.Cli
             }
         }
 
-        private static async Task CreateRelease(GitHubClient github, string owner, string repository, string milestone, string targetCommitish, string asset, Config configuration)
+        private static async Task CreateReleaseFromMilestone(GitHubClient github, string owner, string repository, string milestone, string targetCommitish, IList<string> assets, bool prerelease, Config configuration)
         {
             var releaseNotesBuilder = new ReleaseNotesBuilder(new DefaultGitHubClient(github, owner, repository), owner, repository, milestone, configuration);
 
             var result = await releaseNotesBuilder.BuildReleaseNotes();
 
-            var releaseUpdate = new ReleaseUpdate(milestone)
-            {
-                Draft = true,
-                Body = result,
-                Name = milestone
-            };
-            if (!string.IsNullOrEmpty(targetCommitish))
-            {
-                releaseUpdate.TargetCommitish = targetCommitish;
-            }
+            var releaseUpdate = CreateReleaseUpdate(milestone, result, prerelease, targetCommitish);
 
             var release = await github.Release.Create(owner, repository, releaseUpdate);
 
-            if (File.Exists(asset))
-            {
-                var upload = new ReleaseAssetUpload { FileName = Path.GetFileName(asset), ContentType = "application/octet-stream", RawData = File.Open(asset, FileMode.Open) };
-
-                await github.Release.UploadAsset(release, upload);
-            }
+            await AddAssets(github, assets, release);
         }
 
-        private static async Task AddAsset(GitHubClient github, string owner, string repository, string milestone, string assetPath)
+        private static async Task CreateReleaseFromInputFile(GitHubClient github, string owner, string repository, string name, string inputFilePath, string targetCommitish, IList<string> assets, bool prerelease)
+        {
+            if (!File.Exists(inputFilePath))
+            {
+                throw new ArgumentException("Unable to locate input file.");
+            }
+
+            var inputFileContents = File.ReadAllText(inputFilePath);
+
+            var releaseUpdate = CreateReleaseUpdate(name, inputFileContents, prerelease, targetCommitish);
+
+            var release = await github.Release.Create(owner, repository, releaseUpdate);
+
+            await AddAssets(github, assets, release);
+        }
+
+        private static async Task AddAssets(GitHubClient github, string owner, string repository, string tagName, IList<string> assetPaths)
         {
             var releases = await github.Release.GetAll(owner, repository);
 
-            var release = releases.FirstOrDefault(r => r.TagName == milestone);
+            var release = releases.FirstOrDefault(r => r.TagName == tagName);
 
             if (release == null)
             {
-                Logger.WriteError("Unable to find Release with specified milestone");
+                Logger.WriteError("Unable to find Release with specified tagName");
                 return;
             }
 
-            if (File.Exists(assetPath))
+            foreach (var assetPath in assetPaths)
             {
-                var upload = new ReleaseAssetUpload { FileName = Path.GetFileName(assetPath), ContentType = "application/octet-stream", RawData = File.Open(assetPath, FileMode.Open) };
+                if (!File.Exists(assetPath))
+                {
+                    continue;
+                }
+
+                var upload = new ReleaseAssetUpload
+                                 {
+                                     FileName = Path.GetFileName(assetPath),
+                                     ContentType = "application/octet-stream",
+                                     RawData = File.Open(assetPath, FileMode.Open)
+                                 };
                 await github.Release.UploadAsset(release, upload);
             }
         }
 
-        private static async Task<string> ExportReleases(GitHubClient github, string owner, string repository, Config configuration)
+        private static async Task<string> ExportReleases(GitHubClient github, string owner, string repository, string tagName, Config configuration)
         {
             var releaseNotesExporter = new ReleaseNotesExporter(new DefaultGitHubClient(github, owner, repository), configuration);
 
-            var result = await releaseNotesExporter.ExportReleaseNotes();
+            var result = await releaseNotesExporter.ExportReleaseNotes(tagName);
 
             return result;
         }
@@ -291,17 +308,17 @@ namespace GitHubReleaseManager.Cli
             await milestoneClient.Update(owner, repository, milestone.Number, new MilestoneUpdate { State = ItemState.Closed });
         }
 
-        private static async Task PublishRelease(GitHubClient github, string owner, string repository, string milestone)
+        private static async Task PublishRelease(GitHubClient github, string owner, string repository, string tagName)
         {
             var releases = await github.Release.GetAll(owner, repository);
-            var release = releases.FirstOrDefault(r => r.Name == milestone);
+            var release = releases.FirstOrDefault(r => r.TagName == tagName);
 
             if (release == null)
             {
                 return;
             }
 
-            var releaseUpdate = new ReleaseUpdate(milestone)
+            var releaseUpdate = new ReleaseUpdate(tagName)
             {
                 Draft = false
             };
@@ -309,7 +326,46 @@ namespace GitHubReleaseManager.Cli
             await github.Release.Edit(owner, repository, release.Id, releaseUpdate);
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "This is required here")]
+        private static async Task AddAssets(GitHubClient github, IList<string> assets, Release release)
+        {
+            foreach (var asset in assets)
+            {
+                if (!File.Exists(asset))
+                {
+                    continue;
+                }
+
+                var upload = new ReleaseAssetUpload
+                {
+                    FileName = Path.GetFileName(asset),
+                    ContentType = "application/octet-stream",
+                    RawData = File.Open(asset, FileMode.Open)
+                };
+
+                await github.Release.UploadAsset(release, upload);
+            }
+        }
+
+        private static ReleaseUpdate CreateReleaseUpdate(string name, string body, bool prerelease, string targetCommitish)
+        {
+            var releaseUpdate = new ReleaseUpdate(name)
+            {
+                Draft = true,
+                Body = body,
+                Name = name,
+                Prerelease = prerelease
+            };
+
+            if (!string.IsNullOrEmpty(targetCommitish))
+            {
+                releaseUpdate.TargetCommitish = targetCommitish;
+            }
+
+            return releaseUpdate;
+        }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "Not required.")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "This is required here.")]
         private static void ConfigureLogging(string logFilePath)
         {
             var writeActions = new List<Action<string>>
@@ -317,11 +373,7 @@ namespace GitHubReleaseManager.Cli
                 s => log.AppendLine(s)
             };
 
-            if (logFilePath == "console")
-            {
-                writeActions.Add(Console.WriteLine);
-            }
-            else if (!string.IsNullOrEmpty(logFilePath))
+            if (!string.IsNullOrEmpty(logFilePath))
             {
                 try
                 {
@@ -339,6 +391,11 @@ namespace GitHubReleaseManager.Cli
                 {
                     Console.WriteLine("Failed to configure logging: " + ex.Message);
                 }
+            }
+            else
+            {
+                // if nothing else is specified, write to console
+                writeActions.Add(Console.WriteLine);
             }
 
             Logger.WriteInfo = s => writeActions.ForEach(a => a(s));

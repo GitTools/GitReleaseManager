@@ -80,7 +80,6 @@
     <Compile Include="Options\BaseGitHubSubOptions.cs" />
     <Compile Include="Options\BaseSubOptions.cs" />
     <Compile Include="Options\CloseSubOptions.cs" />
-    <Compile Include="Options\CommonSubOptions.cs" />
     <Compile Include="Options\CreateSubOptions.cs" />
     <Compile Include="Options\ExportSubOptions.cs" />
     <Compile Include="Options\InitSubOptions.cs" />
