@@ -7,11 +7,14 @@
 namespace GitHubReleaseManager
 {
     using System;
+    using System.Globalization;
     using System.Text;
     using System.Text.RegularExpressions;
     using System.Threading.Tasks;
 
     using GitHubReleaseManager.Configuration;
+
+    using Octokit;
 
     public class ReleaseNotesExporter
     {
@@ -37,28 +40,7 @@ namespace GitHubReleaseManager
                 {
                     foreach (var release in releases)
                     {
-                        if (this.configuration.Export.IncludeCreatedDateInTitle)
-                        {
-                            stringBuilder.AppendLine(string.Format("## {0} ({1})", release.TagName, release.CreatedAt.ToString(this.configuration.Export.CreatedDateStringFormat)));
-                        }
-                        else
-                        {
-                            stringBuilder.AppendLine(string.Format("## {0}", release.TagName));
-                        }
-
-                        stringBuilder.AppendLine(Environment.NewLine);
-
-                        if (this.configuration.Export.PerformRegexRemoval)
-                        {
-                            var regexPattern = new Regex(this.configuration.Export.RegexText, this.configuration.Export.IsMultilineRegex ? RegexOptions.Multiline : RegexOptions.Singleline);
-                            var replacement = string.Empty;
-                            var replacedBody = regexPattern.Replace(release.Body, replacement);
-                            stringBuilder.AppendLine(replacedBody);
-                        }
-                        else
-                        {
-                            stringBuilder.AppendLine(release.Body);
-                        }
+                        this.AppendVersionReleaseNotes(stringBuilder, release);
                     }
                 }
                 else
@@ -70,31 +52,36 @@ namespace GitHubReleaseManager
             {
                 var release = await this.gitHubClient.GetSpecificRelease(tagName);
 
-                if (this.configuration.Export.IncludeCreatedDateInTitle)
-                {
-                    stringBuilder.AppendLine(string.Format("## {0} ({1})", release.TagName, release.CreatedAt.ToString(this.configuration.Export.CreatedDateStringFormat)));
-                }
-                else
-                {
-                    stringBuilder.AppendLine(string.Format("## {0}", release.TagName));
-                }
-
-                stringBuilder.AppendLine(Environment.NewLine);
-
-                if (this.configuration.Export.PerformRegexRemoval)
-                {
-                    var regexPattern = new Regex(this.configuration.Export.RegexText, this.configuration.Export.IsMultilineRegex ? RegexOptions.Multiline : RegexOptions.Singleline);
-                    var replacement = string.Empty;
-                    var replacedBody = regexPattern.Replace(release.Body, replacement);
-                    stringBuilder.AppendLine(replacedBody);
-                }
-                else
-                {
-                    stringBuilder.AppendLine(release.Body);
-                }
+                this.AppendVersionReleaseNotes(stringBuilder, release);
             }
 
             return stringBuilder.ToString();
+        }
+
+        private void AppendVersionReleaseNotes(StringBuilder stringBuilder, Release release)
+        {
+            if (this.configuration.Export.IncludeCreatedDateInTitle)
+            {
+                stringBuilder.AppendLine(string.Format(CultureInfo.InvariantCulture, "## {0} ({1})", release.TagName, release.CreatedAt.ToString(this.configuration.Export.CreatedDateStringFormat, CultureInfo.InvariantCulture)));
+            }
+            else
+            {
+                stringBuilder.AppendLine(string.Format(CultureInfo.InvariantCulture, "## {0}", release.TagName));
+            }
+
+            stringBuilder.AppendLine(Environment.NewLine);
+
+            if (this.configuration.Export.PerformRegexRemoval)
+            {
+                var regexPattern = new Regex(this.configuration.Export.RegexText, this.configuration.Export.IsMultilineRegex ? RegexOptions.Multiline : RegexOptions.Singleline);
+                var replacement = string.Empty;
+                var replacedBody = regexPattern.Replace(release.Body, replacement);
+                stringBuilder.AppendLine(replacedBody);
+            }
+            else
+            {
+                stringBuilder.AppendLine(release.Body);
+            }
         }
     }
 }

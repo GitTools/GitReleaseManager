@@ -59,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApprovalTestConfig.cs" />
+    <Compile Include="AssemblyInfo.cs" />
     <Compile Include="ClipBoardHelper.cs" />
     <Compile Include="FakeGitHubClient.cs" />
     <Compile Include="Helper.cs" />

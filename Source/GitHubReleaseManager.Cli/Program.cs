@@ -132,11 +132,11 @@ namespace GitHubReleaseManager.Cli
 
                 if (string.IsNullOrEmpty(subOptions.Milestone))
                 {
-                    await CreateReleaseFromMilestone(github, subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone, subOptions.TargetCommitish, subOptions.AssetPaths, subOptions.PreRelease, configuration);
+                    await CreateReleaseFromMilestone(github, subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone, subOptions.TargetCommitish, subOptions.AssetPaths, subOptions.Prerelease, configuration);
                 }
                 else
                 {
-                    await CreateReleaseFromInputFile(github, subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Name, subOptions.InputFilePath, subOptions.TargetCommitish, subOptions.AssetPaths, subOptions.PreRelease, configuration);
+                    await CreateReleaseFromInputFile(github, subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Name, subOptions.InputFilePath, subOptions.TargetCommitish, subOptions.AssetPaths, subOptions.Prerelease);
                 }
 
                 return 0;
@@ -227,46 +227,20 @@ namespace GitHubReleaseManager.Cli
             }
         }
 
-        private static async Task CreateReleaseFromMilestone(GitHubClient github, string owner, string repository, string milestone, string targetCommitish, IList<string> assets, bool preRelease, Config configuration)
+        private static async Task CreateReleaseFromMilestone(GitHubClient github, string owner, string repository, string milestone, string targetCommitish, IList<string> assets, bool prerelease, Config configuration)
         {
             var releaseNotesBuilder = new ReleaseNotesBuilder(new DefaultGitHubClient(github, owner, repository), owner, repository, milestone, configuration);
 
             var result = await releaseNotesBuilder.BuildReleaseNotes();
 
-            var releaseUpdate = new ReleaseUpdate(milestone)
-            {
-                Draft = true,
-                Body = result,
-                Name = milestone,
-                Prerelease = preRelease
-            };
-
-            if (!string.IsNullOrEmpty(targetCommitish))
-            {
-                releaseUpdate.TargetCommitish = targetCommitish;
-            }
+            var releaseUpdate = CreateReleaseUpdate(milestone, result, prerelease, targetCommitish);
 
             var release = await github.Release.Create(owner, repository, releaseUpdate);
 
-            foreach (var asset in assets)
-            {
-                if (!File.Exists(asset))
-                {
-                    continue;
-                }
-
-                var upload = new ReleaseAssetUpload
-                                 {
-                                     FileName = Path.GetFileName(asset),
-                                     ContentType = "application/octet-stream",
-                                     RawData = File.Open(asset, FileMode.Open)
-                                 };
-
-                await github.Release.UploadAsset(release, upload);
-            }
+            await AddAssets(github, assets, release);
         }
 
-        private static async Task CreateReleaseFromInputFile(GitHubClient github, string owner, string repository, string name, string inputFilePath, string targetCommitish, IList<string> assets, bool preRelease, Config configuration)
+        private static async Task CreateReleaseFromInputFile(GitHubClient github, string owner, string repository, string name, string inputFilePath, string targetCommitish, IList<string> assets, bool prerelease)
         {
             if (!File.Exists(inputFilePath))
             {
@@ -275,37 +249,11 @@ namespace GitHubReleaseManager.Cli
 
             var inputFileContents = File.ReadAllText(inputFilePath);
 
-            var releaseUpdate = new ReleaseUpdate(name)
-            {
-                Draft = true,
-                Body = inputFileContents,
-                Name = name,
-                Prerelease = preRelease
-            };
-
-            if (!string.IsNullOrEmpty(targetCommitish))
-            {
-                releaseUpdate.TargetCommitish = targetCommitish;
-            }
+            var releaseUpdate = CreateReleaseUpdate(name, inputFileContents, prerelease, targetCommitish);
 
             var release = await github.Release.Create(owner, repository, releaseUpdate);
 
-            foreach (var asset in assets)
-            {
-                if (!File.Exists(asset))
-                {
-                    continue;
-                }
-
-                var upload = new ReleaseAssetUpload
-                {
-                    FileName = Path.GetFileName(asset),
-                    ContentType = "application/octet-stream",
-                    RawData = File.Open(asset, FileMode.Open)
-                };
-
-                await github.Release.UploadAsset(release, upload);
-            }
+            await AddAssets(github, assets, release);
         }
 
         private static async Task AddAssets(GitHubClient github, string owner, string repository, string tagName, IList<string> assetPaths)
@@ -378,7 +326,46 @@ namespace GitHubReleaseManager.Cli
             await github.Release.Edit(owner, repository, release.Id, releaseUpdate);
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "This is required here")]
+        private static async Task AddAssets(GitHubClient github, IList<string> assets, Release release)
+        {
+            foreach (var asset in assets)
+            {
+                if (!File.Exists(asset))
+                {
+                    continue;
+                }
+
+                var upload = new ReleaseAssetUpload
+                {
+                    FileName = Path.GetFileName(asset),
+                    ContentType = "application/octet-stream",
+                    RawData = File.Open(asset, FileMode.Open)
+                };
+
+                await github.Release.UploadAsset(release, upload);
+            }
+        }
+
+        private static ReleaseUpdate CreateReleaseUpdate(string name, string body, bool prerelease, string targetCommitish)
+        {
+            var releaseUpdate = new ReleaseUpdate(name)
+            {
+                Draft = true,
+                Body = body,
+                Name = name,
+                Prerelease = prerelease
+            };
+
+            if (!string.IsNullOrEmpty(targetCommitish))
+            {
+                releaseUpdate.TargetCommitish = targetCommitish;
+            }
+
+            return releaseUpdate;
+        }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "Not required.")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "This is required here.")]
         private static void ConfigureLogging(string logFilePath)
         {
             var writeActions = new List<Action<string>>

@@ -28,6 +28,6 @@ namespace GitHubReleaseManager.Cli.Options
         public string InputFilePath { get; set; }
 
         [Option('e', "pre", Required = false, HelpText = "Creates the release as a pre-release.")]
-        public bool PreRelease { get; set; }
+        public bool Prerelease { get; set; }
     }
 }
