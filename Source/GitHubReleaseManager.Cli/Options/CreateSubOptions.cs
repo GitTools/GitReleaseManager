@@ -21,7 +21,7 @@ namespace GitHubReleaseManager.Cli.Options
         [Option('m', "milestone", HelpText = "The milestone to use.", Required = false)]
         public string Milestone { get; set; }
 
-        [Option('n', "name", HelpText = "The name of the release (Typically this is the generated SemVer Version Number.", Required = false)]
+        [Option('n', "name", HelpText = "The name of the release (Typically this is the generated SemVer Version Number).", Required = false)]
         public string Name { get; set; }
 
         [Option('i', "inputFilePath", HelpText = "The path to the file to be used as the content of the release notes.", Required = false)]

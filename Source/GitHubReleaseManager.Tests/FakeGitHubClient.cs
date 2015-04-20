@@ -10,7 +10,7 @@ namespace GitHubReleaseManager.Tests
     using System.Collections.ObjectModel;
     using System.Threading.Tasks;
     using Octokit;
-    using IGitHubClient = GitHubReleaseManager.IGitHubClient;
+    using IGitHubClient = GitHubReleaseManager.Core.IGitHubClient;
 
     public class FakeGitHubClient : IGitHubClient
     {

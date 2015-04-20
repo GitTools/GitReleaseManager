@@ -4,7 +4,7 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-namespace GitHubReleaseManager
+namespace GitHubReleaseManager.Core
 {
     using System;
     using System.Collections.Generic;
@@ -13,9 +13,7 @@ namespace GitHubReleaseManager
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
-
-    using GitHubReleaseManager.Configuration;
-
+    using GitHubReleaseManager.Core.Configuration;
     using Octokit;
 
     public class ReleaseNotesBuilder

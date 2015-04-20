@@ -4,7 +4,7 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-namespace GitHubReleaseManager.Helpers
+namespace GitHubReleaseManager.Core.Helpers
 {
     using System.Collections.Generic;
     using System.IO;
