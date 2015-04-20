@@ -4,7 +4,7 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-namespace GitHubReleaseManager
+namespace GitHubReleaseManager.Core
 {
     using System;
     using Octokit;

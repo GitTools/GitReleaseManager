@@ -4,13 +4,13 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-namespace GitHubReleaseManager.Configuration
+namespace GitHubReleaseManager.Core.Configuration
 {
     using System;
     using System.Globalization;
     using System.IO;
     using System.Text;
-    using GitHubReleaseManager.Helpers;
+    using GitHubReleaseManager.Core.Helpers;
 
     public static class ConfigurationProvider
     {

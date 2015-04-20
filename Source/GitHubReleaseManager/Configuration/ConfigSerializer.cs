@@ -4,7 +4,7 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-namespace GitHubReleaseManager.Configuration
+namespace GitHubReleaseManager.Core.Configuration
 {
     using System;
     using System.IO;

@@ -4,16 +4,14 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-namespace GitHubReleaseManager
+namespace GitHubReleaseManager.Core
 {
     using System;
     using System.Globalization;
     using System.Text;
     using System.Text.RegularExpressions;
     using System.Threading.Tasks;
-
-    using GitHubReleaseManager.Configuration;
-
+    using GitHubReleaseManager.Core.Configuration;
     using Octokit;
 
     public class ReleaseNotesExporter

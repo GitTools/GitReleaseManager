@@ -4,7 +4,7 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-namespace GitHubReleaseManager
+namespace GitHubReleaseManager.Core
 {
     using System.Collections.Generic;
     using System.Collections.ObjectModel;

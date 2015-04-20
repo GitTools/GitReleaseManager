@@ -15,8 +15,9 @@ namespace GitHubReleaseManager.Cli
     using System.Threading.Tasks;
     using CommandLine;
     using GitHubReleaseManager.Cli.Options;
-    using GitHubReleaseManager.Configuration;
-    using GitHubReleaseManager.Helpers;
+    using GitHubReleaseManager.Core;
+    using GitHubReleaseManager.Core.Configuration;
+    using GitHubReleaseManager.Core.Helpers;
     using Octokit;
     using FileMode = System.IO.FileMode;
 
@@ -256,7 +257,7 @@ namespace GitHubReleaseManager.Cli
             await AddAssets(github, assets, release);
         }
 
-        private static async Task AddAssets(GitHubClient github, string owner, string repository, string tagName, IList<string> assetPaths)
+        private static async Task AddAssets(GitHubClient github, string owner, string repository, string tagName, IList<string> assets)
         {
             var releases = await github.Release.GetAll(owner, repository);
 
@@ -268,21 +269,7 @@ namespace GitHubReleaseManager.Cli
                 return;
             }
 
-            foreach (var assetPath in assetPaths)
-            {
-                if (!File.Exists(assetPath))
-                {
-                    continue;
-                }
-
-                var upload = new ReleaseAssetUpload
-                                 {
-                                     FileName = Path.GetFileName(assetPath),
-                                     ContentType = "application/octet-stream",
-                                     RawData = File.Open(assetPath, FileMode.Open)
-                                 };
-                await github.Release.UploadAsset(release, upload);
-            }
+            await AddAssets(github, assets, release);
         }
 
         private static async Task<string> ExportReleases(GitHubClient github, string owner, string repository, string tagName, Config configuration)
@@ -328,21 +315,24 @@ namespace GitHubReleaseManager.Cli
 
         private static async Task AddAssets(GitHubClient github, IList<string> assets, Release release)
         {
-            foreach (var asset in assets)
+            if (assets != null)
             {
-                if (!File.Exists(asset))
+                foreach (var asset in assets)
                 {
-                    continue;
+                    if (!File.Exists(asset))
+                    {
+                        continue;
+                    }
+
+                    var upload = new ReleaseAssetUpload
+                                     {
+                                         FileName = Path.GetFileName(asset),
+                                         ContentType = "application/octet-stream",
+                                         RawData = File.Open(asset, FileMode.Open)
+                                     };
+
+                    await github.Release.UploadAsset(release, upload);
                 }
-
-                var upload = new ReleaseAssetUpload
-                {
-                    FileName = Path.GetFileName(asset),
-                    ContentType = "application/octet-stream",
-                    RawData = File.Open(asset, FileMode.Open)
-                };
-
-                await github.Release.UploadAsset(release, upload);
             }
         }
 
