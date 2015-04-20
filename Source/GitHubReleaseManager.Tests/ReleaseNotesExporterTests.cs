@@ -8,14 +8,11 @@ namespace GitHubReleaseManager.Tests
 {
     using System;
     using System.Text;
-
     using ApprovalTests;
-
-    using GitHubReleaseManager.Configuration;
-    using GitHubReleaseManager.Helpers;
-
+    using GitHubReleaseManager.Core;
+    using GitHubReleaseManager.Core.Configuration;
+    using GitHubReleaseManager.Core.Helpers;
     using NUnit.Framework;
-
     using Octokit;
 
     [TestFixture]

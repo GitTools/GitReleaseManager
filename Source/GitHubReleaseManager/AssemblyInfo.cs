@@ -9,8 +9,8 @@ using System.Reflection;
 using System.Resources;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("GitHubReleaseManager")]
-[assembly: AssemblyProduct("GitHubReleaseManager")]
+[assembly: AssemblyTitle("GitHubReleaseManager.Core")]
+[assembly: AssemblyProduct("GitHubReleaseManager.Core")]
 [assembly: AssemblyDescription("Create release notes in markdown given a GitHub milestone")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
 [assembly: AssemblyVersion("1.0.0.0")]

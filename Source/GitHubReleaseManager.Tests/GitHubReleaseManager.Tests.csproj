@@ -74,9 +74,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GitHubReleaseManager\GitHubReleaseManager.csproj">
+    <ProjectReference Include="..\GitHubReleaseManager\GitHubReleaseManager.Core.csproj">
       <Project>{b02a026e-ca3a-48f4-bba9-eb337b0a2035}</Project>
-      <Name>GitHubReleaseManager</Name>
+      <Name>GitHubReleaseManager.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

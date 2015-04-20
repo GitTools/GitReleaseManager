@@ -8,6 +8,7 @@
       <Word>commitish</Word>
       <Word>Git</Word>
       <Word>Octokit</Word>
+      <Word>Prerelease</Word>
     </Recognized>
     <Deprecated>
       <Term />
