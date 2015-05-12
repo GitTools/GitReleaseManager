@@ -36,7 +36,7 @@ environment:
   GitHubPassword:
     secure: XSuLygmr83zEpWcXIXMXGocN0QbooLud1eIMA3mQWKkT9LAU4TyrijLBcJIo7bD7
   CoverityProjectToken:
-    secure: B9diAS20/XucFCQ8vPg02br0VukNjo5+nbFx121Arac=
+    secure: v9LYg/tMc/XFYAiIJl+KiGpo1pBtyQgcANoNqra/5qg=
   CoverityEmailDistribution:
     secure: FuJy6Wqvw19/VBYyE0hHY+lNbkKxlN1Jsr8OiTdAgkQ=
   COVERALLS_REPO_TOKEN:

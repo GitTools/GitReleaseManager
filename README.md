@@ -2,7 +2,7 @@
 
 [![License](http://img.shields.io/:license-mit-blue.svg)](http://gep13.mit-license.org)
 [![Coverage Status](https://coveralls.io/repos/GitTools/GitReleaseManager/badge.svg?branch=develop)](https://coveralls.io/r/GitTools/GitReleaseManager?branch=develop)
-[![Coverity Scan Build Status](https://scan.coverity.com/projects/4534/badge.svg)](https://scan.coverity.com/projects/4534)
+[![Coverity Scan Build Status](https://scan.coverity.com/projects/5110/badge.svg)](https://scan.coverity.com/projects/5110)
 
 Do you detest creating release notes for your software applications hosted on GitHub?  If so, this is the tool for you.  
 
