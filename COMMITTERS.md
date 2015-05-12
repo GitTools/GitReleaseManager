@@ -1,11 +1,11 @@
 Committing
 ==========
 
-We like to see folks contributing to GitHubReleaseManager. If you are a committer, we'd like to see you help from time to time with triage and the pull request process.
+We like to see folks contributing to GitReleaseManager. If you are a committer, we'd like to see you help from time to time with triage and the pull request process.
 
 In all cases politeness goes a long way. Please thank folks for contributions - they are going out of their way to help make the code base better, or adding something they may personally feel is necessary for the code base.
 
-Please be VERY familiar with [CONTRIBUTING](https://github.com/gep13/GitHubReleaseManager/blob/develop/CONTRIBUTING.md) and follow the process as well.
+Please be VERY familiar with [CONTRIBUTING](https://github.com/GitTools/GitReleaseManager/blob/develop/CONTRIBUTING.md) and follow the process as well.
 
 ## Terminology
 
@@ -24,11 +24,11 @@ Please be VERY familiar with [CONTRIBUTING](https://github.com/gep13/GitHubRelea
 
 #### Initial PR Review
 
- * Did the user create a branch with these changes? If it is on their master, please ask them to review [CONTRIBUTING](https://github.com/gep13/GitHubReleaseManager/blob/develop/CONTRIBUTING.md).
+ * Did the user create a branch with these changes? If it is on their master, please ask them to review [CONTRIBUTING](https://github.com/GitTools/GitReleaseManager/blob/develop/CONTRIBUTING.md).
  * Did the user reformat files and they should not have? Was is just white-space? You can try adding [?w=1](https://github.com/blog/967-github-secrets) to the URL on GitHub.
- * Are there tests? We really want any new contributions to contain tests so unless the committer believes this code really needs to be in the code base and is willing to write the tests, then we need to ask the contributor to make a good faith effort in adding test cases. Ask them to review the [contributing document](https://github.com/gep13/GitHubReleaseManager/blob/develop/CONTRIBUTING.md) and provide tests. **Note:** Some commits may be refactoring which wouldn't necessarily add additional test sets.
+ * Are there tests? We really want any new contributions to contain tests so unless the committer believes this code really needs to be in the code base and is willing to write the tests, then we need to ask the contributor to make a good faith effort in adding test cases. Ask them to review the [contributing document](https://github.com/GitTools/GitReleaseManager/blob/develop/CONTRIBUTING.md) and provide tests. **Note:** Some commits may be refactoring which wouldn't necessarily add additional test sets.
  * Is the code documented properly? Does this additional set of changes require changes to the [documentation](http://ghrm.readme.io/)?
- * Was this code warranted? Did the contributor follow the process of gaining approval for big change sets? If not please have them review the [contributing document](https://github.com/gep13/GitHubReleaseManager/blob/develop/CONTRIBUTING.md) and ask them to follow up in the Chat Room.
+ * Was this code warranted? Did the contributor follow the process of gaining approval for big change sets? If not please have them review the [contributing document](https://github.com/GitTools/GitReleaseManager/blob/develop/CONTRIBUTING.md) and ask them to follow up in the Chat Room.
 
 #### Review the Code
   * Does the code meet the naming conventions and formatting (need link)?

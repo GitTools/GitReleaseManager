@@ -15,7 +15,7 @@ branches:
 #---------------------------------#
 
 # clone directory
-clone_folder: C:\projects\GitHubReleaseManager
+clone_folder: C:\projects\GitReleaseManager
 
 # environment variables
 environment:

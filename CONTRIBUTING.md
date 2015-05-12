@@ -5,14 +5,14 @@ Contributors
 
 ### Get Buyoff Or Find Open Community Issues/Features
 
- * Through GitHub, or through the [Chat Room](https://gitter.im/gep13/GitHubReleaseManager) (preferred), you talk about a feature you would like to see (or a bug), and why it should be in GitHubReleaseManager.
+ * Through GitHub, or through the [Chat Room](https://gitter.im/GitTools/GitReleaseManager) (preferred), you talk about a feature you would like to see (or a bug), and why it should be in GitReleaseManager.
    * If approved through the Chat Room, ensure the accompanying GitHub issue is created with information and a link back to the Chat Room discussion.
  * Once you get a nod you can start on the feature.
- * Alternatively, if a feature is on the issues list with the [community tag](https://github.com/gep13/GitHubReleaseManager/labels/Community), it is open for a patch. You should comment that you are signing up for it on the issue so someone else doesn't also sign up for the work.
+ * Alternatively, if a feature is on the issues list with the [community tag](https://github.com/GitTools/GitReleaseManager/labels/Community), it is open for a patch. You should comment that you are signing up for it on the issue so someone else doesn't also sign up for the work.
 
 ### Set Up Your Environment
 
- * You create, or update, a fork of gep13/GitHubReleaseManager under your GitHub account.
+ * You create, or update, a fork of GitTools/GitReleaseManager under your GitHub account.
  * From there you create a branch named specific to the feature.
  * In the branch you do work specific to the feature.
  * Please also observe the following:
@@ -67,7 +67,7 @@ Prerequisites:
 
 Submitting PR:
 
- * Once you feel it is ready, submit the pull request to the `gep13/GitHubReleaseManager` repository against the ````develop```` branch ([more information on this can be found here](https://help.github.com/articles/creating-a-pull-request)).
+ * Once you feel it is ready, submit the pull request to the `GitTools/GitReleaseManager` repository against the ````develop```` branch ([more information on this can be found here](https://help.github.com/articles/creating-a-pull-request)).
  * In the pull request, outline what you did and point to specific conversations (as in URLs) and issues that you are are resolving. This is a tremendous help for us in evaluation and acceptance.
  * Once the pull request is in, please do not delete the branch or close the pull request (unless something is wrong with it).
  * One of the Team members, or one of the committers, will evaluate it within a reasonable time period (which is to say usually within 2-4 weeks). Some things get evaluated faster or fast tracked. We are human and we have active lives outside of open source so don't fret if you haven't seen any activity on your pull request within a month or two. We don't have a Service Level Agreement (SLA) for pull requests. Just know that we will evaluate your pull request.
@@ -80,13 +80,13 @@ If we have comments or questions when we do evaluate it and receive no response,
 
 Sometimes we may need you to rebase your commit against the latest code before we can review it further. If this happens, you can do the following:
 
- * `git fetch upstream` (upstream would be the mainstream repo or `gep13/GitHubReleaseManager` in this case)
+ * `git fetch upstream` (upstream would be the mainstream repo or `GitTools/GitReleaseManager` in this case)
  * `git checkout develop`
  * `git rebase upstream/develop`
  * `git checkout your-branch`
  * `git rebase develop`
  * Fix any merge conflicts
- * `git push origin your-branch` (origin would be your GitHub repo or `your-github-username/GitHubReleaseManager` in this case). You may need to `git push origin your-branch --force` to get the commits pushed. This is generally acceptable with topic branches not in the mainstream repository.
+ * `git push origin your-branch` (origin would be your GitHub repo or `your-github-username/GitReleaseManager` in this case). You may need to `git push origin your-branch --force` to get the commits pushed. This is generally acceptable with topic branches not in the mainstream repository.
 
 The only reasons a pull request should be closed and resubmitted are as follows:
 
