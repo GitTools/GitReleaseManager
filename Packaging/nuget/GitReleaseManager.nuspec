@@ -4,7 +4,7 @@
     <id>gitreleasemanager</id>
     <title>GitReleaseManager</title>
     <version>$version$</version>
-    <authors>gep13</authors>
+    <authors>GitTools Contributors</authors>
     <owners>gep13</owners>
     <licenseUrl>https://github.com/GitTools/GitReleaseManager/blob/develop/LICENSE</licenseUrl>
     <projectUrl>https://github.com/GitTools/GitReleaseManager</projectUrl>

@@ -26,7 +26,7 @@ You can install GitReleaseManager via Chocolatey by executing:
 
 If you are interested in trying out the latest pre-release version of GitReleaseManager then you can use the following installation command:
 
-`choco install gitreleasemanager -source https://www.myget.org/F/ghrm_develop/ -pre`
+`choco install gitreleasemanager -source https://www.myget.org/F/grm_develop/ -pre`
 
 This uses the public GitReleaseManager feed which is hosted on [MyGet.org](https://www.myget.org/)
 

@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="AssemblyInfo.cs" company="gep13">
-//     Copyright (c) 2015 - Present Gary Ewan Park
+// <copyright file="AssemblyInfo.cs" company="GitTools Contributors">
+//     Copyright (c) 2015 - Present - GitTools Contributors
 // </copyright>
 //-----------------------------------------------------------------------
 
@@ -16,8 +16,8 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyInformationalVersion("1.0.0.0")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("gep13")]
-[assembly: AssemblyCopyright("Copyright 2015 - Gary Ewan Park")]
+[assembly: AssemblyCompany("GitTools Contributors")]
+[assembly: AssemblyCopyright("Copyright 2015 - GitTools Contributors")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: NeutralResourcesLanguage("en-GB")]

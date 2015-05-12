@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="ClipBoardHelper.cs" company="gep13">
-//     Copyright (c) 2015 - Present Gary Ewan Park
+// <copyright file="ClipBoardHelper.cs" company="GitTools Contributors">
+//     Copyright (c) 2015 - Present - GitTools Contributors
 // </copyright>
 //-----------------------------------------------------------------------
 

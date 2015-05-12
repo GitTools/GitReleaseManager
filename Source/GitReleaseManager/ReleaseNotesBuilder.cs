@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="ReleaseNotesBuilder.cs" company="gep13">
-//     Copyright (c) 2015 - Present Gary Ewan Park
+// <copyright file="ReleaseNotesBuilder.cs" company="GitTools Contributors">
+//     Copyright (c) 2015 - Present - GitTools Contributors
 // </copyright>
 //-----------------------------------------------------------------------
 

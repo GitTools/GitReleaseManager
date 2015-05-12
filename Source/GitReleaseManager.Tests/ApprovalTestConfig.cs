@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="ApprovalTestConfig.cs" company="gep13">
-//     Copyright (c) 2015 - Present Gary Ewan Park
+// <copyright file="ApprovalTestConfig.cs" company="GitTools Contributors">
+//     Copyright (c) 2015 - Present - GitTools Contributors
 // </copyright>
 //-----------------------------------------------------------------------
 
