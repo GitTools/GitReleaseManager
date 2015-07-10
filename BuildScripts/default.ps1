@@ -7,12 +7,12 @@ $psake.use_exit_on_error = $true
 properties {
 	$config = 'Debug';
 	$nugetExe = "..\Tools\NuGet\NuGet.exe";
-	$projectName = "GitHubReleaseManager";
+	$projectName = "GitReleaseManager";
   $openCoverExe = "..\Source\packages\OpenCover.4.5.3723\OpenCover.Console.exe";
   $nunitConsoleExe = "..\Source\packages\NUnit.Runners.2.6.4\tools\nunit-console.exe";
-  $reportGeneratorExe = "..\Source\packages\ReportGenerator.2.1.3.0\ReportGenerator.exe";
-  $coverallsExe = "..\Source\packages\coveralls.io.1.2.2\tools\coveralls.net.exe";
-  $publishCoverityExe = "..\Source\packages\PublishCoverity.0.9.0\PublishCoverity.exe";
+  $reportGeneratorExe = "..\Source\packages\ReportGenerator.2.1.8.0\tools\ReportGenerator.exe";
+  $coverallsExe = "..\Source\packages\coveralls.io.1.3.4\tools\coveralls.net.exe";
+  $publishCoverityExe = "..\Source\packages\PublishCoverity.0.10.0\PublishCoverity.exe";
 }
 
 $private = "This is a private task not meant for external use!";
@@ -512,7 +512,7 @@ Task -Name NugetPackageRestore -Depends OutputNugetVersion -Description "Restore
 		Write-Output "Running NugetPackageRestore..."
 
 		exec {
-			& $nugetExe restore "$sourceDirectory\GitHubReleaseManager.sln"
+			& $nugetExe restore "$sourceDirectory\GitReleaseManager.sln"
 		}
 
 		Write-Output ("************ NugetPackageRestore Successful ************")
@@ -536,11 +536,11 @@ Task -Name BuildSolution -Depends __RemoveBuildArtifactsDirectory, __VerifyConfi
 
 		exec {
       if ($env:APPVEYOR_SCHEDULED_BUILD -ne "True") {
-        Invoke-MSBuild "$sourceDirectory\GitHubReleaseManager.sln" -NoLogo -Configuration $config -Targets Build -DetailedSummary -VisualStudioVersion 12.0 -Properties (@{'Platform'='Any CPU'})
+        Invoke-MSBuild "$sourceDirectory\GitReleaseManager.sln" -NoLogo -Configuration $config -Targets Build -DetailedSummary -VisualStudioVersion 12.0 -Properties (@{'Platform'='Any CPU'})
       } else {
         $buildCmd = "C:\Program Files (x86)\MSBuild\12.0\bin\msbuild.exe";
         $buildArgs = @(
-                      "$sourceDirectory\GitHubReleaseManager.sln"
+                      "$sourceDirectory\GitReleaseManager.sln"
                       "/l:C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll",
                       "/m",
                       "/p:Configuration=$config",
@@ -550,7 +550,7 @@ Task -Name BuildSolution -Depends __RemoveBuildArtifactsDirectory, __VerifyConfi
 
         & $publishCoverityExe compress -o $buildArtifactsDirectory\coverity.zip -i $buildArtifactsDirectory\cov-int;
 
-        & $publishCoverityExe publish -z $buildArtifactsDirectory\coverity.zip -r GitTools/GitHubReleaseManager -t $env:CoverityProjectToken -e $env:CoverityEmailDistribution -d "AppVeyor scheduled build." --codeVersion $script:version;
+        & $publishCoverityExe publish -z $buildArtifactsDirectory\coverity.zip -r GitTools/GitReleaseManager -t $env:CoverityProjectToken -e $env:CoverityEmailDistribution -d "AppVeyor scheduled build." --codeVersion $script:version;
       }
 
 			$styleCopResultsFiles = Get-ChildItem $buildArtifactsDirectory -Filter "StyleCop*.xml"
@@ -570,7 +570,7 @@ Task -Name BuildSolution -Depends __RemoveBuildArtifactsDirectory, __VerifyConfi
 			}
 
 			if(isAppVeyor) {
-				$expectedExeFile = Join-Path -Path $buildArtifactsDirectory -ChildPath "GitHubReleaseManager.Cli.exe"
+				$expectedExeFile = Join-Path -Path $buildArtifactsDirectory -ChildPath "GitReleaseManager.exe"
 				if(Test-Path $expectedExeFile) {
 					Push-AppveyorArtifact $expectedExeFile;
 				}
@@ -593,7 +593,7 @@ Task -Name RunCodeCoverage -Description "Use OpenCover, NUnit and Coveralls to a
 
 		exec {
       Write-Output "Running OpenCover...";
-      & $openCoverExe -target:$nunitConsoleExe -targetargs:`"$buildArtifactsDirectory\GitHubReleaseManager.Tests.dll /noshadow /nologo`" -filter:`"+[GitHubReleaseManager]GitHubReleaseManager*`" -excludebyattribute:`"System.CodeDom.Compiler.GeneratedCodeAttribute`" -register:user -output:`"$buildArtifactsDirectory\coverage.xml`";
+      & $openCoverExe -target:$nunitConsoleExe -targetargs:`"$buildArtifactsDirectory\GitReleaseManager.Tests.dll /noshadow /nologo`" -filter:`"+[GitReleaseManager]GitReleaseManager*`" -excludebyattribute:`"System.CodeDom.Compiler.GeneratedCodeAttribute`" -register:user -output:`"$buildArtifactsDirectory\coverage.xml`";
       Write-Output "OpenCover Complete";
 
       Write-Output "Running ReportGenerator...";
@@ -625,7 +625,7 @@ Task -Name CleanSolution -Depends __InstallPSBuild, __RemoveBuildArtifactsDirect
 		Write-Output "Running CleanSolution..."
 
 		exec {
-			Invoke-MSBuild "$sourceDirectory\GitHubReleaseManager.sln" -NoLogo -Configuration $config -Targets Clean -DetailedSummary -VisualStudioVersion 12.0 -Properties (@{'Platform'='Any CPU'})
+			Invoke-MSBuild "$sourceDirectory\GitReleaseManager.sln" -NoLogo -Configuration $config -Targets Clean -DetailedSummary -VisualStudioVersion 12.0 -Properties (@{'Platform'='Any CPU'})
 		}
 
 		Write-Output ("************ CleanSolution Successful ************")
@@ -646,8 +646,8 @@ Task -Name PackageChocolatey -Description "Packs the module and example package"
 		Write-Output "Running PackageChocolatey..."
 
 		exec {
-			.$nugetExe pack "$sourceDirectory\..\Packaging\nuget\GitHubReleaseManager.Portable.nuspec" -OutputDirectory "$buildArtifactsDirectory" -NoPackageAnalysis -version $script:version
-			.$nugetExe pack "$sourceDirectory\..\Packaging\nuget\GitHubReleaseManager.nuspec" -OutputDirectory "$buildArtifactsDirectory" -NoPackageAnalysis -version $script:version
+			.$nugetExe pack "$sourceDirectory\..\Packaging\nuget\GitReleaseManager.Portable.nuspec" -OutputDirectory "$buildArtifactsDirectory" -NoPackageAnalysis -version $script:version
+			.$nugetExe pack "$sourceDirectory\..\Packaging\nuget\GitReleaseManager.nuspec" -OutputDirectory "$buildArtifactsDirectory" -NoPackageAnalysis -version $script:version
 
 			if(isAppVeyor) {
         Get-ChildItem $buildArtifactsDirectory -Filter *.nupkg | Foreach-Object {
@@ -724,7 +724,7 @@ Task -Name DeployPackageToChocolateyAndNuget -Description "Takes the packages an
         $nugetPath = ($_ | Resolve-Path).Path;
         $convertedPath = Convert-Path $nugetPath;
 
-        if($_ -like '*cli*') {
+        if($_ -like '*portable*') {
           & $nugetExe push $convertedPath $env:ChocolateyApiKey -source $env:ChocolateyFeedUrl
         } else {
           & $nugetExe push $convertedPath $env:NugetApiKey -source $env:NugetFeedUrl

@@ -1,1 +1,1 @@
-Remove-BinFile "ghrm" "$packageFolder\Tools\GitHubReleaseManager.Cli.exe"
+Remove-BinFile "grm" "$packageFolder\Tools\GitReleaseManager.exe"

@@ -15,16 +15,16 @@ branches:
 #---------------------------------#
 
 # clone directory
-clone_folder: C:\projects\GitHubReleaseManager
+clone_folder: C:\projects\GitReleaseManager
 
 # environment variables
 environment:
   MyGetDevelopApiKey:
-    secure: CSkz9zxSF7/W9k7MxR0WD3J2q2PU07QkxrlT71yAkMLMECQBsbTHx3HSajNPgTxI
-  MyGetDevelopFeedUrl: https://www.myget.org/F/ghrm_develop/
+    secure: Ddgbcn3J5vLpseoyk7B3yIk7r0lwOBrNdofj0ak23dsWOZq1sMPhtwWpt5oTA1jm
+  MyGetDevelopFeedUrl: https://www.myget.org/F/grm_develop/
   MyGetMasterApiKey:
-    secure: 8YUXM0dwbOFIAwjrbZoYxT/cpnL1J7CKD85kUjSyzZQpcRxpNxKcUtr+0gjj+LBN
-  MyGetMasterFeedUrl: https://www.myget.org/F/ghrm_master/
+    secure: 4I1Xep3sy2ybI89tiqzcK385wIKnt0D4p9JM5sb+ap86kSyfzxxj6nFaO7AUm80H
+  MyGetMasterFeedUrl: https://www.myget.org/F/grm_master/
   ChocolateyApiKey:
     secure: 2Sbie8uhFjl1v+NtLuR1oGcWnQE2M87jq0fSEwFOYcnNEC5qdwCkgVOG0MmC2Ffv
   ChocolateyFeedUrl: https://chocolatey.org/
@@ -36,7 +36,7 @@ environment:
   GitHubPassword:
     secure: XSuLygmr83zEpWcXIXMXGocN0QbooLud1eIMA3mQWKkT9LAU4TyrijLBcJIo7bD7
   CoverityProjectToken:
-    secure: B9diAS20/XucFCQ8vPg02br0VukNjo5+nbFx121Arac=
+    secure: v9LYg/tMc/XFYAiIJl+KiGpo1pBtyQgcANoNqra/5qg=
   CoverityEmailDistribution:
     secure: FuJy6Wqvw19/VBYyE0hHY+lNbkKxlN1Jsr8OiTdAgkQ=
   COVERALLS_REPO_TOKEN:
