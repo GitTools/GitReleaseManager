@@ -1,1 +1,1 @@
-Remove-BinFile "grm" "$packageFolder\Tools\GitReleaseManager.Cli.exe"
+Remove-BinFile "grm" "$packageFolder\Tools\GitReleaseManager.exe"
