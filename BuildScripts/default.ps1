@@ -10,9 +10,9 @@ properties {
 	$projectName = "GitReleaseManager";
   $openCoverExe = "..\Source\packages\OpenCover.4.5.3723\OpenCover.Console.exe";
   $nunitConsoleExe = "..\Source\packages\NUnit.Runners.2.6.4\tools\nunit-console.exe";
-  $reportGeneratorExe = "..\Source\packages\ReportGenerator.2.1.3.0\ReportGenerator.exe";
-  $coverallsExe = "..\Source\packages\coveralls.io.1.2.2\tools\coveralls.net.exe";
-  $publishCoverityExe = "..\Source\packages\PublishCoverity.0.9.0\PublishCoverity.exe";
+  $reportGeneratorExe = "..\Source\packages\ReportGenerator.2.1.8.0\tools\ReportGenerator.exe";
+  $coverallsExe = "..\Source\packages\coveralls.io.1.3.4\tools\coveralls.net.exe";
+  $publishCoverityExe = "..\Source\packages\PublishCoverity.0.10.0\PublishCoverity.exe";
 }
 
 $private = "This is a private task not meant for external use!";
@@ -570,7 +570,7 @@ Task -Name BuildSolution -Depends __RemoveBuildArtifactsDirectory, __VerifyConfi
 			}
 
 			if(isAppVeyor) {
-				$expectedExeFile = Join-Path -Path $buildArtifactsDirectory -ChildPath "GitReleaseManager.Cli.exe"
+				$expectedExeFile = Join-Path -Path $buildArtifactsDirectory -ChildPath "GitReleaseManager.exe"
 				if(Test-Path $expectedExeFile) {
 					Push-AppveyorArtifact $expectedExeFile;
 				}
@@ -724,7 +724,7 @@ Task -Name DeployPackageToChocolateyAndNuget -Description "Takes the packages an
         $nugetPath = ($_ | Resolve-Path).Path;
         $convertedPath = Convert-Path $nugetPath;
 
-        if($_ -like '*cli*') {
+        if($_ -like '*portable*') {
           & $nugetExe push $convertedPath $env:ChocolateyApiKey -source $env:ChocolateyFeedUrl
         } else {
           & $nugetExe push $convertedPath $env:NugetApiKey -source $env:NugetFeedUrl
