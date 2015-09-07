@@ -20,6 +20,8 @@ GitReleaseManager allows you to:
 
 ## Installation
 
+[![Join the chat at https://gitter.im/GitTools/GitReleaseManager](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/GitTools/GitReleaseManager?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 You can install GitReleaseManager via Chocolatey by executing:
 
 `choco install gitreleasemanager.portable`
