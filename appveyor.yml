@@ -20,27 +20,27 @@ clone_folder: C:\projects\GitReleaseManager
 # environment variables
 environment:
   MyGetDevelopApiKey:
-    secure: KFeZCL5TKhJaL96tl0H+HjcVYv/cSsVtFE48mYOpmCMuuNH/sId04odoavJqgl7f
+    secure: YLAuIlbdXtjtumw6OyEtREOmeLQCBhoT7QvpnMf3dk9klv4XXwem2NK/zJ3T1AkZ
   MyGetDevelopFeedUrl: https://www.myget.org/F/packages_develop/
   MyGetMasterApiKey:
-    secure: OewKlbHSmiVUj7kC0WMZwvjDQKBjcZNgSYyXIxDNGZxssxx4KDQNyRbT+6PZ+uPH
+    secure: Sk5RqF4OR1bkNc4Izl0x2YEMG+/7JKwsgmhae1jsBHsV4y47ziduS6e7QAniQWX3
   MyGetMasterFeedUrl: https://www.myget.org/F/packages_master/
   ChocolateyApiKey:
-    secure: rGZLB7/BIEUl7XMeMeidRD50lQe8igKyPUJSAzFBd146Foc67Vyagv1kJ4ImTGvY
+    secure: mb19XDM/nj6pBpA9sCeS79TcrS1aaJri8ID9iB1agXDrFEFgi0MRACXZ5ZMOIDLd
   ChocolateyFeedUrl: https://chocolatey.org/
   NugetApiKey:
-    secure: a/xbTgIAc+QGdAwANmenmrUJFG5hqB+jMyqB6y80KZYXfRHOVEB+1dB4CEyDednf
+    secure: kyvS4pYmOCyvas5wxibDusCABHBkmORratOuw13JYeo/xj+ggCnfZhihMVUrXL7x
   NugetFeedUrl: https://nuget.org/
   GitHubUserName:
-    secure: je/D8MZcaA0IMfIhmrqShQ==
+    secure: ZCA+aRya0+io2tdxuHNk7A==
   GitHubPassword:
-    secure: DCLeGjj/fPf/rkF2y4e3ZEFta2Efnzof1GiOEIPdhw0PQs4NBnjaENwif1itJB96
+    secure: 1wF/X5joO2IxJ2Y4rVQQNHq+FdvWTIg7BzOHxnoIL6NDy9S+lbPEXHkPeJ4ut2+a
   CoverityProjectToken:
-    secure: sNjhk2dFsZr+aR38o8Gd8Lmg09HrEvA7694/Ab339mc=
+    secure: ibAJfTZ3/OdIbl44xS3NcJFEOTfdn/xZYNom7SN24dA=
   CoverityEmailDistribution:
-    secure: aUKSmixrP4rsyYLhnPvZY3sJoDp6J3W19tE3aTOkI2A=
+    secure: oLfhcOUb9277iSyIER67eYe9LJW2mYpsEkaLvvN3cz0=
   COVERALLS_REPO_TOKEN:
-    secure: Nq9nxGOJfq4uTLPaPXiYl32/cVsa/PtPE3ptDbSDjNbEpRRloH9KHjba/B+Oh6yx
+    secure: WZjpH6lAaED670CnGZhI1AI0OBG2T3BaA/8auYvFJ8T84OVLrSab4liqJDQw8RwT
    
 #---------------------------------#
 #       build configuration       #
