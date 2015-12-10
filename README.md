@@ -39,7 +39,7 @@ This uses the public GitReleaseManager feed which is hosted on [MyGet.org](https
 
 AppVeyor  
 -------------
-[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/20hvqfnv6dlwqld7/branch/develop?svg=true)](https://ci.appveyor.com/project/GaryEwanPark/gitreleasemanager)
+[![AppVeyor Build status](https://ci.appveyor.com/api/projects/status/hfad7hkscfx4423p/branch/develop?svg=true)](https://ci.appveyor.com/project/GitTools/gitreleasemanager/branch/develop)
 
 ## Chat Room
 
