@@ -7,6 +7,7 @@
 namespace GitReleaseManager.Core
 {
     using System;
+    using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Globalization;
@@ -100,23 +101,6 @@ namespace GitReleaseManager.Core
             }
         }
 
-        private void CheckForValidLabels(Issue issue)
-        {
-            var count = this.configuration.IssueLabelsInclude.Sum(issueLabel => issue.Labels.Count(l => l.Name == issueLabel));
-
-            if (count != 1)
-            {
-                var allIssueLabels = this.configuration.IssueLabelsInclude.Union(this.configuration.IssueLabelsExclude).ToList();
-                var allIssuesExceptLast = allIssueLabels.Take(allIssueLabels.Count() - 1);
-                var lastLabel = allIssueLabels.Last();
-
-                var allIssuesExceptLastString = string.Join(", ", allIssuesExceptLast);
-
-                var message = string.Format(CultureInfo.InvariantCulture, "Bad Issue {0} expected to find a single label with either {1} or {2}.", issue.HtmlUrl, allIssuesExceptLastString, lastLabel);
-                throw new InvalidOperationException(message);
-            }
-        }
-
         private void AddIssues(StringBuilder stringBuilder, List<Issue> issues)
         {
             foreach (var issueLabel in this.configuration.IssueLabelsInclude)
@@ -170,12 +154,70 @@ namespace GitReleaseManager.Core
         private async Task<List<Issue>> GetIssues(Milestone milestone)
         {
             var issues = await this.gitHubClient.GetIssues(milestone);
-            foreach (var issue in issues)
+            var precedenceDictionary = new ReadOnlyDictionary<string, int>(
+                this.configuration.IssueLabelsPrecedence.Count == 0
+                ? this.configuration.IssueLabelsInclude.Concat(this.configuration.IssueLabelsExclude)
+                    .ToDictionary(lbl => lbl, _ => 0)
+                : this.configuration.IssueLabelsPrecedence.Select((lbl, pos) => new { lbl, pos })
+                    .ToDictionary(x => x.lbl, x => x.pos + 1));
+
+            return issues
+                .AsParallel()
+                .Aggregate(
+                    new ConcurrentBag<Issue>(),
+                    (bag, issue) =>
+                    {
+                        if (IsIssueForInclusion(issue, precedenceDictionary))
+                        {
+                            bag.Add(issue);
+                        }
+
+                        return bag;
+                    }).OrderBy(x => x.Number).ToList();
+        }
+
+        private bool IsIssueForInclusion(Issue issue, IReadOnlyDictionary<string, int> labelPrecedence)
+        {
+            var labelsByPrecedence =
+                issue.Labels.Select(
+                    lbl =>
+                    {
+                        if (!labelPrecedence.ContainsKey(lbl.Name))
+                        {
+                            throw new InvalidOperationException(
+                                string.Format(
+                                    CultureInfo.InvariantCulture,
+                                    "Invalid issue - Issue {0} contains an un-configured label {1}",
+                                    issue.HtmlUrl,
+                                    lbl.Name));
+                        }
+
+                        return new
+                        {
+                            label = lbl.Name,
+                            pos = labelPrecedence[lbl.Name],
+                            include = this.configuration.IssueLabelsInclude.Contains(lbl.Name)
+                        };
+                    })
+                    .OrderBy(x => x.pos)
+                    .ToList();
+
+            if (labelsByPrecedence.Count == 0)
             {
-                this.CheckForValidLabels(issue);
+                throw new InvalidOperationException(
+                    string.Format(CultureInfo.InvariantCulture, "Invalid Issue - Issue {0} has no labels", issue.HtmlUrl));
             }
 
-            return issues;
+            if (labelsByPrecedence.Count(x => x.include) > 1)
+            {
+                throw new InvalidOperationException(
+                    string.Format(
+                        CultureInfo.InvariantCulture,
+                        "Invalid Issue - Issue {0} has more than one label that is configured for inclusion",
+                        issue.HtmlUrl));
+            }
+
+            return labelsByPrecedence.First().include;
         }
 
         private void GetTargetMilestone()

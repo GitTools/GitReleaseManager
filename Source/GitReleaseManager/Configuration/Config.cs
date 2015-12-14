@@ -42,6 +42,8 @@ namespace GitReleaseManager.Core.Configuration
                                    {
                                        "Internal Refactoring"
                                    };
+
+            this.IssueLabelsPrecedence = new List<string>();
         }
 
         [YamlMember(Alias = "create")]
@@ -55,5 +57,8 @@ namespace GitReleaseManager.Core.Configuration
 
         [YamlMember(Alias = "issue-labels-exclude")]
         public IList<string> IssueLabelsExclude { get; private set; }
+
+        [YamlMember(Alias = "issue-labels-precedence")]
+        public IList<string> IssueLabelsPrecedence { get; private set; } 
     }
 }
