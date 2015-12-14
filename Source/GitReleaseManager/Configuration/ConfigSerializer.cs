@@ -7,7 +7,9 @@
 namespace GitReleaseManager.Core.Configuration
 {
     using System;
+    using System.Globalization;
     using System.IO;
+    using System.Linq;
     using YamlDotNet.Serialization;
     using YamlDotNet.Serialization.NamingConventions;
 
@@ -23,9 +25,14 @@ namespace GitReleaseManager.Core.Configuration
                 return new Config();
             }
 
+            if (deserialize.IssueLabelsPrecedence.Count != 0)
+            {
+                ExpandLabelPrecedenceList(deserialize); 
+            }
+
             return deserialize;
         }
-
+        
         public static void Write(Config config, TextWriter writer)
         {
             var serializer = new Serializer(SerializationOptions.None, new HyphenatedNamingConvention());
@@ -58,6 +65,66 @@ namespace GitReleaseManager.Core.Configuration
             writer.WriteLine(@"# - Improvement");
             writer.WriteLine(@"# issue-labels-exclude:");
             writer.WriteLine(@"# - Internal Refactoring");
+        }
+
+        private static void ExpandLabelPrecedenceList(Config config)
+        {
+            var occurrenceDictionary =
+                config.IssueLabelsInclude.Select(lbl => new { Label = lbl, Include = true, Found = false })
+                    .Concat(config.IssueLabelsExclude.Select(lbl => new { Label = lbl, Include = false, Found = false }))
+                    .ToDictionary(x => x.Label, x => new { x.Include, x.Found });
+
+            var origPrecedenceList = config.IssueLabelsPrecedence.ToList();
+            config.IssueLabelsPrecedence.Clear();
+
+            foreach (var label in origPrecedenceList)
+            {
+                switch (label)
+                {
+                    case "$include":
+                        foreach (
+                            var remaining in occurrenceDictionary.Where(kvp => !kvp.Value.Found && kvp.Value.Include).ToList())
+                        {
+                            occurrenceDictionary[remaining.Key] = new { remaining.Value.Include, Found = true };
+                            config.IssueLabelsPrecedence.Add(remaining.Key);
+                        }
+
+                        break;
+                    case "$exclude":
+                        foreach (
+                            var remaining in
+                                occurrenceDictionary.Where(kvp => !kvp.Value.Found && !kvp.Value.Include).ToList())
+                        {
+                            occurrenceDictionary[remaining.Key] = new { remaining.Value.Include, Found = true };
+                            config.IssueLabelsPrecedence.Add(remaining.Key);
+                        }
+
+                        break;
+                    default:
+                        if (!occurrenceDictionary.ContainsKey(label))
+                        {
+                            throw new InvalidOperationException(
+                                string.Format(
+                                    CultureInfo.InvariantCulture,
+                                    "Label {0} was not found in either the include or exclude list.",
+                                    label));
+                        }
+
+                        var details = occurrenceDictionary[label];
+                        if (details.Found)
+                        {
+                            throw new InvalidOperationException(
+                                string.Format(
+                                    CultureInfo.InvariantCulture,
+                                    "Label {0} is already listed in the precedence config.",
+                                    label));
+                        }
+
+                        config.IssueLabelsPrecedence.Add(label);
+                        occurrenceDictionary[label] = new { details.Include, Found = true };
+                        break;
+                }
+            }
         }
     }
 }
