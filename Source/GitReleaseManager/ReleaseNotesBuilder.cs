@@ -107,7 +107,7 @@ namespace GitReleaseManager.Core
             if (count != 1)
             {
                 var allIssueLabels = this.configuration.IssueLabelsInclude.Union(this.configuration.IssueLabelsExclude).ToList();
-                var allIssuesExceptLast = allIssueLabels.Take(allIssueLabels.Count() - 1);
+                var allIssuesExceptLast = allIssueLabels.Take(allIssueLabels.Count - 1);
                 var lastLabel = allIssueLabels.Last();
 
                 var allIssuesExceptLastString = string.Join(", ", allIssuesExceptLast);
