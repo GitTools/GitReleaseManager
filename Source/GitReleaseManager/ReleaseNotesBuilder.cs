@@ -102,7 +102,7 @@ namespace GitReleaseManager.Core
 
         private void CheckForValidLabels(Issue issue)
         {
-            var count = this.configuration.IssueLabelsInclude.Sum(issueLabel => issue.Labels.Count(l => l.Name == issueLabel));
+            var count = this.configuration.IssueLabelsInclude.Sum(issueLabel => issue.Labels.Count(l => l.Name.ToLower() == issueLabel.ToLower()));
 
             if (count != 1)
             {
