@@ -73,17 +73,15 @@ namespace GitReleaseManager.Tests
         }
 
         [Test]
-        [ExpectedException(typeof(AggregateException))]
         public void NoCommitsWrongIssueLabel()
         {
-            AcceptTest(0, CreateIssue(1, "Test"));
+            Assert.Throws<AggregateException>(() => AcceptTest(0, CreateIssue(1, "Test")));
         }
 
         [Test]
-        [ExpectedException(typeof(AggregateException))]
         public void SomeCommitsWrongIssueLabel()
         {
-            AcceptTest(5, CreateIssue(1, "Test"));
+            Assert.Throws<AggregateException>(() => AcceptTest(5, CreateIssue(1, "Test")));
         }
 
         private static void AcceptTest(int commits, params Issue[] issues)
