@@ -41,14 +41,14 @@ environment:
     secure: oLfhcOUb9277iSyIER67eYe9LJW2mYpsEkaLvvN3cz0=
   COVERALLS_REPO_TOKEN:
     secure: WZjpH6lAaED670CnGZhI1AI0OBG2T3BaA/8auYvFJ8T84OVLrSab4liqJDQw8RwT
-   
+
 #---------------------------------#
 #       build configuration       #
 #---------------------------------#
 
 build_script:
   - ps: .\BuildScripts\build.ps1
-  
+
 test: off
 
 #---------------------------------#
