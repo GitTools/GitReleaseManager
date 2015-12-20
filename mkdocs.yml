@@ -3,10 +3,9 @@ theme: readthedocs
 repo_url: https://github.com/GitTools/GitReleaseManager
 
 pages:
-- Documentation:
-  - What is GitReleaseManager: what-is-grm.md
-  - Why would I want to use it?: why-grm.md
-  - Advanced Workflow: advanced.md
+- Home: what-is-grm.md
+- Why would I want to use it?: why-grm.md
+- Advanced Workflow: advanced.md
 - Installation:
   - Via Chocolatey: installation/chocolatey.md
   - Via NuGet: installation/nuget.md
