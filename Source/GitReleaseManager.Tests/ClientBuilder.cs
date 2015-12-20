@@ -15,7 +15,7 @@ namespace GitReleaseManager.Tests
         {
             var credentialStore = new InMemoryCredentialStore(Helper.Credentials);
 
-            var httpClient = new HttpClientAdapter(Helper.Proxy);
+            var httpClient = new HttpClientAdapter(HttpMessageHandlerFactory.CreateDefault);
 
             var connection = new Connection(
                 new ProductHeaderValue("GitReleaseManager"),

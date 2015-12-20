@@ -86,16 +86,7 @@ namespace GitReleaseManager.Tests
             stringBuilder.AppendLine();
             stringBuilder.AppendLine("- [__#3__](http://example.com/3) Issue 3");
 
-            return new Release
-            {
-                CreatedAt = createdDateTime,
-                TagName = milestone,
-                Draft = false,
-                Name = milestone,
-                Id = id,
-                TargetCommitish = "master",
-                Body = stringBuilder.ToString()
-            };
+            return new Release(null, null, null, null, id, milestone, "master", milestone, stringBuilder.ToString(), false, false, createdDateTime, null);
         }
     }
 }

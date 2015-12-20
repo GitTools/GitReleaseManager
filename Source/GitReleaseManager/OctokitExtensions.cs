@@ -40,8 +40,8 @@ namespace GitReleaseManager.Core
             var parts = milestone.Url.AbsolutePath.Split('/');
             var user = parts[2];
             var repository = parts[3];
-            var closedIssues = await gitHubClient.Issue.GetForRepository(user, repository, closedIssueRequest);
-            var openIssues = await gitHubClient.Issue.GetForRepository(user, repository, openIssueRequest);
+            var closedIssues = await gitHubClient.Issue.GetAllForRepository(user, repository, closedIssueRequest);
+            var openIssues = await gitHubClient.Issue.GetAllForRepository(user, repository, openIssueRequest);
             return openIssues.Union(closedIssues);
         }
 

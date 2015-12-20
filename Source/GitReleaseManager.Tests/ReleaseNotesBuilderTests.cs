@@ -73,17 +73,15 @@ namespace GitReleaseManager.Tests
         }
 
         [Test]
-        [ExpectedException(typeof(AggregateException))]
         public void NoCommitsWrongIssueLabel()
         {
-            AcceptTest(0, CreateIssue(1, "Test"));
+            Assert.Throws<AggregateException>(() => AcceptTest(0, CreateIssue(1, "Test")));
         }
 
         [Test]
-        [ExpectedException(typeof(AggregateException))]
         public void SomeCommitsWrongIssueLabel()
         {
-            AcceptTest(5, CreateIssue(1, "Test"));
+            Assert.Throws<AggregateException>(() => AcceptTest(5, CreateIssue(1, "Test")));
         }
 
         private static void AcceptTest(int commits, params Issue[] issues)
@@ -110,23 +108,29 @@ namespace GitReleaseManager.Tests
 
         private static Milestone CreateMilestone(string version)
         {
-            return new Milestone
-                {
-                    Title = version,
-                    Url = new Uri("https://github.com/gep13/FakeRepository/issues?q=milestone%3A" + version)
-                };
+            return new Milestone(new Uri("https://github.com/gep13/FakeRepository/issues?q=milestone%3A" + version), 0, ItemState.Open, version, String.Empty, null, 0, 0, DateTimeOffset.Now, null, null);
         }
 
         private static Issue CreateIssue(int number, params string[] labels)
         {
-            return new Issue
-                {
-                    Number = number,
-                    Title = "Issue " + number,
-                    HtmlUrl = new Uri("http://example.com/" + number),
-                    Body = "Some issue",
-                    Labels = labels.Select(x => new Label { Name = x }).ToArray(),
-                };
+            return new Issue(
+                null,
+                new Uri("http://example.com/" + number),
+                null,
+                null,
+                number,
+                ItemState.Open,
+                "Issue " + number,
+                "Some issue",
+                null,
+                labels.Select(x => new Label (null, x, null)).ToArray(),
+                null,
+                null,
+                0,
+                null,
+                null,
+                DateTimeOffset.Now,
+                null);
         }
     }
 }

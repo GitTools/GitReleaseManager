@@ -234,7 +234,7 @@ namespace GitReleaseManager.Cli
 
             var result = await releaseNotesBuilder.BuildReleaseNotes();
 
-            var releaseUpdate = CreateReleaseUpdate(milestone, result, prerelease, targetCommitish);
+            var releaseUpdate = CreateNewRelease(milestone, result, prerelease, targetCommitish);
 
             var release = await github.Release.Create(owner, repository, releaseUpdate);
 
@@ -250,7 +250,7 @@ namespace GitReleaseManager.Cli
 
             var inputFileContents = File.ReadAllText(inputFilePath);
 
-            var releaseUpdate = CreateReleaseUpdate(name, inputFileContents, prerelease, targetCommitish);
+            var releaseUpdate = CreateNewRelease(name, inputFileContents, prerelease, targetCommitish);
 
             var release = await github.Release.Create(owner, repository, releaseUpdate);
 
@@ -284,7 +284,7 @@ namespace GitReleaseManager.Cli
         private static async Task CloseMilestone(GitHubClient github, string owner, string repository, string milestoneTitle)
         {
             var milestoneClient = github.Issue.Milestone;
-            var openMilestones = await milestoneClient.GetForRepository(owner, repository, new MilestoneRequest { State = ItemState.Open });
+            var openMilestones = await milestoneClient.GetAllForRepository(owner, repository, new MilestoneRequest { State = ItemState.Open });
             var milestone = openMilestones.FirstOrDefault(m => m.Title == milestoneTitle);
 
             if (milestone == null)
@@ -305,10 +305,7 @@ namespace GitReleaseManager.Cli
                 return;
             }
 
-            var releaseUpdate = new ReleaseUpdate(tagName)
-            {
-                Draft = false
-            };
+            var releaseUpdate = new ReleaseUpdate { TagName = tagName, Draft = false };
 
             await github.Release.Edit(owner, repository, release.Id, releaseUpdate);
         }
@@ -325,20 +322,20 @@ namespace GitReleaseManager.Cli
                     }
 
                     var upload = new ReleaseAssetUpload
-                                     {
-                                         FileName = Path.GetFileName(asset),
-                                         ContentType = "application/octet-stream",
-                                         RawData = File.Open(asset, FileMode.Open)
-                                     };
+                    {
+                        FileName = Path.GetFileName(asset),
+                        ContentType = "application/octet-stream",
+                        RawData = File.Open(asset, FileMode.Open)
+                    };
 
                     await github.Release.UploadAsset(release, upload);
                 }
             }
         }
 
-        private static ReleaseUpdate CreateReleaseUpdate(string name, string body, bool prerelease, string targetCommitish)
+        private static NewRelease CreateNewRelease(string name, string body, bool prerelease, string targetCommitish)
         {
-            var releaseUpdate = new ReleaseUpdate(name)
+            var newRelease = new NewRelease(name)
             {
                 Draft = true,
                 Body = body,
@@ -348,10 +345,10 @@ namespace GitReleaseManager.Cli
 
             if (!string.IsNullOrEmpty(targetCommitish))
             {
-                releaseUpdate.TargetCommitish = targetCommitish;
+                newRelease.TargetCommitish = targetCommitish;
             }
 
-            return releaseUpdate;
+            return newRelease;
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "Not required.")]
