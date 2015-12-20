@@ -68,16 +68,16 @@ namespace GitReleaseManager.Core
         {
             var milestonesClient = this.gitHubClient.Issue.Milestone;
             var closed = milestonesClient.GetForRepository(
-                this.user, 
-                this.repository, 
+                this.user,
+                this.repository,
                 new MilestoneRequest
                     {
                         State = ItemState.Closed
                     }).Result;
 
             var open = milestonesClient.GetForRepository(
-                this.user, 
-                this.repository, 
+                this.user,
+                this.repository,
                 new MilestoneRequest
                     {
                         State = ItemState.Open
