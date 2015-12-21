@@ -3,4 +3,5 @@ theme: readthedocs
 repo_url: https://github.com/GitTools/GitReleaseManager
 
 pages:
-- Home: what-is-grm.md
+- Home: index.md
+- Why use GitReleaseManager: why-grm.md
