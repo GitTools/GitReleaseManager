@@ -25,6 +25,6 @@ pages:
   - Show Config: commands/show-config.md
 - Logging:
   - Configure Logging: logging/logging.md
--Credits:
+- Credits:
   - Particular Software: credits/particular.md
   - Icon: credits/icon.md
