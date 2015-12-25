@@ -17,7 +17,7 @@ create:
 
 This would result in the following [release notes](https://github.com/chocolatey/ChocolateyGUI/releases/tag/0.13.1) being generated:
 
-![Example Release Notes]()
+![Example Release Notes](https://raw.githubusercontent.com/GitTools/GitReleaseManager/develop/docs/images/example-release-notes.png)
 
 <div class="admonition note">
     <p class="first admonition-title">Note</p>

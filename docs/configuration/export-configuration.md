@@ -17,7 +17,7 @@ export:
 
 This results in a file which looks like this:
 
-![Example Exported Release Notes]()
+![Example Exported Release Notes](https://raw.githubusercontent.com/GitTools/GitReleaseManager/develop/docs/images/example-export.png)
 
 <div class="admonition note">
     <p class="first admonition-title">Note</p>
