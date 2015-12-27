@@ -55,6 +55,10 @@ If you would like to contribute code or help squash a bug or two, that's awesome
 
 Committers, you should be very familiar with [COMMITTERS](https://github.com/GitTools/GitReleaseManager/blob/develop/COMMITTERS.md).
 
+## Documentation
+
+The documentation for GitReleaseManager can be found on [ReadTheDocs](http://gitreleasemanager.readthedocs.org/en/develop/).
+
 ## Credits
 
 GitReleaseManager is brought to you by quite a few people and frameworks.  See [CREDITS](https://github.com/GitTools/GitReleaseManager/blob/develop/Documentation/legal/CREDITS.md) for full information.
