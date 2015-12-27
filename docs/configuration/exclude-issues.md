@@ -22,10 +22,3 @@ issue-labels-exclude:
         All issues assigned to a milestone have to have a label which matches to one listed in the include to exclude sections of the GitReleaseManager.yaml file or the default configuration.
     </p>
 </div>
-
-<div class="admonition error">
-    <p class="first admonition-title">Note</p>
-    <p class="last">
-        GitReleaseManager uses a case sensitive comparison when checking for labels to include and exclude. i.e. Bug is NOT the same as bug.
-    </p>
-</div>
