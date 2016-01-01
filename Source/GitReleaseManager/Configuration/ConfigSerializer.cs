@@ -54,8 +54,14 @@ namespace GitReleaseManager.Core.Configuration
             writer.WriteLine(@"#   multiline-regex: true | false");
             writer.WriteLine(@"# issue-labels-include:");
             writer.WriteLine(@"# - Bug");
+            writer.WriteLine(@"# - Duplicate");
+            writer.WriteLine(@"# - Enhancement");
             writer.WriteLine(@"# - Feature");
+            writer.WriteLine(@"# - Help Wanted");
             writer.WriteLine(@"# - Improvement");
+            writer.WriteLine(@"# - Invalid");
+            writer.WriteLine(@"# - Question");
+            writer.WriteLine(@"# - WontFix");
             writer.WriteLine(@"# issue-labels-exclude:");
             writer.WriteLine(@"# - Internal Refactoring");
         }
