@@ -8,6 +8,7 @@ namespace GitReleaseManager.Cli.Options
 {
     using CommandLine;
 
+    [Verb("close", HelpText = "Closes the milestone.")]
     public class CloseSubOptions : BaseGitHubSubOptions
     {
         [Option('m', "milestone", HelpText = "The milestone to use.", Required = true)]

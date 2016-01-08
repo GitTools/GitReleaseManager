@@ -9,7 +9,7 @@ properties {
 	$nugetExe = "..\Tools\NuGet\NuGet.exe";
 	$projectName = "GitReleaseManager";
   $openCoverExe = "..\Source\packages\OpenCover.4.5.3723\OpenCover.Console.exe";
-  $nunitConsoleExe = "..\Source\packages\NUnit.Runners.2.6.4\tools\nunit-console.exe";
+  $nunitConsoleExe = "..\Source\packages\NUnit.Console.3.0.1\tools\nunit3-console.exe";
   $reportGeneratorExe = "..\Source\packages\ReportGenerator.2.1.8.0\tools\ReportGenerator.exe";
   $coverallsExe = "..\Source\packages\coveralls.io.1.3.4\tools\coveralls.net.exe";
   $publishCoverityExe = "..\Source\packages\PublishCoverity.0.10.0\PublishCoverity.exe";
@@ -415,7 +415,7 @@ Task -Name RunGitVersion -Depends __InstallGitVersion -Description "Execute the 
 		exec {
 			if(isAppVeyor) {
 				Write-Output "Running on AppVeyor, so UpdateAssemblyInfo will be called."
-				& $gitVersionExe /output buildserver /UpdateAssemblyInfo true
+				& $gitVersionExe $rootDirectory /output buildserver /UpdateAssemblyInfo true
 				$script:version = $env:GitVersion_LegacySemVerPadded
 			} else {
 				$output = & $gitVersionExe
@@ -593,7 +593,7 @@ Task -Name RunCodeCoverage -Description "Use OpenCover, NUnit and Coveralls to a
 
 		exec {
       Write-Output "Running OpenCover...";
-      & $openCoverExe -target:$nunitConsoleExe -targetargs:`"$buildArtifactsDirectory\GitReleaseManager.Tests.dll /noshadow /nologo`" -filter:`"+[GitReleaseManager]GitReleaseManager*`" -excludebyattribute:`"System.CodeDom.Compiler.GeneratedCodeAttribute`" -register:user -output:`"$buildArtifactsDirectory\coverage.xml`";
+      & $openCoverExe -target:$nunitConsoleExe -targetargs:`"$buildArtifactsDirectory\GitReleaseManager.Tests.dll`" -filter:`"+[GitReleaseManager]GitReleaseManager*`" -excludebyattribute:`"System.CodeDom.Compiler.GeneratedCodeAttribute`" -register:user -output:`"$buildArtifactsDirectory\coverage.xml`";
       Write-Output "OpenCover Complete";
 
       Write-Output "Running ReportGenerator...";
