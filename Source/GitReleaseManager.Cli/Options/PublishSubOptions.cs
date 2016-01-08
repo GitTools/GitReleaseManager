@@ -8,6 +8,7 @@ namespace GitReleaseManager.Cli.Options
 {
     using CommandLine;
 
+    [Verb("publish", HelpText = "Publishes the release notes and closes the milestone.")]
     public class PublishSubOptions : BaseGitHubSubOptions
     {
         [Option('t', "tagName", HelpText = "The name of the release (Typically this is the generated SemVer Version Number).", Required = true)]

@@ -28,108 +28,28 @@ namespace GitReleaseManager.Cli
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "Not required")]
         private static int Main(string[] args)
         {
-            var options = new MainOptions();
+            var fileSystem = new FileSystem();
 
-            var result = 1;
-
-            if (!Parser.Default.ParseArgumentsStrict(
-                args,
-                options,
-                (verb, subOptions) =>
-                {
-                    result = 1;
-
-                    var baseSubOptions = subOptions as BaseSubOptions;
-                    if (baseSubOptions != null)
-                    {
-                        if (string.IsNullOrEmpty(baseSubOptions.TargetDirectory))
-                        {
-                            baseSubOptions.TargetDirectory = Environment.CurrentDirectory;
-                        }
-
-                        ConfigureLogging(baseSubOptions.LogFilePath);
-                    }
-
-                    var fileSystem = new FileSystem();
-
-                    if (verb == "create")
-                    {
-                        var createSubOptions = baseSubOptions as CreateSubOptions;
-                        if (createSubOptions != null)
-                        {
-                            result = CreateReleaseAsync(createSubOptions, fileSystem).Result;
-                        }
-                    }
-
-                    if (verb == "addasset")
-                    {
-                        var addAssetSubOptions = baseSubOptions as AddAssetSubOptions;
-                        if (addAssetSubOptions != null)
-                        {
-                            result = AddAssetsAsync(addAssetSubOptions).Result;
-                        }
-                    }
-
-                    if (verb == "close")
-                    {
-                        var closeSubOptions = baseSubOptions as CloseSubOptions;
-                        if (closeSubOptions != null)
-                        {
-                            result = CloseMilestoneAsync(closeSubOptions).Result;
-                        }
-                    }
-
-                    if (verb == "publish")
-                    {
-                        var publishSubOptions = baseSubOptions as PublishSubOptions;
-                        if (publishSubOptions != null)
-                        {
-                            result = PublishReleaseAsync(publishSubOptions).Result;
-                        }
-                    }
-
-                    if (verb == "export")
-                    {
-                        var exportSubOptions = baseSubOptions as ExportSubOptions;
-                        if (exportSubOptions != null)
-                        {
-                            result = ExportReleasesAsync(exportSubOptions, fileSystem).Result;
-                        }
-                    }
-
-                    if (verb == "init")
-                    {
-                        var initSubOptions = baseSubOptions as InitSubOptions;
-                        if (initSubOptions != null)
-                        {
-                            ConfigurationProvider.WriteSample(initSubOptions.TargetDirectory, fileSystem);
-                            result = 0;
-                        }
-                    }
-
-                    if (verb == "showconfig")
-                    {
-                        var showConfigSubOptions = baseSubOptions as ShowConfigSubOptions;
-                        if (showConfigSubOptions != null)
-                        {
-                            Console.WriteLine(ConfigurationProvider.GetEffectiveConfigAsString(showConfigSubOptions.TargetDirectory, fileSystem));
-                            result = 0;
-                        }
-                    }
-                }))
-            {
-                return 1;
-            }
-
-            return result;
+            return Parser.Default.ParseArguments<CreateSubOptions, AddAssetSubOptions, CloseSubOptions, PublishSubOptions, ExportSubOptions, InitSubOptions, ShowConfigSubOptions>(args)
+    .MapResult(
+      (CreateSubOptions opts) => CreateReleaseAsync(opts, fileSystem).Result,
+      (AddAssetSubOptions opts) => AddAssetsAsync(opts).Result,
+      (CloseSubOptions opts) => CloseMilestoneAsync(opts).Result,
+      (PublishSubOptions opts) => PublishReleaseAsync(opts).Result,
+      (ExportSubOptions opts) => ExportReleasesAsync(opts, fileSystem).Result,
+      (InitSubOptions opts) => CreateSampleConfigFile(opts, fileSystem).Result,
+      (ShowConfigSubOptions opts) => ShowConfig(opts, fileSystem).Result,
+            errs => 1);
         }
 
         private static async Task<int> CreateReleaseAsync(CreateSubOptions subOptions, IFileSystem fileSystem)
         {
             try
             {
+                ConfigureLogging(subOptions.LogFilePath);
+
                 var github = subOptions.CreateGitHubClient();
-                var configuration = ConfigurationProvider.Provide(subOptions.TargetDirectory, fileSystem);
+                var configuration = ConfigurationProvider.Provide(subOptions.TargetDirectory ?? Environment.CurrentDirectory, fileSystem);
 
                 if (!string.IsNullOrEmpty(subOptions.Milestone))
                 {
@@ -154,6 +74,8 @@ namespace GitReleaseManager.Cli
         {
             try
             {
+                ConfigureLogging(subOptions.LogFilePath);
+
                 var github = subOptions.CreateGitHubClient();
 
                 await AddAssets(github, subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.TagName, subOptions.AssetPaths);
@@ -172,6 +94,8 @@ namespace GitReleaseManager.Cli
         {
             try
             {
+                ConfigureLogging(subOptions.LogFilePath);
+
                 var github = subOptions.CreateGitHubClient();
 
                 await CloseMilestone(github, subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone);
@@ -190,6 +114,8 @@ namespace GitReleaseManager.Cli
         {
             try
             {
+                ConfigureLogging(subOptions.LogFilePath);
+
                 var github = subOptions.CreateGitHubClient();
 
                 await PublishRelease(github, subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.TagName);
@@ -208,8 +134,10 @@ namespace GitReleaseManager.Cli
         {
             try
             {
+                ConfigureLogging(subOptions.LogFilePath);
+
                 var github = subOptions.CreateGitHubClient();
-                var configuration = ConfigurationProvider.Provide(subOptions.TargetDirectory, fileSystem);
+                var configuration = ConfigurationProvider.Provide(subOptions.TargetDirectory ?? Environment.CurrentDirectory, fileSystem);
 
                 var releasesMarkdown = await ExportReleases(github, subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.TagName, configuration);
 
@@ -226,6 +154,22 @@ namespace GitReleaseManager.Cli
 
                 return 1;
             }
+        }
+
+        private static async Task<int> CreateSampleConfigFile(InitSubOptions subOptions, IFileSystem fileSystem)
+        {
+            ConfigureLogging(subOptions.LogFilePath);
+
+            ConfigurationProvider.WriteSample(subOptions.TargetDirectory ?? Environment.CurrentDirectory, fileSystem);
+            return 0;
+        }
+
+        private static async Task<int> ShowConfig(ShowConfigSubOptions subOptions, IFileSystem fileSystem)
+        {
+            ConfigureLogging(subOptions.LogFilePath);
+
+            Console.WriteLine(ConfigurationProvider.GetEffectiveConfigAsString(subOptions.TargetDirectory ?? Environment.CurrentDirectory, fileSystem));
+            return 0;
         }
 
         private static async Task CreateReleaseFromMilestone(GitHubClient github, string owner, string repository, string milestone, string targetCommitish, IList<string> assets, bool prerelease, Config configuration)
