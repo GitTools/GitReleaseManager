@@ -1,0 +1,31 @@
+site_name: GitReleaseManager
+theme: readthedocs
+repo_url: https://github.com/GitTools/GitReleaseManager
+
+pages:
+- What is GitReleaseManager: index.md
+- Why use GitReleaseManager: why-grm.md
+- Advanced Workflow: advanced.md
+- Installation:
+  - Via Chocolatey: installation/chocolatey.md
+  - Via NuGet: installation/nuget.md
+- Configuration:
+  - Default Configuration: configuration/default-configuration.md
+  - Example of Create Configuration: configuration/create-configuration.md
+  - Example of Export Configuration: configuration/export-configuration.md
+  - Issues to include: configuration/include-issues.md
+  - Issues to exclude: configuration/exclude-issues.md
+  - Using a Proxy: configuration/proxy.md
+- Commands:
+  - Create: commands/create.md
+  - Add Assets: commands/add-assets.md
+  - Publish: commands/publish.md
+  - Close: commands/close.md
+  - Export: commands/export.md
+  - Init: commands/init.md
+  - Show Config: commands/show-config.md
+- Logging:
+  - Configure Logging: logging/logging.md
+- Credits:
+  - Particular Software: credits/particular.md
+  - Icon: credits/icon.md

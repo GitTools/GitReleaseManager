@@ -34,8 +34,14 @@ namespace GitReleaseManager.Core.Configuration
             this.IssueLabelsInclude = new List<string>
                                    {
                                        "Bug",
+                                       "Duplicate",
+                                       "Enhancement",
                                        "Feature",
-                                       "Improvement"
+                                       "Help Wanted",
+                                       "Improvement",
+                                       "Invalid",
+                                       "Question",
+                                       "WontFix"
                                    };
 
             this.IssueLabelsExclude = new List<string>

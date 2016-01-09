@@ -67,17 +67,17 @@ namespace GitReleaseManager.Core
         public ReadOnlyCollection<Milestone> GetMilestones()
         {
             var milestonesClient = this.gitHubClient.Issue.Milestone;
-            var closed = milestonesClient.GetForRepository(
-                this.user, 
-                this.repository, 
+            var closed = milestonesClient.GetAllForRepository(
+                this.user,
+                this.repository,
                 new MilestoneRequest
                     {
                         State = ItemState.Closed
                     }).Result;
 
-            var open = milestonesClient.GetForRepository(
-                this.user, 
-                this.repository, 
+            var open = milestonesClient.GetAllForRepository(
+                this.user,
+                this.repository,
                 new MilestoneRequest
                     {
                         State = ItemState.Open

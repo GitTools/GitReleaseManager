@@ -20,35 +20,35 @@ clone_folder: C:\projects\GitReleaseManager
 # environment variables
 environment:
   MyGetDevelopApiKey:
-    secure: Ddgbcn3J5vLpseoyk7B3yIk7r0lwOBrNdofj0ak23dsWOZq1sMPhtwWpt5oTA1jm
-  MyGetDevelopFeedUrl: https://www.myget.org/F/grm_develop/
+    secure: YLAuIlbdXtjtumw6OyEtREOmeLQCBhoT7QvpnMf3dk9klv4XXwem2NK/zJ3T1AkZ
+  MyGetDevelopFeedUrl: https://www.myget.org/F/packages_develop/
   MyGetMasterApiKey:
-    secure: 4I1Xep3sy2ybI89tiqzcK385wIKnt0D4p9JM5sb+ap86kSyfzxxj6nFaO7AUm80H
-  MyGetMasterFeedUrl: https://www.myget.org/F/grm_master/
+    secure: Sk5RqF4OR1bkNc4Izl0x2YEMG+/7JKwsgmhae1jsBHsV4y47ziduS6e7QAniQWX3
+  MyGetMasterFeedUrl: https://www.myget.org/F/packages_master/
   ChocolateyApiKey:
-    secure: 2Sbie8uhFjl1v+NtLuR1oGcWnQE2M87jq0fSEwFOYcnNEC5qdwCkgVOG0MmC2Ffv
+    secure: mb19XDM/nj6pBpA9sCeS79TcrS1aaJri8ID9iB1agXDrFEFgi0MRACXZ5ZMOIDLd
   ChocolateyFeedUrl: https://chocolatey.org/
   NugetApiKey:
-    secure: a/xbTgIAc+QGdAwANmenmrUJFG5hqB+jMyqB6y80KZYXfRHOVEB+1dB4CEyDednf
+    secure: kyvS4pYmOCyvas5wxibDusCABHBkmORratOuw13JYeo/xj+ggCnfZhihMVUrXL7x
   NugetFeedUrl: https://nuget.org/
   GitHubUserName:
-    secure: 9zbEIVfl69s/qhei6qkdeA==
+    secure: ZCA+aRya0+io2tdxuHNk7A==
   GitHubPassword:
-    secure: XSuLygmr83zEpWcXIXMXGocN0QbooLud1eIMA3mQWKkT9LAU4TyrijLBcJIo7bD7
+    secure: 1wF/X5joO2IxJ2Y4rVQQNHq+FdvWTIg7BzOHxnoIL6NDy9S+lbPEXHkPeJ4ut2+a
   CoverityProjectToken:
-    secure: v9LYg/tMc/XFYAiIJl+KiGpo1pBtyQgcANoNqra/5qg=
+    secure: ibAJfTZ3/OdIbl44xS3NcJFEOTfdn/xZYNom7SN24dA=
   CoverityEmailDistribution:
-    secure: FuJy6Wqvw19/VBYyE0hHY+lNbkKxlN1Jsr8OiTdAgkQ=
+    secure: oLfhcOUb9277iSyIER67eYe9LJW2mYpsEkaLvvN3cz0=
   COVERALLS_REPO_TOKEN:
-    secure: Z5cvhf8uoT2AqN/yfurbwty0RwNMSZA6l+nhINv+uNxVbdCkBDyPjeFUCNCnujs3
-   
+    secure: WZjpH6lAaED670CnGZhI1AI0OBG2T3BaA/8auYvFJ8T84OVLrSab4liqJDQw8RwT
+
 #---------------------------------#
 #       build configuration       #
 #---------------------------------#
 
 build_script:
   - ps: .\BuildScripts\build.ps1
-  
+
 test: off
 
 #---------------------------------#
@@ -56,4 +56,21 @@ test: off
 #---------------------------------#
 
 cache:
-  - Source\packages
+  - Source\packages -> Source\**\packages.config
+
+#---------------------------------#
+#  notifications configuration    #
+#---------------------------------#
+notifications:
+  - provider: Webhook
+    url: https://webhooks.gitter.im/e/a72ea926ecc08de68e71
+    on_build_success: true
+    on_build_failure: true
+    on_build_status_changed: true
+
+#---------------------------------#
+#  Skip builds for doc changes    #
+#---------------------------------#
+skip_commits:
+  # Regex for matching commit message
+  message: /(doc).*/

@@ -22,11 +22,16 @@ GitReleaseManager allows you to:
 
 You can install GitReleaseManager via Chocolatey by executing:
 
-`choco install gitreleasemanager`
+`choco install gitreleasemanager.portable`
+
+**NOTE:** 
+Depending on which version of Chocolatey you are using, you may be required to confirm the installation of the application. You can avoid this prompt using the following command:
+
+`choco install gitreleasemanager.portable -y`
 
 If you are interested in trying out the latest pre-release version of GitReleaseManager then you can use the following installation command:
 
-`choco install gitreleasemanager -source https://www.myget.org/F/grm_develop/ -pre`
+`choco install gitreleasemanager.portable -source https://www.myget.org/F/grm_develop/ -pre`
 
 This uses the public GitReleaseManager feed which is hosted on [MyGet.org](https://www.myget.org/)
 
@@ -34,7 +39,7 @@ This uses the public GitReleaseManager feed which is hosted on [MyGet.org](https
 
 AppVeyor  
 -------------
-[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/20hvqfnv6dlwqld7/branch/develop?svg=true)](https://ci.appveyor.com/project/GaryEwanPark/gitreleasemanager)
+[![AppVeyor Build status](https://ci.appveyor.com/api/projects/status/hfad7hkscfx4423p/branch/develop?svg=true)](https://ci.appveyor.com/project/GitTools/gitreleasemanager/branch/develop)
 
 ## Chat Room
 
@@ -49,6 +54,10 @@ If you would like to contribute code or help squash a bug or two, that's awesome
 ## Committers
 
 Committers, you should be very familiar with [COMMITTERS](https://github.com/GitTools/GitReleaseManager/blob/develop/COMMITTERS.md).
+
+## Documentation
+
+The documentation for GitReleaseManager can be found on [ReadTheDocs](http://gitreleasemanager.readthedocs.org/en/develop/).
 
 ## Credits
 

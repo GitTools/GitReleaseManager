@@ -102,12 +102,12 @@ namespace GitReleaseManager.Core
 
         private void CheckForValidLabels(Issue issue)
         {
-            var count = this.configuration.IssueLabelsInclude.Sum(issueLabel => issue.Labels.Count(l => l.Name == issueLabel));
+            var count = this.configuration.IssueLabelsInclude.Sum(issueLabel => issue.Labels.Count(l => l.Name.ToUpperInvariant() == issueLabel.ToUpperInvariant()));
 
             if (count != 1)
             {
                 var allIssueLabels = this.configuration.IssueLabelsInclude.Union(this.configuration.IssueLabelsExclude).ToList();
-                var allIssuesExceptLast = allIssueLabels.Take(allIssueLabels.Count() - 1);
+                var allIssuesExceptLast = allIssueLabels.Take(allIssueLabels.Count - 1);
                 var lastLabel = allIssueLabels.Last();
 
                 var allIssuesExceptLastString = string.Join(", ", allIssuesExceptLast);
