@@ -4,6 +4,8 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
+using System.Threading.Tasks;
+
 namespace GitReleaseManager.Tests
 {
     using System;
@@ -18,7 +20,7 @@ namespace GitReleaseManager.Tests
     {
         [Test]
         [Explicit]
-        public async void SingleMilestone()
+        public async Task SingleMilestone()
         {
             var gitHubClient = ClientBuilder.Build();
             var fileSystem = new FileSystem();
@@ -33,7 +35,7 @@ namespace GitReleaseManager.Tests
 
         [Test]
         [Explicit]
-        public async void SingleMilestone3()
+        public async Task SingleMilestone3()
         {
             var gitHubClient = ClientBuilder.Build();
             var fileSystem = new FileSystem();
