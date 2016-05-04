@@ -68,12 +68,18 @@
     <Compile Include="ApprovalTestConfig.cs" />
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="ClipBoardHelper.cs" />
+    <Compile Include="ConfigurationTests.cs" />
     <Compile Include="FakeGitHubClient.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="ReleaseNotesBuilderIntegrationTests.cs" />
     <Compile Include="ClientBuilder.cs" />
     <Compile Include="ReleaseNotesBuilderTests.cs" />
     <Compile Include="ReleaseNotesExporterTests.cs" />
+    <Compile Include="Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">
@@ -85,6 +91,12 @@
       <Project>{b02a026e-ca3a-48f4-bba9-eb337b0a2035}</Project>
       <Name>GitReleaseManager.Core</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

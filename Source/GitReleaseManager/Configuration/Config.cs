@@ -48,6 +48,8 @@ namespace GitReleaseManager.Core.Configuration
                                    {
                                        "Internal Refactoring"
                                    };
+
+            this.LabelAliases = new List<LabelAlias>();
         }
 
         [YamlMember(Alias = "create")]
@@ -61,5 +63,8 @@ namespace GitReleaseManager.Core.Configuration
 
         [YamlMember(Alias = "issue-labels-exclude")]
         public IList<string> IssueLabelsExclude { get; private set; }
+
+        [YamlMember(Alias = "issue-labels-alias")]
+        public IList<LabelAlias> LabelAliases { get; private set; }
     }
 }

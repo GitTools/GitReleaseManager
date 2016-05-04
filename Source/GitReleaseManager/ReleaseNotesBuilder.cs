@@ -83,13 +83,15 @@ namespace GitReleaseManager.Core
             return stringBuilder.ToString();
         }
 
-        private static void Append(IEnumerable<Issue> issues, string label, StringBuilder stringBuilder)
+        private void Append(IEnumerable<Issue> issues, string label, StringBuilder stringBuilder)
         {
             var features = issues.Where(x => x.Labels.Any(l => l.Name == label)).ToList();
 
             if (features.Count > 0)
             {
-                stringBuilder.AppendFormat(features.Count == 1 ? "__{0}__\r\n\r\n" : "__{0}s__\r\n\r\n", label);
+                var singular = this.GetLabel(label, alias => alias.Header) ?? label;
+                var plural = this.GetLabel(label, alias => alias.Plural) ?? label + "s";
+                stringBuilder.AppendFormat("__{0}__\r\n\r\n", features.Count == 1 ? singular : plural);
 
                 foreach (var issue in features)
                 {
@@ -98,6 +100,12 @@ namespace GitReleaseManager.Core
 
                 stringBuilder.AppendLine();
             }
+        }
+
+        private string GetLabel(string label, Func<LabelAlias, string> func)
+        {
+            var alias = this.configuration.LabelAliases.FirstOrDefault(x => x.Name.Equals(label, StringComparison.OrdinalIgnoreCase));
+            return alias != null ? func(alias) : null;
         }
 
         private void CheckForValidLabels(Issue issue)
@@ -121,7 +129,7 @@ namespace GitReleaseManager.Core
         {
             foreach (var issueLabel in this.configuration.IssueLabelsInclude)
             {
-                Append(issues, issueLabel, stringBuilder);
+                this.Append(issues, issueLabel, stringBuilder);
             }
         }
 

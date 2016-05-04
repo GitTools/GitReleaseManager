@@ -73,6 +73,38 @@ namespace GitReleaseManager.Tests
         }
 
         [Test]
+        public void SingularCommitsWithHeaderLabelAlias()
+        {
+            var config = new Config();
+            config.LabelAliases.Add(new LabelAlias
+            {
+                Name = "Bug",
+                Header = "Foo"
+            });
+
+            AcceptTest(1, config, CreateIssue(1, "Bug"));
+        }
+
+        [Test]
+        public void SomeCommitsWithPluralizedLabelAlias()
+        {
+            var config = new Config();
+            config.LabelAliases.Add(new LabelAlias
+            {
+                Name = "Help Wanted",
+                Plural = "Bar",
+            });
+
+            AcceptTest(5, config, CreateIssue(1, "Help Wanted"), CreateIssue(2, "Help Wanted"));
+        }
+
+        [Test]
+        public void SomeCommitsWithoutPluralizedLabelAlias()
+        {
+            AcceptTest(5, CreateIssue(1, "Help Wanted"), CreateIssue(2, "Help Wanted"));
+        }
+
+        [Test]
         public void NoCommitsWrongIssueLabel()
         {
             Assert.Throws<AggregateException>(() => AcceptTest(0, CreateIssue(1, "Test")));
@@ -86,10 +118,15 @@ namespace GitReleaseManager.Tests
 
         private static void AcceptTest(int commits, params Issue[] issues)
         {
+            AcceptTest(commits, null, issues);
+        }
+
+        private static void AcceptTest(int commits, Config config, params Issue[] issues)
+        {
             var fakeClient = new FakeGitHubClient();
             var fileSystem = new FileSystem();
             var currentDirectory = Environment.CurrentDirectory;
-            var configuration = ConfigurationProvider.Provide(currentDirectory, fileSystem);
+            var configuration = config ?? ConfigurationProvider.Provide(currentDirectory, fileSystem);
 
             fakeClient.Milestones.Add(CreateMilestone("1.2.3"));
 
