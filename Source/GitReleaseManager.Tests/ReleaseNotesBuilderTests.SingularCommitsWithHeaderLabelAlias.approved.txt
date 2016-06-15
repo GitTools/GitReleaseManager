@@ -1,0 +1,7 @@
+﻿As part of this release we had [1 commit](https://github.com/TestUser/FakeRepository/commits/1.2.3) which resulted in [1 issue](https://github.com/FakeRepository/issues/issues?milestone=0&state=closed) being closed.
+
+
+__Foo__
+
+- [__#1__](http://example.com/1) Issue 1
+
