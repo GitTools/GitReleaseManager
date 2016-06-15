@@ -4,17 +4,11 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System.IO;
-using GitReleaseManager.Core.Configuration;
-using NUnit.Framework;
-
 namespace GitReleaseManager.Tests
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
+    using System.IO;
+    using GitReleaseManager.Core.Configuration;
+    using NUnit.Framework;
 
     [TestFixture]
     public class ConfigurationTests

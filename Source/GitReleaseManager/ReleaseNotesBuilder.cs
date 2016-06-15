@@ -112,7 +112,6 @@ namespace GitReleaseManager.Core
         {
             var count = 0;
 
-
             foreach (var issueLabel in issue.Labels)
             {
                 count += this.configuration.IssueLabelsInclude.Count(issueToInclude => issueLabel.Name.ToUpperInvariant() == issueToInclude.ToUpperInvariant());
