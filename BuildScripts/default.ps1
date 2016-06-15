@@ -264,7 +264,7 @@ Task -Name __InstallChocolatey -Description $private -Action {
     }
 
     exec {
-			Invoke-Expression "$script:chocolateyCommand upgrade chocolatey -y";
+			Invoke-Expression "$script:chocolateyCommand upgrade chocolatey -y -pre";
 		}
 
     Write-Output "Latest Chocolatey installed."
