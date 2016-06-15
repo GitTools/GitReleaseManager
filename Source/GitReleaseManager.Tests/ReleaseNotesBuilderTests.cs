@@ -116,6 +116,12 @@ namespace GitReleaseManager.Tests
             Assert.Throws<AggregateException>(() => AcceptTest(5, CreateIssue(1, "Test")));
         }
 
+        [Test]
+        public void CorrectlyExcludeIssues()
+        {
+            AcceptTest(5, CreateIssue(1, "Internal Refactoring"), CreateIssue(2, "Bug"));
+        }
+
         private static void AcceptTest(int commits, params Issue[] issues)
         {
             AcceptTest(commits, null, issues);
