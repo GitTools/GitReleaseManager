@@ -15,7 +15,7 @@ pages:
   - Example of Export Configuration: configuration/export-configuration.md
   - Issues to include: configuration/include-issues.md
   - Issues to exclude: configuration/exclude-issues.md
-  - Using a Proxy: configuration/proxy.md
+  - Label Aliases: label-aliases.md
 - Commands:
   - Create: commands/create.md
   - Add Assets: commands/add-assets.md

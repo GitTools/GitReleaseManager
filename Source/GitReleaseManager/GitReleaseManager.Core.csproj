@@ -65,6 +65,7 @@
     <Compile Include="Configuration\ConfigurationProvider.cs" />
     <Compile Include="Configuration\CreateConfig.cs" />
     <Compile Include="Configuration\ExportConfig.cs" />
+    <Compile Include="Configuration\LabelAlias.cs" />
     <Compile Include="DefaultGitHubClient.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Helpers\FileSystem.cs" />
