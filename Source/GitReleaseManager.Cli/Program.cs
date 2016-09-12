@@ -273,6 +273,9 @@ namespace GitReleaseManager.Cli
                     };
 
                     await github.Release.UploadAsset(release, upload);
+
+                    // Make sure to tidy up the stream that was created above
+                    upload.RawData.Dispose();
                 }
             }
         }
