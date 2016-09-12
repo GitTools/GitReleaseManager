@@ -2,24 +2,24 @@
 // ENVIRONMENT VARIABLE NAMES
 ///////////////////////////////////////////////////////////////////////////////
 
-private static string githubUserNameVariable = "GITHUB_USERNAME";
-private static string githubPasswordVariable = "GITHUB_PASSWORD";
-private static string myGetApiKeyVariable = "MYGET_API_KEY";
-private static string myGetSourceUrlVariable = "MYGET_SOURCE";
-private static string nuGetApiKeyVariable = "NUGET_API_KEY";
-private static string nuGetSourceUrlVariable = "NUGET_SOURCE";
-private static string chocolateyApiKeyVariable = "CHOCOLATEY_API_KEY";
-private static string chocolateySourceUrlVariable = "CHOCOLATEY_SOURCE";
-private static string gitterTokenVariable = "GITTER_TOKEN";
-private static string gitterRoomIdVariable = "GITTER_ROOM_ID";
-private static string slackTokenVariable = "SLACK_TOKEN";
-private static string slackChannelVariable = "SLACK_CHANNEL";
-private static string twitterConsumerKeyVariable = "TWITTER_CONSUMER_KEY";
-private static string twitterConsumerSecretVariable = "TWITTER_CONSUMER_SECRET";
-private static string twitterAccessTokenVariable = "TWITTER_ACCESS_TOKEN";
-private static string twitterAccessTokenSecretVariable = "TWITTER_ACCESS_TOKEN_SECRET";
-private static string appVeyorApiTokenVariable = "APPVEYOR_API_TOKEN";
-private static string coverallsRepoTokenVariable = "COVERALLS_REPO_TOKEN";
+private static string githubUserNameVariable = "GITTOOLS_GITHUB_USERNAME";
+private static string githubPasswordVariable = "GITTOOLS_GITHUB_PASSWORD";
+private static string myGetApiKeyVariable = "GITTOOLS_MYGET_API_KEY";
+private static string myGetSourceUrlVariable = "GITTOOLS_MYGET_SOURCE";
+private static string nuGetApiKeyVariable = "GITTOOLS_NUGET_API_KEY";
+private static string nuGetSourceUrlVariable = "GITTOOLS_NUGET_SOURCE";
+private static string chocolateyApiKeyVariable = "GITTOOLS_CHOCOLATEY_API_KEY";
+private static string chocolateySourceUrlVariable = "GITTOOLS_CHOCOLATEY_SOURCE";
+private static string gitterTokenVariable = "GITTOOLS_GITTER_TOKEN";
+private static string gitterRoomIdVariable = "GITTOOLS_GITTER_ROOM_ID";
+private static string slackTokenVariable = "GITTOOLS_SLACK_TOKEN";
+private static string slackChannelVariable = "GITTOOLS_SLACK_CHANNEL";
+private static string twitterConsumerKeyVariable = "GITTOOLS_TWITTER_CONSUMER_KEY";
+private static string twitterConsumerSecretVariable = "GITTOOLS_TWITTER_CONSUMER_SECRET";
+private static string twitterAccessTokenVariable = "GITTOOLS_TWITTER_ACCESS_TOKEN";
+private static string twitterAccessTokenSecretVariable = "GITTOOLS_TWITTER_ACCESS_TOKEN_SECRET";
+private static string appVeyorApiTokenVariable = "GITTOOLS_APPVEYOR_API_TOKEN";
+private static string coverallsRepoTokenVariable = "GITTOOLS_COVERALLS_REPO_TOKEN";
 
 ///////////////////////////////////////////////////////////////////////////////
 // BUILD ACTIONS
