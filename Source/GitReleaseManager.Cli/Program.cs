@@ -269,7 +269,7 @@ namespace GitReleaseManager.Cli
                     {
                         FileName = Path.GetFileName(asset),
                         ContentType = "application/octet-stream",
-                        RawData = File.Open(asset, FileMode.Open)
+                        RawData = File.Open(asset, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)
                     };
 
                     await github.Release.UploadAsset(release, upload);
