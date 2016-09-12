@@ -1,62 +1,20 @@
 #---------------------------------#
-#      general configuration      #
+#  Build Script                   #
 #---------------------------------#
-
-# version format
-version: 1.0.{build}
-
-branches:
-  only:
-    - master
-    - develop
-
-#---------------------------------#
-#    environment configuration    #
-#---------------------------------#
-
-# clone directory
-clone_folder: C:\projects\GitReleaseManager
-
-# environment variables
-environment:
-  MyGetDevelopApiKey:
-    secure: YLAuIlbdXtjtumw6OyEtREOmeLQCBhoT7QvpnMf3dk9klv4XXwem2NK/zJ3T1AkZ
-  MyGetDevelopFeedUrl: https://www.myget.org/F/packages_develop/
-  MyGetMasterApiKey:
-    secure: Sk5RqF4OR1bkNc4Izl0x2YEMG+/7JKwsgmhae1jsBHsV4y47ziduS6e7QAniQWX3
-  MyGetMasterFeedUrl: https://www.myget.org/F/packages_master/
-  ChocolateyApiKey:
-    secure: mb19XDM/nj6pBpA9sCeS79TcrS1aaJri8ID9iB1agXDrFEFgi0MRACXZ5ZMOIDLd
-  ChocolateyFeedUrl: https://chocolatey.org/
-  NugetApiKey:
-    secure: kyvS4pYmOCyvas5wxibDusCABHBkmORratOuw13JYeo/xj+ggCnfZhihMVUrXL7x
-  NugetFeedUrl: https://nuget.org/
-  GitHubUserName:
-    secure: ZCA+aRya0+io2tdxuHNk7A==
-  GitHubPassword:
-    secure: 1wF/X5joO2IxJ2Y4rVQQNHq+FdvWTIg7BzOHxnoIL6NDy9S+lbPEXHkPeJ4ut2+a
-  CoverityProjectToken:
-    secure: ibAJfTZ3/OdIbl44xS3NcJFEOTfdn/xZYNom7SN24dA=
-  CoverityEmailDistribution:
-    secure: oLfhcOUb9277iSyIER67eYe9LJW2mYpsEkaLvvN3cz0=
-  COVERALLS_REPO_TOKEN:
-    secure: WZjpH6lAaED670CnGZhI1AI0OBG2T3BaA/8auYvFJ8T84OVLrSab4liqJDQw8RwT
-
-#---------------------------------#
-#       build configuration       #
-#---------------------------------#
-
 build_script:
-  - ps: .\BuildScripts\build.ps1
+  - ps: .\build.ps1 -Target AppVeyor
 
+# Tests
 test: off
 
 #---------------------------------#
-#      caching configuration      #
+#        Branches to build        #
 #---------------------------------#
-
-cache:
-  - Source\packages -> Source\**\packages.config
+branches:
+  # Whitelist
+  only:
+    - develop
+    - master
 
 #---------------------------------#
 #  notifications configuration    #
@@ -67,6 +25,13 @@ notifications:
     on_build_success: true
     on_build_failure: true
     on_build_status_changed: true
+
+#---------------------------------#
+#  Build Cache                    #
+#---------------------------------#
+cache:
+- Source\packages -> Source\**\packages.config
+- Tools -> build.ps1
 
 #---------------------------------#
 #  Skip builds for doc changes    #
