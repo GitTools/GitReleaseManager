@@ -46,6 +46,10 @@ var appVeyorProjectSlug       = "gitreleasemanager";
 // NOTE: Only populate this, if required, but leave as is otherwise.
 var dupFinderExcludePattern   = new string[] { rootDirectoryPath + "/Source/GitReleaseManager.Tests/*.cs" };
 
+var testCoverageFilter = "+[*]* -[xunit.*]* -[Cake.Core]* -[Cake.Testing]* -[*.Tests]* -[Octokit]* -[YamlDotNet]*";
+var testCoverageExcludeByAttribute = "*.ExcludeFromCodeCoverage*";
+var testCoverageExcludeByFile = "*/*Designer.cs;*/*.g.cs;*/*.g.i.cs";
+
 ///////////////////////////////////////////////////////////////////////////////
 // CAKE FILES TO LOAD IN
 ///////////////////////////////////////////////////////////////////////////////
