@@ -42,6 +42,7 @@ App_Packages
 # =========================
 
 # Where everything from the build is put
+tools/
 BuildArtifacts
 
 # Temporary files that kdiff generates
