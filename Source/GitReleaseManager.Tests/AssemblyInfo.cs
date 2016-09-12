@@ -17,7 +17,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyInformationalVersion("1.0.0.0")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("GitTools Contributors")]
-[assembly: AssemblyCopyright("Copyright 2015 - GitTools Contributors")]
+[assembly: AssemblyCopyright("Copyright 2015 - Present - GitTools Contributors")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: NeutralResourcesLanguage("en-GB")]

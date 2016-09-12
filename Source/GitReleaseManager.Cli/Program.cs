@@ -37,8 +37,8 @@ namespace GitReleaseManager.Cli
       (CloseSubOptions opts) => CloseMilestoneAsync(opts).Result,
       (PublishSubOptions opts) => PublishReleaseAsync(opts).Result,
       (ExportSubOptions opts) => ExportReleasesAsync(opts, fileSystem).Result,
-      (InitSubOptions opts) => CreateSampleConfigFile(opts, fileSystem).Result,
-      (ShowConfigSubOptions opts) => ShowConfig(opts, fileSystem).Result,
+      (InitSubOptions opts) => CreateSampleConfigFile(opts, fileSystem),
+      (ShowConfigSubOptions opts) => ShowConfig(opts, fileSystem),
             errs => 1);
         }
 
@@ -156,7 +156,7 @@ namespace GitReleaseManager.Cli
             }
         }
 
-        private static async Task<int> CreateSampleConfigFile(InitSubOptions subOptions, IFileSystem fileSystem)
+        private static int CreateSampleConfigFile(InitSubOptions subOptions, IFileSystem fileSystem)
         {
             ConfigureLogging(subOptions.LogFilePath);
 
@@ -164,7 +164,7 @@ namespace GitReleaseManager.Cli
             return 0;
         }
 
-        private static async Task<int> ShowConfig(ShowConfigSubOptions subOptions, IFileSystem fileSystem)
+        private static int ShowConfig(ShowConfigSubOptions subOptions, IFileSystem fileSystem)
         {
             ConfigureLogging(subOptions.LogFilePath);
 
@@ -269,10 +269,13 @@ namespace GitReleaseManager.Cli
                     {
                         FileName = Path.GetFileName(asset),
                         ContentType = "application/octet-stream",
-                        RawData = File.Open(asset, FileMode.Open)
+                        RawData = File.Open(asset, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)
                     };
 
                     await github.Release.UploadAsset(release, upload);
+
+                    // Make sure to tidy up the stream that was created above
+                    upload.RawData.Dispose();
                 }
             }
         }

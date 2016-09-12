@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
-    <id>gitreleasemanager</id>
+    <id>gitreleasemanager.portable</id>
     <title>GitReleaseManager</title>
     <version>$version$</version>
     <authors>GitTools Contributors</authors>
@@ -17,6 +17,8 @@
     <tags>github release notes create export</tags>
   </metadata>
   <files>
-    <file src="..\..\BuildArtifacts\GitReleaseManager.exe" target="tools" />
+    <file src="..\..\BuildArtifacts\temp\_PublishedApplications\GitReleaseManager.Cli\GitReleaseManager.exe" target="tools" />
+    <file src="chocolateyInstall.ps1" target="tools"/>
+    <file src="chocolateyUninstall.ps1" target="tools"/>
   </files>
 </package>
