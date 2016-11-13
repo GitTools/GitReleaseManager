@@ -61,7 +61,7 @@ The documentation for GitReleaseManager can be found on [ReadTheDocs](http://git
 
 ## Credits
 
-GitReleaseManager is brought to you by quite a few people and frameworks.  See [CREDITS](https://github.com/GitTools/GitReleaseManager/blob/develop/Documentation/legal/CREDITS.md) for full information.
+GitReleaseManager is brought to you by quite a few people and frameworks.  See [CREDITS](https://github.com/GitTools/GitReleaseManager/blob/develop/Documentation/Legal/CREDITS.md) for full information.
 
 Full original credit has to go to the people at [Particular Software](http://www.particular.net/), without whom this project would not have been possible.  They originally created the [GitHubReleaseNotes](https://github.com/Particular/GitHubReleaseNotes) project, which GitReleaseManager is based on, and draws a lot of inspiration from.  
 
