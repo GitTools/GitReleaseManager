@@ -1,6 +1,7 @@
 site_name: GitReleaseManager
 theme: readthedocs
 repo_url: https://github.com/GitTools/GitReleaseManager
+strict: true
 
 pages:
 - What is GitReleaseManager: index.md
