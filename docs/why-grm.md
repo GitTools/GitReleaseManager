@@ -32,7 +32,7 @@ As part of your Release process, you may want to include assets into the GitHub 
 
 ## Close Milestone
 
-When working directly in GitHub, publishing a Release doesn't close the associated milestone.  When using the GitReleaseManager's [publish command](commands/publish.md) the associated milestone is also closed.  However, you can also use the [close command](commands/doc:close] directly if you are not using the publish workflow as part of your process.
+When working directly in GitHub, publishing a Release doesn't close the associated milestone.  When using the GitReleaseManager's [publish command](commands/publish.md) the associated milestone is also closed.  However, you can also use the [close command](commands/close.md) directly if you are not using the publish workflow as part of your process.
 
 ## Export Release Notes
 
