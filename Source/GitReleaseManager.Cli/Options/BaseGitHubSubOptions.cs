@@ -5,8 +5,10 @@
 
 namespace GitReleaseManager.Cli.Options
 {
+    using System.Net;
     using CommandLine;
     using Octokit;
+    using Octokit.Internal;
 
     public abstract class BaseGitHubSubOptions : BaseSubOptions
     {
@@ -25,7 +27,10 @@ namespace GitReleaseManager.Cli.Options
         public GitHubClient CreateGitHubClient()
         {
             var credentials = new Credentials(this.UserName, this.Password);
-            var github = new GitHubClient(new ProductHeaderValue("GitReleaseManager")) { Credentials = credentials };
+            var proxy = WebRequest.DefaultWebProxy;
+            proxy.Credentials = CredentialCache.DefaultNetworkCredentials;
+            var connection = new Connection(new ProductHeaderValue("GitReleaseManager"), new HttpClientAdapter(proxy));
+            var github = new GitHubClient(connection) { Credentials = credentials };
             return github;
         }
     }
