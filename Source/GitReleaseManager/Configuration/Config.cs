@@ -66,5 +66,8 @@ namespace GitReleaseManager.Core.Configuration
 
         [YamlMember(Alias = "issue-labels-alias")]
         public IList<LabelAlias> LabelAliases { get; private set; }
+
+        [YamlMember(Alias = "issue-labels-many")]
+        public bool IssueLabelsMany { get; set; }
     }
 }

@@ -31,5 +31,31 @@ namespace GitReleaseManager.Tests
             Assert.AreEqual("Baz", config.LabelAliases[1].Header);
             Assert.AreEqual("Qux", config.LabelAliases[1].Plural);
         }
+
+        [Test]
+        public void Many_Labels_For_Issue_Disabled_By_Default()
+        {
+            // Given
+            var text = Resources.Default_Configuration_Yaml;
+
+            // When
+            var config = ConfigSerializer.Read(new StringReader(text));
+
+            // Then
+            Assert.AreEqual(false, config.IssueLabelsMany);
+        }
+
+        [Test]
+        public void Should_Read_Many_Labels_Issue()
+        {
+            // Given
+            var text = Resources.Many_Labels_For_Issue_Configuration_Yaml;
+
+            // When
+            var config = ConfigSerializer.Read(new StringReader(text));
+
+            // Then
+            Assert.AreEqual(true, config.IssueLabelsMany);
+        }
     }
 }

@@ -19,7 +19,7 @@ namespace GitReleaseManager.Tests {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -93,6 +93,42 @@ namespace GitReleaseManager.Tests {
         internal static string Default_Configuration_Yaml {
             get {
                 return ResourceManager.GetString("Default_Configuration_Yaml", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to create:
+        ///  include-footer: false
+        ///  footer-heading:
+        ///  footer-content:
+        ///  footer-includes-milestone: false
+        ///  milestone-replace-text:
+        ///  
+        ///export:
+        ///  include-created-date-in-title: false
+        ///  created-date-string-format:
+        ///  perform-regex-removal: false
+        ///  regex-text:
+        ///  multiline-regex: false
+        ///  
+        ///issue-labels-include:
+        ///- Bug
+        ///- Feature
+        ///- Improvement
+        ///
+        ///issue-labels-exclude:
+        ///- Internal Refactoring
+        ///
+        ///issue-labels-alias:
+        ///    - name:    Bug
+        ///      header:  Foo
+        ///      plural:  Bar
+        ///
+        ///    - name:    Improvement [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Many_Labels_For_Issue_Configuration_Yaml {
+            get {
+                return ResourceManager.GetString("Many_Labels_For_Issue_Configuration_Yaml", resourceCulture);
             }
         }
     }
