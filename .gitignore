@@ -316,3 +316,5 @@ ASALocalRun/
 
 # Build Related
 BuildArtifacts/*
+
+Source/.DS_Store
