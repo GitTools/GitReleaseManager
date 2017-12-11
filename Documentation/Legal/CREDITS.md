@@ -22,7 +22,6 @@ GitReleaseManager uses the following awesome frameworks (in no particular order)
 
  * [Octokit.net](https://github.com/octokit/octokit.net)
  * [YamlDotNet](http://aaubry.net/pages/yamldotnet.html)
- * [Costura](https://github.com/Fody/Costura)
 
 GitReleaseManager is built, with the following fantastic frameworks and services (in no particular order):
 
