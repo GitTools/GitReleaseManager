@@ -87,6 +87,9 @@
     <Compile Include="Options\MainOptions.cs" />
     <Compile Include="Options\PublishSubOptions.cs" />
     <Compile Include="Options\ShowConfigSubOptions.cs" />
+    <Compile Include="..\SolutionInfo.cs">
+      <Link>SolutionInfo.cs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
