@@ -8,14 +8,15 @@ BuildParameters.SetParameters(context: Context,
                             title: "GitReleaseManager",
                             repositoryOwner: "GitTools",
                             repositoryName: "GitReleaseManager",
-                            appVeyorAccountName: "GitTools");
+                            appVeyorAccountName: "GitTools",
+                            testFilePattern: "/**/*.Tests.dll");
 
 BuildParameters.PrintParameters(Context);
 
 ToolSettings.SetToolSettings(context: Context,
                             dupFinderExcludePattern: new string[] { 
                                 BuildParameters.RootDirectoryPath + "/Source/GitReleaseManager.Tests/*.cs" },
-                            testCoverageFilter: "+[*]* -[xunit.*]* -[Cake.Core]* -[Cake.Testing]* -[*.Tests]* ",
+                            testCoverageFilter: "+[*]* -[xunit.*]* -[Cake.Core]* -[Cake.Testing]* -[*.Tests]* -[Octokit]* -[YamlDotNet]*",
                             testCoverageExcludeByAttribute: "*.ExcludeFromCodeCoverage*",
                             testCoverageExcludeByFile: "*/*Designer.cs;*/*.g.cs;*/*.g.i.cs");
 Build.Run();
