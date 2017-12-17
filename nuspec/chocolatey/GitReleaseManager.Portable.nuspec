@@ -17,7 +17,11 @@
     <tags>github release notes create export</tags>
   </metadata>
   <files>
+    <file src="..\..\BuildArtifacts\temp\_PublishedApplications\GitReleaseManager.Cli\CommandLine.dll" target="tools" />
+    <file src="..\..\BuildArtifacts\temp\_PublishedApplications\GitReleaseManager.Cli\GitReleaseManager.Core.dll" target="tools" />
     <file src="..\..\BuildArtifacts\temp\_PublishedApplications\GitReleaseManager.Cli\GitReleaseManager.exe" target="tools" />
+    <file src="..\..\BuildArtifacts\temp\_PublishedApplications\GitReleaseManager.Cli\Octokit.dll" target="tools" />
+    <file src="..\..\BuildArtifacts\temp\_PublishedApplications\GitReleaseManager.Cli\YamlDotNet.dll" target="tools" />
     <file src="chocolateyInstall.ps1" target="tools"/>
     <file src="chocolateyUninstall.ps1" target="tools"/>
   </files>
