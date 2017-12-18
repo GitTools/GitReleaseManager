@@ -51,15 +51,17 @@ namespace GitReleaseManager.Cli
                 var github = subOptions.CreateGitHubClient();
                 var configuration = ConfigurationProvider.Provide(subOptions.TargetDirectory ?? Environment.CurrentDirectory, fileSystem);
 
+                Release release;
                 if (!string.IsNullOrEmpty(subOptions.Milestone))
                 {
-                    await CreateReleaseFromMilestone(github, subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone, subOptions.TargetCommitish, subOptions.AssetPaths, subOptions.Prerelease, configuration);
+                    release = await CreateReleaseFromMilestone(github, subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone, subOptions.TargetCommitish, subOptions.AssetPaths, subOptions.Prerelease, configuration);
                 }
                 else
                 {
-                    await CreateReleaseFromInputFile(github, subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Name, subOptions.InputFilePath, subOptions.TargetCommitish, subOptions.AssetPaths, subOptions.Prerelease);
+                    release = await CreateReleaseFromInputFile(github, subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Name, subOptions.InputFilePath, subOptions.TargetCommitish, subOptions.AssetPaths, subOptions.Prerelease);
                 }
 
+                Console.WriteLine(release.HtmlUrl);
                 return 0;
             }
             catch (Exception ex)
@@ -172,7 +174,7 @@ namespace GitReleaseManager.Cli
             return 0;
         }
 
-        private static async Task CreateReleaseFromMilestone(GitHubClient github, string owner, string repository, string milestone, string targetCommitish, IList<string> assets, bool prerelease, Config configuration)
+        private static async Task<Release> CreateReleaseFromMilestone(GitHubClient github, string owner, string repository, string milestone, string targetCommitish, IList<string> assets, bool prerelease, Config configuration)
         {
             var releaseNotesBuilder = new ReleaseNotesBuilder(new DefaultGitHubClient(github, owner, repository), owner, repository, milestone, configuration);
 
@@ -183,9 +185,11 @@ namespace GitReleaseManager.Cli
             var release = await github.Release.Create(owner, repository, releaseUpdate);
 
             await AddAssets(github, assets, release);
+
+            return release;
         }
 
-        private static async Task CreateReleaseFromInputFile(GitHubClient github, string owner, string repository, string name, string inputFilePath, string targetCommitish, IList<string> assets, bool prerelease)
+        private static async Task<Release> CreateReleaseFromInputFile(GitHubClient github, string owner, string repository, string name, string inputFilePath, string targetCommitish, IList<string> assets, bool prerelease)
         {
             if (!File.Exists(inputFilePath))
             {
@@ -199,6 +203,8 @@ namespace GitReleaseManager.Cli
             var release = await github.Release.Create(owner, repository, releaseUpdate);
 
             await AddAssets(github, assets, release);
+
+            return release;
         }
 
         private static async Task AddAssets(GitHubClient github, string owner, string repository, string tagName, IList<string> assets)

@@ -82,6 +82,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="..\SolutionInfo.cs">
+      <Link>SolutionInfo.cs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">
@@ -105,7 +108,5 @@
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\gep13.NUnitRunner.0.1.0\build\gep13.NUnitRunner.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\gep13.NUnitRunner.0.1.0\build\gep13.NUnitRunner.targets'))" />
   </Target>
-  <Import Project="..\packages\gep13.NUnitRunner.0.1.0\build\gep13.NUnitRunner.targets" Condition="Exists('..\packages\gep13.NUnitRunner.0.1.0\build\gep13.NUnitRunner.targets')" />
 </Project>
