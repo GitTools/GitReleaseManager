@@ -11,6 +11,7 @@ namespace GitReleaseManager.Cli
     using System.Globalization;
     using System.IO;
     using System.Linq;
+    using System.Net;
     using System.Text;
     using System.Threading.Tasks;
     using CommandLine;
@@ -28,6 +29,10 @@ namespace GitReleaseManager.Cli
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "Not required")]
         private static int Main(string[] args)
         {
+            // Just add the TLS 1.2 protocol to the Service Point manager until
+            // we've upgraded to latest Octokit.
+            ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
+
             var fileSystem = new FileSystem();
 
             return Parser.Default.ParseArguments<CreateSubOptions, AddAssetSubOptions, CloseSubOptions, PublishSubOptions, ExportSubOptions, InitSubOptions, ShowConfigSubOptions>(args)
