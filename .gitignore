@@ -311,10 +311,10 @@ tools/**
 # OpenCover UI analysis results
 OpenCover/
 
-# Azure Stream Analytics local run output 
+# Azure Stream Analytics local run output
 ASALocalRun/
 
 # Build Related
 BuildArtifacts/*
 
-Source/.DS_Store
+.DS_Store
