@@ -54,11 +54,11 @@ namespace GitReleaseManager.Core
                     var commitsLink = this.GetCommitsLink(previousMilestone);
                     var commitsText = string.Format(numberOfCommits == 1 ? "{0} commit" : "{0} commits", numberOfCommits);
 
-                    stringBuilder.AppendFormat(@"As part of this release we had [{0}]({1}) which resulted in [{2}]({3}) being closed.", commitsText, commitsLink, issuesText, this.targetMilestone.HtmlUrl());
+                    stringBuilder.AppendFormat(@"As part of this release we had [{0}]({1}) which resulted in [{2}]({3}) being closed.", commitsText, commitsLink, issuesText, this.targetMilestone.HtmlUrl);
                 }
                 else
                 {
-                    stringBuilder.AppendFormat(@"As part of this release we had [{0}]({1}) closed.", issuesText, this.targetMilestone.HtmlUrl());
+                    stringBuilder.AppendFormat(@"As part of this release we had [{0}]({1}) closed.", issuesText, this.targetMilestone.HtmlUrl);
                 }
             }
             else if (numberOfCommits > 0)
