@@ -1,0 +1,14 @@
+VERIFICATION
+Verification is intended to assist the Chocolatey moderators and community in verifying that this package's contents are trustworthy.
+
+This package is owned and updated by the members of the GitTools Organisation on GitHub:
+
+https://github.com/GitTools
+
+The files contained within this Chocolatey Package are the same as those that are hosted on our releases page:
+
+https://github.com/GitTools/GitReleaseManager/releases
+
+If you have any concerns about the contents of this package, please raise am issue here:
+
+https://github.com/GitTools/GitReleaseManager/releases
