@@ -24,5 +24,7 @@
     <file src="..\..\BuildArtifacts\temp\_PublishedApplications\GitReleaseManager.Cli\YamlDotNet.dll" target="tools" />
     <file src="chocolateyInstall.ps1" target="tools"/>
     <file src="chocolateyUninstall.ps1" target="tools"/>
+    <file src="VERIFICATION.TXT" />
+    <file src="LICENSE.TXT" />
   </files>
 </package>
