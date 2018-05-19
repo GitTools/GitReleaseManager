@@ -1,6 +1,7 @@
 #load nuget:https://www.myget.org/F/cake-contrib/api/v2?package=Cake.Recipe&prerelease
 
-Environment.SetVariableNames();
+Environment.SetVariableNames(githubUserNameVariable: "GITTOOLS_GITHUB_USERNAME",
+                            githubPasswordVariable: "GITTOOLS_GITHUB_PASSWORD");
 
 BuildParameters.SetParameters(context: Context,
                             buildSystem: BuildSystem,
