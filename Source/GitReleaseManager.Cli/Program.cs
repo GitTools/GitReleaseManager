@@ -187,7 +187,7 @@ namespace GitReleaseManager.Cli
 
             var releaseUpdate = CreateNewRelease(milestone, result, prerelease, targetCommitish);
 
-            var release = await github.Release.Create(owner, repository, releaseUpdate);
+            var release = await github.Repository.Release.Create(owner, repository, releaseUpdate);
 
             await AddAssets(github, assets, release);
 
@@ -205,7 +205,7 @@ namespace GitReleaseManager.Cli
 
             var releaseUpdate = CreateNewRelease(name, inputFileContents, prerelease, targetCommitish);
 
-            var release = await github.Release.Create(owner, repository, releaseUpdate);
+            var release = await github.Repository.Release.Create(owner, repository, releaseUpdate);
 
             await AddAssets(github, assets, release);
 
@@ -214,7 +214,7 @@ namespace GitReleaseManager.Cli
 
         private static async Task AddAssets(GitHubClient github, string owner, string repository, string tagName, IList<string> assets)
         {
-            var releases = await github.Release.GetAll(owner, repository);
+            var releases = await github.Repository.Release.GetAll(owner, repository);
 
             var release = releases.FirstOrDefault(r => r.TagName == tagName);
 
@@ -239,7 +239,7 @@ namespace GitReleaseManager.Cli
         private static async Task CloseMilestone(GitHubClient github, string owner, string repository, string milestoneTitle)
         {
             var milestoneClient = github.Issue.Milestone;
-            var openMilestones = await milestoneClient.GetAllForRepository(owner, repository, new MilestoneRequest { State = ItemState.Open });
+            var openMilestones = await milestoneClient.GetAllForRepository(owner, repository, new MilestoneRequest { State = ItemStateFilter.Open });
             var milestone = openMilestones.FirstOrDefault(m => m.Title == milestoneTitle);
 
             if (milestone == null)
@@ -252,7 +252,7 @@ namespace GitReleaseManager.Cli
 
         private static async Task PublishRelease(GitHubClient github, string owner, string repository, string tagName)
         {
-            var releases = await github.Release.GetAll(owner, repository);
+            var releases = await github.Repository.Release.GetAll(owner, repository);
             var release = releases.FirstOrDefault(r => r.TagName == tagName);
 
             if (release == null)
@@ -262,7 +262,7 @@ namespace GitReleaseManager.Cli
 
             var releaseUpdate = new ReleaseUpdate { TagName = tagName, Draft = false };
 
-            await github.Release.Edit(owner, repository, release.Id, releaseUpdate);
+            await github.Repository.Release.Edit(owner, repository, release.Id, releaseUpdate);
         }
 
         private static async Task AddAssets(GitHubClient github, IList<string> assets, Release release)
@@ -283,7 +283,7 @@ namespace GitReleaseManager.Cli
                         RawData = File.Open(asset, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)
                     };
 
-                    await github.Release.UploadAsset(release, upload);
+                    await github.Repository.Release.UploadAsset(release, upload);
 
                     // Make sure to tidy up the stream that was created above
                     upload.RawData.Dispose();

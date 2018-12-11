@@ -151,14 +151,16 @@ namespace GitReleaseManager.Tests
 
         private static Milestone CreateMilestone(string version)
         {
-            return new Milestone(new Uri("https://github.com/gep13/FakeRepository/issues?q=milestone%3A" + version), 0, ItemState.Open, version, String.Empty, null, 0, 0, DateTimeOffset.Now, null, null);
+            return new Milestone(null, "https://github.com/gep13/FakeRepository/issues?q=milestone%3A" + version, 0, ItemState.Open, version, String.Empty, null, 0, 0, DateTimeOffset.Now, null, null, null);
         }
 
         private static Issue CreateIssue(int number, params string[] labels)
         {
+            var user = new User(null, null, null, 0, null, DateTimeOffset.Now, DateTimeOffset.Now, 0, null, 0, 0, null, null, 0, 0, null, "gep13", "gep31", 0, null, 0, 0, 0, null, null, false, null, null);
+
             return new Issue(
                 null,
-                new Uri("http://example.com/" + number),
+                "http://example.com/" + number,
                 null,
                 null,
                 number,
@@ -166,13 +168,18 @@ namespace GitReleaseManager.Tests
                 "Issue " + number,
                 "Some issue",
                 null,
-                labels.Select(x => new Label (null, x, null)).ToArray(),
+                null,
+                labels.Select(x => new Label(null, x, null)).ToArray(),
+                user,
                 null,
                 null,
                 0,
                 null,
                 null,
                 DateTimeOffset.Now,
+                null,
+                0,
+                false,
                 null);
         }
     }
