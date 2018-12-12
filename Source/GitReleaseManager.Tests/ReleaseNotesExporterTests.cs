@@ -86,7 +86,7 @@ namespace GitReleaseManager.Tests
             stringBuilder.AppendLine();
             stringBuilder.AppendLine("- [__#3__](http://example.com/3) Issue 3");
 
-            return new Release(null, null, null, null, id, milestone, "master", milestone, stringBuilder.ToString(), false, false, createdDateTime, null, null, null, null, null);
+            return new Release(null, null, null, null, id, null, milestone, "master", milestone, stringBuilder.ToString(), false, false, createdDateTime, null, null, null, null, null);
         }
     }
 }

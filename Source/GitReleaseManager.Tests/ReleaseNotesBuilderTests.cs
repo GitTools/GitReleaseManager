@@ -151,12 +151,12 @@ namespace GitReleaseManager.Tests
 
         private static Milestone CreateMilestone(string version)
         {
-            return new Milestone(null, "https://github.com/gep13/FakeRepository/issues?q=milestone%3A" + version, 0, ItemState.Open, version, String.Empty, null, 0, 0, DateTimeOffset.Now, null, null, null);
+            return new Milestone(null, "https://github.com/gep13/FakeRepository/issues?q=milestone%3A" + version, 0, null, ItemState.Open, version, String.Empty, null, 0, 0, DateTimeOffset.Now, null, null, null);
         }
 
         private static Issue CreateIssue(int number, params string[] labels)
         {
-            var user = new User(null, null, null, 0, null, DateTimeOffset.Now, DateTimeOffset.Now, 0, null, 0, 0, null, null, 0, 0, null, "gep13", "gep31", 0, null, 0, 0, 0, null, null, false, null, null);
+            var user = new User(null, null, null, 0, null, DateTimeOffset.Now, DateTimeOffset.Now, 0, null, 0, 0, null, null, 0, 0, null, null, "gep13", "gep31", 0, null, 0, 0, 0, null, null, false, null, null);
 
             return new Issue(
                 null,
@@ -168,9 +168,9 @@ namespace GitReleaseManager.Tests
                 "Issue " + number,
                 "Some issue",
                 null,
-                null,
-                labels.Select(x => new Label(null, x, null)).ToArray(),
                 user,
+                labels.Select(x => new Label(null, x, null, null, null, false)).ToArray(),
+                null,
                 null,
                 null,
                 0,
@@ -179,7 +179,9 @@ namespace GitReleaseManager.Tests
                 DateTimeOffset.Now,
                 null,
                 0,
+                null,
                 false,
+                null,
                 null);
         }
     }

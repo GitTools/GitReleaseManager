@@ -12,16 +12,16 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Tool for creating and exporting releases for software applications hosted on GitHub</description>
     <summary>Tool for creating and exporting releases for software applications hosted on GitHub</summary>
-    <copyright>Copyright 2015</copyright>
+    <copyright>Copyright (c) 2015 - Present - GitTools Contributors</copyright>
     <language>en-GB</language>
     <tags>github release notes create export</tags>
   </metadata>
   <files>
-    <file src="..\..\BuildArtifacts\temp\_PublishedApplications\GitReleaseManager.Cli\CommandLine.dll" target="tools" />
-    <file src="..\..\BuildArtifacts\temp\_PublishedApplications\GitReleaseManager.Cli\GitReleaseManager.Core.dll" target="tools" />
-    <file src="..\..\BuildArtifacts\temp\_PublishedApplications\GitReleaseManager.Cli\GitReleaseManager.exe" target="tools" />
-    <file src="..\..\BuildArtifacts\temp\_PublishedApplications\GitReleaseManager.Cli\Octokit.dll" target="tools" />
-    <file src="..\..\BuildArtifacts\temp\_PublishedApplications\GitReleaseManager.Cli\YamlDotNet.dll" target="tools" />
+    <file src="..\..\BuildArtifacts\temp\_PublishedApplications\GitReleaseManager.Cli\net451\CommandLine.dll" target="tools" />
+    <file src="..\..\BuildArtifacts\temp\_PublishedApplications\GitReleaseManager.Cli\net451\GitReleaseManager.Core.dll" target="tools" />
+    <file src="..\..\BuildArtifacts\temp\_PublishedApplications\GitReleaseManager.Cli\net451\GitReleaseManager.exe" target="tools" />
+    <file src="..\..\BuildArtifacts\temp\_PublishedApplications\GitReleaseManager.Cli\net451\Octokit.dll" target="tools" />
+    <file src="..\..\BuildArtifacts\temp\_PublishedApplications\GitReleaseManager.Cli\net451\YamlDotNet.dll" target="tools" />
     <file src="chocolateyInstall.ps1" target="tools"/>
     <file src="chocolateyUninstall.ps1" target="tools"/>
     <file src="VERIFICATION.TXT" />
