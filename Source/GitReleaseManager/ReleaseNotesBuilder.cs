@@ -85,7 +85,7 @@ namespace GitReleaseManager.Core
 
         private void Append(IEnumerable<Issue> issues, string label, StringBuilder stringBuilder)
         {
-            var features = issues.Where(x => x.Labels.Any(l => l.Name == label)).ToList();
+            var features = issues.Where(x => x.Labels.Any(l => l.Name.ToUpperInvariant() == label.ToUpperInvariant())).ToList();
 
             if (features.Count > 0)
             {
