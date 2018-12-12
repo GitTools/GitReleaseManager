@@ -41,7 +41,7 @@ https://cakebuild.net
 
 [CmdletBinding()]
 Param(
-    [string]$Script = "setup.cake",
+    [string]$Script = "recipe.cake",
     [string]$Target,
     [string]$Configuration,
     [ValidateSet("Quiet", "Minimal", "Normal", "Verbose", "Diagnostic")]
@@ -85,7 +85,7 @@ function GetProxyEnabledWebClient
 {
     $wc = New-Object System.Net.WebClient
     $proxy = [System.Net.WebRequest]::GetSystemWebProxy()
-    $proxy.Credentials = [System.Net.CredentialCache]::DefaultCredentials        
+    $proxy.Credentials = [System.Net.CredentialCache]::DefaultCredentials
     $wc.Proxy = $proxy
     return $wc
 }
@@ -115,8 +115,8 @@ if ((Test-Path $PSScriptRoot) -and !(Test-Path $TOOLS_DIR)) {
 
 # Make sure that packages.config exist.
 if (!(Test-Path $PACKAGES_CONFIG)) {
-    Write-Verbose -Message "Downloading packages.config..."    
-    try {        
+    Write-Verbose -Message "Downloading packages.config..."
+    try {
         $wc = GetProxyEnabledWebClient
         $wc.DownloadFile("https://cakebuild.net/download/bootstrapper/packages", $PACKAGES_CONFIG) } catch {
         Throw "Could not download packages.config."
