@@ -39,7 +39,7 @@ namespace GitReleaseManager.Core.Configuration
         {
             if (writer == null)
             {
-                throw new ArgumentNullException("writer");
+                throw new ArgumentNullException(nameof(writer));
             }
 
             writer.WriteLine(@"# create:");

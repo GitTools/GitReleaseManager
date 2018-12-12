@@ -19,7 +19,7 @@ namespace GitReleaseManager.Core.Configuration
         {
             if (fileSystem == null)
             {
-                throw new ArgumentNullException("fileSystem");
+                throw new ArgumentNullException(nameof(fileSystem));
             }
 
             var configFilePath = GetConfigFilePath(gitDirectory);
@@ -52,7 +52,7 @@ namespace GitReleaseManager.Core.Configuration
         {
             if (fileSystem == null)
             {
-                throw new ArgumentNullException("fileSystem");
+                throw new ArgumentNullException(nameof(fileSystem));
             }
 
             var configFilePath = GetConfigFilePath(targetDirectory);

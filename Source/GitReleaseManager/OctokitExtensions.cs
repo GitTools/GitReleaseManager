@@ -49,7 +49,7 @@ namespace GitReleaseManager.Core
         {
             if (milestone == null)
             {
-                throw new ArgumentNullException("milestone");
+                throw new ArgumentNullException(nameof(milestone));
             }
 
             var parts = milestone.Url.Split('/');
