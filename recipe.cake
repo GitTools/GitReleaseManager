@@ -10,7 +10,6 @@ BuildParameters.SetParameters(context: Context,
                             repositoryOwner: "GitTools",
                             repositoryName: "GitReleaseManager",
                             appVeyorAccountName: "GitTools",
-                            testFilePattern: "/**/*.Tests.dll",
                             shouldRunGitVersion: true);
 
 BuildParameters.PrintParameters(Context);
@@ -21,4 +20,4 @@ ToolSettings.SetToolSettings(context: Context,
                             testCoverageFilter: "+[*]* -[xunit.*]* -[Cake.Core]* -[Cake.Testing]* -[*.Tests]* -[Octokit]* -[YamlDotNet]* -[AlphaFS]* -[ApprovalTests]* -[ApprovalUtilities]*",
                             testCoverageExcludeByAttribute: "*.ExcludeFromCodeCoverage*",
                             testCoverageExcludeByFile: "*/*Designer.cs;*/*.g.cs;*/*.g.i.cs");
-Build.Run();
+Build.RunDotNetCore();
