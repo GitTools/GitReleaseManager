@@ -1,4 +1,4 @@
-﻿As part of this release we had [1 commit](https://github.com/TestUser/FakeRepository/commits/1.2.3) which resulted in [1 issue](https://github.com/gep13/FakeRepository/issues?q=milestone%3A1.2.3) being closed.
+﻿As part of this release we had [1 commit](https://github.com/TestUser/FakeRepository/commits/1.2.3) which resulted in [1 issue](https://github.com/gep13/FakeRepository/issues?q=milestone%3A1.2.3?closed=1) being closed.
 
 
 __Foo__
