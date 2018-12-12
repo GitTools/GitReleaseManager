@@ -6,8 +6,7 @@
     <DebugType>full</DebugType>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'"> 
-    <OutputPath>..\..\BuildArtifacts\</OutputPath>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <Optimize>false</Optimize>
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
@@ -27,7 +26,7 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
     <PackageReference Include="ApprovalTests" Version="3.0.18" />
     <PackageReference Include="NUnit" Version="3.11.0" />
-    <PackageReference Include="NUnit3TestAdapter" Version="3.11.2" /> 
+    <PackageReference Include="NUnit3TestAdapter" Version="3.11.2" />
     <PackageReference Include="Octokit" Version="0.32.0" />
   </ItemGroup>
 </Project>
