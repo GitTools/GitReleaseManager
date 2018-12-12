@@ -38,8 +38,8 @@ namespace GitReleaseManager.Core
                 State = ItemStateFilter.Open
             };
             var parts = milestone.Url.Split('/');
-            var user = parts[2];
-            var repository = parts[3];
+            var user = parts[4];
+            var repository = parts[5];
             var closedIssues = await gitHubClient.Issue.GetAllForRepository(user, repository, closedIssueRequest);
             var openIssues = await gitHubClient.Issue.GetAllForRepository(user, repository, openIssueRequest);
             return openIssues.Union(closedIssues);
