@@ -36,15 +36,15 @@ namespace GitReleaseManager.Cli
             var fileSystem = new FileSystem();
 
             return Parser.Default.ParseArguments<CreateSubOptions, AddAssetSubOptions, CloseSubOptions, PublishSubOptions, ExportSubOptions, InitSubOptions, ShowConfigSubOptions>(args)
-    .MapResult(
-      (CreateSubOptions opts) => CreateReleaseAsync(opts, fileSystem).Result,
-      (AddAssetSubOptions opts) => AddAssetsAsync(opts).Result,
-      (CloseSubOptions opts) => CloseMilestoneAsync(opts).Result,
-      (PublishSubOptions opts) => PublishReleaseAsync(opts).Result,
-      (ExportSubOptions opts) => ExportReleasesAsync(opts, fileSystem).Result,
-      (InitSubOptions opts) => CreateSampleConfigFile(opts, fileSystem),
-      (ShowConfigSubOptions opts) => ShowConfig(opts, fileSystem),
-            errs => 1);
+                .MapResult(
+                  (CreateSubOptions opts) => CreateReleaseAsync(opts, fileSystem).Result,
+                  (AddAssetSubOptions opts) => AddAssetsAsync(opts).Result,
+                  (CloseSubOptions opts) => CloseMilestoneAsync(opts).Result,
+                  (PublishSubOptions opts) => PublishReleaseAsync(opts).Result,
+                  (ExportSubOptions opts) => ExportReleasesAsync(opts, fileSystem).Result,
+                  (InitSubOptions opts) => CreateSampleConfigFile(opts, fileSystem),
+                  (ShowConfigSubOptions opts) => ShowConfig(opts, fileSystem),
+                  errs => 1);
         }
 
         private static async Task<int> CreateReleaseAsync(CreateSubOptions subOptions, IFileSystem fileSystem)
