@@ -1,4 +1,4 @@
-#load nuget:https://ci.appveyor.com/nuget/cake-recipe?package=Cake.Recipe&version=0.3.0-unstable0403
+#load nuget:https://ci.appveyor.com/nuget/cake-recipe?package=Cake.Recipe&prerelease
 
 Environment.SetVariableNames(githubUserNameVariable: "GITTOOLS_GITHUB_USERNAME",
                             githubPasswordVariable: "GITTOOLS_GITHUB_PASSWORD");
