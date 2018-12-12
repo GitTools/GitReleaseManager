@@ -4,9 +4,9 @@ Out of the box, publishing a release on GitHub does not close the milestone asso
 
 ## **Required Parameters**
 
-* `-u, --username`: The username to access GitHub with.
-* `-p, --password`: The password to access GitHub with.
-* `--token`: The access token to access GitHub with.
+* `-u, --username`: The username to access GitHub with.  This can't be used when using the token parameter.
+* `-p, --password`: The password to access GitHub with.  This can't be used when using the token parameter.
+* `--token`: The access token to access GitHub with.  This can't be used when using the username and password parameters.
 * `-o, --owner`: The owner of the repository.
 * `-r, --repository`: The name of the repository.
 * `-m, --milestone`: The milestone to use.

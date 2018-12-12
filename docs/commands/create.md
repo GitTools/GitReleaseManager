@@ -6,9 +6,9 @@ There are two modes of operation when creating a Release.  GitReleaseManager can
 
 ## **Required Parameters**
 
-* `-u, --username`: The username to access GitHub with.
-* `-p, --password`: The password to access GitHub with.
-* `--token`: The access token to access GitHub with.
+* `-u, --username`: The username to access GitHub with.  This can't be used when using the token parameter.
+* `-p, --password`: The password to access GitHub with.  This can't be used when using the token parameter.
+* `--token`: The access token to access GitHub with.  This can't be used when using the username and password parameters.
 * `-o, --owner`: The owner of the repository.
 * `-r, --repository`: The name of the repository.
 
