@@ -12,7 +12,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Tool for creating and exporting releases for software applications hosted on GitHub</description>
     <summary>Tool for creating and exporting releases for software applications hosted on GitHub</summary>
-    <copyright>Copyright 2015</copyright>
+    <copyright>Copyright (c) 2015 - Present - GitTools Contributors</copyright>
     <language>en-GB</language>
     <tags>github release notes create export</tags>
   </metadata>
