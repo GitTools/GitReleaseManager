@@ -1,22 +1,20 @@
-﻿<!DOCTYPE html>
-<html>
-    <head>
+﻿<!DOCTYPE html><html><head>
         <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-        <meta name="description" />
-        <meta name="keywords" content="static content generator,static site generator,static site,HTML,web development,.NET,C#,Razor,Markdown,YAML" />
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+        <meta name="description">
+        <meta name="keywords" content="static content generator,static site generator,static site,HTML,web development,.NET,C#,Razor,Markdown,YAML">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="shortcut icon" href="/GitReleaseManager/assets/img/favicon.ico" type="image/x-icon">
         <link rel="icon" href="/GitReleaseManager/assets/img/favicon.ico" type="image/x-icon">
-        <title>GitReleaseManager - Home</title>
+        <title>GitReleaseManager - API - MainOptions.AddAssetVerb Property</title>
         <link href="/GitReleaseManager/assets/css/mermaid.css" rel="stylesheet">
         <link href="/GitReleaseManager/assets/css/highlight.css" rel="stylesheet">
-        <link href="/GitReleaseManager/assets/css/bootstrap/bootstrap.css" rel="stylesheet" />
-        <link href="/GitReleaseManager/assets/css/adminlte/AdminLTE.css" rel="stylesheet" />
-        <link href="/GitReleaseManager/assets/css/theme/theme.css" rel="stylesheet" />
+        <link href="/GitReleaseManager/assets/css/bootstrap/bootstrap.css" rel="stylesheet">
+        <link href="/GitReleaseManager/assets/css/adminlte/AdminLTE.css" rel="stylesheet">
+        <link href="/GitReleaseManager/assets/css/theme/theme.css" rel="stylesheet">
         <link href="//fonts.googleapis.com/css?family=Roboto+Mono:400,700|Roboto:400,400i,700,700i" rel="stylesheet">
         <link href="/GitReleaseManager/assets/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-        <link href="/GitReleaseManager/assets/css/override.css" rel="stylesheet" />
+        <link href="/GitReleaseManager/assets/css/override.css" rel="stylesheet">
         <script src="/GitReleaseManager/assets/js/jquery-2.2.3.min.js"></script>
         <script src="/GitReleaseManager/assets/js/bootstrap.min.js"></script>        
         <script src="/GitReleaseManager/assets/js/app.min.js"></script>         
@@ -31,7 +29,7 @@
 
         
     </head>
-    <body class="hold-transition wyam layout-boxed layout-top-nav ">    
+    <body class="hold-transition wyam layout-boxed  ">    
         <div class="top-banner"></div>
         <div class="wrapper with-container">
             <!-- Header -->
@@ -43,6 +41,10 @@
                          
                 <nav class="navbar navbar-static-top" role="navigation">
                     <!-- Sidebar toggle button-->
+                        <a href="#" class="sidebar-toggle visible-xs-block" data-toggle="offcanvas" role="button">
+                            <span class="sr-only">Toggle side menu</span>
+                            <i class="fa fa-chevron-circle-right"></i>
+                        </a>
                                         
                     <div class="navbar-header">
                         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
@@ -55,7 +57,7 @@
                     <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
                         <ul class="nav navbar-nav">                            
                                     <li><a href="/GitReleaseManager/tasks">Tasks</a></li>
-        <li><a href="/GitReleaseManager/api">API</a></li>
+        <li class="active"><a href="/GitReleaseManager/api">API</a></li>
  
                         </ul>       
                     </div>
@@ -66,19 +68,83 @@
             </header>
             
             <!-- Left side column. contains the logo and sidebar -->
-            <aside class="main-sidebar hidden">
+            <aside class="main-sidebar ">
                 <section class="infobar" data-spy="affix" data-offset-top="60" data-offset-bottom="200"> 
                     	
-        <div><p><a href="https://github.com/GitTools/GitReleaseManager/tree/develop/docs/input/index.cshtml"><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit Content</a></p></div>
-    <div id="infobar-headings"></div>
+	<div id="infobar-headings"><h6>On This Page</h6><p><a href="#Syntax">Syntax</a></p>
+<p><a href="#Value">Value</a></p>
+<hr class="infobar-hidden">
+</div>
 
                 </section>
                 <section class="sidebar">    
                                      
-                    
+                    	
+	    <script src="/GitReleaseManager/assets/js/lunr.min.js"></script>
+    <script src="/GitReleaseManager/assets/js/searchIndex.js"></script>
+    <div class="sidebar-form">
+        <div class="input-group">
+            <input type="text" name="search" id="search" class="form-control" placeholder="Search Types...">
+            <span class="input-group-btn">
+                <button class="btn btn-flat"><i class="fa fa-search"></i></button>
+            </span>
+        </div>
+    </div>
+    <div id="search-results">
+    </div>
+    <script>
+        function runSearch(query){
+            $("#search-results").empty();			
+            if( query.length < 2 ){
+                return;
+            }			
+            var results = searchModule.search("*" + query + "*");
+            var listHtml = "<ul class='sidebar-menu'>";	
+            listHtml += "<li class='header'>Type Results</li>";	
+            if(results.length == 0 ){
+                listHtml += "<li>No results found</li>";
+            } else {					
+                for(var i = 0; i < results.length; ++i){
+                    var res = results[i];
+                    listHtml += "<li><a href='" + res.url + "'>" + htmlEscape(res.title) + "</a></li>";
+                }				
+            }
+            listHtml += "</ul>";				
+            $("#search-results").append(listHtml);
+        }
+
+        $(document).ready(function(){
+            $("#search").on('input propertychange paste', function() {
+                runSearch($("#search").val());
+            });
+        });
+
+        function htmlEscape(html) {
+            return document.createElement('div')
+                .appendChild(document.createTextNode(html))
+                .parentNode
+                .innerHTML;
+        }
+    </script>
+	
+    <hr>
 
                     <ul class="sidebar-menu">
                         
+			<li class="header">Namespace</li>
+		<li><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options">GitReleaseManager<wbr>.Cli<wbr>.Options</a></li>
+		<li class="header">Type</li>
+		<li><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/MainOptions">MainOptions</a></li>
+		<li role="separator" class="divider"></li>
+			<li class="header">Property Members</li>
+				<li class="selected"><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/MainOptions/B22336C0">AddAssetVerb</a></li>
+				<li><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/MainOptions/ADF33D8F">CloseVerb</a></li>
+				<li><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/MainOptions/10E6EB43">CreateVerb</a></li>
+				<li><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/MainOptions/F4056634">ExportVerb</a></li>
+				<li><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/MainOptions/0088A6E9">InitVerb</a></li>
+				<li><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/MainOptions/543F443A">PublishVerb</a></li>
+				<li><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/MainOptions/F27A0C0D">ShowConfigVerb</a></li>
+
 
                     </ul>
                             
@@ -91,11 +157,56 @@
 
 
 
-	<section class="content">
-		<h1>Welcome!</h1>
+<section class="content-header">
+			<h3><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/MainOptions">MainOptions</a>.</h3>
+	<h1>AddAssetVerb <small>Property</small></h1>
+</section>
+<section class="content">
+	
+	
+	
+		<div class="panel panel-default">
+  			<div class="panel-body">
+				<dl class="dl-horizontal">	
+						
+						<dt>Namespace</dt>
+						<dd><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options">GitReleaseManager<wbr>.Cli<wbr>.Options</a></dd>
+					
+						<dt>Containing Type</dt>
+						<dd><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/MainOptions">MainOptions</a></dd>		
+					
+				</dl>
+  			</div>
+		</div>
 
-<p>You can explore the documentation by selecting sections from the navigation bar above.</p>
-	</section>
+	<h1 id="Syntax">Syntax</h1>
+	<pre><code>public AddAssetSubOptions AddAssetVerb { get; set; }</code></pre>
+
+
+
+
+
+	<h1 id="Value">Value</h1>
+	<div class="box">
+		<div class="box-body no-padding table-responsive">
+			<table class="table table-striped table-hover two-cols">
+				<thead>
+					<tr>
+						<th>Type</th>
+						<th>Description</th>
+					</tr>
+				</thead>
+				<tbody><tr>
+					<td><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/AddAssetSubOptions">AddAssetSubOptions</a></td>
+					<td></td>
+				</tr>
+			</tbody></table>
+		</div>
+	</div>	
+
+
+	
+</section>
                 
             </div>           
             
@@ -149,5 +260,5 @@
                 }, 500);
             });
         </script>
-    </body>
-</html>
+    
+</body></html>
