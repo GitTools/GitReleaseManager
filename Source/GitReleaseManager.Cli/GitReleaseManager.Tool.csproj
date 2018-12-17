@@ -1,32 +1,27 @@
 <Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <AssemblyName>GitReleaseManager</AssemblyName>
-    <TargetFrameworks>netcoreapp2.0;net451</TargetFrameworks>
-    <BuildToolsFxCopVersion>1.0.1</BuildToolsFxCopVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
-    <PublishUrl>publish\</PublishUrl>
-    <Install>true</Install>
-    <InstallFrom>Disk</InstallFrom>
-    <UpdateEnabled>false</UpdateEnabled>
-    <UpdateMode>Foreground</UpdateMode>
-    <UpdateInterval>7</UpdateInterval>
-    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
-    <UpdatePeriodically>false</UpdatePeriodically>
-    <UpdateRequired>false</UpdateRequired>
-    <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <UseApplicationTrust>false</UseApplicationTrust>
-    <BootstrapperEnabled>true</BootstrapperEnabled>
-    <Title>GitReleaseManager.Cli</Title>
-    <Description>Create release notes in markdown given a GitHub milestone</Description>
-    <RunCodeAnalysis>False</RunCodeAnalysis>
-    <CodeAnalysisTreatWarningsAsErrors>True</CodeAnalysisTreatWarningsAsErrors>
-    <CodeAnalysisRuleSet>..\GitReleaseManager.ruleset</CodeAnalysisRuleSet>
-    <IsPackable>false</IsPackable>
+
+    <PackAsTool>true</PackAsTool>
+    <TargetFrameworks>netcoreapp2.1</TargetFrameworks>
+    <ToolCommandName>dotnet-gitreleasemanager</ToolCommandName>
+    <PackageId>GitReleaseManager.Tool</PackageId>
+
+    <Title>GitReleaseManager Tool</Title>
+    <Authors>GitTools Contributors</Authors>
+    <PackageProjectUrl>https://github.com/GitTools/GitReleaseManager</PackageProjectUrl>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageTags>github release notes create export</PackageTags>
+    <Description>Tool for creating and exporting releases for software applications hosted on GitHub.</Description>
+    <Copyright>Copyright (c) 2015 - Present - GitTools Contributors</Copyright>
+    <PackageLicenseUrl>http://www.opensource.org/licenses/mit-license.php</PackageLicenseUrl>
+    <PackageIconUrl>https://cdn.rawgit.com/GitTools/GitReleaseManager/9c547452a10afaf83fce1b5833f4762487b017b7/Icons/package_icon.svg</PackageIconUrl>
+    <PackageReleaseNotes>https://github.com/GitTools/GitReleaseManager/releases</PackageReleaseNotes>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
+
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <RunCodeAnalysisRestore>False</RunCodeAnalysisRestore>
   </PropertyGroup>
