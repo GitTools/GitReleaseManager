@@ -35,7 +35,7 @@ namespace GitReleaseManager.Cli
 
             var fileSystem = new FileSystem();
 
-            return Parser.Default.ParseArguments<CreateSubOptions, AddAssetSubOptions, CloseSubOptions, PublishSubOptions, ExportSubOptions, InitSubOptions, ShowConfigSubOptions>(args)
+            return Parser.Default.ParseArguments<CreateSubOptions, AddAssetSubOptions, CloseSubOptions, PublishSubOptions, ExportSubOptions, InitSubOptions, ShowConfigSubOptions, LabelSubOptions>(args)
                 .MapResult(
                   (CreateSubOptions opts) => CreateReleaseAsync(opts, fileSystem).Result,
                   (AddAssetSubOptions opts) => AddAssetsAsync(opts).Result,
@@ -44,6 +44,7 @@ namespace GitReleaseManager.Cli
                   (ExportSubOptions opts) => ExportReleasesAsync(opts, fileSystem).Result,
                   (InitSubOptions opts) => CreateSampleConfigFile(opts, fileSystem),
                   (ShowConfigSubOptions opts) => ShowConfig(opts, fileSystem),
+                  (LabelSubOptions opts) => CreateLabelsAsync(opts).Result,
                   errs => 1);
         }
 
@@ -179,6 +180,46 @@ namespace GitReleaseManager.Cli
             return 0;
         }
 
+        private static async Task<int> CreateLabelsAsync(LabelSubOptions subOptions)
+        {
+            try
+            {
+                ConfigureLogging(subOptions.LogFilePath);
+
+                var newLabels = new List<NewLabel>();
+                newLabels.Add(new NewLabel("Breaking change", "b60205"));
+                newLabels.Add(new NewLabel("Bug", "ee0701"));
+                newLabels.Add(new NewLabel("Build", "009800"));
+                newLabels.Add(new NewLabel("Documentation", "d4c5f9"));
+                newLabels.Add(new NewLabel("Feature", "84b6eb"));
+                newLabels.Add(new NewLabel("Improvement", "207de5"));
+                newLabels.Add(new NewLabel("Question", "cc317c"));
+                newLabels.Add(new NewLabel("good first issue", "7057ff"));
+                newLabels.Add(new NewLabel("help wanted", "33aa3f"));
+
+                var github = subOptions.CreateGitHubClient();
+
+                var labels = await github.Issue.Labels.GetAllForRepository(subOptions.RepositoryOwner, subOptions.RepositoryName);
+
+                foreach (var label in labels)
+                {
+                    await github.Issue.Labels.Delete(subOptions.RepositoryOwner, subOptions.RepositoryName, label.Name);
+                }
+
+                foreach (var label in newLabels)
+                {
+                    await github.Issue.Labels.Create(subOptions.RepositoryOwner, subOptions.RepositoryName, label);
+                }
+
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+
+                return 1;
+            }
+        }
         private static async Task<Release> CreateReleaseFromMilestone(GitHubClient github, string owner, string repository, string milestone, string targetCommitish, IList<string> assets, bool prerelease, Config configuration)
         {
             var releaseNotesBuilder = new ReleaseNotesBuilder(new DefaultGitHubClient(github, owner, repository), owner, repository, milestone, configuration);

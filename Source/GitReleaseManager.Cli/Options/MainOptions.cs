@@ -22,6 +22,8 @@ namespace GitReleaseManager.Cli.Options
 
         public ShowConfigSubOptions ShowConfigVerb { get; set; }
 
+        public LabelSubOptions LabelVerb { get; set; }
+
         ////[HelpVerbOption]
         ////public string DoHelpForVerb(string verbName)
         ////{
