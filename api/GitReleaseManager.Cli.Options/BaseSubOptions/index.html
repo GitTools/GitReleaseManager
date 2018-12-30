@@ -142,6 +142,7 @@
 				<li><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/CreateSubOptions">CreateSubOptions</a></li>
 				<li><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/ExportSubOptions">ExportSubOptions</a></li>
 				<li><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/InitSubOptions">InitSubOptions</a></li>
+				<li><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/LabelSubOptions">LabelSubOptions</a></li>
 				<li><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/MainOptions">MainOptions</a></li>
 				<li><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/PublishSubOptions">PublishSubOptions</a></li>
 				<li><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/ShowConfigSubOptions">ShowConfigSubOptions</a></li>
@@ -185,9 +186,9 @@
 								<dt>Derived Types</dt>
 								<dd>
 									<ul class="list-unstyled">
-											<li><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/BaseGitHubSubOptions">BaseGitHubSubOptions</a></li>								
-											<li><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/InitSubOptions">InitSubOptions</a></li>								
 											<li><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/ShowConfigSubOptions">ShowConfigSubOptions</a></li>								
+											<li><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/InitSubOptions">InitSubOptions</a></li>								
+											<li><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/BaseGitHubSubOptions">BaseGitHubSubOptions</a></li>								
 									</ul>
 								</dd>			
 							
@@ -199,12 +200,12 @@
 	Base0["object"]--&gt;Type
 	Type["BaseSubOptions"]
 class Type type-node
-	Type--&gt;Derived0["BaseGitHubSubOptions"]
-	click Derived0 "/GitReleaseManager/api/GitReleaseManager.Cli.Options/BaseGitHubSubOptions"
+	Type--&gt;Derived0["ShowConfigSubOptions"]
+	click Derived0 "/GitReleaseManager/api/GitReleaseManager.Cli.Options/ShowConfigSubOptions"
 	Type--&gt;Derived1["InitSubOptions"]
 	click Derived1 "/GitReleaseManager/api/GitReleaseManager.Cli.Options/InitSubOptions"
-	Type--&gt;Derived2["ShowConfigSubOptions"]
-	click Derived2 "/GitReleaseManager/api/GitReleaseManager.Cli.Options/ShowConfigSubOptions"
+	Type--&gt;Derived2["BaseGitHubSubOptions"]
+	click Derived2 "/GitReleaseManager/api/GitReleaseManager.Cli.Options/BaseGitHubSubOptions"
 
 						</div>
 					</div>

@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="shortcut icon" href="/GitReleaseManager/assets/img/favicon.ico" type="image/x-icon">
         <link rel="icon" href="/GitReleaseManager/assets/img/favicon.ico" type="image/x-icon">
-        <title>GitReleaseManager - API - BaseGitHubSubOptions Class</title>
+        <title>GitReleaseManager - API - LabelSubOptions Class</title>
         <link href="/GitReleaseManager/assets/css/mermaid.css" rel="stylesheet">
         <link href="/GitReleaseManager/assets/css/highlight.css" rel="stylesheet">
         <link href="/GitReleaseManager/assets/css/bootstrap/bootstrap.css" rel="stylesheet">
@@ -72,6 +72,7 @@
                 <section class="infobar" data-spy="affix" data-offset-top="60" data-offset-bottom="200"> 
                     	
 	<div id="infobar-headings"><h6>On This Page</h6><p><a href="#Syntax">Syntax</a></p>
+<p><a href="#Attributes">Attributes</a></p>
 <p><a href="#Properties">Properties</a></p>
 <p><a href="#Methods">Methods</a></p>
 <hr class="infobar-hidden">
@@ -137,13 +138,13 @@
 		<li role="separator" class="divider"></li>
 			<li class="header">Class Types</li>
 				<li><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/AddAssetSubOptions">AddAssetSubOptions</a></li>
-				<li class="selected"><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/BaseGitHubSubOptions">BaseGitHubSubOptions</a></li>
+				<li><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/BaseGitHubSubOptions">BaseGitHubSubOptions</a></li>
 				<li><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/BaseSubOptions">BaseSubOptions</a></li>
 				<li><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/CloseSubOptions">CloseSubOptions</a></li>
 				<li><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/CreateSubOptions">CreateSubOptions</a></li>
 				<li><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/ExportSubOptions">ExportSubOptions</a></li>
 				<li><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/InitSubOptions">InitSubOptions</a></li>
-				<li><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/LabelSubOptions">LabelSubOptions</a></li>
+				<li class="selected"><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/LabelSubOptions">LabelSubOptions</a></li>
 				<li><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/MainOptions">MainOptions</a></li>
 				<li><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/PublishSubOptions">PublishSubOptions</a></li>
 				<li><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/ShowConfigSubOptions">ShowConfigSubOptions</a></li>
@@ -161,7 +162,7 @@
 
 
 <section class="content-header">
-	<h1>BaseGitHubSubOptions <small>Class</small></h1>
+	<h1>LabelSubOptions <small>Class</small></h1>
 </section>
 <section class="content">
 	
@@ -182,43 +183,23 @@
 									<ul class="list-unstyled">										
 											<li>object</li>								
 											<li><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/BaseSubOptions">BaseSubOptions</a></li>								
+											<li><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/BaseGitHubSubOptions">BaseGitHubSubOptions</a></li>								
 									</ul>
 								</dd>				
 							
-								<dt>Derived Types</dt>
-								<dd>
-									<ul class="list-unstyled">
-											<li><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/ExportSubOptions">ExportSubOptions</a></li>								
-											<li><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/PublishSubOptions">PublishSubOptions</a></li>								
-											<li><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/CreateSubOptions">CreateSubOptions</a></li>								
-											<li><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/CloseSubOptions">CloseSubOptions</a></li>								
-											<li><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/AddAssetSubOptions">AddAssetSubOptions</a></li>								
-											<li><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/LabelSubOptions">LabelSubOptions</a></li>								
-									</ul>
-								</dd>			
 							
 						</dl>
 					</div>		
 					<div class="col-md-6">
 						<div class="mermaid">
 							graph TD
-	Base0["BaseSubOptions"]--&gt;Type
-	click Base0 "/GitReleaseManager/api/GitReleaseManager.Cli.Options/BaseSubOptions"
-	Base1["object"]--&gt;Base0
-	Type["BaseGitHubSubOptions"]
+	Base0["BaseGitHubSubOptions"]--&gt;Type
+	click Base0 "/GitReleaseManager/api/GitReleaseManager.Cli.Options/BaseGitHubSubOptions"
+	Base1["BaseSubOptions"]--&gt;Base0
+	click Base1 "/GitReleaseManager/api/GitReleaseManager.Cli.Options/BaseSubOptions"
+	Base2["object"]--&gt;Base1
+	Type["LabelSubOptions"]
 class Type type-node
-	Type--&gt;Derived0["ExportSubOptions"]
-	click Derived0 "/GitReleaseManager/api/GitReleaseManager.Cli.Options/ExportSubOptions"
-	Type--&gt;Derived1["PublishSubOptions"]
-	click Derived1 "/GitReleaseManager/api/GitReleaseManager.Cli.Options/PublishSubOptions"
-	Type--&gt;Derived2["CreateSubOptions"]
-	click Derived2 "/GitReleaseManager/api/GitReleaseManager.Cli.Options/CreateSubOptions"
-	Type--&gt;Derived3["CloseSubOptions"]
-	click Derived3 "/GitReleaseManager/api/GitReleaseManager.Cli.Options/CloseSubOptions"
-	Type--&gt;Derived4["AddAssetSubOptions"]
-	click Derived4 "/GitReleaseManager/api/GitReleaseManager.Cli.Options/AddAssetSubOptions"
-	Type--&gt;Derived5["LabelSubOptions"]
-	click Derived5 "/GitReleaseManager/api/GitReleaseManager.Cli.Options/LabelSubOptions"
 
 						</div>
 					</div>
@@ -227,10 +208,28 @@ class Type type-node
 		</div>
 
 	<h1 id="Syntax">Syntax</h1>
-	<pre><code>public abstract class BaseGitHubSubOptions : BaseSubOptions</code></pre>
+	<pre><code>[Verb("label", HelpText = "Deletes existing labels and replaces with set of default labels.")]
+public class LabelSubOptions : BaseGitHubSubOptions</code></pre>
 
 
 
+	<h1 id="Attributes">Attributes</h1>
+	<div class="box">
+		<div class="box-body no-padding table-responsive">
+			<table class="table table-striped table-hover two-cols">
+				<thead>
+					<tr>
+						<th>Type</th>
+						<th>Description</th>
+					</tr>
+				</thead>
+					<tbody><tr>
+						<td>Verb</td>
+						<td></td>
+					</tr>
+			</tbody></table>
+		</div>
+	</div>	
 
 
 
@@ -262,6 +261,7 @@ class Type type-node
 								<td>string</td>
 								<td>
 									<div></div>
+											<div><small><em>Inherited from <a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/BaseGitHubSubOptions">BaseGitHubSubOptions</a></em></small></div>
 								</td>
 							</tr>
 							<tr>
@@ -269,6 +269,7 @@ class Type type-node
 								<td>string</td>
 								<td>
 									<div></div>
+											<div><small><em>Inherited from <a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/BaseGitHubSubOptions">BaseGitHubSubOptions</a></em></small></div>
 								</td>
 							</tr>
 							<tr>
@@ -276,6 +277,7 @@ class Type type-node
 								<td>string</td>
 								<td>
 									<div></div>
+											<div><small><em>Inherited from <a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/BaseGitHubSubOptions">BaseGitHubSubOptions</a></em></small></div>
 								</td>
 							</tr>
 							<tr>
@@ -291,6 +293,7 @@ class Type type-node
 								<td>string</td>
 								<td>
 									<div></div>
+											<div><small><em>Inherited from <a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/BaseGitHubSubOptions">BaseGitHubSubOptions</a></em></small></div>
 								</td>
 							</tr>
 							<tr>
@@ -298,6 +301,7 @@ class Type type-node
 								<td>string</td>
 								<td>
 									<div></div>
+											<div><small><em>Inherited from <a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/BaseGitHubSubOptions">BaseGitHubSubOptions</a></em></small></div>
 								</td>
 							</tr>
 					</tbody></table>
@@ -321,6 +325,7 @@ class Type type-node
 								<td>GitHubClient</td>
 								<td>
 									<div></div>
+											<div><small><em>Inherited from <a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/BaseGitHubSubOptions">BaseGitHubSubOptions</a></em></small></div>
 								</td>
 							</tr>
 					</tbody></table>
