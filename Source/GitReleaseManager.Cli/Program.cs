@@ -35,16 +35,17 @@ namespace GitReleaseManager.Cli
 
             var fileSystem = new FileSystem();
 
-            return Parser.Default.ParseArguments<CreateSubOptions, AddAssetSubOptions, CloseSubOptions, PublishSubOptions, ExportSubOptions, InitSubOptions, ShowConfigSubOptions>(args)
-    .MapResult(
-      (CreateSubOptions opts) => CreateReleaseAsync(opts, fileSystem).Result,
-      (AddAssetSubOptions opts) => AddAssetsAsync(opts).Result,
-      (CloseSubOptions opts) => CloseMilestoneAsync(opts).Result,
-      (PublishSubOptions opts) => PublishReleaseAsync(opts).Result,
-      (ExportSubOptions opts) => ExportReleasesAsync(opts, fileSystem).Result,
-      (InitSubOptions opts) => CreateSampleConfigFile(opts, fileSystem),
-      (ShowConfigSubOptions opts) => ShowConfig(opts, fileSystem),
-            errs => 1);
+            return Parser.Default.ParseArguments<CreateSubOptions, AddAssetSubOptions, CloseSubOptions, PublishSubOptions, ExportSubOptions, InitSubOptions, ShowConfigSubOptions, LabelSubOptions>(args)
+                .MapResult(
+                  (CreateSubOptions opts) => CreateReleaseAsync(opts, fileSystem).Result,
+                  (AddAssetSubOptions opts) => AddAssetsAsync(opts).Result,
+                  (CloseSubOptions opts) => CloseMilestoneAsync(opts).Result,
+                  (PublishSubOptions opts) => PublishReleaseAsync(opts).Result,
+                  (ExportSubOptions opts) => ExportReleasesAsync(opts, fileSystem).Result,
+                  (InitSubOptions opts) => CreateSampleConfigFile(opts, fileSystem),
+                  (ShowConfigSubOptions opts) => ShowConfig(opts, fileSystem),
+                  (LabelSubOptions opts) => CreateLabelsAsync(opts).Result,
+                  errs => 1);
         }
 
         private static async Task<int> CreateReleaseAsync(CreateSubOptions subOptions, IFileSystem fileSystem)
@@ -179,6 +180,46 @@ namespace GitReleaseManager.Cli
             return 0;
         }
 
+        private static async Task<int> CreateLabelsAsync(LabelSubOptions subOptions)
+        {
+            try
+            {
+                ConfigureLogging(subOptions.LogFilePath);
+
+                var newLabels = new List<NewLabel>();
+                newLabels.Add(new NewLabel("Breaking change", "b60205"));
+                newLabels.Add(new NewLabel("Bug", "ee0701"));
+                newLabels.Add(new NewLabel("Build", "009800"));
+                newLabels.Add(new NewLabel("Documentation", "d4c5f9"));
+                newLabels.Add(new NewLabel("Feature", "84b6eb"));
+                newLabels.Add(new NewLabel("Improvement", "207de5"));
+                newLabels.Add(new NewLabel("Question", "cc317c"));
+                newLabels.Add(new NewLabel("good first issue", "7057ff"));
+                newLabels.Add(new NewLabel("help wanted", "33aa3f"));
+
+                var github = subOptions.CreateGitHubClient();
+
+                var labels = await github.Issue.Labels.GetAllForRepository(subOptions.RepositoryOwner, subOptions.RepositoryName);
+
+                foreach (var label in labels)
+                {
+                    await github.Issue.Labels.Delete(subOptions.RepositoryOwner, subOptions.RepositoryName, label.Name);
+                }
+
+                foreach (var label in newLabels)
+                {
+                    await github.Issue.Labels.Create(subOptions.RepositoryOwner, subOptions.RepositoryName, label);
+                }
+
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+
+                return 1;
+            }
+        }
         private static async Task<Release> CreateReleaseFromMilestone(GitHubClient github, string owner, string repository, string milestone, string targetCommitish, IList<string> assets, bool prerelease, Config configuration)
         {
             var releaseNotesBuilder = new ReleaseNotesBuilder(new DefaultGitHubClient(github, owner, repository), owner, repository, milestone, configuration);
@@ -187,7 +228,7 @@ namespace GitReleaseManager.Cli
 
             var releaseUpdate = CreateNewRelease(milestone, result, prerelease, targetCommitish);
 
-            var release = await github.Release.Create(owner, repository, releaseUpdate);
+            var release = await github.Repository.Release.Create(owner, repository, releaseUpdate);
 
             await AddAssets(github, assets, release);
 
@@ -205,7 +246,7 @@ namespace GitReleaseManager.Cli
 
             var releaseUpdate = CreateNewRelease(name, inputFileContents, prerelease, targetCommitish);
 
-            var release = await github.Release.Create(owner, repository, releaseUpdate);
+            var release = await github.Repository.Release.Create(owner, repository, releaseUpdate);
 
             await AddAssets(github, assets, release);
 
@@ -214,7 +255,7 @@ namespace GitReleaseManager.Cli
 
         private static async Task AddAssets(GitHubClient github, string owner, string repository, string tagName, IList<string> assets)
         {
-            var releases = await github.Release.GetAll(owner, repository);
+            var releases = await github.Repository.Release.GetAll(owner, repository);
 
             var release = releases.FirstOrDefault(r => r.TagName == tagName);
 
@@ -239,7 +280,7 @@ namespace GitReleaseManager.Cli
         private static async Task CloseMilestone(GitHubClient github, string owner, string repository, string milestoneTitle)
         {
             var milestoneClient = github.Issue.Milestone;
-            var openMilestones = await milestoneClient.GetAllForRepository(owner, repository, new MilestoneRequest { State = ItemState.Open });
+            var openMilestones = await milestoneClient.GetAllForRepository(owner, repository, new MilestoneRequest { State = ItemStateFilter.Open });
             var milestone = openMilestones.FirstOrDefault(m => m.Title == milestoneTitle);
 
             if (milestone == null)
@@ -252,7 +293,7 @@ namespace GitReleaseManager.Cli
 
         private static async Task PublishRelease(GitHubClient github, string owner, string repository, string tagName)
         {
-            var releases = await github.Release.GetAll(owner, repository);
+            var releases = await github.Repository.Release.GetAll(owner, repository);
             var release = releases.FirstOrDefault(r => r.TagName == tagName);
 
             if (release == null)
@@ -262,7 +303,7 @@ namespace GitReleaseManager.Cli
 
             var releaseUpdate = new ReleaseUpdate { TagName = tagName, Draft = false };
 
-            await github.Release.Edit(owner, repository, release.Id, releaseUpdate);
+            await github.Repository.Release.Edit(owner, repository, release.Id, releaseUpdate);
         }
 
         private static async Task AddAssets(GitHubClient github, IList<string> assets, Release release)
@@ -283,7 +324,7 @@ namespace GitReleaseManager.Cli
                         RawData = File.Open(asset, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)
                     };
 
-                    await github.Release.UploadAsset(release, upload);
+                    await github.Repository.Release.UploadAsset(release, upload);
 
                     // Make sure to tidy up the stream that was created above
                     upload.RawData.Dispose();

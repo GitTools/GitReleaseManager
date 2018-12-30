@@ -15,9 +15,10 @@ namespace GitReleaseManager.Core.Configuration
     {
         public static Config Read(TextReader reader)
         {
-            var deserializer = new Deserializer(null, new HyphenatedNamingConvention());
+            var deserializerBuilder = new DeserializerBuilder().WithNamingConvention(new HyphenatedNamingConvention());
+            var deserializer = deserializerBuilder.Build();
             var deserialize = deserializer.Deserialize<Config>(reader);
-            
+
             if (deserialize == null)
             {
                 return new Config();
@@ -28,7 +29,8 @@ namespace GitReleaseManager.Core.Configuration
 
         public static void Write(Config config, TextWriter writer)
         {
-            var serializer = new Serializer(SerializationOptions.None, new HyphenatedNamingConvention());
+            var serializerBuilder = new SerializerBuilder().WithNamingConvention(new HyphenatedNamingConvention());
+            var serializer = serializerBuilder.Build();
             serializer.Serialize(writer, config);
         }
 
@@ -37,7 +39,7 @@ namespace GitReleaseManager.Core.Configuration
         {
             if (writer == null)
             {
-                throw new ArgumentNullException("writer");
+                throw new ArgumentNullException(nameof(writer));
             }
 
             writer.WriteLine(@"# create:");

@@ -31,11 +31,11 @@ namespace GitReleaseManager.Core
             {
                 if (previousMilestone == null)
                 {
-                    var gitHubClientRepositoryCommitsCompare = await this.gitHubClient.Repository.Commits.Compare(this.user, this.repository, "master", currentMilestone.Title);
+                    var gitHubClientRepositoryCommitsCompare = await this.gitHubClient.Repository.Commit.Compare(this.user, this.repository, "master", currentMilestone.Title);
                     return gitHubClientRepositoryCommitsCompare.AheadBy;
                 }
 
-                var compareResult = await this.gitHubClient.Repository.Commits.Compare(this.user, this.repository, previousMilestone.Title, "master");
+                var compareResult = await this.gitHubClient.Repository.Commit.Compare(this.user, this.repository, previousMilestone.Title, "master");
                 return compareResult.AheadBy;
             }
             catch (NotFoundException)
@@ -54,13 +54,13 @@ namespace GitReleaseManager.Core
 
         public async Task<List<Release>> GetReleases()
         {
-            var allReleases = await this.gitHubClient.Release.GetAll(this.user, this.repository);
+            var allReleases = await this.gitHubClient.Repository.Release.GetAll(this.user, this.repository);
             return allReleases.OrderByDescending(r => r.CreatedAt).ToList();
         }
 
         public async Task<Release> GetSpecificRelease(string tagName)
         {
-            var allReleases = await this.gitHubClient.Release.GetAll(this.user, this.repository);
+            var allReleases = await this.gitHubClient.Repository.Release.GetAll(this.user, this.repository);
             return allReleases.FirstOrDefault(r => r.TagName == tagName);
         }
 
@@ -71,17 +71,17 @@ namespace GitReleaseManager.Core
                 this.user,
                 this.repository,
                 new MilestoneRequest
-                    {
-                        State = ItemState.Closed
-                    }).Result;
+                {
+                    State = ItemStateFilter.Closed
+                }).Result;
 
             var open = milestonesClient.GetAllForRepository(
                 this.user,
                 this.repository,
                 new MilestoneRequest
-                    {
-                        State = ItemState.Open
-                    }).Result;
+                {
+                    State = ItemStateFilter.Open
+                }).Result;
 
             return new ReadOnlyCollection<Milestone>(closed.Concat(open).ToList());
         }

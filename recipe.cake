@@ -1,4 +1,4 @@
-#load nuget:https://www.myget.org/F/cake-contrib/api/v2?package=Cake.Recipe&prerelease
+#load nuget:https://ci.appveyor.com/nuget/cake-recipe?package=Cake.Recipe&prerelease
 
 Environment.SetVariableNames(githubUserNameVariable: "GITTOOLS_GITHUB_USERNAME",
                             githubPasswordVariable: "GITTOOLS_GITHUB_PASSWORD");
@@ -10,15 +10,15 @@ BuildParameters.SetParameters(context: Context,
                             repositoryOwner: "GitTools",
                             repositoryName: "GitReleaseManager",
                             appVeyorAccountName: "GitTools",
-                            testFilePattern: "/**/*.Tests.dll",
-                            shouldRunGitVersion: true);
+                            shouldRunGitVersion: true,
+                            shouldRunDotNetCorePack: true);
 
 BuildParameters.PrintParameters(Context);
 
 ToolSettings.SetToolSettings(context: Context,
                             dupFinderExcludePattern: new string[] {
                                 BuildParameters.RootDirectoryPath + "/Source/GitReleaseManager.Tests/*.cs" },
-                            testCoverageFilter: "+[*]* -[xunit.*]* -[Cake.Core]* -[Cake.Testing]* -[*.Tests]* -[Octokit]* -[YamlDotNet]*",
+                            testCoverageFilter: "+[*]* -[xunit.*]* -[Cake.Core]* -[Cake.Testing]* -[*.Tests]* -[Octokit]* -[YamlDotNet]* -[AlphaFS]* -[ApprovalTests]* -[ApprovalUtilities]*",
                             testCoverageExcludeByAttribute: "*.ExcludeFromCodeCoverage*",
                             testCoverageExcludeByFile: "*/*Designer.cs;*/*.g.cs;*/*.g.i.cs");
-Build.Run();
+Build.RunDotNetCore();

@@ -30,16 +30,16 @@ namespace GitReleaseManager.Core
             var closedIssueRequest = new RepositoryIssueRequest
             {
                 Milestone = milestone.Number.ToString(CultureInfo.InvariantCulture),
-                State = ItemState.Closed
+                State = ItemStateFilter.Closed
             };
             var openIssueRequest = new RepositoryIssueRequest
             {
                 Milestone = milestone.Number.ToString(CultureInfo.InvariantCulture),
-                State = ItemState.Open
+                State = ItemStateFilter.Open
             };
-            var parts = milestone.Url.AbsolutePath.Split('/');
-            var user = parts[2];
-            var repository = parts[3];
+            var parts = milestone.Url.Split('/');
+            var user = parts[4];
+            var repository = parts[5];
             var closedIssues = await gitHubClient.Issue.GetAllForRepository(user, repository, closedIssueRequest);
             var openIssues = await gitHubClient.Issue.GetAllForRepository(user, repository, openIssueRequest);
             return openIssues.Union(closedIssues);
@@ -49,10 +49,10 @@ namespace GitReleaseManager.Core
         {
             if (milestone == null)
             {
-                throw new ArgumentNullException("milestone");
+                throw new ArgumentNullException(nameof(milestone));
             }
 
-            var parts = milestone.Url.AbsolutePath.Split('/');
+            var parts = milestone.Url.Split('/');
             var user = parts[2];
             var repository = parts[3];
 

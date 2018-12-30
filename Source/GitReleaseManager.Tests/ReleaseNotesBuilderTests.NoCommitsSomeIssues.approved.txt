@@ -1,4 +1,4 @@
-﻿As part of this release we had [3 issues](https://github.com/FakeRepository/issues/issues?milestone=0&state=closed) closed.
+﻿As part of this release we had [3 issues](https://github.com/gep13/FakeRepository/issues?q=milestone%3A1.2.3?closed=1) closed.
 
 
 __Bug__

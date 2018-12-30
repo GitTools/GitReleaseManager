@@ -54,11 +54,11 @@ namespace GitReleaseManager.Core
                     var commitsLink = this.GetCommitsLink(previousMilestone);
                     var commitsText = string.Format(numberOfCommits == 1 ? "{0} commit" : "{0} commits", numberOfCommits);
 
-                    stringBuilder.AppendFormat(@"As part of this release we had [{0}]({1}) which resulted in [{2}]({3}) being closed.", commitsText, commitsLink, issuesText, this.targetMilestone.HtmlUrl());
+                    stringBuilder.AppendFormat(@"As part of this release we had [{0}]({1}) which resulted in [{2}]({3}) being closed.", commitsText, commitsLink, issuesText, this.targetMilestone.HtmlUrl + "?closed=1");
                 }
                 else
                 {
-                    stringBuilder.AppendFormat(@"As part of this release we had [{0}]({1}) closed.", issuesText, this.targetMilestone.HtmlUrl());
+                    stringBuilder.AppendFormat(@"As part of this release we had [{0}]({1}) closed.", issuesText, this.targetMilestone.HtmlUrl + "?closed=1");
                 }
             }
             else if (numberOfCommits > 0)
@@ -85,7 +85,7 @@ namespace GitReleaseManager.Core
 
         private void Append(IEnumerable<Issue> issues, string label, StringBuilder stringBuilder)
         {
-            var features = issues.Where(x => x.Labels.Any(l => l.Name == label)).ToList();
+            var features = issues.Where(x => x.Labels.Any(l => l.Name.ToUpperInvariant() == label.ToUpperInvariant())).ToList();
 
             if (features.Count > 0)
             {
