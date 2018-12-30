@@ -10,7 +10,8 @@ BuildParameters.SetParameters(context: Context,
                             repositoryOwner: "GitTools",
                             repositoryName: "GitReleaseManager",
                             appVeyorAccountName: "GitTools",
-                            shouldRunGitVersion: true);
+                            shouldRunGitVersion: true,
+                            shouldRunDotNetCorePack: true);
 
 BuildParameters.PrintParameters(Context);
 

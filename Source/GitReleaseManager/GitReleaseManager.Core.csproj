@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <RootNamespace>GitSReleaseManager.Core</RootNamespace>
-    <TargetFramework>net451</TargetFramework>
+    <TargetFrameworks>netstandard2.0;net451</TargetFrameworks>
     <BuildToolsFxCopVersion>1.0.1</BuildToolsFxCopVersion>
     <Title>GitReleaseManager.Core</Title>
     <Description>Create release notes in markdown given a GitHub milestone</Description>
@@ -10,6 +9,7 @@
     <CodeAnalysisRuleSet>..\GitReleaseManager.ruleset</CodeAnalysisRuleSet>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <DebugType>full</DebugType>
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <RunCodeAnalysisRestore>False</RunCodeAnalysisRestore>
