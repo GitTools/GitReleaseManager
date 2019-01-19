@@ -9,6 +9,6 @@ The files contained within this Chocolatey Package are the same as those that ar
 
 https://github.com/GitTools/GitReleaseManager/releases
 
-If you have any concerns about the contents of this package, please raise am issue here:
+If you have any concerns about the contents of this package, please raise an issue here:
 
 https://github.com/GitTools/GitReleaseManager/releases
