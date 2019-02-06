@@ -2,7 +2,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <AssemblyName>GitReleaseManager</AssemblyName>
-    <TargetFrameworks>netcoreapp2.0;net451</TargetFrameworks>
+    <TargetFrameworks>netcoreapp2.0;net462</TargetFrameworks>
     <BuildToolsFxCopVersion>1.0.1</BuildToolsFxCopVersion>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
@@ -55,5 +55,6 @@
   <ItemGroup>
     <PackageReference Include="CommandLineParser" Version="2.3.0" />
     <PackageReference Include="Octokit" Version="0.32.0" />
+    <PackageReference Include="Spectre.Cli" Version="0.20.0" />
   </ItemGroup>
 </Project>
