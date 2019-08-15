@@ -36,7 +36,7 @@ notifications:
 #---------------------------------#
 cache:
 - Source\packages -> Source\**\packages.config
-- Tools -> build.ps1
+- Tools -> recipe.cake
 
 #---------------------------------#
 #  Skip builds for doc changes    #
