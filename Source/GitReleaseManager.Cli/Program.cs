@@ -12,6 +12,7 @@ namespace GitReleaseManager.Cli
     using System.IO;
     using System.Linq;
     using System.Net;
+    using System.Security.Cryptography;
     using System.Text;
     using System.Threading.Tasks;
     using CommandLine;
@@ -230,7 +231,7 @@ namespace GitReleaseManager.Cli
 
             var release = await github.Repository.Release.Create(owner, repository, releaseUpdate);
 
-            await AddAssets(github, assets, release);
+            await AddAssets(github, owner, repository, assets, release);
 
             return release;
         }
@@ -248,7 +249,7 @@ namespace GitReleaseManager.Cli
 
             var release = await github.Repository.Release.Create(owner, repository, releaseUpdate);
 
-            await AddAssets(github, assets, release);
+            await AddAssets(github, owner, repository, assets, release);
 
             return release;
         }
@@ -265,7 +266,7 @@ namespace GitReleaseManager.Cli
                 return;
             }
 
-            await AddAssets(github, assets, release);
+            await AddAssets(github, owner, repository, assets, release);
         }
 
         private static async Task<string> ExportReleases(GitHubClient github, string owner, string repository, string tagName, Config configuration)
@@ -306,7 +307,7 @@ namespace GitReleaseManager.Cli
             await github.Repository.Release.Edit(owner, repository, release.Id, releaseUpdate);
         }
 
-        private static async Task AddAssets(GitHubClient github, IList<string> assets, Release release)
+        private static async Task AddAssets(GitHubClient github, string owner, string repository, IList<string> assets, Release release)
         {
             if (assets != null)
             {
@@ -329,6 +330,35 @@ namespace GitReleaseManager.Cli
                     // Make sure to tidy up the stream that was created above
                     upload.RawData.Dispose();
                 }
+                await AddAssetsSha256(github, owner, repository, assets, release);
+            }
+        }
+
+        private static async Task AddAssetsSha256(GitHubClient github, string owner, string repository, IList<string> assets, Release release)
+        {
+            if (assets != null && assets.Any())
+            {
+                var stringBuilder = new StringBuilder(release.Body);
+
+                stringBuilder.AppendLine("__SHA256 Hashes of the release artifacts__");
+
+                foreach (var asset in assets)
+                {
+                    var file = new FileInfo(asset);
+                    if (!file.Exists)
+                    {
+                        continue;
+                    }
+
+                    stringBuilder.AppendFormat("- `{0}`\r\n", file.Name);
+                    stringBuilder.AppendFormat("\t- {0}\r\n", ComputeSha256Hash(asset));
+                }
+
+                stringBuilder.AppendLine();
+
+                var releaseUpdate = release.ToUpdate();
+                releaseUpdate.Body = stringBuilder.ToString();
+                await github.Repository.Release.Edit(owner, repository, release.Id, releaseUpdate);
             }
         }
 
@@ -394,5 +424,25 @@ namespace GitReleaseManager.Cli
             var contents = string.Format(CultureInfo.InvariantCulture, "{0}\t\t{1}\r\n", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture), s);
             File.AppendAllText(logFilePath, contents);
         }
+
+        private static string ComputeSha256Hash(string asset)  
+        {  
+            // Create a SHA256   
+            using (var sha256Hash = SHA256.Create())
+            using (var fileStream = File.Open(asset, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            {
+                // ComputeHash - returns byte array  
+                var bytes = sha256Hash.ComputeHash(fileStream);
+
+                // Convert byte array to a string   
+                var builder = new StringBuilder();
+                foreach (var t in bytes)
+                {
+                    builder.Append(t.ToString("x2"));
+                }
+
+                return builder.ToString();
+            }
+        }  
     }
 }
