@@ -1,11 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <AssemblyName>GitReleaseManager</AssemblyName>
 
     <PackAsTool>true</PackAsTool>
-    <TargetFrameworks>netcoreapp2.1</TargetFrameworks>
+    <TargetFrameworks>netcoreapp2.1;netcoreapp3.0</TargetFrameworks>
     <ToolCommandName>dotnet-gitreleasemanager</ToolCommandName>
     <PackageId>GitReleaseManager.Tool</PackageId>
 
