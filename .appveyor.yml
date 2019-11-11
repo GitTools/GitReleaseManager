@@ -37,10 +37,3 @@ notifications:
 cache:
 - Source\packages -> Source\**\packages.config
 - Tools -> recipe.cake
-
-#---------------------------------#
-#  Skip builds for doc changes    #
-#---------------------------------#
-skip_commits:
-  # Regex for matching commit message
-  message: /(doc).*/
