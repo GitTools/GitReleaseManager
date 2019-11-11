@@ -22,7 +22,7 @@ export:
 
 This results in a file which looks like this:
 
-![Example Exported Release Notes](https://raw.githubusercontent.com/GitTools/GitReleaseManager/develop/docs/input/docs/images/example-export.png)
+![Example Exported Release Notes](../images/example-export.png)
 
 :::{.alert .alert-info}
 The important things to note in the above image are that a created date has been added for each release, via the include-created-date-in-title parameter (and it is possible to configure the DateTime format string that is used).  And also, the "Where to get it" section has not been included.  Since we are including the release notes within the Chocolatey GUI application, the user already has it installed, so they don't need to know where to get it.

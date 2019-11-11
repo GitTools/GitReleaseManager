@@ -22,7 +22,7 @@ create:
 
 This would result in the following [release notes](https://github.com/chocolatey/ChocolateyGUI/releases/tag/0.13.1) being generated:
 
-![Example Release Notes](https://raw.githubusercontent.com/GitTools/GitReleaseManager/develop/docs/input/docs/images/example-release-notes.png)
+![Example Release Notes](../images/example-release-notes.png)
 
 :::{.alert .alert-info}
 The generated URL for the link to Chocolatey.org includes the milestone number.  The complete URL is https://chocolatey.org/packages/chocolateyGUI/0.13.1.  This was achieved by using a regular expression replacement of the [footer-content](default-configuration), using the [milestone-replace-text](default-configuration) property as the text to replace with the actual milestone.
