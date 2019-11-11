@@ -4,11 +4,11 @@
 [![Coverage Status](https://coveralls.io/repos/GitTools/GitReleaseManager/badge.svg?branch=develop)](https://coveralls.io/r/GitTools/GitReleaseManager?branch=develop)
 [![Coverity Scan Build Status](https://scan.coverity.com/projects/5110/badge.svg)](https://scan.coverity.com/projects/5110)
 
-Do you detest creating release notes for your software applications hosted on GitHub?  If so, this is the tool for you.  
+Do you detest creating release notes for your software applications hosted on GitHub?  If so, this is the tool for you.
 
-Using a simple set of configuration properties, you can fully automate the creation and export of Release Notes from your GitHub hosted project.  
+Using a simple set of configuration properties, you can fully automate the creation and export of Release Notes from your GitHub hosted project.
 
-As an example see this [Release](https://github.com/chocolatey/ChocolateyGUI/releases/tag/0.12.0) for [ChocolateyGUI](https://github.com/chocolatey/ChocolateyGUI) which was created using GitReleaseManager.  
+As an example see this [Release](https://github.com/chocolatey/ChocolateyGUI/releases/tag/0.12.0) for [Chocolatey GUI](https://github.com/chocolatey/ChocolateyGUI) which was created using GitReleaseManager.
 
 GitReleaseManager allows you to:
 
@@ -24,7 +24,7 @@ You can install GitReleaseManager via Chocolatey by executing:
 
 `choco install gitreleasemanager.portable`
 
-**NOTE:** 
+**NOTE:**
 Depending on which version of Chocolatey you are using, you may be required to confirm the installation of the application. You can avoid this prompt using the following command:
 
 `choco install gitreleasemanager.portable -y`
@@ -37,7 +37,7 @@ This uses the public GitReleaseManager feed which is hosted on [MyGet.org](https
 
 ## Build Status
 
-AppVeyor  
+AppVeyor
 -------------
 [![AppVeyor Build status](https://ci.appveyor.com/api/projects/status/hfad7hkscfx4423p/branch/develop?svg=true)](https://ci.appveyor.com/project/GitTools/gitreleasemanager/branch/develop)
 
@@ -63,7 +63,7 @@ The documentation for GitReleaseManager can be found on [ReadTheDocs](http://git
 
 GitReleaseManager is brought to you by quite a few people and frameworks.  See [CREDITS](https://github.com/GitTools/GitReleaseManager/blob/develop/Documentation/Legal/CREDITS.md) for full information.
 
-Full original credit has to go to the people at [Particular Software](http://www.particular.net/), without whom this project would not have been possible.  They originally created the [GitHubReleaseNotes](https://github.com/Particular/GitHubReleaseNotes) project, which GitReleaseManager is based on, and draws a lot of inspiration from.  
+Full original credit has to go to the people at [Particular Software](http://www.particular.net/), without whom this project would not have been possible.  They originally created the [GitHubReleaseNotes](https://github.com/Particular/GitHubReleaseNotes) project, which GitReleaseManager is based on, and draws a lot of inspiration from.
 
 Where GitHubReleaseNotes uses a set of fixed configuration, based on Particular's internal usage requirements, GitReleaseManager attempts to be fully configurable, so that the end user can decide what should be done when creating and exporting Release Notes on GitHub.  Huge thanks to the people at Particular for their support in helping me create this project.  For more information about what has changed between GitHubReleaseNotes and GitReleaseManager, see this [issue](https://github.com/GitTools/GitReleaseManager/issues/24).
 
