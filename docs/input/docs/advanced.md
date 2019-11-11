@@ -7,12 +7,9 @@ Title: Advanced Workflow
 
 In order to best understand the use case for GitReleaseManager let's take a look at an example workflow currently in use by the ChocolateyGUI project.
 
-<div class="admonition note">
-    <p class="first admonition-title">Note</p>
-    <p class="last">
-        ChocolateyGUI uses a number of concepts, for example, GitFlow, psake build script engine, AppVeyor Continuous Integration, as well as using GitReleaseManager.  In order to understand the usage of GitReleaseManager for this project, you sort of have to understand the entire process.  As a result, this walk-through steps you through the entire end to end process, which as a result, means it is quite lengthy.
-    </p>
-</div>
+:::{.alert .alert-info}
+ChocolateyGUI uses a number of concepts, for example, GitFlow, psake build script engine, AppVeyor Continuous Integration, as well as using GitReleaseManager.  In order to understand the usage of GitReleaseManager for this project, you sort of have to understand the entire process.  As a result, this walk-through steps you through the entire end to end process, which as a result, means it is quite lengthy.
+:::
 
 # ChocolateyGUI
 [ChocolateyGUI](https://github.com/chocolatey/ChocolateyGUI) is an open source project, hosted on GitHub that makes use of GitReleaseManager to create and export it's release notes.  Before we can get into how GitReleaseManager is used, we need to take a look at how ChocolateyGUI is setup.

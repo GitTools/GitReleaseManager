@@ -19,9 +19,6 @@ gitreleasemanager.cli.exe init -l c:\temp\log.txt
 gitreleasemanager.cli.exe init -logFilePath c:\temp\log.txt
 ```
 
-<div class="admonition note">
-    <p class="first admonition-title">Note</p>
-    <p class="last">
-        Assuming you simply wanted to **pipe** the output from GitReleaseManager to a file, when executing directly from the command line, it is not required to use the -l parameter.  The log messages written to the console window, would simply be piped to the output file.
-    </p>
-</div>
+:::{.alert .alert-info}
+Assuming you simply wanted to **pipe** the output from GitReleaseManager to a file, when executing directly from the command line, it is not required to use the -l parameter.  The log messages written to the console window, would simply be piped to the output file.
+:::

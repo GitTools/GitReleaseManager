@@ -22,9 +22,6 @@ issue-labels-alias:
       plural:  Qux
 ```
 
-<div class="admonition note">
-    <p class="first admonition-title">Note</p>
-    <p class="last">
-        You can add as many label aliases as required.
-    </p>
-</div>
+:::{.alert .alert-info}
+You can add as many label aliases as required.
+:::

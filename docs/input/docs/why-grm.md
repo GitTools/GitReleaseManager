@@ -7,12 +7,9 @@ Title: Why use GitReleaseManager
 
 There are a number of reasons that you would want to incorporate GitReleaseManager into your workflow.
 
-<div class="admonition note">
-    <p class="first admonition-title">Note</p>
-    <p class="last">
-        GitReleaseManager works best when included within an automated Build Process, using something like psake, or Octopus Deploy, etc.  However, it can also be used as a standalone tool, running directly at the command line.
-    </p>
-</div>
+:::{.alert .alert-info}
+GitReleaseManager works best when included within an automated Build Process, using something like psake, or Octopus Deploy, etc.  However, it can also be used as a standalone tool, running directly at the command line.
+:::
 
 Here are a few examples:
 
@@ -24,12 +21,9 @@ Assuming that you are already using the concept of milestones in GitHub, once a 
 
 Even if you don't want to use GitReleaseManager to create the release notes on GitHub, you may still want the ability to Publish a Release (which has the result of creating a tag in your repository).  This can be done using the [publish command](commands/publish.md).
 
-<div class="admonition note">
-    <p class="first admonition-title">Note</p>
-    <p class="last">
-        Publishing a Release also closes the associated Milestone for the Release.
-    </p>
-</div>
+:::{.alert .alert-info}
+Publishing a Release also closes the associated Milestone for the Release.
+:::
 
 ## Add Asset to Release
 

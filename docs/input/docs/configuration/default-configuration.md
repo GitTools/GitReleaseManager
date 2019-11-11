@@ -32,12 +32,9 @@ issue-labels-exclude:
 
 Essentially, the only settings that are enabled by default are those that specify which labels to include and which to exclude.
 
-<div class="admonition note">
-    <p class="first admonition-title">Note</p>
-    <p class="last">
-        Not all options are required.  For example, footer-content, is an empty string by default.
-    </p>
-</div>
+:::{.alert .alert-info}
+Not all options are required.  For example, footer-content, is an empty string by default.
+:::
 
 ## Create Options
 When creating a Release, there are a number of options which can be set to control the look and feel of the generated release notes.

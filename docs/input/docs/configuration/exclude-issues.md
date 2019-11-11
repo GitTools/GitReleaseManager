@@ -14,16 +14,10 @@ issue-labels-exclude:
 - Internal Refactoring
 ```
 
-<div class="admonition note">
-    <p class="first admonition-title">Note</p>
-    <p class="last">
-        You can add as many issue labels into this section as required.  Any issue, included within a milestone that contains a label specified within this list will NOT be included within the generated release notes.
-    </p>
-</div>
+:::{.alert .alert-info}
+You can add as many issue labels into this section as required.  Any issue, included within a milestone that contains a label specified within this list will NOT be included within the generated release notes.
+:::
 
-<div class="admonition attention">
-    <p class="first admonition-title">Warning</p>
-    <p class="last">
-        All issues assigned to a milestone have to have a label which matches to one listed in the include to exclude sections of the GitReleaseManager.yaml file or the default configuration.
-    </p>
-</div>
+:::{.alert .alert-warning}
+All issues assigned to a milestone have to have a label which matches to one listed in the include to exclude sections of the GitReleaseManager.yaml file or the default configuration.
+:::
