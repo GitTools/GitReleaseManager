@@ -7,7 +7,6 @@
         <link rel="shortcut icon" href="/GitReleaseManager/assets/img/favicon.ico" type="image/x-icon">
         <link rel="icon" href="/GitReleaseManager/assets/img/favicon.ico" type="image/x-icon">
         <title>GitReleaseManager - API - ReleaseNotesBuilder Class</title>
-        <link href="/GitReleaseManager/assets/css/mermaid.css" rel="stylesheet">
         <link href="/GitReleaseManager/assets/css/highlight.css" rel="stylesheet">
         <link href="/GitReleaseManager/assets/css/bootstrap/bootstrap.css" rel="stylesheet">
         <link href="/GitReleaseManager/assets/css/adminlte/AdminLTE.css" rel="stylesheet">
@@ -22,6 +21,7 @@
         <script src="/GitReleaseManager/assets/js/jquery.slimscroll.min.js"></script>
         <script src="/GitReleaseManager/assets/js/jquery.sticky-kit.min.js"></script>
         <script src="/GitReleaseManager/assets/js/mermaid.min.js"></script>
+        <script src="/GitReleaseManager/assets/js/svg-pan-zoom.min.js"></script>
         <!--[if lt IE 9]>
         <script src="/GitReleaseManager/assets/js/html5shiv.min.js"></script>
         <script src="/GitReleaseManager/assets/js/respond.min.js"></script>
@@ -56,7 +56,7 @@
                     <!-- Collect the nav links, forms, and other content for toggling -->
                     <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
                         <ul class="nav navbar-nav">                            
-                                    <li><a href="/GitReleaseManager/tasks">Tasks</a></li>
+                                    <li><a href="/GitReleaseManager/docs">Docs</a></li>
         <li class="active"><a href="/GitReleaseManager/api">API</a></li>
  
                         </ul>       
@@ -135,8 +135,6 @@
 			<li class="header">Namespace</li>
 		<li><a href="/GitReleaseManager/api/GitReleaseManager.Core">GitReleaseManager<wbr>.Core</a></li>
 		<li role="separator" class="divider"></li>
-			<li class="header">Interface Types</li>
-				<li><a href="/GitReleaseManager/api/GitReleaseManager.Core/IGitHubClient">IGitHubClient</a></li>
 			<li class="header">Class Types</li>
 				<li><a href="/GitReleaseManager/api/GitReleaseManager.Core/DefaultGitHubClient">DefaultGitHubClient</a></li>
 				<li><a href="/GitReleaseManager/api/GitReleaseManager.Core/Logger">Logger</a></li>
@@ -144,6 +142,8 @@
 				<li><a href="/GitReleaseManager/api/GitReleaseManager.Core/OctokitExtensions">OctokitExtensions</a></li>
 				<li class="selected"><a href="/GitReleaseManager/api/GitReleaseManager.Core/ReleaseNotesBuilder">ReleaseNotesBuilder</a></li>
 				<li><a href="/GitReleaseManager/api/GitReleaseManager.Core/ReleaseNotesExporter">ReleaseNotesExporter</a></li>
+			<li class="header">Interface Types</li>
+				<li><a href="/GitReleaseManager/api/GitReleaseManager.Core/IGitHubClient">IGitHubClient</a></li>
 
 
                     </ul>
@@ -186,8 +186,8 @@
 					</div>		
 					<div class="col-md-6">
 						<div class="mermaid">
-							graph TD
-	Base0["object"]--&gt;Type
+							graph BT
+	Type--&gt;Base0["object"]
 	Type["ReleaseNotesBuilder"]
 class Type type-node
 
@@ -276,22 +276,53 @@ class Type type-node
                 $(document.body).removeClass('sidebar-open');
             });
             
-            $(document).load(function() {
+            $(document).ready(function() {
                 mermaid.initialize(
                 {
                     flowchart:
                     {
-                        htmlLabels: false,
-                        useMaxWidth:false
-                    }
-                });  
-                mermaid.init(undefined, ".mermaid")
-                $('svg').addClass('img-responsive');
+                        useMaxWidth: false
+                    },
+					startOnLoad: false,
+					cloneCssStyles: false
+                });     
+                mermaid.init(undefined, ".mermaid");
+
+                // Remove the max-width setting that Mermaid sets
+                var mermaidSvg = $('.mermaid svg');
+                mermaidSvg.addClass('img-responsive');
+                mermaidSvg.css('max-width', '');
+
+                // Make it scrollable
+				var target = document.querySelector(".mermaid svg");
+				if(target !== null)
+				{
+					var panZoom = window.panZoom = svgPanZoom(target, {
+						zoomEnabled: true,
+						controlIconsEnabled: true,
+						fit: true,
+						center: true,
+                        maxZoom: 20,
+                        zoomScaleSensitivity: 0.6
+					});			                          
+
+                    // Do the reset once right away to fit the diagram
+                    panZoom.resize();
+                    panZoom.fit();
+                    panZoom.center();
+                    
+                    $(window).resize(function(){
+                        panZoom.resize();
+                        panZoom.fit();
+                        panZoom.center();
+                    });
+				}
                 
                 $('pre code').each(function(i, block) {
                     hljs.highlightBlock(block);
                 });  
             });
+
             hljs.initHighlightingOnLoad();
 
             // Back to top

@@ -1,0 +1,298 @@
+﻿<!DOCTYPE html><html><head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+        <meta name="description">
+        <meta name="keywords" content="static content generator,static site generator,static site,HTML,web development,.NET,C#,Razor,Markdown,YAML">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="shortcut icon" href="/GitReleaseManager/assets/img/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="/GitReleaseManager/assets/img/favicon.ico" type="image/x-icon">
+        <title>GitReleaseManager - Advanced Workflow</title>
+        <link href="/GitReleaseManager/assets/css/highlight.css" rel="stylesheet">
+        <link href="/GitReleaseManager/assets/css/bootstrap/bootstrap.css" rel="stylesheet">
+        <link href="/GitReleaseManager/assets/css/adminlte/AdminLTE.css" rel="stylesheet">
+        <link href="/GitReleaseManager/assets/css/theme/theme.css" rel="stylesheet">
+        <link href="//fonts.googleapis.com/css?family=Roboto+Mono:400,700|Roboto:400,400i,700,700i" rel="stylesheet">
+        <link href="/GitReleaseManager/assets/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+        <link href="/GitReleaseManager/assets/css/override.css" rel="stylesheet">
+        <script src="/GitReleaseManager/assets/js/jquery-2.2.3.min.js"></script>
+        <script src="/GitReleaseManager/assets/js/bootstrap.min.js"></script>        
+        <script src="/GitReleaseManager/assets/js/app.min.js"></script>         
+        <script src="/GitReleaseManager/assets/js/highlight.pack.js"></script>   
+        <script src="/GitReleaseManager/assets/js/jquery.slimscroll.min.js"></script>
+        <script src="/GitReleaseManager/assets/js/jquery.sticky-kit.min.js"></script>
+        <script src="/GitReleaseManager/assets/js/mermaid.min.js"></script>
+        <script src="/GitReleaseManager/assets/js/svg-pan-zoom.min.js"></script>
+        <!--[if lt IE 9]>
+        <script src="/GitReleaseManager/assets/js/html5shiv.min.js"></script>
+        <script src="/GitReleaseManager/assets/js/respond.min.js"></script>
+        <![endif]-->  
+
+        
+    </head>
+    <body class="hold-transition wyam layout-boxed  ">    
+        <div class="top-banner"></div>
+        <div class="wrapper with-container">
+            <!-- Header -->
+            <header class="main-header">   
+                     
+                <a href="/GitReleaseManager/" class="logo">
+                            <span>GitReleaseManager</span>
+                </a>   
+                         
+                <nav class="navbar navbar-static-top" role="navigation">
+                    <!-- Sidebar toggle button-->
+                        <a href="#" class="sidebar-toggle visible-xs-block" data-toggle="offcanvas" role="button">
+                            <span class="sr-only">Toggle side menu</span>
+                            <i class="fa fa-chevron-circle-right"></i>
+                        </a>
+                                        
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
+                            <span class="sr-only">Toggle side menu</span>
+                            <i class="fa fa-chevron-circle-down"></i>
+                        </button>
+                    </div>
+            
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
+                        <ul class="nav navbar-nav">                            
+                                    <li class="active"><a href="/GitReleaseManager/docs">Docs</a></li>
+        <li><a href="/GitReleaseManager/api">API</a></li>
+ 
+                        </ul>       
+                    </div>
+                    <!-- /.navbar-collapse -->
+                
+                    <!-- Navbar Right Menu -->
+                </nav>
+            </header>
+            
+            <!-- Left side column. contains the logo and sidebar -->
+            <aside class="main-sidebar ">
+                <section class="infobar" data-spy="affix" data-offset-top="60" data-offset-bottom="200"> 
+                    	
+        <div><p><a href="https://github.com/GitTools/GitReleaseManager/tree/develop/docs/input/docs/advanced.md"><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit Content</a></p></div>
+    <div id="infobar-headings"><h6>On This Page</h6><p><a href="#advanced-workflow">Advanced Workflow</a></p>
+<p><a href="#chocolatey-gui">Chocolatey GUI</a></p>
+<hr class="infobar-hidden">
+</div>
+
+                </section>
+                <section class="sidebar">    
+                                     
+                    
+
+                    <ul class="sidebar-menu">
+                        
+
+                <li><a href="/GitReleaseManager/docs/why-grm">Why use GitReleaseManager</a></li>
+                <li class="selected"><a href="/GitReleaseManager/docs/advanced">Advanced Workflow</a></li>
+                <li class="treeview">
+                    <a href="/GitReleaseManager/docs/installation">Installation</a> <a href="#" class="expand"></a>
+                    <ul class="treeview-menu">
+                        
+                <li><a href="/GitReleaseManager/docs/installation/chocolatey">Via Chocolatey</a></li>
+                <li><a href="/GitReleaseManager/docs/installation/nuget">Via NuGet</a></li>
+
+                    </ul>
+                </li>
+                <li class="treeview">
+                    <a href="/GitReleaseManager/docs/configuration">Configuration</a> <a href="#" class="expand"></a>
+                    <ul class="treeview-menu">
+                        
+                <li><a href="/GitReleaseManager/docs/configuration/default-configuration">Default Configuration</a></li>
+                <li><a href="/GitReleaseManager/docs/configuration/create-configuration">Example of Create Configuration</a></li>
+                <li><a href="/GitReleaseManager/docs/configuration/export-configuration">Example of Export Configuration</a></li>
+                <li><a href="/GitReleaseManager/docs/configuration/include-issues">Issues to include</a></li>
+                <li><a href="/GitReleaseManager/docs/configuration/exclude-issues">Issues to exclude</a></li>
+                <li><a href="/GitReleaseManager/docs/configuration/label-aliases">Label Aliases</a></li>
+
+                    </ul>
+                </li>
+                <li class="treeview">
+                    <a href="/GitReleaseManager/docs/commands">Commands</a> <a href="#" class="expand"></a>
+                    <ul class="treeview-menu">
+                        
+                <li><a href="/GitReleaseManager/docs/commands/create">Create</a></li>
+                <li><a href="/GitReleaseManager/docs/commands/add-assets">Add Assets</a></li>
+                <li><a href="/GitReleaseManager/docs/commands/publish">Publish</a></li>
+                <li><a href="/GitReleaseManager/docs/commands/close">Close</a></li>
+                <li><a href="/GitReleaseManager/docs/commands/export">Export</a></li>
+                <li><a href="/GitReleaseManager/docs/commands/init">Init</a></li>
+                <li><a href="/GitReleaseManager/docs/commands/show-config">Show Config</a></li>
+
+                    </ul>
+                </li>
+                <li class="treeview">
+                    <a href="/GitReleaseManager/docs/logging">Logging</a> <a href="#" class="expand"></a>
+                    <ul class="treeview-menu">
+                        
+                <li><a href="/GitReleaseManager/docs/logging/logging">Configure Logging</a></li>
+
+                    </ul>
+                </li>
+                <li class="treeview">
+                    <a href="/GitReleaseManager/docs/credits">Credits</a> <a href="#" class="expand"></a>
+                    <ul class="treeview-menu">
+                        
+                <li><a href="/GitReleaseManager/docs/credits/particular">Particular Software</a></li>
+                <li><a href="/GitReleaseManager/docs/credits/icon">Icon</a></li>
+
+                    </ul>
+                </li>
+
+                    </ul>
+                            
+                </section>                
+            </aside>
+            
+            <!-- Content Wrapper. Contains page content -->
+            <div class="content-wrapper">
+                
+
+
+
+		<section class="content-header">
+			<h1>Advanced Workflow</h1>
+		</section>
+	<section class="content">
+		<h1 id="advanced-workflow">Advanced Workflow</h1>
+<p>In order to best understand the use case for GitReleaseManager let's take a look at an example workflow currently in use by the Chocolatey GUI project.</p>
+<div class="alert alert-info"><p>Chocolatey GUI uses a number of concepts, for example, GitFlow, psake build script engine, AppVeyor Continuous Integration, as well as using GitReleaseManager.  In order to understand the usage of GitReleaseManager for this project, you sort of have to understand the entire process.  As a result, this walk-through steps you through the entire end to end process, which as a result, means it is quite lengthy.</p>
+</div>
+<h1 id="chocolatey-gui">Chocolatey GUI</h1>
+<p><a href="https://github.com/chocolatey/ChocolateyGUI">Chocolatey GUI</a> is an open source project, hosted on GitHub that makes use of GitReleaseManager to create and export it's release notes.  Before we can get into how GitReleaseManager is used, we need to take a look at how Chocolatey GUI is setup.</p>
+<h2 id="github-setup">GitHub Setup</h2>
+<ul>
+<li>All Issues are tracked using the<a href="https://github.com/chocolatey/ChocolateyGUI/issues"> GitHub Issues List</a></li>
+<li>Each Issue is assigned to a <a href="https://github.com/chocolatey/ChocolateyGUI/milestones">project milestone</a></li>
+<li>Each Issue is appropriately tagged using one of the <a href="https://github.com/chocolatey/ChocolateyGUI/labels">pre-defined labels</a></li>
+</ul>
+<h2 id="gitflow">GitFlow</h2>
+<ul>
+<li>Chocolatey GUI uses the <a href="http://nvie.com/posts/a-successful-git-branching-model/">GitFlow Branching Model</a></li>
+<li><a href="https://github.com/ParticularLabs/GitVersion">GitVersion</a> is used to determine the current version number, based on the current state of the repository, i.e. what branch is being worked on, and what tags have been assigned, and how many commits have been made to the repository</li>
+</ul>
+<h2 id="build-artifacts">Build Artifacts</h2>
+<p>Every build of Chocolatey GUI generates a number of Build Artifacts, these include:</p>
+<ul>
+<li>An MSI package for installing Chocolatey GUI</li>
+<li>A Chocolatey package to ease the installation of Chocolatey GUI</li>
+</ul>
+<h2 id="continuous-integration">Continuous Integration</h2>
+<ul>
+<li>Chocolatey GUI uses <a href="http://www.appveyor.com/">AppVeyor</a> as it's Continuous Integration Server.</li>
+<li>Any time a <strong>Pull Request</strong> is created, an AppVeyor build is triggered, but no deployment of the build artifacts takes place</li>
+<li>Any time a commit is made into the **develop **branch, an AppVeyor build is triggered, and the build artifacts are deployed to the <a href="https://www.myget.org/feed/Packages/ghrm_develop">MyGet Develop Feed</a></li>
+<li>Any time a commit is made into the **master **branch, an AppVeyor build is triggered, and the build artifacts are deployed to the <a href="https://www.myget.org/feed/Packages/ghrm_master">MyGet Master Feed</a></li>
+<li>Any time a **tag **is applied to the repository, an AppVeyor build is triggered, and the build artifacts are deployed to <a href="https://chocolatey.org/">Chocolatey.org</a> for public consumption.</li>
+</ul>
+<h2 id="ok-so-where-does-gitreleasemanager-come-into-play">Ok, so where does GitReleaseManager come into play?</h2>
+<p>The role of GitReleaseManager really comes into play when moving between a <strong>release</strong> or <strong>hotfix</strong> branch and the **master **branch.</p>
+<p>Let's say you have done a bunch of work on the develop branch, you want to move all of that work into the master branch, via a release branch.  When you do this, you are effectively saying that the milestone that you were working on is almost ready for release.  It is at this point that you should really know, via the issues list, everything that is being included in the release, and now would seem like a great time to create some release notes.  And this is exactly what the build process for Chocolatey GUI does.  Let's break this down further...</p>
+<ul>
+<li>A **release **branch is created from **develop **branch</li>
+<li>The release branch is merged into master branch, triggering a build (with deployment to MyGet Master Feed).</li>
+<li>During this build, GitReleaseManager is executed, using the <strong>create</strong> command, and the version number which was provided by GitVersion, to create a set of release notes for this milestone - <a href="https://github.com/chocolatey/ChocolateyGUI/blob/09b78495ebc9d334fedf351b021fd7e215c5cf87/BuildScripts/default.ps1#L687">source</a>.</li>
+<li>This set of release notes is created in draft format, ready for review, in the GitHub UI.</li>
+<li>The build artifacts which have been deployed to MyGet Master Feed are tested</li>
+<li>The release notes are reviewed, and ensured to be correct</li>
+<li>Assuming that everything is verified to be correct, the draft release is then published through the GitHub UI, which creates a tag in the repository, triggering another AppVeyor build, this time with deployment to Chocolatey.org</li>
+<li>During this build, GitReleaseManager is executed using the <strong>export</strong> command, so that all release notes can be bundled into the application - <a href="https://github.com/chocolatey/ChocolateyGUI/blob/09b78495ebc9d334fedf351b021fd7e215c5cf87/BuildScripts/default.ps1#L707">source</a></li>
+<li>In addition, GitReleaseManager is executed using the <strong>addasset</strong> command to add the build artifacts to the GitHub release - <a href="https://github.com/chocolatey/ChocolateyGUI/blob/09b78495ebc9d334fedf351b021fd7e215c5cf87/BuildScripts/default.ps1#L731">source</a></li>
+<li>And finally, GitReleaseManager is executed using the <strong>close</strong> command to close the milestone associated with the release that has just been published - <a href="https://github.com/chocolatey/ChocolateyGUI/blob/09b78495ebc9d334fedf351b021fd7e215c5cf87/BuildScripts/default.ps1#L753">source</a></li>
+</ul>
+<p>The end result of this process can be seen <a href="https://github.com/chocolatey/ChocolateyGUI/releases/tag/0.12.0">here</a>.  This release included 218 commits, and 75 issues.  Personally, I simply wouldn't have created such a comprehensive set of release notes manually.  Instead, I would have written something like...</p>
+<pre><code>#0.12.0
+
+This release included lots of bug fixes, and tonnes of new features.  Enjoy!
+</code></pre>
+<p>By leveraging GitVersion, and GitReleaseManager, and a small amount of process (which you are likely already doing), I hope you will agree that you can very easily create a comprehensive set of release notes for your application.</p>
+
+	</section>
+                
+            </div>           
+            
+            <!-- Footer -->
+            <footer class="main-footer">
+            </footer>
+            
+        </div>
+        <div class="wrapper bottom-wrapper">
+            <footer class="bottom-footer">
+                Generated by <a href="https://wyam.io">Wyam</a>
+            </footer>
+        </div>
+        <a href="javascript:" id="return-to-top"><i class="fa fa-chevron-up"></i></a>
+        
+        <script>           
+            // Close the sidebar if we select an anchor link
+            $(".main-sidebar a[href^='#']:not('.expand')").click(function(){
+                $(document.body).removeClass('sidebar-open');
+            });
+            
+            $(document).ready(function() {
+                mermaid.initialize(
+                {
+                    flowchart:
+                    {
+                        useMaxWidth: false
+                    },
+					startOnLoad: false,
+					cloneCssStyles: false
+                });     
+                mermaid.init(undefined, ".mermaid");
+
+                // Remove the max-width setting that Mermaid sets
+                var mermaidSvg = $('.mermaid svg');
+                mermaidSvg.addClass('img-responsive');
+                mermaidSvg.css('max-width', '');
+
+                // Make it scrollable
+				var target = document.querySelector(".mermaid svg");
+				if(target !== null)
+				{
+					var panZoom = window.panZoom = svgPanZoom(target, {
+						zoomEnabled: true,
+						controlIconsEnabled: true,
+						fit: true,
+						center: true,
+                        maxZoom: 20,
+                        zoomScaleSensitivity: 0.6
+					});			                          
+
+                    // Do the reset once right away to fit the diagram
+                    panZoom.resize();
+                    panZoom.fit();
+                    panZoom.center();
+                    
+                    $(window).resize(function(){
+                        panZoom.resize();
+                        panZoom.fit();
+                        panZoom.center();
+                    });
+				}
+                
+                $('pre code').each(function(i, block) {
+                    hljs.highlightBlock(block);
+                });  
+            });
+
+            hljs.initHighlightingOnLoad();
+
+            // Back to top
+            $(window).scroll(function() {
+                if ($(this).scrollTop() >= 200) {        // If page is scrolled more than 50px
+                    $('#return-to-top').fadeIn(1000);    // Fade in the arrow
+                } else {
+                    $('#return-to-top').fadeOut(1000);   // Else fade out the arrow
+                }
+            });
+            $('#return-to-top').click(function() {      // When arrow is clicked
+                $('body,html').animate({
+                    scrollTop : 0                       // Scroll to top of body
+                }, 500);
+            });
+        </script>
+    
+</body></html>

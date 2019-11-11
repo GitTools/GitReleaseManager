@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-	<link rel="self" href="http://gittools.github.io/GitReleaseManager" />
 	<id>http://gittools.github.io/GitReleaseManager</id>
 	<title>GitReleaseManager</title>
-	<rights>2018</rights>
-	<updated>2018-12-30T15:56:11Z</updated>
+	<link rel="self" href="http://gittools.github.io/GitReleaseManager" />
+	<rights>2019</rights>
+	<updated>2019-11-11T10:23:35Z</updated>
 </feed>
