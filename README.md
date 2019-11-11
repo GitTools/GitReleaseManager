@@ -57,7 +57,7 @@ Committers, you should be very familiar with [COMMITTERS](https://github.com/Git
 
 ## Documentation
 
-The documentation for GitReleaseManager can be found on [ReadTheDocs](http://gitreleasemanager.readthedocs.org/en/develop/).
+The documentation for GitReleaseManager can be found on [here](http://gittools.github.io/GitReleaseManager/docs/).
 
 ## Credits
 
