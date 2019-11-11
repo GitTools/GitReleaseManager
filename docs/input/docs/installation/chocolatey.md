@@ -29,4 +29,4 @@ grm
 
 Which should then output something similar to the following:
 
-![GitReleaseManager Usage](https://raw.githubusercontent.com/GitTools/GitReleaseManager/develop/docs/images/grm-usage.png)
+![GitReleaseManager Usage](https://raw.githubusercontent.com/GitTools/GitReleaseManager/develop/docs/input/docs/images/grm-usage.png)
