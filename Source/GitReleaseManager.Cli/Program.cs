@@ -330,6 +330,7 @@ namespace GitReleaseManager.Cli
                     // Make sure to tidy up the stream that was created above
                     upload.RawData.Dispose();
                 }
+
                 await AddAssetsSha256(github, owner, repository, assets, release);
             }
         }
@@ -345,6 +346,7 @@ namespace GitReleaseManager.Cli
                 foreach (var asset in assets)
                 {
                     var file = new FileInfo(asset);
+
                     if (!file.Exists)
                     {
                         continue;
@@ -426,22 +428,25 @@ namespace GitReleaseManager.Cli
         }
 
         private static string ComputeSha256Hash(string asset)  
-        {  
+        {
             // Create a SHA256   
             using (var sha256Hash = SHA256.Create())
-            using (var fileStream = File.Open(asset, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
-                // ComputeHash - returns byte array  
-                var bytes = sha256Hash.ComputeHash(fileStream);
-
-                // Convert byte array to a string   
-                var builder = new StringBuilder();
-                foreach (var t in bytes)
+                using (var fileStream = File.Open(asset, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                 {
-                    builder.Append(t.ToString("x2"));
-                }
+                    // ComputeHash - returns byte array  
+                    var bytes = sha256Hash.ComputeHash(fileStream);
 
-                return builder.ToString();
+                    // Convert byte array to a string   
+                    var builder = new StringBuilder();
+
+                    foreach (var t in bytes)
+                    {
+                        builder.Append(t.ToString("x2"));
+                    }
+
+                    return builder.ToString();
+                }
             }
         }  
     }
