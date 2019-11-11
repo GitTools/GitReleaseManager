@@ -50,7 +50,7 @@ When creating a Release, there are a number of options which can be set to contr
   * **milestone-replace-text**
     * A string value which contains the string which should be replaced in the footer-content with the actual milestone release number. Default is an empty string.
 
-See the [example create configuration section](create-configuration.md) to see an example of how a footer can be configured.
+See the [example create configuration section](create-configuration) to see an example of how a footer can be configured.
 
 ## Export Options
 
@@ -65,10 +65,10 @@ See the [example create configuration section](create-configuration.md) to see a
   * **multiline-regex**
     * A boolean value which indicates that the regular expression should span multiple lines.  Default is false.
 
-See the [example export configuration section](export-configuration.md) to see an example of how the export can be configured.
+See the [example export configuration section](export-configuration) to see an example of how the export can be configured.
 
 ## Issues to include
-See the [Issues to include](include-issues.md) section.
+See the [Issues to include](include-issues) section.
 
 ## Issues to exclude
-See the [Issues to exclude](exclude-issues.md) section.
+See the [Issues to exclude](exclude-issues) section.
