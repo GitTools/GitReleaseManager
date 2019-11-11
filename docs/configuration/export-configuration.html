@@ -168,7 +168,7 @@
   multiline-regex: true
 </code></pre>
 <p>This results in a file which looks like this:</p>
-<p><img src="https://raw.githubusercontent.com/GitTools/GitReleaseManager/develop/docs/images/example-export.png" class="img-fluid" alt="Example Exported Release Notes"></p>
+<p><img src="../images/example-export.png" class="img-fluid" alt="Example Exported Release Notes"></p>
 <div class="alert alert-info"><p>The important things to note in the above image are that a created date has been added for each release, via the include-created-date-in-title parameter (and it is possible to configure the DateTime format string that is used).  And also, the "Where to get it" section has not been included.  Since we are including the release notes within the Chocolatey GUI application, the user already has it installed, so they don't need to know where to get it.</p>
 <p>Assumes that you can create the necessary regular expression, any text can be removed from the exported set of release notes.</p>
 <p>This approach can be used for any project, this example simply shows what is done in the Chocolatey GUI project.</p>
