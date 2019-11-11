@@ -61,7 +61,13 @@ namespace GitReleaseManager.Cli
                 Release release;
                 if (!string.IsNullOrEmpty(subOptions.Milestone))
                 {
-                    release = await CreateReleaseFromMilestone(github, subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone, subOptions.TargetCommitish, subOptions.AssetPaths, subOptions.Prerelease, configuration);
+                    var releaseName = subOptions.Name;
+                    if (string.IsNullOrWhiteSpace(releaseName))
+                    {
+                        releaseName = subOptions.Milestone;
+                    }
+
+                    release = await CreateReleaseFromMilestone(github, subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone, releaseName, subOptions.TargetCommitish, subOptions.AssetPaths, subOptions.Prerelease, configuration);
                 }
                 else
                 {
@@ -221,13 +227,13 @@ namespace GitReleaseManager.Cli
                 return 1;
             }
         }
-        private static async Task<Release> CreateReleaseFromMilestone(GitHubClient github, string owner, string repository, string milestone, string targetCommitish, IList<string> assets, bool prerelease, Config configuration)
+        private static async Task<Release> CreateReleaseFromMilestone(GitHubClient github, string owner, string repository, string milestone, string releaseName, string targetCommitish, IList<string> assets, bool prerelease, Config configuration)
         {
             var releaseNotesBuilder = new ReleaseNotesBuilder(new DefaultGitHubClient(github, owner, repository), owner, repository, milestone, configuration);
 
             var result = await releaseNotesBuilder.BuildReleaseNotes();
 
-            var releaseUpdate = CreateNewRelease(milestone, result, prerelease, targetCommitish);
+            var releaseUpdate = CreateNewRelease(releaseName, milestone, result, prerelease, targetCommitish);
 
             var release = await github.Repository.Release.Create(owner, repository, releaseUpdate);
 
@@ -245,7 +251,7 @@ namespace GitReleaseManager.Cli
 
             var inputFileContents = File.ReadAllText(inputFilePath);
 
-            var releaseUpdate = CreateNewRelease(name, inputFileContents, prerelease, targetCommitish);
+            var releaseUpdate = CreateNewRelease(name, name, inputFileContents, prerelease, targetCommitish);
 
             var release = await github.Repository.Release.Create(owner, repository, releaseUpdate);
 
@@ -364,9 +370,9 @@ namespace GitReleaseManager.Cli
             }
         }
 
-        private static NewRelease CreateNewRelease(string name, string body, bool prerelease, string targetCommitish)
+        private static NewRelease CreateNewRelease(string name, string tagName, string body, bool prerelease, string targetCommitish)
         {
-            var newRelease = new NewRelease(name)
+            var newRelease = new NewRelease(tagName)
             {
                 Draft = true,
                 Body = body,
