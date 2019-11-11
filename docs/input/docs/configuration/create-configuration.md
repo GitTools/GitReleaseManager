@@ -1,3 +1,8 @@
+---
+Order: 20
+Title: Example of Create Configuration
+---
+
 # Example of Create Configuration
 
 When creating a release, it is possible to control the look and feel of the release notes, using settings within the GitReleaseManager.yaml file.

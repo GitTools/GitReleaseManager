@@ -1,3 +1,8 @@
+---
+Order: 50
+Title: Export
+---
+
 # Export
 
 This command will export all the release notes for a given repository on GitHub.  The generated file will be in Markdown format, and the contents of the exported file is configurable using the GitReleaseManager.yaml file, per repository.

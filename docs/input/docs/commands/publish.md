@@ -1,3 +1,8 @@
+---
+Order: 30
+Title: Publish
+---
+
 # Publish
 
 While it would be possible to automatically publish a set of release notes in a single command, it is envisioned that some manual intervention is required to ensure that all release notes are valid, and any additional information is added to the release, prior to publishing.  As a result, a second command is required to actually publish a release.

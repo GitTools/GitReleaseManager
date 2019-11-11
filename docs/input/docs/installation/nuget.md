@@ -1,3 +1,8 @@
+---
+Order: 20
+Title: Via NuGet
+---
+
 # Via NuGet
 
 It is possible to install GitReleaseManager as a Solution Level package in Visual Studio using Nuget.  Simply execute the following installation command:

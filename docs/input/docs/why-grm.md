@@ -1,3 +1,8 @@
+---
+Order: 10
+Title: Why use GitReleaseManager
+---
+
 # Why would I want to use GitReleaseManager?
 
 There are a number of reasons that you would want to incorporate GitReleaseManager into your workflow.

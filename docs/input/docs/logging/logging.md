@@ -1,10 +1,15 @@
+---
+Order: 10
+Title: Configure Logging
+---
+
 # Configure Logging
 
 It is possible to view all the output from GitReleaseManager, either in the console window, or by writing out to a file.
 
 By default, all command output is written to the console window, however, it is possible to specify a text file where command output should be written to.
 
-## **Examples** 
+## **Examples**
 
 Enable logging to a file located in c:\temp\log.txt using the following command:
 

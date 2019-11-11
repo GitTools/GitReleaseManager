@@ -1,3 +1,8 @@
+---
+Order: 40
+Title: Close
+---
+
 # Close
 
 Out of the box, publishing a release on GitHub does not close the milestone associated with the release.  This command, when executed, closes the specified milestone.

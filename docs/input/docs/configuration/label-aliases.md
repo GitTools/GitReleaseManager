@@ -1,3 +1,8 @@
+---
+Order: 60
+Title: Label Aliases
+---
+
 # Label Aliases
 
 When there are more than one issue associated with a particular label, GitReleaseManager will attempt to pluralize the label name.  For example, `Bugs` instead of `Bug`.  However, there are times when this basic pluralization will not work.  For example, `Documentation` will be pluralized as `Documentations` which doesn't really make sense.  In these situations, it is possible to override the automatic title.

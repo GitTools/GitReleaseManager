@@ -1,3 +1,8 @@
+---
+Order: 10
+Title: Create
+---
+
 # Create
 
 This is the main command of GitReleaseManager and it is used to create a draft set of release notes based on a milestone, which has been set up in GitHub.

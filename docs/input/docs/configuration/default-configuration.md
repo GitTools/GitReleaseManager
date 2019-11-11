@@ -1,3 +1,8 @@
+---
+Order: 10
+Title: Default Configuration
+---
+
 # Default Configuration
 
 GitReleaseManager configuration can be controlled using a GitReleaseManager.yaml file, which is typically stored at the root of your project.

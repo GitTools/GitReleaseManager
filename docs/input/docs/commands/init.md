@@ -1,3 +1,8 @@
+---
+Order: 60
+Title: Init
+---
+
 # Init
 
 The Init command is used to create GitReleaseManager.yaml which controls the configurable options of GitReleaseManager

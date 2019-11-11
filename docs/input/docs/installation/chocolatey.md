@@ -1,3 +1,8 @@
+---
+Order: 10
+Title: Via Chocolatey
+---
+
 # Via Chocolatey
 
 It is possible to install the portable version of GitReleaseManager using Chocolatey.  Simply execute the following installation command:
