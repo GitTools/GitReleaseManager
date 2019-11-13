@@ -27,7 +27,7 @@ Please be VERY familiar with [CONTRIBUTING](https://github.com/GitTools/GitRelea
  * Did the user create a branch with these changes? If it is on their master, please ask them to review [CONTRIBUTING](https://github.com/GitTools/GitReleaseManager/blob/develop/CONTRIBUTING.md).
  * Did the user reformat files and they should not have? Was is just white-space? You can try adding [?w=1](https://github.com/blog/967-github-secrets) to the URL on GitHub.
  * Are there tests? We really want any new contributions to contain tests so unless the committer believes this code really needs to be in the code base and is willing to write the tests, then we need to ask the contributor to make a good faith effort in adding test cases. Ask them to review the [contributing document](https://github.com/GitTools/GitReleaseManager/blob/develop/CONTRIBUTING.md) and provide tests. **Note:** Some commits may be refactoring which wouldn't necessarily add additional test sets.
- * Is the code documented properly? Does this additional set of changes require changes to the [documentation](http://gitreleasemanager.readme.io/)?
+ * Is the code documented properly? Does this additional set of changes require changes to the [documentation](http://gittools.github.io/GitReleaseManager/docs/)?
  * Was this code warranted? Did the contributor follow the process of gaining approval for big change sets? If not please have them review the [contributing document](https://github.com/GitTools/GitReleaseManager/blob/develop/CONTRIBUTING.md) and ask them to follow up in the Chat Room.
 
 #### Review the Code
