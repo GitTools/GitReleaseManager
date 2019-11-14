@@ -36,4 +36,10 @@ BuildParameters.Tasks.DotNetCoreBuildTask.Does((context) =>
 BuildParameters.Tasks.CreateReleaseNotesTask
     .IsDependentOn(BuildParameters.Tasks.DotNetCoreBuildTask); // We need to be sure that the executable exist, and have been registered before using it
 
+((CakeTask)BuildParameters.Tasks.ExportReleaseNotesTask.Task).ErrorHandler = null;
+((CakeTask)BuildParameters.Tasks.PublishGitHubReleaseTask.Task).ErrorHandler = null;
+BuildParameters.Tasks.PublishChocolateyPackagesTask.IsDependentOn(BuildParameters.Tasks.PublishGitHubReleaseTask);
+BuildParameters.Tasks.PublishNuGetPackagesTask.IsDependentOn(BuildParameters.Tasks.PublishGitHubReleaseTask);
+BuildParameters.Tasks.PublishMyGetPackagesTask.IsDependentOn(BuildParameters.Tasks.PublishGitHubReleaseTask);
+
 Build.RunDotNetCore();
