@@ -1,26 +1,25 @@
-Contributors
-============
+# Contributors
 
 ## Contributing Process
 
 ### Get Buyoff Or Find Open Community Issues/Features
 
- * Through GitHub, or through the [Chat Room](https://gitter.im/GitTools/GitReleaseManager) (preferred), you talk about a feature you would like to see (or a bug), and why it should be in GitReleaseManager.
-   * If approved through the Chat Room, ensure the accompanying GitHub issue is created with information and a link back to the Chat Room discussion.
- * Once you get a nod you can start on the feature.
- * Alternatively, if a feature is on the issues list with the [community tag](https://github.com/GitTools/GitReleaseManager/labels/Community), it is open for a patch. You should comment that you are signing up for it on the issue so someone else doesn't also sign up for the work.
+* Through GitHub, or through the [Chat Room](https://gitter.im/GitTools/GitReleaseManager) (preferred), you talk about a feature you would like to see (or a bug), and why it should be in GitReleaseManager.
+  * If approved through the Chat Room, ensure the accompanying GitHub issue is created with information and a link back to the Chat Room discussion.
+* Once you get a nod you can start on the feature.
+* Alternatively, if a feature is on the issues list with the [community tag](https://github.com/GitTools/GitReleaseManager/labels/Community), it is open for a patch. You should comment that you are signing up for it on the issue so someone else doesn't also sign up for the work.
 
 ### Set Up Your Environment
 
- * You create, or update, a fork of GitTools/GitReleaseManager under your GitHub account.
- * From there you create a branch named specific to the feature.
- * In the branch you do work specific to the feature.
- * Please also observe the following:
-    * No reformatting
-    * No changing files that are not specific to the feature
-    * More covered below in the **Prepare commits** section.
- * Test your changes and please help us out by updating and implementing some automated tests. It is recommended that all contributors spend some time looking over the tests in the source code. You can't go wrong emulating one of the existing tests and then changing it specific to the behavior you are testing.
- * Please do not update your branch from the master unless we ask you to. See the responding to feedback section below.
+* You create, or update, a fork of GitTools/GitReleaseManager under your GitHub account.
+* From there you create a branch named specific to the feature.
+* In the branch you do work specific to the feature.
+* Please also observe the following:
+  * No reformatting
+  * No changing files that are not specific to the feature
+  * More covered below in the **Prepare commits** section.
+* Test your changes and please help us out by updating and implementing some automated tests. It is recommended that all contributors spend some time looking over the tests in the source code. You can't go wrong emulating one of the existing tests and then changing it specific to the behavior you are testing.
+* Please do not update your branch from the master unless we ask you to. See the responding to feedback section below.
 
 ### Prepare Commits
 
@@ -28,25 +27,25 @@ This section serves to help you understand what makes a good commit.
 
 A commit should observe the following:
 
- * A commit is a small logical unit that represents a change.
- * Should include new or changed tests relevant to the changes you are making.
- * No unnecessary whitespace. Check for whitespace with `git diff --check` and `git diff --cached --check` before commit.
- * You can stage parts of a file for commit.
+* A commit is a small logical unit that represents a change.
+* Should include new or changed tests relevant to the changes you are making.
+* No unnecessary whitespace. Check for whitespace with `git diff --check` and `git diff --cached --check` before commit.
+* You can stage parts of a file for commit.
 
 A commit message should observe the following:
 
-  * The first line of the commit message should be a short description around 50 characters in length and be prefixed with the GitHub issue it refers to with parentheses surrounding that. If the GitHub issue is #25, you should have `(GH-25)` prefixed to the message.
-  * If the commit is about documentation, the message should be prefixed with `(doc)`.
-  * If it is a trivial commit or one of formatting/spaces fixes, it should be prefixed with `(maint)`.
-  * After the subject, skip one line and fill out a body if the subject line is not informative enough.
-  * The body:
-    * Should indent at `72` characters.
-    * Explains more fully the reason(s) for the change and contrasts with previous behavior.
-    * Uses present tense. "Fix" versus "Fixed".
+* The first line of the commit message should be a short description around 50 characters in length and be prefixed with the GitHub issue it refers to with parentheses surrounding that. If the GitHub issue is #25, you should have `(GH-25)` prefixed to the message.
+* If the commit is about documentation, the message should be prefixed with `(doc)`.
+* If it is a trivial commit or one of formatting/spaces fixes, it should be prefixed with `(maint)`.
+* After the subject, skip one line and fill out a body if the subject line is not informative enough.
+* The body:
+  * Should indent at `72` characters.
+  * Explains more fully the reason(s) for the change and contrasts with previous behavior.
+  * Uses present tense. "Fix" versus "Fixed".
 
 A good example of a commit message is as follows:
 
-```
+```shell
 (GH-7) Installation Adds All Required Folders
 
 Previously the installation script worked for the older version of
@@ -62,15 +61,15 @@ choco client properly.
 
 Prerequisites:
 
- * You are making commits in a feature branch.
- * All specs should be passing.
+* You are making commits in a feature branch.
+* All specs should be passing.
 
 Submitting PR:
 
- * Once you feel it is ready, submit the pull request to the `GitTools/GitReleaseManager` repository against the ````develop```` branch ([more information on this can be found here](https://help.github.com/articles/creating-a-pull-request)).
- * In the pull request, outline what you did and point to specific conversations (as in URLs) and issues that you are are resolving. This is a tremendous help for us in evaluation and acceptance.
- * Once the pull request is in, please do not delete the branch or close the pull request (unless something is wrong with it).
- * One of the Team members, or one of the committers, will evaluate it within a reasonable time period (which is to say usually within 2-4 weeks). Some things get evaluated faster or fast tracked. We are human and we have active lives outside of open source so don't fret if you haven't seen any activity on your pull request within a month or two. We don't have a Service Level Agreement (SLA) for pull requests. Just know that we will evaluate your pull request.
+* Once you feel it is ready, submit the pull request to the `GitTools/GitReleaseManager` repository against the ````develop```` branch ([more information on this can be found here](https://help.github.com/articles/creating-a-pull-request)).
+* In the pull request, outline what you did and point to specific conversations (as in URLs) and issues that you are are resolving. This is a tremendous help for us in evaluation and acceptance.
+* Once the pull request is in, please do not delete the branch or close the pull request (unless something is wrong with it).
+* One of the Team members, or one of the committers, will evaluate it within a reasonable time period (which is to say usually within 2-4 weeks). Some things get evaluated faster or fast tracked. We are human and we have active lives outside of open source so don't fret if you haven't seen any activity on your pull request within a month or two. We don't have a Service Level Agreement (SLA) for pull requests. Just know that we will evaluate your pull request.
 
 ### Respond to Feedback on Pull Request
 
@@ -80,18 +79,18 @@ If we have comments or questions when we do evaluate it and receive no response,
 
 Sometimes we may need you to rebase your commit against the latest code before we can review it further. If this happens, you can do the following:
 
- * `git fetch upstream` (upstream would be the mainstream repo or `GitTools/GitReleaseManager` in this case)
- * `git checkout develop`
- * `git rebase upstream/develop`
- * `git checkout your-branch`
- * `git rebase develop`
- * Fix any merge conflicts
- * `git push origin your-branch` (origin would be your GitHub repo or `your-github-username/GitReleaseManager` in this case). You may need to `git push origin your-branch --force` to get the commits pushed. This is generally acceptable with topic branches not in the mainstream repository.
+* `git fetch upstream` (upstream would be the mainstream repo or `GitTools/GitReleaseManager` in this case)
+* `git checkout develop`
+* `git rebase upstream/develop`
+* `git checkout your-branch`
+* `git rebase develop`
+* Fix any merge conflicts
+* `git push origin your-branch` (origin would be your GitHub repo or `your-github-username/GitReleaseManager` in this case). You may need to `git push origin your-branch --force` to get the commits pushed. This is generally acceptable with topic branches not in the mainstream repository.
 
 The only reasons a pull request should be closed and resubmitted are as follows:
 
-  * When the pull request is targeting the wrong branch (this doesn't happen as often).
-  * When there are updates made to the original by someone other than the original contributor. Then the old branch is closed with a note on the newer branch this supersedes #github_number.
+* When the pull request is targeting the wrong branch (this doesn't happen as often).
+* When there are updates made to the original by someone other than the original contributor. Then the old branch is closed with a note on the newer branch this supersedes #github_number.
 
 ## Other General Information
 
