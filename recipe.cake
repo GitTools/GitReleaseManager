@@ -33,4 +33,7 @@ BuildParameters.Tasks.DotNetCoreBuildTask.Does((context) =>
     context.Tools.RegisterFile(grmExecutable);
 });
 
+BuildParameters.Tasks.CreateReleaseNotesTask
+    .IsDependentOn(BuildParameters.Tasks.DotNetCoreBuildTask); // We need to be sure that the executable exist, and have been registered before using it
+
 Build.RunDotNetCore();
