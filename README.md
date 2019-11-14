@@ -1,3 +1,5 @@
+# GitReleaseManager
+
 ![Icon](https://raw.github.com/GitTools/GitReleaseManager/develop/Icons/package_icon_no_credit.png)
 
 [![License](http://img.shields.io/:license-mit-blue.svg)](http://gep13.mit-license.org)
@@ -37,8 +39,8 @@ This uses the public GitReleaseManager feed which is hosted on [MyGet.org](https
 
 ## Build Status
 
-AppVeyor
--------------
+### AppVeyor
+
 [![AppVeyor Build status](https://ci.appveyor.com/api/projects/status/hfad7hkscfx4423p/branch/develop?svg=true)](https://ci.appveyor.com/project/GitTools/gitreleasemanager/branch/develop)
 
 ## Chat Room
@@ -71,4 +73,4 @@ In addition, a large thank you has to go to again [Particular Software](http://w
 
 ## Icon
 
-<a href="http://thenounproject.com/term/pull-request/116189/" target="_blank">Pull-request</a> designed by <a href="http://thenounproject.com/richard.slater/" target="_blank">Richard Slater</a> from The Noun Project.
+[Pull-request](http://thenounproject.com/term/pull-request/116189/) designed by [Richard Slater](http://thenounproject.com/richard.slater/) from The Noun Project.
