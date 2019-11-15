@@ -22,4 +22,24 @@ ToolSettings.SetToolSettings(context: Context,
                             testCoverageFilter: "+[*]* -[xunit.*]* -[Cake.Core]* -[Cake.Testing]* -[*.Tests]* -[Octokit]* -[YamlDotNet]* -[AlphaFS]* -[ApprovalTests]* -[ApprovalUtilities]*",
                             testCoverageExcludeByAttribute: "*.ExcludeFromCodeCoverage*",
                             testCoverageExcludeByFile: "*/*Designer.cs;*/*.g.cs;*/*.g.i.cs");
+
+BuildParameters.Tasks.DotNetCoreBuildTask.Does((context) =>
+{
+    var buildDir = BuildParameters.Paths.Directories.PublishedApplications;
+
+    var grmExecutable = context.GetFiles(buildDir + "/**/*.exe").First();
+
+    context.Information("Registering Built GRM executable...");
+    context.Tools.RegisterFile(grmExecutable);
+});
+
+BuildParameters.Tasks.CreateReleaseNotesTask
+    .IsDependentOn(BuildParameters.Tasks.DotNetCoreBuildTask); // We need to be sure that the executable exist, and have been registered before using it
+
+((CakeTask)BuildParameters.Tasks.ExportReleaseNotesTask.Task).ErrorHandler = null;
+((CakeTask)BuildParameters.Tasks.PublishGitHubReleaseTask.Task).ErrorHandler = null;
+BuildParameters.Tasks.PublishChocolateyPackagesTask.IsDependentOn(BuildParameters.Tasks.PublishGitHubReleaseTask);
+BuildParameters.Tasks.PublishNuGetPackagesTask.IsDependentOn(BuildParameters.Tasks.PublishGitHubReleaseTask);
+BuildParameters.Tasks.PublishMyGetPackagesTask.IsDependentOn(BuildParameters.Tasks.PublishGitHubReleaseTask);
+
 Build.RunDotNetCore();
