@@ -25,7 +25,9 @@ namespace GitReleaseManager.Cli
 
     public static class Program
     {
-        private static StringBuilder log = new StringBuilder();
+        private static StringBuilder _log = new StringBuilder();
+        private static FileSystem _fileSystem;
+        private static Config _configuration;
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "Not required")]
         private static int Main(string[] args)
@@ -34,29 +36,29 @@ namespace GitReleaseManager.Cli
             // we've upgraded to latest Octokit.
             ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
 
-            var fileSystem = new FileSystem();
+            _fileSystem = new FileSystem();
 
             return Parser.Default.ParseArguments<CreateSubOptions, AddAssetSubOptions, CloseSubOptions, PublishSubOptions, ExportSubOptions, InitSubOptions, ShowConfigSubOptions, LabelSubOptions>(args)
                 .MapResult(
-                  (CreateSubOptions opts) => CreateReleaseAsync(opts, fileSystem).Result,
+                  (CreateSubOptions opts) => CreateReleaseAsync(opts).Result,
                   (AddAssetSubOptions opts) => AddAssetsAsync(opts).Result,
                   (CloseSubOptions opts) => CloseMilestoneAsync(opts).Result,
                   (PublishSubOptions opts) => PublishReleaseAsync(opts).Result,
-                  (ExportSubOptions opts) => ExportReleasesAsync(opts, fileSystem).Result,
-                  (InitSubOptions opts) => CreateSampleConfigFile(opts, fileSystem),
-                  (ShowConfigSubOptions opts) => ShowConfig(opts, fileSystem),
+                  (ExportSubOptions opts) => ExportReleasesAsync(opts).Result,
+                  (InitSubOptions opts) => CreateSampleConfigFile(opts),
+                  (ShowConfigSubOptions opts) => ShowConfig(opts),
                   (LabelSubOptions opts) => CreateLabelsAsync(opts).Result,
                   errs => 1);
         }
 
-        private static async Task<int> CreateReleaseAsync(CreateSubOptions subOptions, IFileSystem fileSystem)
+        private static async Task<int> CreateReleaseAsync(CreateSubOptions subOptions)
         {
             try
             {
                 ConfigureLogging(subOptions.LogFilePath);
 
                 var github = subOptions.CreateGitHubClient();
-                var configuration = ConfigurationProvider.Provide(subOptions.TargetDirectory ?? Environment.CurrentDirectory, fileSystem);
+                _configuration = ConfigurationProvider.Provide(subOptions.TargetDirectory ?? Environment.CurrentDirectory, _fileSystem);
 
                 Release release;
                 if (!string.IsNullOrEmpty(subOptions.Milestone))
@@ -67,7 +69,7 @@ namespace GitReleaseManager.Cli
                         releaseName = subOptions.Milestone;
                     }
 
-                    release = await CreateReleaseFromMilestone(github, subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone, releaseName, subOptions.TargetCommitish, subOptions.AssetPaths, subOptions.Prerelease, configuration);
+                    release = await CreateReleaseFromMilestone(github, subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone, releaseName, subOptions.TargetCommitish, subOptions.AssetPaths, subOptions.Prerelease);
                 }
                 else
                 {
@@ -92,6 +94,7 @@ namespace GitReleaseManager.Cli
                 ConfigureLogging(subOptions.LogFilePath);
 
                 var github = subOptions.CreateGitHubClient();
+                _configuration = ConfigurationProvider.Provide(subOptions.TargetDirectory ?? Environment.CurrentDirectory, _fileSystem);
 
                 await AddAssets(github, subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.TagName, subOptions.AssetPaths);
 
@@ -112,6 +115,7 @@ namespace GitReleaseManager.Cli
                 ConfigureLogging(subOptions.LogFilePath);
 
                 var github = subOptions.CreateGitHubClient();
+                _configuration = ConfigurationProvider.Provide(subOptions.TargetDirectory ?? Environment.CurrentDirectory, _fileSystem);
 
                 await CloseMilestone(github, subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone);
 
@@ -132,6 +136,7 @@ namespace GitReleaseManager.Cli
                 ConfigureLogging(subOptions.LogFilePath);
 
                 var github = subOptions.CreateGitHubClient();
+                _configuration = ConfigurationProvider.Provide(subOptions.TargetDirectory ?? Environment.CurrentDirectory, _fileSystem);
 
                 await PublishRelease(github, subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.TagName);
 
@@ -145,16 +150,16 @@ namespace GitReleaseManager.Cli
             }
         }
 
-        private static async Task<int> ExportReleasesAsync(ExportSubOptions subOptions, IFileSystem fileSystem)
+        private static async Task<int> ExportReleasesAsync(ExportSubOptions subOptions)
         {
             try
             {
                 ConfigureLogging(subOptions.LogFilePath);
 
                 var github = subOptions.CreateGitHubClient();
-                var configuration = ConfigurationProvider.Provide(subOptions.TargetDirectory ?? Environment.CurrentDirectory, fileSystem);
+                _configuration = ConfigurationProvider.Provide(subOptions.TargetDirectory ?? Environment.CurrentDirectory, _fileSystem);
 
-                var releasesMarkdown = await ExportReleases(github, subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.TagName, configuration);
+                var releasesMarkdown = await ExportReleases(github, subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.TagName);
 
                 using (var sw = new StreamWriter(File.Open(subOptions.FileOutputPath, FileMode.OpenOrCreate)))
                 {
@@ -171,19 +176,19 @@ namespace GitReleaseManager.Cli
             }
         }
 
-        private static int CreateSampleConfigFile(InitSubOptions subOptions, IFileSystem fileSystem)
+        private static int CreateSampleConfigFile(InitSubOptions subOptions)
         {
             ConfigureLogging(subOptions.LogFilePath);
 
-            ConfigurationProvider.WriteSample(subOptions.TargetDirectory ?? Environment.CurrentDirectory, fileSystem);
+            ConfigurationProvider.WriteSample(subOptions.TargetDirectory ?? Environment.CurrentDirectory, _fileSystem);
             return 0;
         }
 
-        private static int ShowConfig(ShowConfigSubOptions subOptions, IFileSystem fileSystem)
+        private static int ShowConfig(ShowConfigSubOptions subOptions)
         {
             ConfigureLogging(subOptions.LogFilePath);
 
-            Console.WriteLine(ConfigurationProvider.GetEffectiveConfigAsString(subOptions.TargetDirectory ?? Environment.CurrentDirectory, fileSystem));
+            Console.WriteLine(ConfigurationProvider.GetEffectiveConfigAsString(subOptions.TargetDirectory ?? Environment.CurrentDirectory, _fileSystem));
             return 0;
         }
 
@@ -205,6 +210,7 @@ namespace GitReleaseManager.Cli
                 newLabels.Add(new NewLabel("help wanted", "33aa3f"));
 
                 var github = subOptions.CreateGitHubClient();
+                _configuration = ConfigurationProvider.Provide(subOptions.TargetDirectory ?? Environment.CurrentDirectory, _fileSystem);
 
                 var labels = await github.Issue.Labels.GetAllForRepository(subOptions.RepositoryOwner, subOptions.RepositoryName);
 
@@ -227,9 +233,10 @@ namespace GitReleaseManager.Cli
                 return 1;
             }
         }
-        private static async Task<Release> CreateReleaseFromMilestone(GitHubClient github, string owner, string repository, string milestone, string releaseName, string targetCommitish, IList<string> assets, bool prerelease, Config configuration)
+
+        private static async Task<Release> CreateReleaseFromMilestone(GitHubClient github, string owner, string repository, string milestone, string releaseName, string targetCommitish, IList<string> assets, bool prerelease)
         {
-            var releaseNotesBuilder = new ReleaseNotesBuilder(new DefaultGitHubClient(github, owner, repository), owner, repository, milestone, configuration);
+            var releaseNotesBuilder = new ReleaseNotesBuilder(new DefaultGitHubClient(github, owner, repository), owner, repository, milestone, _configuration);
 
             var result = await releaseNotesBuilder.BuildReleaseNotes();
 
@@ -275,9 +282,9 @@ namespace GitReleaseManager.Cli
             await AddAssets(github, owner, repository, assets, release);
         }
 
-        private static async Task<string> ExportReleases(GitHubClient github, string owner, string repository, string tagName, Config configuration)
+        private static async Task<string> ExportReleases(GitHubClient github, string owner, string repository, string tagName)
         {
-            var releaseNotesExporter = new ReleaseNotesExporter(new DefaultGitHubClient(github, owner, repository), configuration);
+            var releaseNotesExporter = new ReleaseNotesExporter(new DefaultGitHubClient(github, owner, repository), _configuration);
 
             var result = await releaseNotesExporter.ExportReleaseNotes(tagName);
 
@@ -343,11 +350,14 @@ namespace GitReleaseManager.Cli
 
         private static async Task AddAssetsSha256(GitHubClient github, string owner, string repository, IList<string> assets, Release release)
         {
-            if (assets != null && assets.Any())
+            if (assets != null && assets.Any() && _configuration.Create.IncludeShaSection)
             {
                 var stringBuilder = new StringBuilder(release.Body);
 
-                stringBuilder.AppendLine("__SHA256 Hashes of the release artifacts__");
+                if (!release.Body.Contains(_configuration.Create.ShaSectionHeading))
+                {
+                    stringBuilder.AppendLine(string.Format("### {0}", _configuration.Create.ShaSectionHeading));
+                }
 
                 foreach (var asset in assets)
                 {
@@ -358,8 +368,8 @@ namespace GitReleaseManager.Cli
                         continue;
                     }
 
-                    stringBuilder.AppendFormat("- `{0}`\r\n", file.Name);
-                    stringBuilder.AppendFormat("\t- {0}\r\n", ComputeSha256Hash(asset));
+                    stringBuilder.AppendFormat(_configuration.Create.ShaSectionLineFormat, file.Name, ComputeSha256Hash(asset));
+                    stringBuilder.AppendLine();
                 }
 
                 stringBuilder.AppendLine();
@@ -394,7 +404,7 @@ namespace GitReleaseManager.Cli
         {
             var writeActions = new List<Action<string>>
             {
-                s => log.AppendLine(s)
+                s => _log.AppendLine(s)
             };
 
             if (!string.IsNullOrEmpty(logFilePath))
@@ -433,17 +443,17 @@ namespace GitReleaseManager.Cli
             File.AppendAllText(logFilePath, contents);
         }
 
-        private static string ComputeSha256Hash(string asset)  
+        private static string ComputeSha256Hash(string asset)
         {
-            // Create a SHA256   
+            // Create a SHA256
             using (var sha256Hash = SHA256.Create())
             {
                 using (var fileStream = File.Open(asset, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                 {
-                    // ComputeHash - returns byte array  
+                    // ComputeHash - returns byte array
                     var bytes = sha256Hash.ComputeHash(fileStream);
 
-                    // Convert byte array to a string   
+                    // Convert byte array to a string
                     var builder = new StringBuilder();
 
                     foreach (var t in bytes)
@@ -454,6 +464,6 @@ namespace GitReleaseManager.Cli
                     return builder.ToString();
                 }
             }
-        }  
+        }
     }
 }

@@ -24,5 +24,14 @@ namespace GitReleaseManager.Core.Configuration
 
         [YamlMember(Alias = "milestone-replace-text")]
         public string MilestoneReplaceText { get; set; }
+
+        [YamlMember(Alias = "include-sha-section")]
+        public bool IncludeShaSection { get; set; }
+
+        [YamlMember(Alias = "sha-section-heading")]
+        public string ShaSectionHeading { get; set; }
+
+        [YamlMember(Alias = "sha-section-line-format")]
+        public string ShaSectionLineFormat { get; set; }
     }
 }
