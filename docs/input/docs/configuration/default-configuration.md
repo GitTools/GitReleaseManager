@@ -3,13 +3,11 @@ Order: 10
 Title: Default Configuration
 ---
 
-# Default Configuration
-
 GitReleaseManager configuration can be controlled using a GitReleaseManager.yaml file, which is typically stored at the root of your project.
 
 GitReleaseManager ships with the following default set of configuration (i.e. when no yaml file is placed in the root directory):
 
-```
+```yaml
 create:
   include-footer: false
   footer-heading:
@@ -37,6 +35,7 @@ Not all options are required.  For example, footer-content, is an empty string b
 :::
 
 ## Create Options
+
 When creating a Release, there are a number of options which can be set to control the look and feel of the generated release notes.
 
   * **include-footer**
@@ -68,7 +67,9 @@ See the [example create configuration section](create-configuration) to see an e
 See the [example export configuration section](export-configuration) to see an example of how the export can be configured.
 
 ## Issues to include
+
 See the [Issues to include](include-issues) section.
 
 ## Issues to exclude
+
 See the [Issues to exclude](exclude-issues) section.
