@@ -28,7 +28,11 @@ namespace GitReleaseManager.Core.Configuration
             {
                 var readAllText = fileSystem.ReadAllText(configFilePath);
 
-                return ConfigSerializer.Read(new StringReader(readAllText));
+                var deserializedConfig = ConfigSerializer.Read(new StringReader(readAllText));
+
+                EnsureDefaultConfig(deserializedConfig);
+
+                return deserializedConfig;
             }
 
             return new Config();
@@ -74,6 +78,19 @@ namespace GitReleaseManager.Core.Configuration
         private static string GetConfigFilePath(string targetDirectory)
         {
             return Path.Combine(targetDirectory, "GitReleaseManager.yaml");
+        }
+
+        private static void EnsureDefaultConfig(Config configuration)
+        {
+            if(configuration.Create.ShaSectionHeading == null)
+            {
+                configuration.Create.ShaSectionHeading = "__SHA256 Hashes of the release artifacts__";
+            }
+
+            if(configuration.Create.ShaSectionLineFormat == null)
+            {
+                configuration.Create.ShaSectionLineFormat = "- `{1}\t{0}`";
+            }
         }
     }
 }

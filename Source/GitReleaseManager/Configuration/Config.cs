@@ -19,8 +19,11 @@ namespace GitReleaseManager.Core.Configuration
                                   FooterHeading = string.Empty,
                                   FooterContent = string.Empty,
                                   FooterIncludesMilestone = false,
-                                  MilestoneReplaceText = string.Empty
-                              };
+                                  MilestoneReplaceText = string.Empty,
+                                  IncludeShaSection = false,
+                                  ShaSectionHeading = "__SHA256 Hashes of the release artifacts__",
+                                  ShaSectionLineFormat = "- `{1}\t{0}`"
+            };
 
             this.Export = new ExportConfig
                               {

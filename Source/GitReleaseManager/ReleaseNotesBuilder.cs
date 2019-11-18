@@ -175,6 +175,7 @@ namespace GitReleaseManager.Core
             }
 
             stringBuilder.Append(footerContent);
+            stringBuilder.AppendLine();
         }
 
         private void LoadMilestones()
