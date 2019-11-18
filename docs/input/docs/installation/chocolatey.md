@@ -3,11 +3,11 @@ Order: 10
 Title: Via Chocolatey
 ---
 
-# Via Chocolatey
-
 It is possible to install the portable version of GitReleaseManager using Chocolatey.  Simply execute the following installation command:
 
-```choco install gitreleasemanager.portable```
+```bash
+choco install gitreleasemanager.portable
+```
 
 :::{.alert .alert-info}
 Depending on which version of Chocolatey you are using, you may be required to confirm the installation of the application.  You can avoid this prompt using the following command:
@@ -17,13 +17,13 @@ Depending on which version of Chocolatey you are using, you may be required to c
 
 Once installed, GitReleaseManager should be immediately available on the command line.  You can either use:
 
-```
+```bash
 gitreleasemanager
 ```
 
 or:
 
-```
+```bash
 grm
 ```
 
