@@ -70,6 +70,20 @@ control the look and feel of the generated release notes.
   * A string value which contains the string which should be replaced in the
   footer-content with the actual milestone release number. Default is an empty
   string.
+* **include-sha-section**
+  * A boolean value which indicates that the calculated SHA256 hash of the
+  assets which are added to a release should be included within the release
+  notes.  Default is false.  **NOTE:** This configuration option was added
+  in version 0.9.0 of GitReleaseManager.
+* **sha-section-heading**
+  * A string value which contains the heading text for the SHA256 hash section.
+  Default is `SHA256 Hashes of the release artifacts`  **NOTE:** This configuration option was added
+  in version 0.9.0 of GitReleaseManager.
+* **sha-section-line-format**
+  * A string value which contains the .Net String Format value which will be
+  used when creating the SHA256 hash entries in the release notes.
+  Default is ```- `{1}\t{0}` ```  **NOTE:** This configuration option was added
+  in version 0.9.0 of GitReleaseManager.
 
 See the [example create configuration section](create-configuration) to see an
 example of how a footer can be configured.
