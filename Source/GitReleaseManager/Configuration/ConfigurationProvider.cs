@@ -84,7 +84,7 @@ namespace GitReleaseManager.Core.Configuration
         {
             if(configuration.Create.ShaSectionHeading == null)
             {
-                configuration.Create.ShaSectionHeading = "__SHA256 Hashes of the release artifacts__";
+                configuration.Create.ShaSectionHeading = "SHA256 Hashes of the release artifacts";
             }
 
             if(configuration.Create.ShaSectionLineFormat == null)

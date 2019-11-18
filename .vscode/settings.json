@@ -1,0 +1,13 @@
+{
+    "editor.rulers": [80],
+    "cSpell.words": [
+        "addasset",
+        "buildartifacts",
+        "choco",
+        "gitreleasemanager",
+        "nupkg",
+        "psake",
+        "releasenotes",
+        "showconfig"
+    ]
+}
