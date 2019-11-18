@@ -3,8 +3,6 @@ Order: 20
 Title: Add Assets
 ---
 
-# Add Assets
-
 Once a draft set of release notes has been created, it is possible to add additional assets to the release using the addasset command.
 
 ## **Required Parameters**

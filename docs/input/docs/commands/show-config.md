@@ -3,8 +3,6 @@ Order: 70
 Title: Show Config
 ---
 
-# Show Config
-
 The showconfig command is used to display the current configuration for GitReleaseManager when executed against a specific directory.
 
 ## **Optional Parameters**

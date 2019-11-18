@@ -3,8 +3,6 @@ Order: 10
 Title: Create
 ---
 
-# Create
-
 This is the main command of GitReleaseManager and it is used to create a draft set of release notes based on a milestone, which has been set up in GitHub.
 
 There are two modes of operation when creating a Release.  GitReleaseManager can take as an input the name of the milestone to generate the release notes from.  Or, it can take as an input the name of a file which contains the release notes to include in the Release.
