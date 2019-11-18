@@ -1,4 +1,4 @@
-#load nuget:?package=Cake.Recipe&version=1.0.0
+#load nuget:https://www.myget.org/F/cake-contrib/api/v2?package=Cake.Recipe&version=2.0.0-unstable0157&prerelease
 
 Environment.SetVariableNames(githubUserNameVariable: "GITTOOLS_GITHUB_USERNAME",
                             githubPasswordVariable: "GITTOOLS_GITHUB_PASSWORD");
@@ -11,8 +11,9 @@ BuildParameters.SetParameters(context: Context,
                             repositoryName: "GitReleaseManager",
                             appVeyorAccountName: "GitTools",
                             shouldRunGitVersion: true,
-                            shouldRunDotNetCorePack: true,
-                            shouldDeployGraphDocumentation: false);
+                            shouldRunDotNetCorePack: true);
+
+BuildParameters.PackageSources.Add(new PackageSourceData(Context, "GPR", "https://nuget.pkg.github.com/GitTools/index.json", FeedType.NuGet, false));
 
 BuildParameters.PrintParameters(Context);
 
@@ -38,8 +39,7 @@ BuildParameters.Tasks.CreateReleaseNotesTask
 
 ((CakeTask)BuildParameters.Tasks.ExportReleaseNotesTask.Task).ErrorHandler = null;
 ((CakeTask)BuildParameters.Tasks.PublishGitHubReleaseTask.Task).ErrorHandler = null;
-BuildParameters.Tasks.PublishChocolateyPackagesTask.IsDependentOn(BuildParameters.Tasks.PublishGitHubReleaseTask);
-BuildParameters.Tasks.PublishNuGetPackagesTask.IsDependentOn(BuildParameters.Tasks.PublishGitHubReleaseTask);
-BuildParameters.Tasks.PublishMyGetPackagesTask.IsDependentOn(BuildParameters.Tasks.PublishGitHubReleaseTask);
+BuildParameters.Tasks.PublishPreReleasePackagesTask.IsDependentOn(BuildParameters.Tasks.PublishGitHubReleaseTask);
+BuildParameters.Tasks.PublishReleasePackagesTask.IsDependentOn(BuildParameters.Tasks.PublishGitHubReleaseTask);
 
 Build.RunDotNetCore();
