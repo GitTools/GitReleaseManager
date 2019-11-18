@@ -10,12 +10,15 @@ choco install gitreleasemanager.portable
 ```
 
 :::{.alert .alert-info}
-Depending on which version of Chocolatey you are using, you may be required to confirm the installation of the application.  You can avoid this prompt using the following command:
+Depending on which version of Chocolatey you are using, you may be required to
+confirm the installation of the application.  You can avoid this prompt using
+the following command:
 
 ```choco install gitreleasemanager.portable -y```
 :::
 
-Once installed, GitReleaseManager should be immediately available on the command line.  You can either use:
+Once installed, GitReleaseManager should be immediately available on the command
+line.  You can either use:
 
 ```bash
 gitreleasemanager
