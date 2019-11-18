@@ -3,15 +3,13 @@ Order: 30
 Title: Example of Export Configuration
 ---
 
-# Example of Export Configuration
-
 Once you have created a number of releases, you might want to export all of the release notes into a single file.  This is especially useful if you want to embed all the release notes within your application.  To cater for this, GitReleaseManager includes the export command.  The format of the resulting file can be configured via a number of parameters.
 
 Out of the box, GitReleaseManager exports all the release notes for a given project, exactly as these release notes appear within GitHub.  However, there are certain things that you might want to add, or remove, for the exported file.
 
 Take for example the GitReleaseManager.yaml file which is used by the [Chocolatey GUI](https://github.com/chocolatey/ChocolateyGUI) project:
 
-```
+```yaml
 export:
   include-created-date-in-title: true
   created-date-string-format: MMMM dd, yyyy

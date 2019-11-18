@@ -3,13 +3,11 @@ Order: 50
 Title: Issues to exclude
 ---
 
-# Issues to exclude
-
 From time to time, you may want to include issues within a milestone, however, you don't want any information about these issues to appear in the release notes that are generated for that milestone.  For example, let's say you were doing some internal refactoring work.  This information is not required for the end user, but you as the administrator would want to know when that work was done.  GitReleaseManager caters for this requirement using the issue-labels-exclude section of the GitReleaseManager.yaml file.
 
 Out of the box, GitReleaseManager is configured to exclude issues that are tagged with the following labels:
 
-```
+```yaml
 issue-labels-exclude:
 - Internal Refactoring
 ```
