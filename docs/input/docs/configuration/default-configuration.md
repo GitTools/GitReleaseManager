@@ -61,7 +61,7 @@ control the look and feel of the generated release notes.
   milestone, which should be replaced with the actual milestone value.  As an
   example, let's say you want to provide a link to where you can download your
   release, and the URL could be something like
-  http://mydomain.com/releases/0.1.0.  You don't want to have to hard code the
+  <http://mydomain.com/releases/0.1.0>.  You don't want to have to hard code the
   milestone number into your yaml configuration, so instead, you can use a
   replacement string in your footer-content, which will then be replaced with
   the actual milestone release number, when the release is created.  Default is
@@ -77,7 +77,8 @@ control the look and feel of the generated release notes.
   in version 0.9.0 of GitReleaseManager.
 * **sha-section-heading**
   * A string value which contains the heading text for the SHA256 hash section.
-  Default is `SHA256 Hashes of the release artifacts`  **NOTE:** This configuration option was added
+  Default is `SHA256 Hashes of the release artifacts`  **NOTE:** This
+  configuration option was added
   in version 0.9.0 of GitReleaseManager.
 * **sha-section-line-format**
   * A string value which contains the .Net String Format value which will be
@@ -99,7 +100,7 @@ example of how a footer can be configured.
   used when including the created date in the title of the release notes.
   Default is an empty string.
 * **perform-regex-removal**
-  * A boolean value which inidcates whether a regular expression should be
+  * A boolean value which indicates whether a regular expression should be
   performed on the generated release notes to remove some text.  Default is
   false.
 * **regex-text**
