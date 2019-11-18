@@ -6,8 +6,9 @@
     <version>$version$</version>
     <authors>GitTools Contributors</authors>
     <owners>gep13</owners>
-    <licenseUrl>https://github.com/GitTools/GitReleaseManager/blob/develop/LICENSE</licenseUrl>
+    <license type="expression">MIT</license>
     <projectUrl>https://github.com/GitTools/GitReleaseManager</projectUrl>
+    <repository type="git" url="https://github.com/GitTools/GitReleaseManager.git"/>
     <iconUrl>https://cdn.jsdelivr.net/gh/GitTools/GitReleaseManager@9c547452a10afaf83fce1b5833f4762487b017b7/Icons/package_icon.svg</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Tool for creating and exporting releases for software applications hosted on GitHub</description>
