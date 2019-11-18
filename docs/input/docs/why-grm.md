@@ -1,9 +1,7 @@
 ---
 Order: 10
-Title: Why use GitReleaseManager
+Title: Why would I want to use GitReleaseManager
 ---
-
-# Why would I want to use GitReleaseManager?
 
 There are a number of reasons that you would want to incorporate GitReleaseManager into your workflow.
 
@@ -27,7 +25,7 @@ Publishing a Release also closes the associated Milestone for the Release.
 
 ## Add Asset to Release
 
-As part of your Release process, you may want to include assets into the GitHub Release.  This could be the final MSI package for your application, or a nuget package.  GitReleaseManager allows you to do this in two ways.  The first is using the [create command](commands/create), which includes the ability to add an asset at the time of Release creation.  However, at the time of Release creation, you might not have all the assets that you want to add.  As a result, there is a separate [add asset](commands/add-assets) command that you can use to add an asset to an existing Release.
+As part of your Release process, you may want to include assets into the GitHub Release.  This could be the final MSI package for your application, or a NuGet package.  GitReleaseManager allows you to do this in two ways.  The first is using the [create command](commands/create), which includes the ability to add an asset at the time of Release creation.  However, at the time of Release creation, you might not have all the assets that you want to add.  As a result, there is a separate [add asset](commands/add-assets) command that you can use to add an asset to an existing Release.
 
 ## Close Milestone
 
