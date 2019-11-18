@@ -21,7 +21,7 @@ namespace GitReleaseManager.Core.Configuration
                                   FooterIncludesMilestone = false,
                                   MilestoneReplaceText = string.Empty,
                                   IncludeShaSection = false,
-                                  ShaSectionHeading = "__SHA256 Hashes of the release artifacts__",
+                                  ShaSectionHeading = "SHA256 Hashes of the release artifacts",
                                   ShaSectionLineFormat = "- `{1}\t{0}`"
             };
 
