@@ -1,19 +1,21 @@
-﻿<!DOCTYPE html><html><head>
+﻿<!DOCTYPE html>
+<html>
+    <head>
         <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-        <meta name="description">
-        <meta name="keywords" content="static content generator,static site generator,static site,HTML,web development,.NET,C#,Razor,Markdown,YAML">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+        <meta name="description" />
+        <meta name="keywords" content="static content generator,static site generator,static site,HTML,web development,.NET,C#,Razor,Markdown,YAML" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="shortcut icon" href="/GitReleaseManager/assets/img/favicon.ico" type="image/x-icon">
         <link rel="icon" href="/GitReleaseManager/assets/img/favicon.ico" type="image/x-icon">
         <title>GitReleaseManager - Configure Logging</title>
         <link href="/GitReleaseManager/assets/css/highlight.css" rel="stylesheet">
-        <link href="/GitReleaseManager/assets/css/bootstrap/bootstrap.css" rel="stylesheet">
-        <link href="/GitReleaseManager/assets/css/adminlte/AdminLTE.css" rel="stylesheet">
-        <link href="/GitReleaseManager/assets/css/theme/theme.css" rel="stylesheet">
+        <link href="/GitReleaseManager/assets/css/bootstrap/bootstrap.css" rel="stylesheet" />
+        <link href="/GitReleaseManager/assets/css/adminlte/AdminLTE.css" rel="stylesheet" />
+        <link href="/GitReleaseManager/assets/css/theme/theme.css" rel="stylesheet" />
         <link href="//fonts.googleapis.com/css?family=Roboto+Mono:400,700|Roboto:400,400i,700,700i" rel="stylesheet">
         <link href="/GitReleaseManager/assets/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-        <link href="/GitReleaseManager/assets/css/override.css" rel="stylesheet">
+        <link href="/GitReleaseManager/assets/css/override.css" rel="stylesheet" />
         <script src="/GitReleaseManager/assets/js/jquery-2.2.3.min.js"></script>
         <script src="/GitReleaseManager/assets/js/bootstrap.min.js"></script>        
         <script src="/GitReleaseManager/assets/js/app.min.js"></script>         
@@ -72,9 +74,7 @@
                 <section class="infobar" data-spy="affix" data-offset-top="60" data-offset-bottom="200"> 
                     	
         <div><p><a href="https://github.com/GitTools/GitReleaseManager/tree/develop/docs/input/docs/logging/logging.md"><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit Content</a></p></div>
-    <div id="infobar-headings"><h6>On This Page</h6><p><a href="#configure-logging">Configure Logging</a></p>
-<hr class="infobar-hidden">
-</div>
+    <div id="infobar-headings"></div>
 
                 </section>
                 <section class="sidebar">    
@@ -84,7 +84,7 @@
                     <ul class="sidebar-menu">
                         
 
-                <li><a href="/GitReleaseManager/docs/why-grm">Why use GitReleaseManager</a></li>
+                <li><a href="/GitReleaseManager/docs/why-grm">Why would I want to use GitReleaseManager</a></li>
                 <li><a href="/GitReleaseManager/docs/advanced">Advanced Workflow</a></li>
                 <li class="treeview">
                     <a href="/GitReleaseManager/docs/installation">Installation</a> <a href="#" class="expand"></a>
@@ -156,16 +156,20 @@
 			<h1>Configure Logging</h1>
 		</section>
 	<section class="content">
-		<h1 id="configure-logging">Configure Logging</h1>
-<p>It is possible to view all the output from GitReleaseManager, either in the console window, or by writing out to a file.</p>
-<p>By default, all command output is written to the console window, however, it is possible to specify a text file where command output should be written to.</p>
+		<p>It is possible to view all the output from GitReleaseManager, either in the
+console window, or by writing out to a file.</p>
+<p>By default, all command output is written to the console window, however, it is
+possible to specify a text file where command output should be written to.</p>
 <h2 id="examples"><strong>Examples</strong></h2>
 <p>Enable logging to a file located in c:\temp\log.txt using the following command:</p>
-<pre><code>gitreleasemanager.cli.exe init -l c:\temp\log.txt
+<pre><code class="language-bash">gitreleasemanager.cli.exe init -l c:\temp\log.txt
 
 gitreleasemanager.cli.exe init -logFilePath c:\temp\log.txt
 </code></pre>
-<div class="alert alert-info"><p>Assuming you simply wanted to <strong>pipe</strong> the output from GitReleaseManager to a file, when executing directly from the command line, it is not required to use the -l parameter.  The log messages written to the console window, would simply be piped to the output file.</p>
+<div class="alert alert-info"><p>Assuming you simply wanted to <strong>pipe</strong> the output from GitReleaseManager to a
+file, when executing directly from the command line, it is not required to use
+the -l parameter.  The log messages written to the console window, would simply
+be piped to the output file.</p>
 </div>
 
 	</section>
@@ -253,5 +257,5 @@ gitreleasemanager.cli.exe init -logFilePath c:\temp\log.txt
                 }, 500);
             });
         </script>
-    
-</body></html>
+    </body>
+</html>

@@ -1,19 +1,21 @@
-﻿<!DOCTYPE html><html><head>
+﻿<!DOCTYPE html>
+<html>
+    <head>
         <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-        <meta name="description">
-        <meta name="keywords" content="static content generator,static site generator,static site,HTML,web development,.NET,C#,Razor,Markdown,YAML">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+        <meta name="description" />
+        <meta name="keywords" content="static content generator,static site generator,static site,HTML,web development,.NET,C#,Razor,Markdown,YAML" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="shortcut icon" href="/GitReleaseManager/assets/img/favicon.ico" type="image/x-icon">
         <link rel="icon" href="/GitReleaseManager/assets/img/favicon.ico" type="image/x-icon">
-        <title>GitReleaseManager - Why use GitReleaseManager</title>
+        <title>GitReleaseManager - Why would I want to use GitReleaseManager</title>
         <link href="/GitReleaseManager/assets/css/highlight.css" rel="stylesheet">
-        <link href="/GitReleaseManager/assets/css/bootstrap/bootstrap.css" rel="stylesheet">
-        <link href="/GitReleaseManager/assets/css/adminlte/AdminLTE.css" rel="stylesheet">
-        <link href="/GitReleaseManager/assets/css/theme/theme.css" rel="stylesheet">
+        <link href="/GitReleaseManager/assets/css/bootstrap/bootstrap.css" rel="stylesheet" />
+        <link href="/GitReleaseManager/assets/css/adminlte/AdminLTE.css" rel="stylesheet" />
+        <link href="/GitReleaseManager/assets/css/theme/theme.css" rel="stylesheet" />
         <link href="//fonts.googleapis.com/css?family=Roboto+Mono:400,700|Roboto:400,400i,700,700i" rel="stylesheet">
         <link href="/GitReleaseManager/assets/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-        <link href="/GitReleaseManager/assets/css/override.css" rel="stylesheet">
+        <link href="/GitReleaseManager/assets/css/override.css" rel="stylesheet" />
         <script src="/GitReleaseManager/assets/js/jquery-2.2.3.min.js"></script>
         <script src="/GitReleaseManager/assets/js/bootstrap.min.js"></script>        
         <script src="/GitReleaseManager/assets/js/app.min.js"></script>         
@@ -72,9 +74,7 @@
                 <section class="infobar" data-spy="affix" data-offset-top="60" data-offset-bottom="200"> 
                     	
         <div><p><a href="https://github.com/GitTools/GitReleaseManager/tree/develop/docs/input/docs/why-grm.md"><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit Content</a></p></div>
-    <div id="infobar-headings"><h6>On This Page</h6><p><a href="#why-would-i-want-to-use-gitreleasemanager">Why would I want to use GitReleaseManager?</a></p>
-<hr class="infobar-hidden">
-</div>
+    <div id="infobar-headings"></div>
 
                 </section>
                 <section class="sidebar">    
@@ -84,7 +84,7 @@
                     <ul class="sidebar-menu">
                         
 
-                <li class="selected"><a href="/GitReleaseManager/docs/why-grm">Why use GitReleaseManager</a></li>
+                <li class="selected"><a href="/GitReleaseManager/docs/why-grm">Why would I want to use GitReleaseManager</a></li>
                 <li><a href="/GitReleaseManager/docs/advanced">Advanced Workflow</a></li>
                 <li class="treeview">
                     <a href="/GitReleaseManager/docs/installation">Installation</a> <a href="#" class="expand"></a>
@@ -153,26 +153,51 @@
 
 
 		<section class="content-header">
-			<h1>Why use GitReleaseManager</h1>
+			<h1>Why would I want to use GitReleaseManager</h1>
 		</section>
 	<section class="content">
-		<h1 id="why-would-i-want-to-use-gitreleasemanager">Why would I want to use GitReleaseManager?</h1>
-<p>There are a number of reasons that you would want to incorporate GitReleaseManager into your workflow.</p>
-<div class="alert alert-info"><p>GitReleaseManager works best when included within an automated Build Process, using something like psake, or Octopus Deploy, etc.  However, it can also be used as a standalone tool, running directly at the command line.</p>
+		<p>There are a number of reasons that you would want to incorporate
+GitReleaseManager into your workflow.</p>
+<div class="alert alert-info"><p>GitReleaseManager works best when included within an automated Build Process,
+using something like psake, or Octopus Deploy, etc.  However, it can also be
+used as a standalone tool, running directly at the command line.</p>
 </div>
 <p>Here are a few examples:</p>
 <h2 id="create-milestone-release-notes">Create Milestone Release Notes</h2>
-<p>Assuming that you are already using the concept of milestones in GitHub, once a milestone is completed, and you have a number of closed issues, you can use the <a href="commands/create">create command</a> to generate a draft set of release notes, which includes all the closed issues (assuming that they match the <a href="configuration/include-issues">set of labels</a> which are configured to be included.</p>
+<p>Assuming that you are already using the concept of milestones in GitHub, once a
+milestone is completed, and you have a number of closed issues, you can use the
+<a href="commands/create">create command</a> to generate a draft set of release notes,
+which includes all the closed issues (assuming that they match the
+<a href="configuration/include-issues">set of labels</a> which are configured to be
+included.</p>
 <h2 id="publish-release">Publish Release</h2>
-<p>Even if you don't want to use GitReleaseManager to create the release notes on GitHub, you may still want the ability to Publish a Release (which has the result of creating a tag in your repository).  This can be done using the <a href="commands/publish">publish command</a>.</p>
+<p>Even if you don't want to use GitReleaseManager to create the release notes on
+GitHub, you may still want the ability to Publish a Release (which has the
+result of creating a tag in your repository).  This can be done using the
+<a href="commands/publish">publish command</a>.</p>
 <div class="alert alert-info"><p>Publishing a Release also closes the associated Milestone for the Release.</p>
 </div>
 <h2 id="add-asset-to-release">Add Asset to Release</h2>
-<p>As part of your Release process, you may want to include assets into the GitHub Release.  This could be the final MSI package for your application, or a nuget package.  GitReleaseManager allows you to do this in two ways.  The first is using the <a href="commands/create">create command</a>, which includes the ability to add an asset at the time of Release creation.  However, at the time of Release creation, you might not have all the assets that you want to add.  As a result, there is a separate <a href="commands/add-assets">add asset</a> command that you can use to add an asset to an existing Release.</p>
+<p>As part of your Release process, you may want to include assets into the GitHub
+Release.  This could be the final MSI package for your application, or a NuGet
+package.  GitReleaseManager allows you to do this in two ways.  The first is
+using the <a href="commands/create">create command</a>, which includes the ability to add
+an asset at the time of Release creation.  However, at the time of Release
+creation, you might not have all the assets that you want to add.  As a result,
+there is a separate <a href="commands/add-assets">add asset</a> command that you can use to
+add an asset to an existing Release.</p>
 <h2 id="close-milestone">Close Milestone</h2>
-<p>When working directly in GitHub, publishing a Release doesn't close the associated milestone.  When using the GitReleaseManager's <a href="commands/publish">publish command</a> the associated milestone is also closed.  However, you can also use the <a href="commands/close">close command</a> directly if you are not using the publish workflow as part of your process.</p>
+<p>When working directly in GitHub, publishing a Release doesn't close the
+associated milestone.  When using the GitReleaseManager's
+<a href="commands/publish">publish command</a> the associated milestone is also closed.
+However, you can also use the <a href="commands/close">close command</a> directly if you
+are not using the publish workflow as part of your process.</p>
 <h2 id="export-release-notes">Export Release Notes</h2>
-<p>When working on a project, you might want to include all the Release Notes within the application itself, let's say in the About dialog.  GitReleaseManager's <a href="commands/export">export command</a> makes it really simple to export the entire history of your application/product, by creating a markdown file with all the information contained in the releases section of GitHub.</p>
+<p>When working on a project, you might want to include all the Release Notes
+within the application itself, let's say in the About dialog.
+GitReleaseManager's <a href="commands/export">export command</a> makes it really simple to
+export the entire history of your application/product, by creating a markdown
+file with all the information contained in the releases section of GitHub.</p>
 
 	</section>
                 
@@ -259,5 +284,5 @@
                 }, 500);
             });
         </script>
-    
-</body></html>
+    </body>
+</html>

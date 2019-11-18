@@ -1,19 +1,21 @@
-﻿<!DOCTYPE html><html><head>
+﻿<!DOCTYPE html>
+<html>
+    <head>
         <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-        <meta name="description">
-        <meta name="keywords" content="static content generator,static site generator,static site,HTML,web development,.NET,C#,Razor,Markdown,YAML">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+        <meta name="description" />
+        <meta name="keywords" content="static content generator,static site generator,static site,HTML,web development,.NET,C#,Razor,Markdown,YAML" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="shortcut icon" href="/GitReleaseManager/assets/img/favicon.ico" type="image/x-icon">
         <link rel="icon" href="/GitReleaseManager/assets/img/favicon.ico" type="image/x-icon">
         <title>GitReleaseManager - Create</title>
         <link href="/GitReleaseManager/assets/css/highlight.css" rel="stylesheet">
-        <link href="/GitReleaseManager/assets/css/bootstrap/bootstrap.css" rel="stylesheet">
-        <link href="/GitReleaseManager/assets/css/adminlte/AdminLTE.css" rel="stylesheet">
-        <link href="/GitReleaseManager/assets/css/theme/theme.css" rel="stylesheet">
+        <link href="/GitReleaseManager/assets/css/bootstrap/bootstrap.css" rel="stylesheet" />
+        <link href="/GitReleaseManager/assets/css/adminlte/AdminLTE.css" rel="stylesheet" />
+        <link href="/GitReleaseManager/assets/css/theme/theme.css" rel="stylesheet" />
         <link href="//fonts.googleapis.com/css?family=Roboto+Mono:400,700|Roboto:400,400i,700,700i" rel="stylesheet">
         <link href="/GitReleaseManager/assets/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-        <link href="/GitReleaseManager/assets/css/override.css" rel="stylesheet">
+        <link href="/GitReleaseManager/assets/css/override.css" rel="stylesheet" />
         <script src="/GitReleaseManager/assets/js/jquery-2.2.3.min.js"></script>
         <script src="/GitReleaseManager/assets/js/bootstrap.min.js"></script>        
         <script src="/GitReleaseManager/assets/js/app.min.js"></script>         
@@ -72,9 +74,7 @@
                 <section class="infobar" data-spy="affix" data-offset-top="60" data-offset-bottom="200"> 
                     	
         <div><p><a href="https://github.com/GitTools/GitReleaseManager/tree/develop/docs/input/docs/commands/create.md"><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit Content</a></p></div>
-    <div id="infobar-headings"><h6>On This Page</h6><p><a href="#create">Create</a></p>
-<hr class="infobar-hidden">
-</div>
+    <div id="infobar-headings"></div>
 
                 </section>
                 <section class="sidebar">    
@@ -84,7 +84,7 @@
                     <ul class="sidebar-menu">
                         
 
-                <li><a href="/GitReleaseManager/docs/why-grm">Why use GitReleaseManager</a></li>
+                <li><a href="/GitReleaseManager/docs/why-grm">Why would I want to use GitReleaseManager</a></li>
                 <li><a href="/GitReleaseManager/docs/advanced">Advanced Workflow</a></li>
                 <li class="treeview">
                     <a href="/GitReleaseManager/docs/installation">Installation</a> <a href="#" class="expand"></a>
@@ -156,32 +156,45 @@
 			<h1>Create</h1>
 		</section>
 	<section class="content">
-		<h1 id="create">Create</h1>
-<p>This is the main command of GitReleaseManager and it is used to create a draft set of release notes based on a milestone, which has been set up in GitHub.</p>
-<p>There are two modes of operation when creating a Release.  GitReleaseManager can take as an input the name of the milestone to generate the release notes from.  Or, it can take as an input the name of a file which contains the release notes to include in the Release.</p>
+		<p>This is the main command of GitReleaseManager and it is used to create a draft
+set of release notes based on a milestone, which has been set up in GitHub.</p>
+<p>There are two modes of operation when creating a Release.  GitReleaseManager can
+take as an input the name of the milestone to generate the release notes from.
+Or, it can take as an input the name of a file which contains the release notes
+to include in the Release.</p>
 <h2 id="required-parameters"><strong>Required Parameters</strong></h2>
 <ul>
-<li><code>-u, --username</code>: The username to access GitHub with.  This can't be used when using the token parameter.</li>
-<li><code>-p, --password</code>: The password to access GitHub with.  This can't be used when using the token parameter.</li>
-<li><code>--token</code>: The access token to access GitHub with.  This can't be used when using the username and password parameters.</li>
+<li><code>-u, --username</code>: The username to access GitHub with.  This can't be used when
+using the token parameter.</li>
+<li><code>-p, --password</code>: The password to access GitHub with.  This can't be used when
+using the token parameter.</li>
+<li><code>--token</code>: The access token to access GitHub with.  This can't be used when
+using the username and password parameters.</li>
 <li><code>-o, --owner</code>: The owner of the repository.</li>
 <li><code>-r, --repository</code>: The name of the repository.</li>
 </ul>
 <h2 id="optional-parameters"><strong>Optional Parameters</strong></h2>
 <ul>
 <li><code>-m, --milestone</code>: The milestone to use.</li>
-<li><code>-n, --name</code>: The name of the release (Typically this is the generated SemVer Version Number).</li>
-<li><code>-i, --inputFilePath</code>: The path to the file to be used as the content of the release notes.</li>
+<li><code>-n, --name</code>: The name of the release (Typically this is the generated SemVer
+Version Number).</li>
+<li><code>-i, --inputFilePath</code>: The path to the file to be used as the content of the
+release notes.</li>
 <li><code>-e, --pre</code>: Creates the release as a pre-release.</li>
-<li><code>-a, --assets</code>: Path(s) to the file(s) to include in the release.  This is a comma separated list of files to include</li>
-<li><code>-c, --targetcommitish</code>: The commit to tag. Can be a branch or SHA. Defaults to repository's default branch.</li>
-<li><code>-d, --targetDirectory</code>: The directory on which GitReleaseManager should be executed. Defaults to current directory.</li>
-<li><code>-l, --logFilePath</code>: Path to where log file should be created. Defaults to logging to console.</li>
+<li><code>-a, --assets</code>: Path(s) to the file(s) to include in the release.  This is a
+comma separated list of files to include</li>
+<li><code>-c, --targetcommitish</code>: The commit to tag. Can be a branch or SHA. Defaults
+to repository's default branch.</li>
+<li><code>-d, --targetDirectory</code>: The directory on which GitReleaseManager should be
+executed. Defaults to current directory.</li>
+<li><code>-l, --logFilePath</code>: Path to where log file should be created. Defaults to
+logging to console.</li>
 </ul>
 <h2 id="notes"><strong>Notes</strong></h2>
 <p>For Authentication use either username and password, or token parameter</p>
 <h2 id="examples"><strong>Examples</strong></h2>
-<p>Use GitReleaseManager to create a Release, generating the release notes based on Milestone:</p>
+<p>Use GitReleaseManager to create a Release, generating the release notes based on
+Milestone:</p>
 <pre><code class="language-bash">gitreleasemanager.exe create -m 0.1.0 -u bob -p password -o repoOwner -r repo
 
 gitreleasemanager.exe create --milestone 0.1.0 --username bob --password password --owner repoOwner --repository repo
@@ -281,5 +294,5 @@ gitreleasemanager.exe create --inputFilePath c:\temp\releasenotes.md --name 0.1.
                 }, 500);
             });
         </script>
-    
-</body></html>
+    </body>
+</html>

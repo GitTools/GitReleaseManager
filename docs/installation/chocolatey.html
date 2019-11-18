@@ -1,19 +1,21 @@
-﻿<!DOCTYPE html><html><head>
+﻿<!DOCTYPE html>
+<html>
+    <head>
         <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-        <meta name="description">
-        <meta name="keywords" content="static content generator,static site generator,static site,HTML,web development,.NET,C#,Razor,Markdown,YAML">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+        <meta name="description" />
+        <meta name="keywords" content="static content generator,static site generator,static site,HTML,web development,.NET,C#,Razor,Markdown,YAML" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="shortcut icon" href="/GitReleaseManager/assets/img/favicon.ico" type="image/x-icon">
         <link rel="icon" href="/GitReleaseManager/assets/img/favicon.ico" type="image/x-icon">
         <title>GitReleaseManager - Via Chocolatey</title>
         <link href="/GitReleaseManager/assets/css/highlight.css" rel="stylesheet">
-        <link href="/GitReleaseManager/assets/css/bootstrap/bootstrap.css" rel="stylesheet">
-        <link href="/GitReleaseManager/assets/css/adminlte/AdminLTE.css" rel="stylesheet">
-        <link href="/GitReleaseManager/assets/css/theme/theme.css" rel="stylesheet">
+        <link href="/GitReleaseManager/assets/css/bootstrap/bootstrap.css" rel="stylesheet" />
+        <link href="/GitReleaseManager/assets/css/adminlte/AdminLTE.css" rel="stylesheet" />
+        <link href="/GitReleaseManager/assets/css/theme/theme.css" rel="stylesheet" />
         <link href="//fonts.googleapis.com/css?family=Roboto+Mono:400,700|Roboto:400,400i,700,700i" rel="stylesheet">
         <link href="/GitReleaseManager/assets/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-        <link href="/GitReleaseManager/assets/css/override.css" rel="stylesheet">
+        <link href="/GitReleaseManager/assets/css/override.css" rel="stylesheet" />
         <script src="/GitReleaseManager/assets/js/jquery-2.2.3.min.js"></script>
         <script src="/GitReleaseManager/assets/js/bootstrap.min.js"></script>        
         <script src="/GitReleaseManager/assets/js/app.min.js"></script>         
@@ -72,9 +74,7 @@
                 <section class="infobar" data-spy="affix" data-offset-top="60" data-offset-bottom="200"> 
                     	
         <div><p><a href="https://github.com/GitTools/GitReleaseManager/tree/develop/docs/input/docs/installation/chocolatey.md"><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit Content</a></p></div>
-    <div id="infobar-headings"><h6>On This Page</h6><p><a href="#via-chocolatey">Via Chocolatey</a></p>
-<hr class="infobar-hidden">
-</div>
+    <div id="infobar-headings"></div>
 
                 </section>
                 <section class="sidebar">    
@@ -84,7 +84,7 @@
                     <ul class="sidebar-menu">
                         
 
-                <li><a href="/GitReleaseManager/docs/why-grm">Why use GitReleaseManager</a></li>
+                <li><a href="/GitReleaseManager/docs/why-grm">Why would I want to use GitReleaseManager</a></li>
                 <li><a href="/GitReleaseManager/docs/advanced">Advanced Workflow</a></li>
                 <li class="treeview active">
                     <a href="/GitReleaseManager/docs/installation">Installation</a> <a href="#" class="expand"></a>
@@ -156,20 +156,23 @@
 			<h1>Via Chocolatey</h1>
 		</section>
 	<section class="content">
-		<h1 id="via-chocolatey">Via Chocolatey</h1>
-<p>It is possible to install the portable version of GitReleaseManager using Chocolatey.  Simply execute the following installation command:</p>
-<p><code>choco install gitreleasemanager.portable</code></p>
-<div class="alert alert-info"><p>Depending on which version of Chocolatey you are using, you may be required to confirm the installation of the application.  You can avoid this prompt using the following command:</p>
+		<p>It is possible to install the portable version of GitReleaseManager using Chocolatey.  Simply execute the following installation command:</p>
+<pre><code class="language-bash">choco install gitreleasemanager.portable
+</code></pre>
+<div class="alert alert-info"><p>Depending on which version of Chocolatey you are using, you may be required to
+confirm the installation of the application.  You can avoid this prompt using
+the following command:</p>
 <p><code>choco install gitreleasemanager.portable -y</code></p>
 </div>
-<p>Once installed, GitReleaseManager should be immediately available on the command line.  You can either use:</p>
-<pre><code>gitreleasemanager
+<p>Once installed, GitReleaseManager should be immediately available on the command
+line.  You can either use:</p>
+<pre><code class="language-bash">gitreleasemanager
 </code></pre>
 <p>or:</p>
-<pre><code>grm
+<pre><code class="language-bash">grm
 </code></pre>
 <p>Which should then output something similar to the following:</p>
-<p><img src="../images/grm-usage.png" class="img-fluid" alt="GitReleaseManager Usage"></p>
+<p><img src="../images/grm-usage.png" class="img-fluid" alt="GitReleaseManager Usage" /></p>
 
 	</section>
                 
@@ -256,5 +259,5 @@
                 }, 500);
             });
         </script>
-    
-</body></html>
+    </body>
+</html>

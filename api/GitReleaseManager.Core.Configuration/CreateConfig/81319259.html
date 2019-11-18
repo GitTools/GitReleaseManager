@@ -1,21 +1,19 @@
-﻿<!DOCTYPE html>
-<html>
-    <head>
+﻿<!DOCTYPE html><html><head>
         <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-        <meta name="description" />
-        <meta name="keywords" content="static content generator,static site generator,static site,HTML,web development,.NET,C#,Razor,Markdown,YAML" />
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+        <meta name="description">
+        <meta name="keywords" content="static content generator,static site generator,static site,HTML,web development,.NET,C#,Razor,Markdown,YAML">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="shortcut icon" href="/GitReleaseManager/assets/img/favicon.ico" type="image/x-icon">
         <link rel="icon" href="/GitReleaseManager/assets/img/favicon.ico" type="image/x-icon">
-        <title>GitReleaseManager - Issues to exclude</title>
+        <title>GitReleaseManager - API - CreateConfig.ShaSectionHeading Property</title>
         <link href="/GitReleaseManager/assets/css/highlight.css" rel="stylesheet">
-        <link href="/GitReleaseManager/assets/css/bootstrap/bootstrap.css" rel="stylesheet" />
-        <link href="/GitReleaseManager/assets/css/adminlte/AdminLTE.css" rel="stylesheet" />
-        <link href="/GitReleaseManager/assets/css/theme/theme.css" rel="stylesheet" />
+        <link href="/GitReleaseManager/assets/css/bootstrap/bootstrap.css" rel="stylesheet">
+        <link href="/GitReleaseManager/assets/css/adminlte/AdminLTE.css" rel="stylesheet">
+        <link href="/GitReleaseManager/assets/css/theme/theme.css" rel="stylesheet">
         <link href="//fonts.googleapis.com/css?family=Roboto+Mono:400,700|Roboto:400,400i,700,700i" rel="stylesheet">
         <link href="/GitReleaseManager/assets/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-        <link href="/GitReleaseManager/assets/css/override.css" rel="stylesheet" />
+        <link href="/GitReleaseManager/assets/css/override.css" rel="stylesheet">
         <script src="/GitReleaseManager/assets/js/jquery-2.2.3.min.js"></script>
         <script src="/GitReleaseManager/assets/js/bootstrap.min.js"></script>        
         <script src="/GitReleaseManager/assets/js/app.min.js"></script>         
@@ -58,8 +56,8 @@
                     <!-- Collect the nav links, forms, and other content for toggling -->
                     <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
                         <ul class="nav navbar-nav">                            
-                                    <li class="active"><a href="/GitReleaseManager/docs">Docs</a></li>
-        <li><a href="/GitReleaseManager/api">API</a></li>
+                                    <li><a href="/GitReleaseManager/docs">Docs</a></li>
+        <li class="active"><a href="/GitReleaseManager/api">API</a></li>
  
                         </ul>       
                     </div>
@@ -73,73 +71,82 @@
             <aside class="main-sidebar ">
                 <section class="infobar" data-spy="affix" data-offset-top="60" data-offset-bottom="200"> 
                     	
-        <div><p><a href="https://github.com/GitTools/GitReleaseManager/tree/develop/docs/input/docs/configuration/exclude-issues.md"><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit Content</a></p></div>
-    <div id="infobar-headings"></div>
+	<div id="infobar-headings"><h6>On This Page</h6><p><a href="#Syntax">Syntax</a></p>
+<p><a href="#Attributes">Attributes</a></p>
+<p><a href="#Value">Value</a></p>
+<hr class="infobar-hidden">
+</div>
 
                 </section>
                 <section class="sidebar">    
                                      
-                    
+                    	
+	    <script src="/GitReleaseManager/assets/js/lunr.min.js"></script>
+    <script src="/GitReleaseManager/assets/js/searchIndex.js"></script>
+    <div class="sidebar-form">
+        <div class="input-group">
+            <input type="text" name="search" id="search" class="form-control" placeholder="Search Types...">
+            <span class="input-group-btn">
+                <button class="btn btn-flat"><i class="fa fa-search"></i></button>
+            </span>
+        </div>
+    </div>
+    <div id="search-results">
+    </div>
+    <script>
+        function runSearch(query){
+            $("#search-results").empty();			
+            if( query.length < 2 ){
+                return;
+            }			
+            var results = searchModule.search("*" + query + "*");
+            var listHtml = "<ul class='sidebar-menu'>";	
+            listHtml += "<li class='header'>Type Results</li>";	
+            if(results.length == 0 ){
+                listHtml += "<li>No results found</li>";
+            } else {					
+                for(var i = 0; i < results.length; ++i){
+                    var res = results[i];
+                    listHtml += "<li><a href='" + res.url + "'>" + htmlEscape(res.title) + "</a></li>";
+                }				
+            }
+            listHtml += "</ul>";				
+            $("#search-results").append(listHtml);
+        }
+
+        $(document).ready(function(){
+            $("#search").on('input propertychange paste', function() {
+                runSearch($("#search").val());
+            });
+        });
+
+        function htmlEscape(html) {
+            return document.createElement('div')
+                .appendChild(document.createTextNode(html))
+                .parentNode
+                .innerHTML;
+        }
+    </script>
+	
+    <hr>
 
                     <ul class="sidebar-menu">
                         
+			<li class="header">Namespace</li>
+		<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.Configuration">GitReleaseManager<wbr>.Core<wbr>.Configuration</a></li>
+		<li class="header">Type</li>
+		<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.Configuration/CreateConfig">CreateConfig</a></li>
+		<li role="separator" class="divider"></li>
+			<li class="header">Property Members</li>
+				<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.Configuration/CreateConfig/1067D093">FooterContent</a></li>
+				<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.Configuration/CreateConfig/7868A16F">FooterHeading</a></li>
+				<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.Configuration/CreateConfig/747FD816">Footer<wbr>Includes<wbr>Milestone</a></li>
+				<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.Configuration/CreateConfig/83C3B726">IncludeFooter</a></li>
+				<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.Configuration/CreateConfig/76230A38">IncludeShaSection</a></li>
+				<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.Configuration/CreateConfig/14A6BE2D">MilestoneReplaceText</a></li>
+				<li class="selected"><a href="/GitReleaseManager/api/GitReleaseManager.Core.Configuration/CreateConfig/81319259">ShaSectionHeading</a></li>
+				<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.Configuration/CreateConfig/1E99BE90">ShaSectionLineFormat</a></li>
 
-                <li><a href="/GitReleaseManager/docs/why-grm">Why would I want to use GitReleaseManager</a></li>
-                <li><a href="/GitReleaseManager/docs/advanced">Advanced Workflow</a></li>
-                <li class="treeview">
-                    <a href="/GitReleaseManager/docs/installation">Installation</a> <a href="#" class="expand"></a>
-                    <ul class="treeview-menu">
-                        
-                <li><a href="/GitReleaseManager/docs/installation/chocolatey">Via Chocolatey</a></li>
-                <li><a href="/GitReleaseManager/docs/installation/nuget">Via NuGet</a></li>
-                <li><a href="/GitReleaseManager/docs/installation/dotnettool">Via .Net Global Tool</a></li>
-
-                    </ul>
-                </li>
-                <li class="treeview active">
-                    <a href="/GitReleaseManager/docs/configuration">Configuration</a> <a href="#" class="expand"></a>
-                    <ul class="treeview-menu">
-                        
-                <li><a href="/GitReleaseManager/docs/configuration/default-configuration">Default Configuration</a></li>
-                <li><a href="/GitReleaseManager/docs/configuration/create-configuration">Example of Create Configuration</a></li>
-                <li><a href="/GitReleaseManager/docs/configuration/export-configuration">Example of Export Configuration</a></li>
-                <li><a href="/GitReleaseManager/docs/configuration/include-issues">Issues to include</a></li>
-                <li class="selected"><a href="/GitReleaseManager/docs/configuration/exclude-issues">Issues to exclude</a></li>
-                <li><a href="/GitReleaseManager/docs/configuration/label-aliases">Label Aliases</a></li>
-
-                    </ul>
-                </li>
-                <li class="treeview">
-                    <a href="/GitReleaseManager/docs/commands">Commands</a> <a href="#" class="expand"></a>
-                    <ul class="treeview-menu">
-                        
-                <li><a href="/GitReleaseManager/docs/commands/create">Create</a></li>
-                <li><a href="/GitReleaseManager/docs/commands/add-assets">Add Assets</a></li>
-                <li><a href="/GitReleaseManager/docs/commands/publish">Publish</a></li>
-                <li><a href="/GitReleaseManager/docs/commands/close">Close</a></li>
-                <li><a href="/GitReleaseManager/docs/commands/export">Export</a></li>
-                <li><a href="/GitReleaseManager/docs/commands/init">Init</a></li>
-                <li><a href="/GitReleaseManager/docs/commands/show-config">Show Config</a></li>
-
-                    </ul>
-                </li>
-                <li class="treeview">
-                    <a href="/GitReleaseManager/docs/logging">Logging</a> <a href="#" class="expand"></a>
-                    <ul class="treeview-menu">
-                        
-                <li><a href="/GitReleaseManager/docs/logging/logging">Configure Logging</a></li>
-
-                    </ul>
-                </li>
-                <li class="treeview">
-                    <a href="/GitReleaseManager/docs/credits">Credits</a> <a href="#" class="expand"></a>
-                    <ul class="treeview-menu">
-                        
-                <li><a href="/GitReleaseManager/docs/credits/particular">Particular Software</a></li>
-                <li><a href="/GitReleaseManager/docs/credits/icon">Icon</a></li>
-
-                    </ul>
-                </li>
 
                     </ul>
                             
@@ -152,32 +159,74 @@
 
 
 
-		<section class="content-header">
-			<h1>Issues to exclude</h1>
-		</section>
-	<section class="content">
-		<p>From time to time, you may want to include issues within a milestone, however,
-you don't want any information about these issues to appear in the release notes
-that are generated for that milestone.  For example, let's say you were doing
-some internal refactoring work.  This information is not required for the end
-user, but you as the administrator would want to know when that work was done.
-GitReleaseManager caters for this requirement using the issue-labels-exclude
-section of the GitReleaseManager.yaml file.</p>
-<p>Out of the box, GitReleaseManager is configured to exclude issues that are
-tagged with the following labels:</p>
-<pre><code class="language-yaml">issue-labels-exclude:
-- Internal Refactoring
-</code></pre>
-<div class="alert alert-info"><p>You can add as many issue labels into this section as required.  Any issue,
-included within a milestone that contains a label specified within this list
-will NOT be included within the generated release notes.</p>
-</div>
-<div class="alert alert-warning"><p>All issues assigned to a milestone have to have a label which matches to one
-listed in the include to exclude sections of the GitReleaseManager.yaml file or
-the default configuration.</p>
-</div>
+<section class="content-header">
+			<h3><a href="/GitReleaseManager/api/GitReleaseManager.Core.Configuration/CreateConfig">CreateConfig</a>.</h3>
+	<h1>ShaSectionHeading <small>Property</small></h1>
+</section>
+<section class="content">
+	
+	
+	
+		<div class="panel panel-default">
+  			<div class="panel-body">
+				<dl class="dl-horizontal">	
+						
+						<dt>Namespace</dt>
+						<dd><a href="/GitReleaseManager/api/GitReleaseManager.Core.Configuration">GitReleaseManager<wbr>.Core<wbr>.Configuration</a></dd>
+					
+						<dt>Containing Type</dt>
+						<dd><a href="/GitReleaseManager/api/GitReleaseManager.Core.Configuration/CreateConfig">CreateConfig</a></dd>		
+					
+				</dl>
+  			</div>
+		</div>
 
-	</section>
+	<h1 id="Syntax">Syntax</h1>
+	<pre><code>[YamlMember(Alias = "sha-section-heading")]
+public string ShaSectionHeading { get; set; }</code></pre>
+
+
+
+	<h1 id="Attributes">Attributes</h1>
+	<div class="box">
+		<div class="box-body no-padding table-responsive">
+			<table class="table table-striped table-hover two-cols">
+				<thead>
+					<tr>
+						<th>Type</th>
+						<th>Description</th>
+					</tr>
+				</thead>
+					<tbody><tr>
+						<td>YamlMember</td>
+						<td></td>
+					</tr>
+			</tbody></table>
+		</div>
+	</div>	
+
+
+	<h1 id="Value">Value</h1>
+	<div class="box">
+		<div class="box-body no-padding table-responsive">
+			<table class="table table-striped table-hover two-cols">
+				<thead>
+					<tr>
+						<th>Type</th>
+						<th>Description</th>
+					</tr>
+				</thead>
+				<tbody><tr>
+					<td>string</td>
+					<td></td>
+				</tr>
+			</tbody></table>
+		</div>
+	</div>	
+
+
+	
+</section>
                 
             </div>           
             
@@ -262,5 +311,5 @@ the default configuration.</p>
                 }, 500);
             });
         </script>
-    </body>
-</html>
+    
+</body></html>

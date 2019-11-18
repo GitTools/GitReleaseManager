@@ -1,19 +1,21 @@
-﻿<!DOCTYPE html><html><head>
+﻿<!DOCTYPE html>
+<html>
+    <head>
         <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-        <meta name="description">
-        <meta name="keywords" content="static content generator,static site generator,static site,HTML,web development,.NET,C#,Razor,Markdown,YAML">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+        <meta name="description" />
+        <meta name="keywords" content="static content generator,static site generator,static site,HTML,web development,.NET,C#,Razor,Markdown,YAML" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="shortcut icon" href="/GitReleaseManager/assets/img/favicon.ico" type="image/x-icon">
         <link rel="icon" href="/GitReleaseManager/assets/img/favicon.ico" type="image/x-icon">
         <title>GitReleaseManager - Publish</title>
         <link href="/GitReleaseManager/assets/css/highlight.css" rel="stylesheet">
-        <link href="/GitReleaseManager/assets/css/bootstrap/bootstrap.css" rel="stylesheet">
-        <link href="/GitReleaseManager/assets/css/adminlte/AdminLTE.css" rel="stylesheet">
-        <link href="/GitReleaseManager/assets/css/theme/theme.css" rel="stylesheet">
+        <link href="/GitReleaseManager/assets/css/bootstrap/bootstrap.css" rel="stylesheet" />
+        <link href="/GitReleaseManager/assets/css/adminlte/AdminLTE.css" rel="stylesheet" />
+        <link href="/GitReleaseManager/assets/css/theme/theme.css" rel="stylesheet" />
         <link href="//fonts.googleapis.com/css?family=Roboto+Mono:400,700|Roboto:400,400i,700,700i" rel="stylesheet">
         <link href="/GitReleaseManager/assets/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-        <link href="/GitReleaseManager/assets/css/override.css" rel="stylesheet">
+        <link href="/GitReleaseManager/assets/css/override.css" rel="stylesheet" />
         <script src="/GitReleaseManager/assets/js/jquery-2.2.3.min.js"></script>
         <script src="/GitReleaseManager/assets/js/bootstrap.min.js"></script>        
         <script src="/GitReleaseManager/assets/js/app.min.js"></script>         
@@ -72,9 +74,7 @@
                 <section class="infobar" data-spy="affix" data-offset-top="60" data-offset-bottom="200"> 
                     	
         <div><p><a href="https://github.com/GitTools/GitReleaseManager/tree/develop/docs/input/docs/commands/publish.md"><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit Content</a></p></div>
-    <div id="infobar-headings"><h6>On This Page</h6><p><a href="#publish">Publish</a></p>
-<hr class="infobar-hidden">
-</div>
+    <div id="infobar-headings"></div>
 
                 </section>
                 <section class="sidebar">    
@@ -84,7 +84,7 @@
                     <ul class="sidebar-menu">
                         
 
-                <li><a href="/GitReleaseManager/docs/why-grm">Why use GitReleaseManager</a></li>
+                <li><a href="/GitReleaseManager/docs/why-grm">Why would I want to use GitReleaseManager</a></li>
                 <li><a href="/GitReleaseManager/docs/advanced">Advanced Workflow</a></li>
                 <li class="treeview">
                     <a href="/GitReleaseManager/docs/installation">Installation</a> <a href="#" class="expand"></a>
@@ -156,21 +156,30 @@
 			<h1>Publish</h1>
 		</section>
 	<section class="content">
-		<h1 id="publish">Publish</h1>
-<p>While it would be possible to automatically publish a set of release notes in a single command, it is envisioned that some manual intervention is required to ensure that all release notes are valid, and any additional information is added to the release, prior to publishing.  As a result, a second command is required to actually publish a release.</p>
+		<p>While it would be possible to automatically publish a set of release notes in a
+single command, it is envisioned that some manual intervention is required to
+ensure that all release notes are valid, and any additional information is added
+to the release, prior to publishing.  As a result, a second command is required
+to actually publish a release.</p>
 <h2 id="required-parameters"><strong>Required Parameters</strong></h2>
 <ul>
-<li><code>-u, --username</code>: The username to access GitHub with.  This can't be used when using the token parameter.</li>
-<li><code>-p, --password</code>: The password to access GitHub with.  This can't be used when using the token parameter.</li>
-<li><code>--token</code>: The access token to access GitHub with.  This can't be used when using the username and password parameters.</li>
+<li><code>-u, --username</code>: The username to access GitHub with.  This can't be used when
+using the token parameter.</li>
+<li><code>-p, --password</code>: The password to access GitHub with.  This can't be used when
+using the token parameter.</li>
+<li><code>--token</code>: The access token to access GitHub with.  This can't be used when
+using the username and password parameters.</li>
 <li><code>-o, --owner</code>: The owner of the repository.</li>
 <li><code>-r, --repository</code>: The name of the repository.</li>
-<li><code>-t, --tagName</code>: The name of the release (Typically this is the generated SemVer Version Number).</li>
+<li><code>-t, --tagName</code>: The name of the release (Typically this is the generated
+SemVer Version Number).</li>
 </ul>
 <h2 id="optional-parameters"><strong>Optional Parameters</strong></h2>
 <ul>
-<li><code>-d, -targetDirectory</code>: The directory on which GitReleaseManager should be executed. Defaults to current directory.</li>
-<li><code>-l, -logFilePath</code>: Path to where log file should be created. Defaults to logging to console.</li>
+<li><code>-d, -targetDirectory</code>: The directory on which GitReleaseManager should be
+executed. Defaults to current directory.</li>
+<li><code>-l, -logFilePath</code>: Path to where log file should be created. Defaults to
+logging to console.</li>
 </ul>
 <h2 id="notes"><strong>Notes</strong></h2>
 <p>For Authentication use either username and password, or token parameter</p>
@@ -267,5 +276,5 @@ gitreleasemanager.exe publish --tagName 0.1.0 --token fsdfsf67657sdf5s7d5f --own
                 }, 500);
             });
         </script>
-    
-</body></html>
+    </body>
+</html>
