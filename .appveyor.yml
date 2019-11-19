@@ -1,13 +1,13 @@
 #---------------------------------#
 #  Build Image                    #
 #---------------------------------#
-image: Visual Studio 2017
+image: Visual Studio 2019
 
 #---------------------------------#
 #  Build Script                   #
 #---------------------------------#
 build_script:
-  - ps: .\build.ps1 -Target AppVeyor
+  - ps: .\build.ps1 -Target ContinuousIntegration
 
 # Tests
 test: off
@@ -22,25 +22,8 @@ branches:
     - master
 
 #---------------------------------#
-#  notifications configuration    #
-#---------------------------------#
-notifications:
-  - provider: Webhook
-    url: https://webhooks.gitter.im/e/a72ea926ecc08de68e71
-    on_build_success: true
-    on_build_failure: true
-    on_build_status_changed: true
-
-#---------------------------------#
 #  Build Cache                    #
 #---------------------------------#
 cache:
 - Source\packages -> Source\**\packages.config
-- Tools -> build.ps1
-
-#---------------------------------#
-#  Skip builds for doc changes    #
-#---------------------------------#
-skip_commits:
-  # Regex for matching commit message
-  message: /(doc).*/
+- Tools -> recipe.cake

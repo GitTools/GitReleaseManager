@@ -1,4 +1,4 @@
-#load nuget:https://ci.appveyor.com/nuget/cake-recipe?package=Cake.Recipe&prerelease
+#load nuget:https://www.myget.org/F/cake-contrib/api/v2?package=Cake.Recipe&version=2.0.0-unstable0157&prerelease
 
 Environment.SetVariableNames(githubUserNameVariable: "GITTOOLS_GITHUB_USERNAME",
                             githubPasswordVariable: "GITTOOLS_GITHUB_PASSWORD");
@@ -13,6 +13,8 @@ BuildParameters.SetParameters(context: Context,
                             shouldRunGitVersion: true,
                             shouldRunDotNetCorePack: true);
 
+BuildParameters.PackageSources.Add(new PackageSourceData(Context, "GPR", "https://nuget.pkg.github.com/GitTools/index.json", FeedType.NuGet, false));
+
 BuildParameters.PrintParameters(Context);
 
 ToolSettings.SetToolSettings(context: Context,
@@ -21,4 +23,23 @@ ToolSettings.SetToolSettings(context: Context,
                             testCoverageFilter: "+[*]* -[xunit.*]* -[Cake.Core]* -[Cake.Testing]* -[*.Tests]* -[Octokit]* -[YamlDotNet]* -[AlphaFS]* -[ApprovalTests]* -[ApprovalUtilities]*",
                             testCoverageExcludeByAttribute: "*.ExcludeFromCodeCoverage*",
                             testCoverageExcludeByFile: "*/*Designer.cs;*/*.g.cs;*/*.g.i.cs");
+
+BuildParameters.Tasks.DotNetCoreBuildTask.Does((context) =>
+{
+    var buildDir = BuildParameters.Paths.Directories.PublishedApplications;
+
+    var grmExecutable = context.GetFiles(buildDir + "/**/*.exe").First();
+
+    context.Information("Registering Built GRM executable...");
+    context.Tools.RegisterFile(grmExecutable);
+});
+
+BuildParameters.Tasks.CreateReleaseNotesTask
+    .IsDependentOn(BuildParameters.Tasks.DotNetCoreBuildTask); // We need to be sure that the executable exist, and have been registered before using it
+
+((CakeTask)BuildParameters.Tasks.ExportReleaseNotesTask.Task).ErrorHandler = null;
+((CakeTask)BuildParameters.Tasks.PublishGitHubReleaseTask.Task).ErrorHandler = null;
+BuildParameters.Tasks.PublishPreReleasePackagesTask.IsDependentOn(BuildParameters.Tasks.PublishGitHubReleaseTask);
+BuildParameters.Tasks.PublishReleasePackagesTask.IsDependentOn(BuildParameters.Tasks.PublishGitHubReleaseTask);
+
 Build.RunDotNetCore();

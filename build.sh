@@ -7,7 +7,7 @@
 ##########################################################################
 
 # Define directories.
-SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 TOOLS_DIR=$SCRIPT_DIR/tools
 ADDINS_DIR=$TOOLS_DIR/Addins
 MODULES_DIR=$TOOLS_DIR/Modules
@@ -33,16 +33,23 @@ CAKE_ARGUMENTS=()
 # Parse arguments.
 for i in "$@"; do
     case $1 in
-        -s|--script) SCRIPT="$2"; shift ;;
-        --) shift; CAKE_ARGUMENTS+=("$@"); break ;;
-        *) CAKE_ARGUMENTS+=("$1") ;;
+    -s | --script)
+        SCRIPT="$2"
+        shift
+        ;;
+    --)
+        shift
+        CAKE_ARGUMENTS+=("$@")
+        break
+        ;;
+    *) CAKE_ARGUMENTS+=("$1") ;;
     esac
     shift
 done
 
 # Make sure the tools folder exist.
 if [ ! -d "$TOOLS_DIR" ]; then
-  mkdir "$TOOLS_DIR"
+    mkdir "$TOOLS_DIR"
 fi
 
 # Make sure that packages.config exist.
@@ -67,7 +74,7 @@ fi
 
 # Restore tools from NuGet.
 pushd "$TOOLS_DIR" >/dev/null
-if [ ! -f "$PACKAGES_CONFIG_MD5" ] || [ "$( cat "$PACKAGES_CONFIG_MD5" | sed 's/\r$//' )" != "$( $MD5_EXE "$PACKAGES_CONFIG" | awk '{ print $1 }' )" ]; then
+if [ ! -f "$PACKAGES_CONFIG_MD5" ] || [ "$(cat "$PACKAGES_CONFIG_MD5" | sed 's/\r$//')" != "$($MD5_EXE "$PACKAGES_CONFIG" | awk '{ print $1 }')" ]; then
     find . -type d ! -name . ! -name 'Cake.Bakery' | xargs rm -rf
 fi
 
@@ -77,7 +84,7 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-$MD5_EXE "$PACKAGES_CONFIG" | awk '{ print $1 }' >| "$PACKAGES_CONFIG_MD5"
+$MD5_EXE "$PACKAGES_CONFIG" | awk '{ print $1 }' >|"$PACKAGES_CONFIG_MD5"
 
 popd >/dev/null
 
