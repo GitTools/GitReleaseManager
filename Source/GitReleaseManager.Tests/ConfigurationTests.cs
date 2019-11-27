@@ -7,6 +7,7 @@
 namespace GitReleaseManager.Tests
 {
     using System.IO;
+    using System.Text;
     using GitReleaseManager.Core.Configuration;
     using NUnit.Framework;
 
@@ -30,6 +31,24 @@ namespace GitReleaseManager.Tests
             Assert.AreEqual("Improvement", config.LabelAliases[1].Name);
             Assert.AreEqual("Baz", config.LabelAliases[1].Header);
             Assert.AreEqual("Qux", config.LabelAliases[1].Plural);
+        }
+
+        [Test]
+        public void Should_Write_Default_Boolean_Values()
+        {
+            // Given
+            var config = new Config();
+            config.Create.IncludeFooter = false; // Just to be sure it is a false value
+
+            // When
+            var builder = new StringBuilder();
+            using (var writer = new StringWriter(builder))
+            {
+                ConfigSerializer.Write(config, writer);
+            }
+
+            // Then
+            Assert.That(builder.ToString(), Contains.Substring("include-footer: false"));
         }
     }
 }
