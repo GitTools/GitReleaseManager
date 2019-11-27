@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="ConfigSerializer.cs" company="GitTools Contributors">
 //     Copyright (c) 2015 - Present - GitTools Contributors
 // </copyright>
@@ -8,6 +8,8 @@ namespace GitReleaseManager.Core.Configuration
 {
     using System;
     using System.IO;
+    using System.Reflection;
+    using GitReleaseManager.Core.Attributes;
     using YamlDotNet.Serialization;
     using YamlDotNet.Serialization.NamingConventions;
 
@@ -44,30 +46,44 @@ namespace GitReleaseManager.Core.Configuration
                 throw new ArgumentNullException(nameof(writer));
             }
 
-            writer.WriteLine(@"# create:");
-            writer.WriteLine(@"#   include-footer: true | false");
-            writer.WriteLine(@"#   footer-heading: Where to get it");
-            writer.WriteLine(@"#   footer-content: You can download this release from [chocolatey](https://chocolatey.org/packages/chocolateyGUI/{milestone}");
-            writer.WriteLine(@"#   footer-includes-milestone: true | false");
-            writer.WriteLine(@"#   milestone-replace-text: '{milestone}'");
-            writer.WriteLine(@"# export:");
-            writer.WriteLine(@"#   include-created-date-in-title: true | false");
-            writer.WriteLine(@"#   created-date-string-format: MMMM dd, yyyy");
-            writer.WriteLine(@"#   perform-regex-removal: true | false");
-            writer.WriteLine(@"#   regex-text: '### Where to get it(\r\n)*You can .*\)'");
-            writer.WriteLine(@"#   multiline-regex: true | false");
-            writer.WriteLine(@"# issue-labels-include:");
-            writer.WriteLine(@"# - Bug");
-            writer.WriteLine(@"# - Duplicate");
-            writer.WriteLine(@"# - Enhancement");
-            writer.WriteLine(@"# - Feature");
-            writer.WriteLine(@"# - Help Wanted");
-            writer.WriteLine(@"# - Improvement");
-            writer.WriteLine(@"# - Invalid");
-            writer.WriteLine(@"# - Question");
-            writer.WriteLine(@"# - WontFix");
-            writer.WriteLine(@"# issue-labels-exclude:");
-            writer.WriteLine(@"# - Internal Refactoring");
+            var config = new Config();
+            config.LabelAliases.Add(new LabelAlias
+            {
+                Header = "Documentation",
+                Name = "Documentation",
+                Plural = "Documentation"
+            });
+            var configType = config.GetType();
+
+            writer.Write("#");
+            writer.NewLine = Environment.NewLine + "#";
+            SetConfigurationSamples(config, configType, writer);
+
+            Write(config, writer);
+        }
+
+        private static void SetConfigurationSamples(object config, Type configType, TextWriter writer)
+        {
+            foreach (var property in configType.GetProperties(BindingFlags.Public | BindingFlags.Instance))
+            {
+                var sampleAttribute = property.GetCustomAttribute<SampleAttribute>();
+                var propertyType = property.PropertyType;
+
+                if (propertyType.IsClass && propertyType != typeof(string))
+                {
+                    var subConfig = property.GetValue(config);
+                    SetConfigurationSamples(subConfig, propertyType, writer);
+                }
+                else if (sampleAttribute != null && propertyType == sampleAttribute.Value.GetType())
+                {
+                    // We need to replace '\n' newlines in samples when running on Windows to keep
+                    // Line endings consistent
+                    var value = Environment.OSVersion.Platform == PlatformID.Win32NT && propertyType == typeof(string)
+                        ? sampleAttribute.Value.ToString().Replace("\n", Environment.NewLine)
+                        : sampleAttribute.Value;
+                    property.SetValue(config, value);
+                }
+            }
         }
     }
 }
