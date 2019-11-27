@@ -118,28 +118,33 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Default_Configuration_Yaml" xml:space="preserve">
-    <value>create:
+    <value># Configuration values used when creating new releases
+create:
   include-footer: false
   footer-heading:
   footer-content:
   footer-includes-milestone: false
   milestone-replace-text:
-  
+
+# Configuration values used when exporting release notes  
 export:
   include-created-date-in-title: false
   created-date-string-format:
   perform-regex-removal: false
   regex-text:
   multiline-regex: false
-  
+
+# The labels that will be used to include issues in release notes.
 issue-labels-include:
 - Bug
 - Feature
 - Improvement
 
+# The labels that will NOT be used when including issues in release notes.
 issue-labels-exclude:
 - Internal Refactoring
 
+# Overrides default pluralization and header names for specific labels.
 issue-labels-alias:
     - name:    Bug
       header:  Foo

@@ -10,6 +10,7 @@ namespace GitReleaseManager.Core.Configuration
     using System.IO;
     using System.Reflection;
     using GitReleaseManager.Core.Attributes;
+    using GitReleaseManager.Core.Configuration.CommentSerialization;
     using YamlDotNet.Serialization;
     using YamlDotNet.Serialization.NamingConventions;
 
@@ -32,6 +33,8 @@ namespace GitReleaseManager.Core.Configuration
         public static void Write(Config config, TextWriter writer)
         {
             var serializerBuilder = new SerializerBuilder()
+                .WithTypeInspector(inner => new CommentGatheringTypeInspector(inner))
+                .WithEmissionPhaseObjectGraphVisitor(args => new CommentsObjectGraphVisitor(args.InnerVisitor))
                 .WithNamingConvention(new HyphenatedNamingConvention())
                 .EmitDefaults(); // Can be removed when YamlDotNet is updated to 8.0.0+
             var serializer = serializerBuilder.Build();
