@@ -33,11 +33,6 @@
   <Import Project="..\..\BuildScripts\CodeAnalysis.props" Condition="Exists('..\..\BuildScripts\CodeAnalysis.props')" />
   <Import Project="..\..\BuildScripts\StyleCop.props" Condition="Exists('..\..\BuildScripts\StyleCop.props')" />
   <ItemGroup>
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="..\SolutionInfo.cs" Link="SolutionInfo.cs" />
   </ItemGroup>
   <ItemGroup>
