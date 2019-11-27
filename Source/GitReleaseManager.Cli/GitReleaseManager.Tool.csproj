@@ -17,7 +17,7 @@
     <Description>Tool for creating and exporting releases for software applications hosted on GitHub.</Description>
     <Copyright>Copyright (c) 2015 - Present - GitTools Contributors</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageIconUrl>https://cdn.jsdelivr.net/gh/GitTools/GitReleaseManager@9c547452a10afaf83fce1b5833f4762487b017b7/Icons/package_icon.svg</PackageIconUrl>
+    <PackageIcon>package_icon.png</PackageIcon>
     <PackageReleaseNotes>https://github.com/GitTools/GitReleaseManager/releases</PackageReleaseNotes>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <RepositoryType>git</RepositoryType>
@@ -47,5 +47,11 @@
   <ItemGroup>
     <PackageReference Include="CommandLineParser" Version="2.3.0" />
     <PackageReference Include="Octokit" Version="0.32.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="../../Icons/package_icon.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 </Project>
