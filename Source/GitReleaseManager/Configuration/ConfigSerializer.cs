@@ -29,7 +29,9 @@ namespace GitReleaseManager.Core.Configuration
 
         public static void Write(Config config, TextWriter writer)
         {
-            var serializerBuilder = new SerializerBuilder().WithNamingConvention(new HyphenatedNamingConvention());
+            var serializerBuilder = new SerializerBuilder()
+                .WithNamingConvention(new HyphenatedNamingConvention())
+                .EmitDefaults(); // Can be removed when YamlDotNet is updated to 8.0.0+
             var serializer = serializerBuilder.Build();
             serializer.Serialize(writer, config);
         }
