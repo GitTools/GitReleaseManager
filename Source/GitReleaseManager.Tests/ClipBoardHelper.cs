@@ -7,7 +7,7 @@
 namespace GitReleaseManager.Tests
 {
     using System.Threading;
-    using System.Windows.Forms;
+    using TextCopy;
 
     public class ClipBoardHelper
     {
