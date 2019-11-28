@@ -65,14 +65,31 @@ namespace GitReleaseManager.Cli
             {
                 version = version.Substring(0, version.IndexOf('+'));
             }
-            Console.WriteLine(@"
+            var shortFormat = @"
    ____ ____  __  __ 
   / ___|  _ \|  \/  |
  | |  _| |_) | |\/| |
  | |_| |  _ <| |  | |
   \____|_| \_\_|  |_|
 {0,21}
-", version);
+";
+            var longFormat = @"
+   ____ _ _   ____      _                     __  __
+  / ___(_) |_|  _ \ ___| | ___  __ _ ___  ___|  \/  | __ _ _ __   __ _  __ _  ___ _ __
+ | |  _| | __| |_) / _ \ |/ _ \/ _` / __|/ _ \ |\/| |/ _` | '_ \ / _` |/ _` |/ _ \ '__|
+ | |_| | | |_|  _ <  __/ |  __/ (_| \__ \  __/ |  | | (_| | | | | (_| | (_| |  __/ |
+  \____|_|\__|_| \_\___|_|\___|\__,_|___/\___|_|  |_|\__,_|_| |_|\__,_|\__, |\___|_|
+                                                                       |___/
+{0,87}
+";
+            if (Console.WindowWidth > 87)
+            {
+                Console.WriteLine(longFormat, version);
+            }
+            else
+            {
+                Console.WriteLine(shortFormat, version);
+            }
         }
 
         private static async Task<int> CreateReleaseAsync(CreateSubOptions subOptions)
