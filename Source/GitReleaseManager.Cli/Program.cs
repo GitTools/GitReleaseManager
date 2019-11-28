@@ -12,6 +12,7 @@ namespace GitReleaseManager.Cli
     using System.IO;
     using System.Linq;
     using System.Net;
+    using System.Reflection;
     using System.Security.Cryptography;
     using System.Text;
     using System.Threading.Tasks;
@@ -39,6 +40,7 @@ namespace GitReleaseManager.Cli
             _fileSystem = new FileSystem();
 
             return Parser.Default.ParseArguments<CreateSubOptions, AddAssetSubOptions, CloseSubOptions, PublishSubOptions, ExportSubOptions, InitSubOptions, ShowConfigSubOptions, LabelSubOptions>(args)
+                .WithParsed<BaseSubOptions>(CreateFiglet)
                 .MapResult(
                   (CreateSubOptions opts) => CreateReleaseAsync(opts).Result,
                   (AddAssetSubOptions opts) => AddAssetsAsync(opts).Result,
@@ -49,6 +51,28 @@ namespace GitReleaseManager.Cli
                   (ShowConfigSubOptions opts) => ShowConfig(opts),
                   (LabelSubOptions opts) => CreateLabelsAsync(opts).Result,
                   errs => 1);
+        }
+
+        private static void CreateFiglet(BaseSubOptions options)
+        {
+            if (options.NoLogo)
+            {
+                return;
+            }
+
+            var version = Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
+            if (version.IndexOf('+') > 0)
+            {
+                version = version.Substring(0, version.IndexOf('+'));
+            }
+            Console.WriteLine(@"
+   ____ ____  __  __ 
+  / ___|  _ \|  \/  |
+ | |  _| |_) | |\/| |
+ | |_| |  _ <| |  | |
+  \____|_| \_\_|  |_|
+{0,21}
+", version);
         }
 
         private static async Task<int> CreateReleaseAsync(CreateSubOptions subOptions)

@@ -15,5 +15,8 @@ namespace GitReleaseManager.Cli.Options
 
         [Option('l', "logFilePath", HelpText = "Path to where log file should be created. Defaults to logging to console.", Required = false)]
         public string LogFilePath { get; set; }
+
+        [Option("no-logo", HelpText = "Disables the generation of the GRM commandline logo.", Required = false)]
+        public bool NoLogo { get; set; }
     }
 }
