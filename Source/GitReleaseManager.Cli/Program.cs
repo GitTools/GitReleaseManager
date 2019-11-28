@@ -12,6 +12,7 @@ namespace GitReleaseManager.Cli
     using System.IO;
     using System.Linq;
     using System.Net;
+    using System.Reflection;
     using System.Security.Cryptography;
     using System.Text;
     using System.Threading.Tasks;
@@ -39,6 +40,7 @@ namespace GitReleaseManager.Cli
             _fileSystem = new FileSystem();
 
             return Parser.Default.ParseArguments<CreateSubOptions, AddAssetSubOptions, CloseSubOptions, PublishSubOptions, ExportSubOptions, InitSubOptions, ShowConfigSubOptions, LabelSubOptions>(args)
+                .WithParsed<BaseSubOptions>(CreateFiglet)
                 .MapResult(
                   (CreateSubOptions opts) => CreateReleaseAsync(opts).Result,
                   (AddAssetSubOptions opts) => AddAssetsAsync(opts).Result,
@@ -49,6 +51,45 @@ namespace GitReleaseManager.Cli
                   (ShowConfigSubOptions opts) => ShowConfig(opts),
                   (LabelSubOptions opts) => CreateLabelsAsync(opts).Result,
                   errs => 1);
+        }
+
+        private static void CreateFiglet(BaseSubOptions options)
+        {
+            if (options.NoLogo)
+            {
+                return;
+            }
+
+            var version = Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
+            if (version.IndexOf('+') > 0)
+            {
+                version = version.Substring(0, version.IndexOf('+'));
+            }
+            var shortFormat = @"
+   ____ ____  __  __ 
+  / ___|  _ \|  \/  |
+ | |  _| |_) | |\/| |
+ | |_| |  _ <| |  | |
+  \____|_| \_\_|  |_|
+{0,21}
+";
+            var longFormat = @"
+   ____ _ _   ____      _                     __  __
+  / ___(_) |_|  _ \ ___| | ___  __ _ ___  ___|  \/  | __ _ _ __   __ _  __ _  ___ _ __
+ | |  _| | __| |_) / _ \ |/ _ \/ _` / __|/ _ \ |\/| |/ _` | '_ \ / _` |/ _` |/ _ \ '__|
+ | |_| | | |_|  _ <  __/ |  __/ (_| \__ \  __/ |  | | (_| | | | | (_| | (_| |  __/ |
+  \____|_|\__|_| \_\___|_|\___|\__,_|___/\___|_|  |_|\__,_|_| |_|\__,_|\__, |\___|_|
+                                                                       |___/
+{0,87}
+";
+            if (Console.WindowWidth > 87)
+            {
+                Console.WriteLine(longFormat, version);
+            }
+            else
+            {
+                Console.WriteLine(shortFormat, version);
+            }
         }
 
         private static async Task<int> CreateReleaseAsync(CreateSubOptions subOptions)
