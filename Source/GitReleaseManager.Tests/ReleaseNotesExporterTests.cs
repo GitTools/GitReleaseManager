@@ -18,27 +18,27 @@ namespace GitReleaseManager.Tests
     [TestFixture]
     public class ReleaseNotesExporterTests
     {
-        private FileSystem fileSystem = new FileSystem();
-        private string currentDirectory = Environment.CurrentDirectory;
+        private FileSystem _fileSystem = new FileSystem();
+        private string _currentDirectory = Environment.CurrentDirectory;
 
         [Test]
         public void NoReleases()
         {
-            var configuration = ConfigurationProvider.Provide(this.currentDirectory, this.fileSystem);
+            var configuration = ConfigurationProvider.Provide(_currentDirectory, _fileSystem);
             AcceptTest(configuration);
         }
 
         [Test]
         public void SingleRelease()
         {
-            var configuration = ConfigurationProvider.Provide(this.currentDirectory, this.fileSystem);
+            var configuration = ConfigurationProvider.Provide(_currentDirectory, _fileSystem);
             AcceptTest(configuration, CreateRelease(1, new DateTime(2015, 3, 12), "0.1.0"));
         }
 
         [Test]
         public void SingleReleaseExcludeCreatedDateInTitle()
         {
-            var configuration = ConfigurationProvider.Provide(this.currentDirectory, this.fileSystem);
+            var configuration = ConfigurationProvider.Provide(_currentDirectory, _fileSystem);
             configuration.Export.IncludeCreatedDateInTitle = false;
 
             AcceptTest(configuration, CreateRelease(1, new DateTime(2015, 3, 12), "0.1.0"));
@@ -47,7 +47,7 @@ namespace GitReleaseManager.Tests
         [Test]
         public void SingleReleaseExcludeRegexRemoval()
         {
-            var configuration = ConfigurationProvider.Provide(this.currentDirectory, this.fileSystem);
+            var configuration = ConfigurationProvider.Provide(_currentDirectory, _fileSystem);
             configuration.Export.PerformRegexRemoval = false;
 
             AcceptTest(configuration, CreateRelease(1, new DateTime(2015, 3, 12), "0.1.0"));

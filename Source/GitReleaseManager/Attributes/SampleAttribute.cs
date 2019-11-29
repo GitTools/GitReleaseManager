@@ -7,7 +7,7 @@
     {
         public SampleAttribute(object value)
         {
-            this.Value = value;
+            Value = value;
         }
 
         public object Value { get; private set; }

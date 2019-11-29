@@ -1,17 +1,18 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="IGitHubClient.cs" company="GitTools Contributors">
+// <copyright file="IVcsClient.cs" company="GitTools Contributors">
 //     Copyright (c) 2015 - Present - GitTools Contributors
 // </copyright>
 //-----------------------------------------------------------------------
 
 namespace GitReleaseManager.Core
 {
+    using GitReleaseManager.Core.Model;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Threading.Tasks;
-    using Octokit;
 
-    public interface IGitHubClient
+    // TODO: Confirm best name for this thing!
+    public interface IVcsClient
     {
         Task<int> GetNumberOfCommitsBetween(Milestone previousMilestone, Milestone currentMilestone);
 

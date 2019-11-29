@@ -10,19 +10,19 @@ namespace GitReleaseManager.Core.Configuration.CommentSerialization
 
     public sealed class CommentsObjectDescriptor : IObjectDescriptor
     {
-        private readonly IObjectDescriptor innerDescriptor;
+        private readonly IObjectDescriptor _innerDescriptor;
 
         public CommentsObjectDescriptor(IObjectDescriptor innerDescriptor, string comment)
         {
-            this.innerDescriptor = innerDescriptor;
+            _innerDescriptor = innerDescriptor;
             Comment = comment;
         }
 
         public string Comment { get; private set; }
 
-        public object Value => this.innerDescriptor.Value;
-        public Type Type => this.innerDescriptor.Type;
-        public Type StaticType => this.innerDescriptor.StaticType;
-        public ScalarStyle ScalarStyle => this.innerDescriptor.ScalarStyle;
+        public object Value => _innerDescriptor.Value;
+        public Type Type => _innerDescriptor.Type;
+        public Type StaticType => _innerDescriptor.StaticType;
+        public ScalarStyle ScalarStyle => _innerDescriptor.ScalarStyle;
     }
 }

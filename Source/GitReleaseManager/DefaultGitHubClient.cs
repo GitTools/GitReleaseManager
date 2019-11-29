@@ -11,18 +11,21 @@ namespace GitReleaseManager.Core
     using System.Linq;
     using System.Threading.Tasks;
     using Octokit;
+    using Milestone = Model.Milestone;
+    using Release = Model.Release;
+    using Issue = Model.Issue;
 
-    public class DefaultGitHubClient : IGitHubClient
+    public class DefaultGitHubClient : IVcsClient
     {
-        private GitHubClient gitHubClient;
-        private string user;
-        private string repository;
+        private GitHubClient _gitHubClient;
+        private string _user;
+        private string _repository;
 
         public DefaultGitHubClient(GitHubClient gitHubClient, string user, string repository)
         {
-            this.gitHubClient = gitHubClient;
-            this.user = user;
-            this.repository = repository;
+            _gitHubClient = gitHubClient;
+            _user = user;
+            _repository = repository;
         }
 
         public async Task<int> GetNumberOfCommitsBetween(Milestone previousMilestone, Milestone currentMilestone)
@@ -31,11 +34,11 @@ namespace GitReleaseManager.Core
             {
                 if (previousMilestone == null)
                 {
-                    var gitHubClientRepositoryCommitsCompare = await this.gitHubClient.Repository.Commit.Compare(this.user, this.repository, "master", currentMilestone.Title);
+                    var gitHubClientRepositoryCommitsCompare = await _gitHubClient.Repository.Commit.Compare(_user, _repository, "master", currentMilestone.Title);
                     return gitHubClientRepositoryCommitsCompare.AheadBy;
                 }
 
-                var compareResult = await this.gitHubClient.Repository.Commit.Compare(this.user, this.repository, previousMilestone.Title, "master");
+                var compareResult = await _gitHubClient.Repository.Commit.Compare(_user, _repository, previousMilestone.Title, "master");
                 return compareResult.AheadBy;
             }
             catch (NotFoundException)
@@ -48,36 +51,36 @@ namespace GitReleaseManager.Core
 
         public async Task<List<Issue>> GetIssues(Milestone targetMilestone)
         {
-            var allIssues = await this.gitHubClient.AllIssuesForMilestone(targetMilestone);
+            var allIssues = await _gitHubClient.AllIssuesForMilestone(targetMilestone);
             return allIssues.Where(x => x.State == ItemState.Closed).ToList();
         }
 
         public async Task<List<Release>> GetReleases()
         {
-            var allReleases = await this.gitHubClient.Repository.Release.GetAll(this.user, this.repository);
+            var allReleases = await _gitHubClient.Repository.Release.GetAll(_user, _repository);
             return allReleases.OrderByDescending(r => r.CreatedAt).ToList();
         }
 
         public async Task<Release> GetSpecificRelease(string tagName)
         {
-            var allReleases = await this.gitHubClient.Repository.Release.GetAll(this.user, this.repository);
+            var allReleases = await _gitHubClient.Repository.Release.GetAll(_user, _repository);
             return allReleases.FirstOrDefault(r => r.TagName == tagName);
         }
 
         public ReadOnlyCollection<Milestone> GetMilestones()
         {
-            var milestonesClient = this.gitHubClient.Issue.Milestone;
+            var milestonesClient = _gitHubClient.Issue.Milestone;
             var closed = milestonesClient.GetAllForRepository(
-                this.user,
-                this.repository,
+                _user,
+                _repository,
                 new MilestoneRequest
                 {
                     State = ItemStateFilter.Closed
                 }).Result;
 
             var open = milestonesClient.GetAllForRepository(
-                this.user,
-                this.repository,
+                _user,
+                _repository,
                 new MilestoneRequest
                 {
                     State = ItemStateFilter.Open

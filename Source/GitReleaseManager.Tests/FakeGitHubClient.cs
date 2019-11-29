@@ -6,20 +6,20 @@
 
 namespace GitReleaseManager.Tests
 {
+    using GitReleaseManager.Core.Model;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Threading.Tasks;
-    using Octokit;
-    using IGitHubClient = GitReleaseManager.Core.IGitHubClient;
+    using IVcsClient = Core.IVcsClient;
 
-    public class FakeGitHubClient : IGitHubClient
+    public class FakeGitHubClient : IVcsClient
     {
         public FakeGitHubClient()
         {
-            this.Milestones = new List<Milestone>();
-            this.Issues = new List<Issue>();
-            this.Releases = new List<Release>();
-            this.Release = new Release();
+            Milestones = new List<Milestone>();
+            Issues = new List<Issue>();
+            Releases = new List<Release>();
+            Release = new Release();
         }
 
         public List<Milestone> Milestones { get; private set; }
@@ -34,27 +34,27 @@ namespace GitReleaseManager.Tests
 
         public Task<int> GetNumberOfCommitsBetween(Milestone previousMilestone, Milestone currentMilestone)
         {
-            return Task.FromResult(this.NumberOfCommits);
+            return Task.FromResult(NumberOfCommits);
         }
 
         public Task<List<Issue>> GetIssues(Milestone targetMilestone)
         {
-            return Task.FromResult(this.Issues);
+            return Task.FromResult(Issues);
         }
 
         public Task<List<Release>> GetReleases()
         {
-            return Task.FromResult(this.Releases);
+            return Task.FromResult(Releases);
         }
 
         public Task<Release> GetSpecificRelease(string tagName)
         {
-            return Task.FromResult(this.Release);
+            return Task.FromResult(Release);
         }
 
         public ReadOnlyCollection<Milestone> GetMilestones()
         {
-            return new ReadOnlyCollection<Milestone>(this.Milestones);
+            return new ReadOnlyCollection<Milestone>(Milestones);
         }
     }
 }

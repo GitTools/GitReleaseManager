@@ -14,7 +14,7 @@ namespace GitReleaseManager.Core.Configuration.CommentSerialization
 
     public sealed class CommentGatheringTypeInspector : TypeInspectorSkeleton
     {
-        private readonly ITypeInspector innerTypeDescriptor;
+        private readonly ITypeInspector _innerTypeDescriptor;
 
         public CommentGatheringTypeInspector(ITypeInspector innerTypeDescriptor)
         {
@@ -23,60 +23,60 @@ namespace GitReleaseManager.Core.Configuration.CommentSerialization
                 throw new ArgumentNullException(nameof(innerTypeDescriptor));
             }
 
-            this.innerTypeDescriptor = innerTypeDescriptor;
+            _innerTypeDescriptor = innerTypeDescriptor;
         }
 
         public override IEnumerable<IPropertyDescriptor> GetProperties(Type type, object container)
         {
-            return this.innerTypeDescriptor.GetProperties(type, container).Select(d => new CommentsPropertyDescriptor(d));
+            return _innerTypeDescriptor.GetProperties(type, container).Select(d => new CommentsPropertyDescriptor(d));
         }
 
         private sealed class CommentsPropertyDescriptor : IPropertyDescriptor
         {
-            private readonly IPropertyDescriptor baseDescriptor;
+            private readonly IPropertyDescriptor _baseDescriptor;
 
             public CommentsPropertyDescriptor(IPropertyDescriptor baseDescriptor)
             {
-                this.baseDescriptor = baseDescriptor;
+                _baseDescriptor = baseDescriptor;
                 Name = baseDescriptor.Name;
             }
 
             public string Name { get; set; }
 
-            public Type Type => this.baseDescriptor.Type;
+            public Type Type => _baseDescriptor.Type;
 
             public Type TypeOverride
             {
-                get => this.baseDescriptor.TypeOverride;
-                set => this.baseDescriptor.TypeOverride = value;
+                get => _baseDescriptor.TypeOverride;
+                set => _baseDescriptor.TypeOverride = value;
             }
 
-            public bool CanWrite => this.baseDescriptor.CanWrite;
+            public bool CanWrite => _baseDescriptor.CanWrite;
 
             public int Order { get; set; }
 
             public ScalarStyle ScalarStyle
             {
-                get => this.baseDescriptor.ScalarStyle;
-                set => this.baseDescriptor.ScalarStyle = value;
+                get => _baseDescriptor.ScalarStyle;
+                set => _baseDescriptor.ScalarStyle = value;
             }
 
             public T GetCustomAttribute<T>() where T : Attribute
             {
-                return this.baseDescriptor.GetCustomAttribute<T>();
+                return _baseDescriptor.GetCustomAttribute<T>();
             }
 
             public IObjectDescriptor Read(object target)
             {
-                var description = this.baseDescriptor.GetCustomAttribute<DescriptionAttribute>();
+                var description = _baseDescriptor.GetCustomAttribute<DescriptionAttribute>();
                 return description != null
-                    ? new CommentsObjectDescriptor(this.baseDescriptor.Read(target), description.Description)
-                    : this.baseDescriptor.Read(target);
+                    ? new CommentsObjectDescriptor(_baseDescriptor.Read(target), description.Description)
+                    : _baseDescriptor.Read(target);
             }
 
             public void Write(object target, object value)
             {
-                this.baseDescriptor.Write(target, value);
+                _baseDescriptor.Write(target, value);
             }
         }
     }
