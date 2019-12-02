@@ -18,7 +18,7 @@ namespace GitReleaseManager.Core.Configuration
     {
         public static Config Read(TextReader reader)
         {
-            var deserializerBuilder = new DeserializerBuilder().WithNamingConvention(new HyphenatedNamingConvention());
+            var deserializerBuilder = new DeserializerBuilder().WithNamingConvention(HyphenatedNamingConvention.Instance);
             var deserializer = deserializerBuilder.Build();
             var deserialize = deserializer.Deserialize<Config>(reader);
 
@@ -35,8 +35,7 @@ namespace GitReleaseManager.Core.Configuration
             var serializerBuilder = new SerializerBuilder()
                 .WithTypeInspector(inner => new CommentGatheringTypeInspector(inner))
                 .WithEmissionPhaseObjectGraphVisitor(args => new CommentsObjectGraphVisitor(args.InnerVisitor))
-                .WithNamingConvention(new HyphenatedNamingConvention())
-                .EmitDefaults(); // Can be removed when YamlDotNet is updated to 8.0.0+
+                .WithNamingConvention(HyphenatedNamingConvention.Instance);
             var serializer = serializerBuilder.Build();
             serializer.Serialize(writer, config);
         }

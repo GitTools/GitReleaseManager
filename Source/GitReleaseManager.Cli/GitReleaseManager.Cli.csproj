@@ -2,7 +2,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <AssemblyName>GitReleaseManager</AssemblyName>
-    <TargetFrameworks>netcoreapp2.0;net451</TargetFrameworks>
+    <TargetFrameworks>netcoreapp2.0;net461</TargetFrameworks>
     <BuildToolsFxCopVersion>1.0.1</BuildToolsFxCopVersion>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
@@ -46,7 +46,7 @@
     <ProjectReference Include="..\GitReleaseManager\GitReleaseManager.Core.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="CommandLineParser" Version="2.3.0" />
-    <PackageReference Include="Octokit" Version="0.32.0" />
+    <PackageReference Include="CommandLineParser" Version="2.6.0" />
+    <PackageReference Include="Octokit" Version="0.36.0" />
   </ItemGroup>
 </Project>
