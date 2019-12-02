@@ -11,7 +11,7 @@ namespace GitReleaseManager.Core
 
     public static class MilestoneExtensions
     {
-        internal static Version Version(this Milestone ver)
+        public static Version Version(this Milestone ver)
         {
             var nameWithoutPrerelease = ver.Title.Split('-')[0];
             Version parsedVersion;

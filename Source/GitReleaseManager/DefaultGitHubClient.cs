@@ -14,18 +14,21 @@ namespace GitReleaseManager.Core
     using Milestone = Model.Milestone;
     using Release = Model.Release;
     using Issue = Model.Issue;
+    using AutoMapper;
 
     public class DefaultGitHubClient : IVcsClient
     {
         private GitHubClient _gitHubClient;
         private string _user;
         private string _repository;
+        private IMapper _mapper;
 
-        public DefaultGitHubClient(GitHubClient gitHubClient, string user, string repository)
+        public DefaultGitHubClient(GitHubClient gitHubClient, string user, string repository, IMapper mapper)
         {
             _gitHubClient = gitHubClient;
             _user = user;
             _repository = repository;
+            _mapper = mapper;
         }
 
         public async Task<int> GetNumberOfCommitsBetween(Milestone previousMilestone, Milestone currentMilestone)
@@ -51,20 +54,21 @@ namespace GitReleaseManager.Core
 
         public async Task<List<Issue>> GetIssues(Milestone targetMilestone)
         {
-            var allIssues = await _gitHubClient.AllIssuesForMilestone(targetMilestone);
-            return allIssues.Where(x => x.State == ItemState.Closed).ToList();
+            var githubMilestone = _mapper.Map<Octokit.Milestone>(targetMilestone);
+            var allIssues = await _gitHubClient.AllIssuesForMilestone(githubMilestone);
+            return _mapper.Map<List<Issue>>(allIssues.Where(x => x.State == ItemState.Closed).ToList());
         }
 
         public async Task<List<Release>> GetReleases()
         {
             var allReleases = await _gitHubClient.Repository.Release.GetAll(_user, _repository);
-            return allReleases.OrderByDescending(r => r.CreatedAt).ToList();
+            return _mapper.Map<List<Release>>(allReleases.OrderByDescending(r => r.CreatedAt).ToList());
         }
 
         public async Task<Release> GetSpecificRelease(string tagName)
         {
             var allReleases = await _gitHubClient.Repository.Release.GetAll(_user, _repository);
-            return allReleases.FirstOrDefault(r => r.TagName == tagName);
+            return _mapper.Map<Release>(allReleases.FirstOrDefault(r => r.TagName == tagName));
         }
 
         public ReadOnlyCollection<Milestone> GetMilestones()
@@ -86,7 +90,7 @@ namespace GitReleaseManager.Core
                     State = ItemStateFilter.Open
                 }).Result;
 
-            return new ReadOnlyCollection<Milestone>(closed.Concat(open).ToList());
+            return new ReadOnlyCollection<Milestone>(_mapper.Map<List<Milestone>>(closed.Concat(open).ToList()));
         }
     }
 }

@@ -12,16 +12,16 @@ namespace GitReleaseManager.Core
     using System.Text.RegularExpressions;
     using System.Threading.Tasks;
     using GitReleaseManager.Core.Configuration;
-    using Octokit;
+    using GitReleaseManager.Core.Model;
 
     public class ReleaseNotesExporter
     {
-        private IGitHubClient _gitHubClient;
+        private IVcsClient _vcsClient;
         private Config _configuration;
 
-        public ReleaseNotesExporter(IGitHubClient gitHubClient, Config configuration)
+        public ReleaseNotesExporter(IVcsClient vcsClient, Config configuration)
         {
-            _gitHubClient = gitHubClient;
+            _vcsClient = vcsClient;
             _configuration = configuration;
         }
 
@@ -32,7 +32,7 @@ namespace GitReleaseManager.Core
 
             if (string.IsNullOrEmpty(tagName))
             {
-                var releases = await _gitHubClient.GetReleases();
+                var releases = await _vcsClient.GetReleases();
 
                 if (releases.Count > 0)
                 {
@@ -48,7 +48,7 @@ namespace GitReleaseManager.Core
             }
             else
             {
-                var release = await _gitHubClient.GetSpecificRelease(tagName);
+                var release = await _vcsClient.GetSpecificRelease(tagName);
 
                 AppendVersionReleaseNotes(stringBuilder, release);
             }

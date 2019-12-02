@@ -12,8 +12,8 @@ namespace GitReleaseManager.Tests
     using GitReleaseManager.Core;
     using GitReleaseManager.Core.Configuration;
     using GitReleaseManager.Core.Helpers;
+    using GitReleaseManager.Core.Model;
     using NUnit.Framework;
-    using Octokit;
 
     [TestFixture]
     public class ReleaseNotesBuilderTests
@@ -151,53 +151,23 @@ namespace GitReleaseManager.Tests
 
         private static Milestone CreateMilestone(string version)
         {
-            return new Milestone(
-                null,
-                "https://github.com/gep13/FakeRepository/issues?q=milestone%3A" + version, 
-                0, 
-                0,
-                null, 
-                ItemState.Open, 
-                version, 
-                String.Empty,
-                null,
-                0,
-                0,
-                DateTimeOffset.Now,
-                null,
-                null,
-                null);
+            return new Milestone
+            {
+                Title = version,
+                HtmlUrl = "https://github.com/gep13/FakeRepository/issues?q=milestone%3A" + version,
+                Version = new Version(version)
+            };
         }
 
         private static Issue CreateIssue(int number, params string[] labels)
         {
-            var user = new User(null, null, null, 0, null, DateTimeOffset.Now, DateTimeOffset.Now, 0, null, 0, 0, null, null, 0, 0, null, null, "gep13", "gep31", 0, null, 0, 0, 0, null, null, false, null, null);
-
-            return new Issue(
-                null,
-                "http://example.com/" + number,
-                null,
-                null,
-                number,
-                ItemState.Open,
-                "Issue " + number,
-                "Some issue",
-                null,
-                user,
-                labels.Select(x => new Label(0, null, x, null, null, null, false)).ToArray(),
-                null,
-                null,
-                null,
-                0,
-                null,
-                null,
-                DateTimeOffset.Now,
-                null,
-                0,
-                null,
-                false,
-                null,
-                null);
+            return new Issue
+            {
+                Number = number.ToString(),
+                Labels = labels.Select(l => new Label { Name = l }).ToList(),
+                HtmlUrl = "http://example.com/" + number,
+                Title = "Issue " + number
+            };
         }
     }
 }

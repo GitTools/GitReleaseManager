@@ -16,6 +16,7 @@ namespace GitReleaseManager.Cli
     using System.Security.Cryptography;
     using System.Text;
     using System.Threading.Tasks;
+    using AutoMapper;
     using CommandLine;
     using GitReleaseManager.Cli.Options;
     using GitReleaseManager.Core;
@@ -29,6 +30,7 @@ namespace GitReleaseManager.Cli
         private static StringBuilder _log = new StringBuilder();
         private static FileSystem _fileSystem;
         private static Config _configuration;
+        private static IMapper _mapper;
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "Not required")]
         private static int Main(string[] args)
@@ -38,6 +40,20 @@ namespace GitReleaseManager.Cli
             ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
 
             _fileSystem = new FileSystem();
+
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<Core.Model.Issue, Issue>();
+                cfg.CreateMap<Core.Model.Release, Release>();
+                cfg.CreateMap<Core.Model.Label, Label>();
+                cfg.CreateMap<Core.Model.Milestone, Milestone>();
+                cfg.CreateMap<Issue, Core.Model.Issue>();
+                cfg.CreateMap<Release, Core.Model.Release>();
+                cfg.CreateMap<Label, Core.Model.Label>();
+                cfg.CreateMap<Milestone, Core.Model.Milestone>();
+            });
+
+            _mapper = config.CreateMapper();
 
             return Parser.Default.ParseArguments<CreateSubOptions, AddAssetSubOptions, CloseSubOptions, PublishSubOptions, ExportSubOptions, InitSubOptions, ShowConfigSubOptions, LabelSubOptions>(args)
                 .WithParsed<BaseSubOptions>(CreateFiglet)
@@ -277,7 +293,7 @@ namespace GitReleaseManager.Cli
 
         private static async Task<Release> CreateReleaseFromMilestone(GitHubClient github, string owner, string repository, string milestone, string releaseName, string targetCommitish, IList<string> assets, bool prerelease)
         {
-            var releaseNotesBuilder = new ReleaseNotesBuilder(new DefaultGitHubClient(github, owner, repository), owner, repository, milestone, _configuration);
+            var releaseNotesBuilder = new ReleaseNotesBuilder(new DefaultGitHubClient(github, owner, repository, _mapper), owner, repository, milestone, _configuration);
 
             var result = await releaseNotesBuilder.BuildReleaseNotes();
 
@@ -325,7 +341,7 @@ namespace GitReleaseManager.Cli
 
         private static async Task<string> ExportReleases(GitHubClient github, string owner, string repository, string tagName)
         {
-            var releaseNotesExporter = new ReleaseNotesExporter(new DefaultGitHubClient(github, owner, repository), _configuration);
+            var releaseNotesExporter = new ReleaseNotesExporter(new DefaultGitHubClient(github, owner, repository, _mapper), _configuration);
 
             var result = await releaseNotesExporter.ExportReleaseNotes(tagName);
 

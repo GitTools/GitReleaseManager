@@ -14,11 +14,11 @@ namespace GitReleaseManager.Core
     using System.Text;
     using System.Threading.Tasks;
     using GitReleaseManager.Core.Configuration;
-    using Octokit;
+    using GitReleaseManager.Core.Model;
 
     public class ReleaseNotesBuilder
     {
-        private IGitHubClient _gitHubClient;
+        private IVcsClient _vcsClient;
         private string _user;
         private string _repository;
         private string _milestoneTitle;
@@ -26,9 +26,9 @@ namespace GitReleaseManager.Core
         private Milestone _targetMilestone;
         private Config _configuration;
 
-        public ReleaseNotesBuilder(IGitHubClient gitHubClient, string user, string repository, string milestoneTitle, Config configuration)
+        public ReleaseNotesBuilder(IVcsClient vcsClient, string user, string repository, string milestoneTitle, Config configuration)
         {
-            _gitHubClient = gitHubClient;
+            _vcsClient = vcsClient;
             _user = user;
             _repository = repository;
             _milestoneTitle = milestoneTitle;
@@ -43,7 +43,7 @@ namespace GitReleaseManager.Core
             var issues = await GetIssues(_targetMilestone);
             var stringBuilder = new StringBuilder();
             var previousMilestone = GetPreviousMilestone();
-            var numberOfCommits = await _gitHubClient.GetNumberOfCommitsBetween(previousMilestone, _targetMilestone);
+            var numberOfCommits = await _vcsClient.GetNumberOfCommitsBetween(previousMilestone, _targetMilestone);
 
             if (issues.Count > 0)
             {
@@ -142,11 +142,11 @@ namespace GitReleaseManager.Core
 
         private Milestone GetPreviousMilestone()
         {
-            var currentVersion = _targetMilestone.Version();
+            var currentVersion = _targetMilestone.Version;
             return _milestones
-                .OrderByDescending(m => m.Version())
+                .OrderByDescending(m => m.Version)
                 .Distinct().ToList()
-                .SkipWhile(x => x.Version() >= currentVersion)
+                .SkipWhile(x => x.Version >= currentVersion)
                 .FirstOrDefault();
         }
 
@@ -180,12 +180,12 @@ namespace GitReleaseManager.Core
 
         private void LoadMilestones()
         {
-            _milestones = _gitHubClient.GetMilestones();
+            _milestones = _vcsClient.GetMilestones();
         }
 
         private async Task<List<Issue>> GetIssues(Milestone milestone)
         {
-            var issues = await _gitHubClient.GetIssues(milestone);
+            var issues = await _vcsClient.GetIssues(milestone);
             foreach (var issue in issues)
             {
                 CheckForValidLabels(issue);

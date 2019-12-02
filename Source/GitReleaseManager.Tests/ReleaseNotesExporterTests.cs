@@ -12,8 +12,8 @@ namespace GitReleaseManager.Tests
     using GitReleaseManager.Core;
     using GitReleaseManager.Core.Configuration;
     using GitReleaseManager.Core.Helpers;
+    using GitReleaseManager.Core.Model;
     using NUnit.Framework;
-    using Octokit;
 
     [TestFixture]
     public class ReleaseNotesExporterTests
@@ -86,7 +86,7 @@ namespace GitReleaseManager.Tests
             stringBuilder.AppendLine();
             stringBuilder.AppendLine("- [__#3__](http://example.com/3) Issue 3");
 
-            return new Release(null, null, null, null, id, null, milestone, "master", milestone, stringBuilder.ToString(), false, false, createdDateTime, null, null, null, null, null);
+            return new Release { TagName = milestone, Body = stringBuilder.ToString(), CreatedAt = createdDateTime };
         }
     }
 }
