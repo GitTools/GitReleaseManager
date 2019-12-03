@@ -20,7 +20,7 @@
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
     <Title>GitReleaseManager.Cli</Title>
-    <Description>Create release notes in markdown given a GitHub milestone</Description>
+    <Description>Create release notes in markdown given a milestone</Description>
     <RunCodeAnalysis>False</RunCodeAnalysis>
     <CodeAnalysisTreatWarningsAsErrors>True</CodeAnalysisTreatWarningsAsErrors>
     <CodeAnalysisRuleSet>..\GitReleaseManager.ruleset</CodeAnalysisRuleSet>

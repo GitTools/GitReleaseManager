@@ -9,7 +9,7 @@ namespace GitReleaseManager.Cli.Options
     using CommandLine;
 
     [Verb("export", HelpText = "Exports all the Release Notes in markdown format.")]
-    public class ExportSubOptions : BaseGitHubSubOptions
+    public class ExportSubOptions : BaseVcsOptions
     {
         [Option('f', "fileOutputPath", HelpText = "Path to the file export releases.", Required = true)]
         public string FileOutputPath { get; set; }

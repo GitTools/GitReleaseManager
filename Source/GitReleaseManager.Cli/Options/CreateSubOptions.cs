@@ -10,7 +10,7 @@ namespace GitReleaseManager.Cli.Options
     using CommandLine;
 
     [Verb("create", HelpText = "Creates a draft release notes from a milestone.")]
-    public class CreateSubOptions : BaseGitHubSubOptions
+    public class CreateSubOptions : BaseVcsOptions
     {
         [Option('a', "assets", Separator = ',', HelpText = "Paths to the files to include in the release.", Required = false)]
         public IList<string> AssetPaths { get; set; }

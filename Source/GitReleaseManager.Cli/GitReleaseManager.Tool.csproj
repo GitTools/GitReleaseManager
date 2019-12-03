@@ -14,7 +14,7 @@
     <PackageProjectUrl>https://github.com/GitTools/GitReleaseManager</PackageProjectUrl>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageTags>github release notes create export</PackageTags>
-    <Description>Tool for creating and exporting releases for software applications hosted on GitHub.</Description>
+    <Description>Tool for creating and exporting releases for software applications.</Description>
     <Copyright>Copyright (c) 2015 - Present - GitTools Contributors</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageIcon>package_icon.png</PackageIcon>
