@@ -11,8 +11,8 @@
     <repository type="git" url="https://github.com/GitTools/GitReleaseManager.git"/>
     <icon>package_icon.png</icon>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>Tool for creating and exporting releases for software applications hosted on GitHub</description>
-    <summary>Tool for creating and exporting releases for software applications hosted on GitHub</summary>
+    <description>Tool for creating and exporting releases for software applications</description>
+    <summary>Tool for creating and exporting releases for software applications</summary>
     <copyright>Copyright (c) 2015 - Present - GitTools Contributors</copyright>
     <language>en-GB</language>
     <tags>github release notes create export</tags>
