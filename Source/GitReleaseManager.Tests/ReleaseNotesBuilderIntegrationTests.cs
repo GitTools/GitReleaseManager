@@ -4,18 +4,16 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System.Threading.Tasks;
-
 namespace GitReleaseManager.Tests
 {
     using System;
     using System.Diagnostics;
+    using System.Threading.Tasks;
     using AutoMapper;
     using GitReleaseManager.Core;
     using GitReleaseManager.Core.Configuration;
     using GitReleaseManager.Core.Helpers;
     using NUnit.Framework;
-    using Octokit;
 
     [TestFixture]
     public class ReleaseNotesBuilderIntegrationTests
@@ -25,33 +23,19 @@ namespace GitReleaseManager.Tests
         [OneTimeSetUp]
         public void Configure()
         {
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<Core.Model.Issue, Issue>();
-                cfg.CreateMap<Core.Model.Release, Release>();
-                cfg.CreateMap<Core.Model.Label, Label>();
-                cfg.CreateMap<Core.Model.Milestone, Milestone>();
-
-                cfg.CreateMap<Issue, Core.Model.Issue>();
-                cfg.CreateMap<Release, Core.Model.Release>();
-                cfg.CreateMap<Label, Core.Model.Label>();
-                cfg.CreateMap<Milestone, Core.Model.Milestone>()
-                    .AfterMap((src, dest) => dest.Version = src.Version());
-            });
-
-            _mapper = config.CreateMapper();
+            _mapper = AutoMapperConfiguration.Configure();
         }
 
         [Test]
         [Explicit]
         public async Task SingleMilestone()
         {
-            var gitHubClient = ClientBuilder.Build();
             var fileSystem = new FileSystem();
             var currentDirectory = Environment.CurrentDirectory;
             var configuration = ConfigurationProvider.Provide(currentDirectory, fileSystem);
 
-            var releaseNotesBuilder = new ReleaseNotesBuilder(new DefaultGitHubClient(gitHubClient, "Chocolatey", "ChocolateyGUI", _mapper), "Chocolatey", "ChocolateyGUI", "0.12.4", configuration);
+            var vcsClient = new DefaultGitHubClient(_mapper, configuration, "username", "password", "token");
+            var releaseNotesBuilder = new ReleaseNotesBuilder(vcsClient, "Chocolatey", "ChocolateyGUI", "0.12.4", configuration);
             var result = await releaseNotesBuilder.BuildReleaseNotes();
             Debug.WriteLine(result);
             ClipBoardHelper.SetClipboard(result);
@@ -61,12 +45,12 @@ namespace GitReleaseManager.Tests
         [Explicit]
         public async Task SingleMilestone3()
         {
-            var gitHubClient = ClientBuilder.Build();
             var fileSystem = new FileSystem();
             var currentDirectory = Environment.CurrentDirectory;
             var configuration = ConfigurationProvider.Provide(currentDirectory, fileSystem);
 
-            var releaseNotesBuilder = new ReleaseNotesBuilder(new DefaultGitHubClient(gitHubClient, "Chocolatey", "ChocolateyGUI", _mapper), "Chocolatey", "ChocolateyGUI", "0.13.0", configuration);
+            var vcsClient = new DefaultGitHubClient(_mapper, configuration, "username", "password", "token");
+            var releaseNotesBuilder = new ReleaseNotesBuilder(vcsClient, "Chocolatey", "ChocolateyGUI", "0.13.0", configuration);
             var result = await releaseNotesBuilder.BuildReleaseNotes();
             Debug.WriteLine(result);
             ClipBoardHelper.SetClipboard(result);

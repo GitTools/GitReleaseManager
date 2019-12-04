@@ -62,7 +62,7 @@ namespace GitReleaseManager.Tests
                 fakeClient.Releases.Add(release);
             }
 
-            var builder = new ReleaseNotesExporter(fakeClient, configuration);
+            var builder = new ReleaseNotesExporter(fakeClient, configuration, "bob", "repo");
             var notes = builder.ExportReleaseNotes(null).Result;
 
             Approvals.Verify(notes);

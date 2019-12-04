@@ -43,7 +43,7 @@ namespace GitReleaseManager.Core
             var issues = await GetIssues(_targetMilestone);
             var stringBuilder = new StringBuilder();
             var previousMilestone = GetPreviousMilestone();
-            var numberOfCommits = await _vcsClient.GetNumberOfCommitsBetween(previousMilestone, _targetMilestone);
+            var numberOfCommits = await _vcsClient.GetNumberOfCommitsBetween(previousMilestone, _targetMilestone, _user, _repository);
 
             if (issues.Count > 0)
             {
@@ -51,7 +51,7 @@ namespace GitReleaseManager.Core
 
                 if (numberOfCommits > 0)
                 {
-                    var commitsLink = GetCommitsLink(previousMilestone);
+                    var commitsLink = _vcsClient.GetCommitsLink(_user, _repository, _targetMilestone, previousMilestone);
                     var commitsText = string.Format(numberOfCommits == 1 ? "{0} commit" : "{0} commits", numberOfCommits);
 
                     stringBuilder.AppendFormat(@"As part of this release we had [{0}]({1}) which resulted in [{2}]({3}) being closed.", commitsText, commitsLink, issuesText, _targetMilestone.HtmlUrl + "?closed=1");
@@ -63,7 +63,7 @@ namespace GitReleaseManager.Core
             }
             else if (numberOfCommits > 0)
             {
-                var commitsLink = GetCommitsLink(previousMilestone);
+                var commitsLink = _vcsClient.GetCommitsLink(_user, _repository, _targetMilestone, previousMilestone);
                 var commitsText = string.Format(numberOfCommits == 1 ? "{0} commit" : "{0} commits", numberOfCommits);
                 stringBuilder.AppendFormat(@"As part of this release we had [{0}]({1}).", commitsText, commitsLink);
             }
@@ -150,16 +150,6 @@ namespace GitReleaseManager.Core
                 .FirstOrDefault();
         }
 
-        private string GetCommitsLink(Milestone previousMilestone)
-        {
-            if (previousMilestone == null)
-            {
-                return string.Format(CultureInfo.InvariantCulture, "https://github.com/{0}/{1}/commits/{2}", _user, _repository, _targetMilestone.Title);
-            }
-
-            return string.Format(CultureInfo.InvariantCulture, "https://github.com/{0}/{1}/compare/{2}...{3}", _user, _repository, previousMilestone.Title, _targetMilestone.Title);
-        }
-
         private void AddFooter(StringBuilder stringBuilder)
         {
             stringBuilder.AppendLine(string.Format(CultureInfo.InvariantCulture, "### {0}", _configuration.Create.FooterHeading));
@@ -180,7 +170,7 @@ namespace GitReleaseManager.Core
 
         private void LoadMilestones()
         {
-            _milestones = _vcsClient.GetMilestones();
+            _milestones = _vcsClient.GetMilestones(_user, _repository);
         }
 
         private async Task<List<Issue>> GetIssues(Milestone milestone)

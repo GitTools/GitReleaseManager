@@ -18,11 +18,15 @@ namespace GitReleaseManager.Core
     {
         private IVcsClient _vcsClient;
         private Config _configuration;
+        private string _user;
+        private string _repository;
 
-        public ReleaseNotesExporter(IVcsClient vcsClient, Config configuration)
+        public ReleaseNotesExporter(IVcsClient vcsClient, Config configuration, string user, string repository)
         {
             _vcsClient = vcsClient;
             _configuration = configuration;
+            _user = user;
+            _repository = repository;
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Not appropriate.")]
@@ -32,7 +36,7 @@ namespace GitReleaseManager.Core
 
             if (string.IsNullOrEmpty(tagName))
             {
-                var releases = await _vcsClient.GetReleases();
+                var releases = await _vcsClient.GetReleases(_user, _repository);
 
                 if (releases.Count > 0)
                 {
@@ -48,7 +52,7 @@ namespace GitReleaseManager.Core
             }
             else
             {
-                var release = await _vcsClient.GetSpecificRelease(tagName);
+                var release = await _vcsClient.GetSpecificRelease(tagName, _user, _repository);
 
                 AppendVersionReleaseNotes(stringBuilder, release);
             }

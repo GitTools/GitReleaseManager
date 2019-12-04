@@ -14,16 +14,30 @@ namespace GitReleaseManager.Core
     // TODO: Confirm best name for this thing!
     public interface IVcsClient
     {
-        Task<int> GetNumberOfCommitsBetween(Milestone previousMilestone, Milestone currentMilestone);
+        Task<int> GetNumberOfCommitsBetween(Milestone previousMilestone, Milestone currentMilestone, string user, string repository);
+
+        string GetCommitsLink(string user, string repository, Milestone milestone, Milestone previousMilestone);
 
         Task<List<Issue>> GetIssues(Milestone targetMilestone);
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Not appropriate")]
-        Task<List<Release>> GetReleases();
+        Task<List<Release>> GetReleases(string user, string repository);
 
-        Task<Release> GetSpecificRelease(string tagName);
+        Task<Release> GetSpecificRelease(string tagName, string user, string repository);
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Not appropriate")]
-        ReadOnlyCollection<Milestone> GetMilestones();
+        ReadOnlyCollection<Milestone> GetMilestones(string user, string repository);
+
+        Task<Release> CreateReleaseFromMilestone(string owner, string repository, string milestone, string releaseName, string targetCommitish, IList<string> assets, bool prerelease);
+
+        Task<Release> CreateReleaseFromInputFile(string owner, string repository, string name, string inputFilePath, string targetCommitish, IList<string> assets, bool prerelease);
+
+        Task AddAssets(string owner, string repository, string tagName, IList<string> assets);
+
+        Task<string> ExportReleases(string owner, string repository, string tagName);
+
+        Task CloseMilestone(string owner, string repository, string milestoneTitle);
+
+        Task PublishRelease(string owner, string repository, string tagName);
+
+        Task CreateLabels(string owner, string repository);
     }
 }

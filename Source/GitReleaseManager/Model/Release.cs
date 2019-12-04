@@ -7,5 +7,6 @@ namespace GitReleaseManager.Core.Model
         public string Body { get; set; }
         public string TagName { get; set; }
         public DateTimeOffset CreatedAt { get; set; }
+        public string HtmlUrl { get; set; }
     }
 }
