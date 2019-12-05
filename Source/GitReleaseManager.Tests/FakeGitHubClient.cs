@@ -9,6 +9,7 @@ namespace GitReleaseManager.Tests
     using GitReleaseManager.Core.Model;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.Globalization;
     using System.Threading.Tasks;
     using IVcsProvider = Core.IVcsProvider;
 
@@ -59,7 +60,12 @@ namespace GitReleaseManager.Tests
 
         public string GetCommitsLink(string user, string repository, Milestone milestone, Milestone previousMilestone)
         {
-            throw new System.NotImplementedException();
+            if (previousMilestone == null)
+            {
+                return string.Format(CultureInfo.InvariantCulture, "https://github.com/{0}/{1}/commits/{2}", user, repository, milestone.Title);
+            }
+
+            return string.Format(CultureInfo.InvariantCulture, "https://github.com/{0}/{1}/compare/{2}...{3}", user, repository, previousMilestone.Title, milestone.Title);
         }
 
         public Task<Release> CreateReleaseFromMilestone(string owner, string repository, string milestone, string releaseName, string targetCommitish, IList<string> assets, bool prerelease)

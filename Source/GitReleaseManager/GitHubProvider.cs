@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="DefaultGitHubClient.cs" company="GitTools Contributors">
+// <copyright file="GitHubProvider.cs" company="GitTools Contributors">
 //     Copyright (c) 2015 - Present - GitTools Contributors
 // </copyright>
 //-----------------------------------------------------------------------
@@ -22,13 +22,13 @@ namespace GitReleaseManager.Core
     using GitReleaseManager.Core.Configuration;
     using System.Globalization;
 
-    public class DefaultGitHubClient : IVcsClient
+    public class GitHubProvider : IVcsProvider
     {
         private GitHubClient _gitHubClient;
         private IMapper _mapper;
         private Config _configuration;
 
-        public DefaultGitHubClient(IMapper mapper, Config configuration, string userName, string password, string token)
+        public GitHubProvider(IMapper mapper, Config configuration, string userName, string password, string token)
         {
             _mapper = mapper;
             _configuration = configuration;

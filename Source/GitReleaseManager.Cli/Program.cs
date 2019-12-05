@@ -29,7 +29,7 @@ namespace GitReleaseManager.Cli
         private static FileSystem _fileSystem;
         private static Config _configuration;
         private static IMapper _mapper;
-        private static IVcsClient _vcsClient;
+        private static IVcsProvider _vcsProvider;
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "Not required")]
         private static int Main(string[] args)
@@ -100,9 +100,9 @@ namespace GitReleaseManager.Cli
             try
             {
                 ConfigureLogging(subOptions.LogFilePath);
-                
-                _configuration = ConfigurationProvider.Provide(subOptions.TargetDirectory ?? Environment.CurrentDirectory, _fileSystem);
-                _vcsClient = new DefaultGitHubClient(_mapper, _configuration, subOptions.UserName, subOptions.Password, subOptions.Token);
+
+                _vcsProvider = GetVcsProvider(subOptions);
+
                 Core.Model.Release release;
                 if (!string.IsNullOrEmpty(subOptions.Milestone))
                 {
@@ -112,11 +112,11 @@ namespace GitReleaseManager.Cli
                         releaseName = subOptions.Milestone;
                     }
 
-                    release = await _vcsClient.CreateReleaseFromMilestone(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone, releaseName, subOptions.TargetCommitish, subOptions.AssetPaths, subOptions.Prerelease);
+                    release = await _vcsProvider.CreateReleaseFromMilestone(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone, releaseName, subOptions.TargetCommitish, subOptions.AssetPaths, subOptions.Prerelease);
                 }
                 else
                 {
-                    release = await _vcsClient.CreateReleaseFromInputFile(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Name, subOptions.InputFilePath, subOptions.TargetCommitish, subOptions.AssetPaths, subOptions.Prerelease);
+                    release = await _vcsProvider.CreateReleaseFromInputFile(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Name, subOptions.InputFilePath, subOptions.TargetCommitish, subOptions.AssetPaths, subOptions.Prerelease);
                 }
 
                 Console.WriteLine(release.HtmlUrl);
@@ -136,10 +136,9 @@ namespace GitReleaseManager.Cli
             {
                 ConfigureLogging(subOptions.LogFilePath);
 
-                _configuration = ConfigurationProvider.Provide(subOptions.TargetDirectory ?? Environment.CurrentDirectory, _fileSystem);
-                _vcsClient = new DefaultGitHubClient(_mapper, _configuration, subOptions.UserName, subOptions.Password, subOptions.Token);
-                
-                await _vcsClient.AddAssets(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.TagName, subOptions.AssetPaths);
+                _vcsProvider = GetVcsProvider(subOptions);
+
+                await _vcsProvider.AddAssets(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.TagName, subOptions.AssetPaths);
 
                 return 0;
             }
@@ -157,10 +156,9 @@ namespace GitReleaseManager.Cli
             {
                 ConfigureLogging(subOptions.LogFilePath);
 
-                _configuration = ConfigurationProvider.Provide(subOptions.TargetDirectory ?? Environment.CurrentDirectory, _fileSystem);
-                _vcsClient = new DefaultGitHubClient(_mapper, _configuration, subOptions.UserName, subOptions.Password, subOptions.Token);
-                
-                await _vcsClient.CloseMilestone(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone);
+                _vcsProvider = GetVcsProvider(subOptions);
+
+                await _vcsProvider.CloseMilestone(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone);
 
                 return 0;
             }
@@ -178,10 +176,9 @@ namespace GitReleaseManager.Cli
             {
                 ConfigureLogging(subOptions.LogFilePath);
 
-                _configuration = ConfigurationProvider.Provide(subOptions.TargetDirectory ?? Environment.CurrentDirectory, _fileSystem);
-                _vcsClient = new DefaultGitHubClient(_mapper, _configuration, subOptions.UserName, subOptions.Password, subOptions.Token);
+                _vcsProvider = GetVcsProvider(subOptions);
 
-                await _vcsClient.PublishRelease(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.TagName);
+                await _vcsProvider.PublishRelease(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.TagName);
 
                 return 0;
             }
@@ -199,10 +196,9 @@ namespace GitReleaseManager.Cli
             {
                 ConfigureLogging(subOptions.LogFilePath);
 
-                _configuration = ConfigurationProvider.Provide(subOptions.TargetDirectory ?? Environment.CurrentDirectory, _fileSystem);
-                _vcsClient = new DefaultGitHubClient(_mapper, _configuration, subOptions.UserName, subOptions.Password, subOptions.Token);
+                _vcsProvider = GetVcsProvider(subOptions);
 
-                var releasesMarkdown = await _vcsClient.ExportReleases(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.TagName);
+                var releasesMarkdown = await _vcsProvider.ExportReleases(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.TagName);
 
                 using (var sw = new StreamWriter(File.Open(subOptions.FileOutputPath, FileMode.OpenOrCreate)))
                 {
@@ -241,10 +237,9 @@ namespace GitReleaseManager.Cli
             {
                 ConfigureLogging(subOptions.LogFilePath);
 
-                _configuration = ConfigurationProvider.Provide(subOptions.TargetDirectory ?? Environment.CurrentDirectory, _fileSystem);
-                _vcsClient = new DefaultGitHubClient(_mapper, _configuration, subOptions.UserName, subOptions.Password, subOptions.Token);
+                _vcsProvider = GetVcsProvider(subOptions);
 
-                await _vcsClient.CreateLabels(subOptions.RepositoryOwner, subOptions.RepositoryName);
+                await _vcsProvider.CreateLabels(subOptions.RepositoryOwner, subOptions.RepositoryName);
 
                 return 0;
             }
@@ -254,6 +249,12 @@ namespace GitReleaseManager.Cli
 
                 return 1;
             }
+        }
+
+        private static IVcsProvider GetVcsProvider(BaseVcsOptions subOptions)
+        {
+            _configuration = ConfigurationProvider.Provide(subOptions.TargetDirectory ?? Environment.CurrentDirectory, _fileSystem);
+            return new GitHubProvider(_mapper, _configuration, subOptions.UserName, subOptions.Password, subOptions.Token);
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "Not required.")]

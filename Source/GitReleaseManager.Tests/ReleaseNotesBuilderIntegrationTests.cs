@@ -34,8 +34,8 @@ namespace GitReleaseManager.Tests
             var currentDirectory = Environment.CurrentDirectory;
             var configuration = ConfigurationProvider.Provide(currentDirectory, fileSystem);
 
-            var vcsClient = new DefaultGitHubClient(_mapper, configuration, "username", "password", "token");
-            var releaseNotesBuilder = new ReleaseNotesBuilder(vcsClient, "Chocolatey", "ChocolateyGUI", "0.12.4", configuration);
+            var vcsProvider = new GitHubProvider(_mapper, configuration, "username", "password", "token");
+            var releaseNotesBuilder = new ReleaseNotesBuilder(vcsProvider, "Chocolatey", "ChocolateyGUI", "0.12.4", configuration);
             var result = await releaseNotesBuilder.BuildReleaseNotes();
             Debug.WriteLine(result);
             ClipBoardHelper.SetClipboard(result);
@@ -49,8 +49,8 @@ namespace GitReleaseManager.Tests
             var currentDirectory = Environment.CurrentDirectory;
             var configuration = ConfigurationProvider.Provide(currentDirectory, fileSystem);
 
-            var vcsClient = new DefaultGitHubClient(_mapper, configuration, "username", "password", "token");
-            var releaseNotesBuilder = new ReleaseNotesBuilder(vcsClient, "Chocolatey", "ChocolateyGUI", "0.13.0", configuration);
+            var vcsProvider = new GitHubProvider(_mapper, configuration, "username", "password", "token");
+            var releaseNotesBuilder = new ReleaseNotesBuilder(vcsProvider, "Chocolatey", "ChocolateyGUI", "0.13.0", configuration);
             var result = await releaseNotesBuilder.BuildReleaseNotes();
             Debug.WriteLine(result);
             ClipBoardHelper.SetClipboard(result);

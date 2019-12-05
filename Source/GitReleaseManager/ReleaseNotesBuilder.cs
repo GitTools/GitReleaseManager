@@ -18,7 +18,7 @@ namespace GitReleaseManager.Core
 
     public class ReleaseNotesBuilder
     {
-        private IVcsClient _vcsClient;
+        private IVcsProvider _vcsProvider;
         private string _user;
         private string _repository;
         private string _milestoneTitle;
@@ -26,9 +26,9 @@ namespace GitReleaseManager.Core
         private Milestone _targetMilestone;
         private Config _configuration;
 
-        public ReleaseNotesBuilder(IVcsClient vcsClient, string user, string repository, string milestoneTitle, Config configuration)
+        public ReleaseNotesBuilder(IVcsProvider vcsProvider, string user, string repository, string milestoneTitle, Config configuration)
         {
-            _vcsClient = vcsClient;
+            _vcsProvider = vcsProvider;
             _user = user;
             _repository = repository;
             _milestoneTitle = milestoneTitle;
@@ -43,7 +43,7 @@ namespace GitReleaseManager.Core
             var issues = await GetIssues(_targetMilestone);
             var stringBuilder = new StringBuilder();
             var previousMilestone = GetPreviousMilestone();
-            var numberOfCommits = await _vcsClient.GetNumberOfCommitsBetween(previousMilestone, _targetMilestone, _user, _repository);
+            var numberOfCommits = await _vcsProvider.GetNumberOfCommitsBetween(previousMilestone, _targetMilestone, _user, _repository);
 
             if (issues.Count > 0)
             {
@@ -51,7 +51,7 @@ namespace GitReleaseManager.Core
 
                 if (numberOfCommits > 0)
                 {
-                    var commitsLink = _vcsClient.GetCommitsLink(_user, _repository, _targetMilestone, previousMilestone);
+                    var commitsLink = _vcsProvider.GetCommitsLink(_user, _repository, _targetMilestone, previousMilestone);
                     var commitsText = string.Format(numberOfCommits == 1 ? "{0} commit" : "{0} commits", numberOfCommits);
 
                     stringBuilder.AppendFormat(@"As part of this release we had [{0}]({1}) which resulted in [{2}]({3}) being closed.", commitsText, commitsLink, issuesText, _targetMilestone.HtmlUrl + "?closed=1");
@@ -63,7 +63,7 @@ namespace GitReleaseManager.Core
             }
             else if (numberOfCommits > 0)
             {
-                var commitsLink = _vcsClient.GetCommitsLink(_user, _repository, _targetMilestone, previousMilestone);
+                var commitsLink = _vcsProvider.GetCommitsLink(_user, _repository, _targetMilestone, previousMilestone);
                 var commitsText = string.Format(numberOfCommits == 1 ? "{0} commit" : "{0} commits", numberOfCommits);
                 stringBuilder.AppendFormat(@"As part of this release we had [{0}]({1}).", commitsText, commitsLink);
             }
@@ -170,12 +170,12 @@ namespace GitReleaseManager.Core
 
         private void LoadMilestones()
         {
-            _milestones = _vcsClient.GetMilestones(_user, _repository);
+            _milestones = _vcsProvider.GetMilestones(_user, _repository);
         }
 
         private async Task<List<Issue>> GetIssues(Milestone milestone)
         {
-            var issues = await _vcsClient.GetIssues(milestone);
+            var issues = await _vcsProvider.GetIssues(milestone);
             foreach (var issue in issues)
             {
                 CheckForValidLabels(issue);
