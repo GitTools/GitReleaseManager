@@ -20,7 +20,7 @@ BuildParameters.PrintParameters(Context);
 ToolSettings.SetToolSettings(context: Context,
                             dupFinderExcludePattern: new string[] {
                                 BuildParameters.RootDirectoryPath + "/Source/GitReleaseManager.Tests/*.cs",
-                                BuildParameters.RootDirectoryPath + "/Source/GitReleaseManager.Core/AutoMapperConfiguration.cs" },
+                                BuildParameters.RootDirectoryPath + "/Source/GitReleaseManager/AutoMapperConfiguration.cs" },
                             testCoverageFilter: "+[GitReleaseManager*]* -[GitReleaseManager.Tests*]*",
                             testCoverageExcludeByAttribute: "*.ExcludeFromCodeCoverage*",
                             testCoverageExcludeByFile: "*/*Designer.cs;*/*.g.cs;*/*.g.i.cs");
