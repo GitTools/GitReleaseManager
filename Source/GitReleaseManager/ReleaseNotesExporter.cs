@@ -16,12 +16,12 @@ namespace GitReleaseManager.Core
 
     public class ReleaseNotesExporter
     {
-        private IVcsClient _vcsClient;
+        private IVcsProvider _vcsClient;
         private Config _configuration;
         private string _user;
         private string _repository;
 
-        public ReleaseNotesExporter(IVcsClient vcsClient, Config configuration, string user, string repository)
+        public ReleaseNotesExporter(IVcsProvider vcsClient, Config configuration, string user, string repository)
         {
             _vcsClient = vcsClient;
             _configuration = configuration;

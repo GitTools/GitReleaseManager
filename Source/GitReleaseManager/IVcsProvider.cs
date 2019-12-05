@@ -12,7 +12,7 @@ namespace GitReleaseManager.Core
     using System.Threading.Tasks;
 
     // TODO: Confirm best name for this thing!
-    public interface IVcsClient
+    public interface IVcsProvider
     {
         Task<int> GetNumberOfCommitsBetween(Milestone previousMilestone, Milestone currentMilestone, string user, string repository);
 
