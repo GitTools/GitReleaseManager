@@ -14,7 +14,7 @@ namespace GitReleaseManager.Core
         public static Version Version(this Milestone ver)
         {
             var nameWithoutPrerelease = ver.Title.Split('-')[0];
-            if (nameWithoutPrerelease.StartsWith("v"))
+            if (nameWithoutPrerelease.StartsWith("v", StringComparison.OrdinalIgnoreCase))
             {
                 nameWithoutPrerelease = nameWithoutPrerelease.Remove(0, 1);
             }
