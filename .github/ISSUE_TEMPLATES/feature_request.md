@@ -1,7 +1,7 @@
 ---
 name: Suggest a new feature
 about: Suggest a new feature to implement
-title: 'REPLACE THIS TEXT WITH A GENERAL SUMMARY OF THE ISSUE'
+title: 'REPLACE THIS TEXT WITH A GENERAL SUMMARY OF THE FEATURE'
 labels: Feature, Investigating
 assignees: ''
 ---
