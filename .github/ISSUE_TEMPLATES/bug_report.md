@@ -14,7 +14,7 @@ assignees: ''
 <!-- Tell us what you believe should happen -->
 
 ## Actual Behavior
-<!-- Tell us what is happening> -->
+<!-- Tell us what is happening -->
 
 ## Possible Fix
 <!-- Not obligatory, but suggest a fix or reason for the bug -->
@@ -27,7 +27,7 @@ assignees: ''
 <!-- How has this bug affected you? What were you trying to accomplish? -->
 
 ## Your Environment
-<!-- Include as many relevant details bout the environment -->
+<!-- Include as many relevant details about the environment -->
 <!-- you experienced the bug in -->
 - Version Used:
 - Edition Used (.NET Core, .NET Framework):
