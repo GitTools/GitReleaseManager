@@ -78,6 +78,11 @@ namespace GitReleaseManager.Tests
             throw new System.NotImplementedException();
         }
 
+        public async Task DiscardRelease(string owner, string repository, string name)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public Task AddAssets(string owner, string repository, string tagName, IList<string> assets)
         {
             throw new System.NotImplementedException();

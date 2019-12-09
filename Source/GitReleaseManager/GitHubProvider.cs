@@ -51,7 +51,7 @@ namespace GitReleaseManager.Core
             catch (NotFoundException)
             {
                 Logger.WriteWarning("Unable to find tag for milestone, so commit count will be returned as zero");
-                
+
                 // If there is no tag yet the Compare will return a NotFoundException
                 // we can safely ignore
                 return 0;
@@ -193,6 +193,24 @@ namespace GitReleaseManager.Core
             return _mapper.Map<Octokit.Release, Release>(release);
         }
 
+        public async Task DiscardRelease(string owner, string repository, string name)
+        {
+            var allReleases = await _gitHubClient.Repository.Release.GetAll(owner, repository);
+            var release = allReleases.FirstOrDefault(r => r.TagName == name);
+
+            if (release == null)
+            {
+                throw new Exception(string.Format("Unable to find a release with name {0}", name));
+            }
+
+            if (!release.Draft)
+            {
+                throw new Exception("Release if not in draft state, so not discarding.");
+            }
+
+            await _gitHubClient.Repository.Release.Delete(owner, repository, release.Id);
+            return;
+        }
         public async Task AddAssets(string owner, string repository, string tagName, IList<string> assets)
         {
             var releases = await _gitHubClient.Repository.Release.GetAll(owner, repository);
