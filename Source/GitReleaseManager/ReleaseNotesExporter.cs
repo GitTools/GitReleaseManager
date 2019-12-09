@@ -36,7 +36,7 @@ namespace GitReleaseManager.Core
 
             if (string.IsNullOrEmpty(tagName))
             {
-                var releases = await _vcsProvider.GetReleases(_user, _repository);
+                var releases = await _vcsProvider.GetReleases(_user, _repository).ConfigureAwait(false);
 
                 if (releases.Count > 0)
                 {
@@ -52,7 +52,7 @@ namespace GitReleaseManager.Core
             }
             else
             {
-                var release = await _vcsProvider.GetSpecificRelease(tagName, _user, _repository);
+                var release = await _vcsProvider.GetSpecificRelease(tagName, _user, _repository).ConfigureAwait(false);
 
                 AppendVersionReleaseNotes(stringBuilder, release);
             }

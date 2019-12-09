@@ -114,11 +114,11 @@ namespace GitReleaseManager.Cli
                         releaseName = subOptions.Milestone;
                     }
 
-                    release = await _vcsProvider.CreateReleaseFromMilestone(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone, releaseName, subOptions.TargetCommitish, subOptions.AssetPaths, subOptions.Prerelease);
+                    release = await _vcsProvider.CreateReleaseFromMilestone(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone, releaseName, subOptions.TargetCommitish, subOptions.AssetPaths, subOptions.Prerelease).ConfigureAwait(false);
                 }
                 else
                 {
-                    release = await _vcsProvider.CreateReleaseFromInputFile(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Name, subOptions.InputFilePath, subOptions.TargetCommitish, subOptions.AssetPaths, subOptions.Prerelease);
+                    release = await _vcsProvider.CreateReleaseFromInputFile(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Name, subOptions.InputFilePath, subOptions.TargetCommitish, subOptions.AssetPaths, subOptions.Prerelease).ConfigureAwait(false);
                 }
 
                 Console.WriteLine(release.HtmlUrl);
@@ -160,7 +160,7 @@ namespace GitReleaseManager.Cli
 
                 _vcsProvider = GetVcsProvider(subOptions);
 
-                await _vcsProvider.AddAssets(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.TagName, subOptions.AssetPaths);
+                await _vcsProvider.AddAssets(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.TagName, subOptions.AssetPaths).ConfigureAwait(false);
 
                 return 0;
             }
@@ -180,7 +180,7 @@ namespace GitReleaseManager.Cli
 
                 _vcsProvider = GetVcsProvider(subOptions);
 
-                await _vcsProvider.CloseMilestone(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone);
+                await _vcsProvider.CloseMilestone(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone).ConfigureAwait(false);
 
                 return 0;
             }
@@ -200,7 +200,7 @@ namespace GitReleaseManager.Cli
 
                 _vcsProvider = GetVcsProvider(subOptions);
 
-                await _vcsProvider.PublishRelease(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.TagName);
+                await _vcsProvider.PublishRelease(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.TagName).ConfigureAwait(false);
 
                 return 0;
             }
@@ -220,7 +220,7 @@ namespace GitReleaseManager.Cli
 
                 _vcsProvider = GetVcsProvider(subOptions);
 
-                var releasesMarkdown = await _vcsProvider.ExportReleases(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.TagName);
+                var releasesMarkdown = await _vcsProvider.ExportReleases(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.TagName).ConfigureAwait(false);
 
                 using (var sw = new StreamWriter(File.Open(subOptions.FileOutputPath, FileMode.OpenOrCreate)))
                 {
@@ -261,7 +261,7 @@ namespace GitReleaseManager.Cli
 
                 _vcsProvider = GetVcsProvider(subOptions);
 
-                await _vcsProvider.CreateLabels(subOptions.RepositoryOwner, subOptions.RepositoryName);
+                await _vcsProvider.CreateLabels(subOptions.RepositoryOwner, subOptions.RepositoryName).ConfigureAwait(false);
 
                 return 0;
             }
