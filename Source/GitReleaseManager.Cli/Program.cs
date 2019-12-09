@@ -50,8 +50,8 @@ namespace GitReleaseManager.Cli
                   (CloseSubOptions opts) => CloseMilestoneAsync(opts),
                   (PublishSubOptions opts) => PublishReleaseAsync(opts),
                   (ExportSubOptions opts) => ExportReleasesAsync(opts),
-                  (InitSubOptions opts) => CreateSampleConfigFile(opts),
-                  (ShowConfigSubOptions opts) => ShowConfig(opts),
+                  (InitSubOptions opts) => CreateSampleConfigFileAsync(opts),
+                  (ShowConfigSubOptions opts) => ShowConfigAsync(opts),
                   (LabelSubOptions opts) => CreateLabelsAsync(opts),
                   errs => Task.FromResult(1));
         }
@@ -235,7 +235,7 @@ namespace GitReleaseManager.Cli
             }
         }
 
-        private static Task<int> CreateSampleConfigFile(InitSubOptions subOptions)
+        private static Task<int> CreateSampleConfigFileAsync(InitSubOptions subOptions)
         {
             ConfigureLogging(subOptions.LogFilePath);
 
@@ -243,7 +243,7 @@ namespace GitReleaseManager.Cli
             return Task.FromResult(0);
         }
 
-        private static Task<int> ShowConfig(ShowConfigSubOptions subOptions)
+        private static Task<int> ShowConfigAsync(ShowConfigSubOptions subOptions)
         {
             ConfigureLogging(subOptions.LogFilePath);
 
