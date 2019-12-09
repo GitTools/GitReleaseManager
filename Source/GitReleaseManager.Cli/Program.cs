@@ -31,7 +31,7 @@ namespace GitReleaseManager.Cli
         private static IVcsProvider _vcsProvider;
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "Not required")]
-        private static int Main(string[] args)
+        private static Task<int> Main(string[] args)
         {
             // Just add the TLS 1.2 protocol to the Service Point manager until
             // we've upgraded to latest Octokit.
@@ -40,20 +40,22 @@ namespace GitReleaseManager.Cli
             _fileSystem = new FileSystem();
 
             _mapper = AutoMapperConfiguration.Configure();
-
-            return Parser.Default.ParseArguments<CreateSubOptions, DiscardSubOptions, AddAssetSubOptions, CloseSubOptions, PublishSubOptions, ExportSubOptions, InitSubOptions, ShowConfigSubOptions, LabelSubOptions>(args)
+            
+            var result = Parser.Default.ParseArguments<CreateSubOptions, DiscardSubOptions, AddAssetSubOptions, CloseSubOptions, PublishSubOptions, ExportSubOptions, InitSubOptions, ShowConfigSubOptions, LabelSubOptions>(args)
                 .WithParsed<BaseSubOptions>(CreateFiglet)
                 .MapResult(
-                  (CreateSubOptions opts) => CreateReleaseAsync(opts).Result,
-                  (DiscardSubOptions opts) => DiscardReleaseAsync(opts).Result,
-                  (AddAssetSubOptions opts) => AddAssetsAsync(opts).Result,
-                  (CloseSubOptions opts) => CloseMilestoneAsync(opts).Result,
-                  (PublishSubOptions opts) => PublishReleaseAsync(opts).Result,
-                  (ExportSubOptions opts) => ExportReleasesAsync(opts).Result,
-                  (InitSubOptions opts) => CreateSampleConfigFile(opts),
-                  (ShowConfigSubOptions opts) => ShowConfig(opts),
-                  (LabelSubOptions opts) => CreateLabelsAsync(opts).Result,
-                  errs => 1);
+                  (CreateSubOptions opts) => CreateReleaseAsync(opts),
+                  (DiscardSubOptions opts) => DiscardReleaseAsync(opts),
+                  (AddAssetSubOptions opts) => AddAssetsAsync(opts),
+                  (CloseSubOptions opts) => CloseMilestoneAsync(opts),
+                  (PublishSubOptions opts) => PublishReleaseAsync(opts),
+                  (ExportSubOptions opts) => ExportReleasesAsync(opts),
+                  (InitSubOptions opts) => Task.FromResult(CreateSampleConfigFile(opts)),
+                  (ShowConfigSubOptions opts) => Task.FromResult(ShowConfig(opts)),
+                  (LabelSubOptions opts) => CreateLabelsAsync(opts),
+                  errs => Task.FromResult(1));
+
+            return result;
         }
 
         private static void CreateFiglet(BaseSubOptions options)
