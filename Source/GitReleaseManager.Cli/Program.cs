@@ -40,11 +40,12 @@ namespace GitReleaseManager.Cli
             _fileSystem = new FileSystem();
 
             _mapper = AutoMapperConfiguration.Configure();
-            
-            return Parser.Default.ParseArguments<CreateSubOptions, AddAssetSubOptions, CloseSubOptions, PublishSubOptions, ExportSubOptions, InitSubOptions, ShowConfigSubOptions, LabelSubOptions>(args)
+
+            return Parser.Default.ParseArguments<CreateSubOptions, DiscardSubOptions, AddAssetSubOptions, CloseSubOptions, PublishSubOptions, ExportSubOptions, InitSubOptions, ShowConfigSubOptions, LabelSubOptions>(args)
                 .WithParsed<BaseSubOptions>(CreateFiglet)
                 .MapResult(
                   (CreateSubOptions opts) => CreateReleaseAsync(opts).Result,
+                  (DiscardSubOptions opts) => DiscardReleaseAsync(opts).Result,
                   (AddAssetSubOptions opts) => AddAssetsAsync(opts).Result,
                   (CloseSubOptions opts) => CloseMilestoneAsync(opts).Result,
                   (PublishSubOptions opts) => PublishReleaseAsync(opts).Result,
@@ -129,6 +130,26 @@ namespace GitReleaseManager.Cli
             }
         }
 
+        private static async Task<int> DiscardReleaseAsync(DiscardSubOptions subOptions)
+        {
+            try
+            {
+                ConfigureLogging(subOptions.LogFilePath);
+
+                _vcsProvider = GetVcsProvider(subOptions);
+
+                await _vcsProvider.DiscardRelease(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone);
+
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+
+                return 1;
+            }
+        }
+        
         private static async Task<int> AddAssetsAsync(AddAssetSubOptions subOptions)
         {
             try
