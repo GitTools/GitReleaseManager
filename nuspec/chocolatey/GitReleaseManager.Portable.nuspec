@@ -10,7 +10,7 @@
     <projectUrl>https://github.com/GitTools/GitReleaseManager</projectUrl>
     <iconUrl>https://cdn.jsdelivr.net/gh/GitTools/GitReleaseManager@9c547452a10afaf83fce1b5833f4762487b017b7/Icons/package_icon.svg</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>Tool for creating and exporting releases for software applications</description>
+    <description>Tool for creating and exporting releases for software applications from online Version Control Systems</description>
     <summary>Tool for creating and exporting releases for software applications</summary>
     <copyright>Copyright (c) 2015 - Present - GitTools Contributors</copyright>
     <language>en-GB</language>

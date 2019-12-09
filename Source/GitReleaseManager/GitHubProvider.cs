@@ -50,7 +50,9 @@ namespace GitReleaseManager.Core
             }
             catch (NotFoundException)
             {
-                // If there is not tag yet the Compare will return a NotFoundException
+                Logger.WriteWarning("Unable to find tag for milestone, so commit count will be returned as zero");
+                
+                // If there is no tag yet the Compare will return a NotFoundException
                 // we can safely ignore
                 return 0;
             }

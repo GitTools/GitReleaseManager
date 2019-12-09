@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <LangVersion>8.0</LangVersion>
     <OutputType>Exe</OutputType>
     <AssemblyName>GitReleaseManager</AssemblyName>
 
@@ -14,7 +15,7 @@
     <PackageProjectUrl>https://github.com/GitTools/GitReleaseManager</PackageProjectUrl>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageTags>github release notes create export</PackageTags>
-    <Description>Tool for creating and exporting releases for software applications.</Description>
+    <Description>Tool for creating and exporting releases for software applications from online Version Control Systems</Description>
     <Copyright>Copyright (c) 2015 - Present - GitTools Contributors</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageIcon>package_icon.png</PackageIcon>

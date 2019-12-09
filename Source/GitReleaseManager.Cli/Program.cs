@@ -20,7 +20,6 @@ namespace GitReleaseManager.Cli
     using GitReleaseManager.Core;
     using GitReleaseManager.Core.Configuration;
     using GitReleaseManager.Core.Helpers;
-    using Octokit;
     using FileMode = System.IO.FileMode;
 
     public static class Program
