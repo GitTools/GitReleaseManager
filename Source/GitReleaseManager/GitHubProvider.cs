@@ -276,13 +276,11 @@ namespace GitReleaseManager.Core
             }
         }
 
-        public async Task<string> ExportReleases(string owner, string repository, string tagName)
+        public Task<string> ExportReleases(string owner, string repository, string tagName)
         {
             var releaseNotesExporter = new ReleaseNotesExporter(this, _configuration, owner, repository);
 
-            var result = await releaseNotesExporter.ExportReleaseNotes(tagName).ConfigureAwait(false);
-
-            return result;
+            return releaseNotesExporter.ExportReleaseNotes(tagName);
         }
 
         public async Task CloseMilestone(string owner, string repository, string milestoneTitle)
