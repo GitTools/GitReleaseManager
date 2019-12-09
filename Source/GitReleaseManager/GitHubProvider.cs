@@ -213,9 +213,7 @@ namespace GitReleaseManager.Core
         }
         public async Task AddAssets(string owner, string repository, string tagName, IList<string> assets)
         {
-            var releases = await _gitHubClient.Repository.Release.GetAll(owner, repository).ConfigureAwait(false);
-
-            var release = releases.FirstOrDefault(r => r.TagName == tagName);
+            var release = await GetRelease(owner, repository, tagName).ConfigureAwait(false);
 
             if (release == null)
             {
@@ -300,8 +298,7 @@ namespace GitReleaseManager.Core
 
         public async Task PublishRelease(string owner, string repository, string tagName)
         {
-            var releases = await _gitHubClient.Repository.Release.GetAll(owner, repository).ConfigureAwait(false);
-            var release = releases.FirstOrDefault(r => r.TagName == tagName);
+            var release = await GetRelease(owner, repository, tagName).ConfigureAwait(false);
 
             if (release == null)
             {
@@ -334,6 +331,13 @@ namespace GitReleaseManager.Core
 
             var createLabelsTasks = newLabels.Select(label => _gitHubClient.Issue.Labels.Create(owner, repository, label));
             await Task.WhenAll(createLabelsTasks).ConfigureAwait(false);
+        }
+
+        private async Task<Octokit.Release> GetRelease(string owner, string repository, string tagName)
+        {
+            var releases = await _gitHubClient.Repository.Release.GetAll(owner, repository).ConfigureAwait(false);
+            var release = releases.FirstOrDefault(r => r.TagName == tagName);
+            return release;
         }
     }
 }
