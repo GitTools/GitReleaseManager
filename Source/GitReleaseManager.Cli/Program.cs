@@ -41,7 +41,7 @@ namespace GitReleaseManager.Cli
 
             _mapper = AutoMapperConfiguration.Configure();
             
-            var result = Parser.Default.ParseArguments<CreateSubOptions, DiscardSubOptions, AddAssetSubOptions, CloseSubOptions, PublishSubOptions, ExportSubOptions, InitSubOptions, ShowConfigSubOptions, LabelSubOptions>(args)
+            return Parser.Default.ParseArguments<CreateSubOptions, DiscardSubOptions, AddAssetSubOptions, CloseSubOptions, PublishSubOptions, ExportSubOptions, InitSubOptions, ShowConfigSubOptions, LabelSubOptions>(args)
                 .WithParsed<BaseSubOptions>(CreateFiglet)
                 .MapResult(
                   (CreateSubOptions opts) => CreateReleaseAsync(opts),
@@ -50,12 +50,10 @@ namespace GitReleaseManager.Cli
                   (CloseSubOptions opts) => CloseMilestoneAsync(opts),
                   (PublishSubOptions opts) => PublishReleaseAsync(opts),
                   (ExportSubOptions opts) => ExportReleasesAsync(opts),
-                  (InitSubOptions opts) => Task.FromResult(CreateSampleConfigFile(opts)),
-                  (ShowConfigSubOptions opts) => Task.FromResult(ShowConfig(opts)),
+                  (InitSubOptions opts) => CreateSampleConfigFile(opts),
+                  (ShowConfigSubOptions opts) => ShowConfig(opts),
                   (LabelSubOptions opts) => CreateLabelsAsync(opts),
                   errs => Task.FromResult(1));
-
-            return result;
         }
 
         private static void CreateFiglet(BaseSubOptions options)
@@ -237,20 +235,20 @@ namespace GitReleaseManager.Cli
             }
         }
 
-        private static int CreateSampleConfigFile(InitSubOptions subOptions)
+        private static Task<int> CreateSampleConfigFile(InitSubOptions subOptions)
         {
             ConfigureLogging(subOptions.LogFilePath);
 
             ConfigurationProvider.WriteSample(subOptions.TargetDirectory ?? Environment.CurrentDirectory, _fileSystem);
-            return 0;
+            return Task.FromResult(0);
         }
 
-        private static int ShowConfig(ShowConfigSubOptions subOptions)
+        private static Task<int> ShowConfig(ShowConfigSubOptions subOptions)
         {
             ConfigureLogging(subOptions.LogFilePath);
 
             Console.WriteLine(ConfigurationProvider.GetEffectiveConfigAsString(subOptions.TargetDirectory ?? Environment.CurrentDirectory, _fileSystem));
-            return 0;
+            return Task.FromResult(0);
         }
 
         private static async Task<int> CreateLabelsAsync(LabelSubOptions subOptions)
