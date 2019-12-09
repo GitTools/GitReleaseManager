@@ -14,36 +14,36 @@ namespace GitReleaseManager.Core
     using System.Text;
     using System.Threading.Tasks;
     using GitReleaseManager.Core.Configuration;
-    using Octokit;
+    using GitReleaseManager.Core.Model;
 
     public class ReleaseNotesBuilder
     {
-        private IGitHubClient gitHubClient;
-        private string user;
-        private string repository;
-        private string milestoneTitle;
-        private ReadOnlyCollection<Milestone> milestones;
-        private Milestone targetMilestone;
-        private Config configuration;
+        private IVcsProvider _vcsProvider;
+        private string _user;
+        private string _repository;
+        private string _milestoneTitle;
+        private ReadOnlyCollection<Milestone> _milestones;
+        private Milestone _targetMilestone;
+        private Config _configuration;
 
-        public ReleaseNotesBuilder(IGitHubClient gitHubClient, string user, string repository, string milestoneTitle, Config configuration)
+        public ReleaseNotesBuilder(IVcsProvider vcsProvider, string user, string repository, string milestoneTitle, Config configuration)
         {
-            this.gitHubClient = gitHubClient;
-            this.user = user;
-            this.repository = repository;
-            this.milestoneTitle = milestoneTitle;
-            this.configuration = configuration;
+            _vcsProvider = vcsProvider;
+            _user = user;
+            _repository = repository;
+            _milestoneTitle = milestoneTitle;
+            _configuration = configuration;
         }
 
         public async Task<string> BuildReleaseNotes()
         {
-            this.LoadMilestones();
-            this.GetTargetMilestone();
+            LoadMilestones();
+            GetTargetMilestone();
 
-            var issues = await this.GetIssues(this.targetMilestone);
+            var issues = await GetIssues(_targetMilestone);
             var stringBuilder = new StringBuilder();
-            var previousMilestone = this.GetPreviousMilestone();
-            var numberOfCommits = await this.gitHubClient.GetNumberOfCommitsBetween(previousMilestone, this.targetMilestone);
+            var previousMilestone = GetPreviousMilestone();
+            var numberOfCommits = await _vcsProvider.GetNumberOfCommitsBetween(previousMilestone, _targetMilestone, _user, _repository);
 
             if (issues.Count > 0)
             {
@@ -51,33 +51,33 @@ namespace GitReleaseManager.Core
 
                 if (numberOfCommits > 0)
                 {
-                    var commitsLink = this.GetCommitsLink(previousMilestone);
+                    var commitsLink = _vcsProvider.GetCommitsLink(_user, _repository, _targetMilestone, previousMilestone);
                     var commitsText = string.Format(numberOfCommits == 1 ? "{0} commit" : "{0} commits", numberOfCommits);
 
-                    stringBuilder.AppendFormat(@"As part of this release we had [{0}]({1}) which resulted in [{2}]({3}) being closed.", commitsText, commitsLink, issuesText, this.targetMilestone.HtmlUrl + "?closed=1");
+                    stringBuilder.AppendFormat(@"As part of this release we had [{0}]({1}) which resulted in [{2}]({3}) being closed.", commitsText, commitsLink, issuesText, _targetMilestone.HtmlUrl + "?closed=1");
                 }
                 else
                 {
-                    stringBuilder.AppendFormat(@"As part of this release we had [{0}]({1}) closed.", issuesText, this.targetMilestone.HtmlUrl + "?closed=1");
+                    stringBuilder.AppendFormat(@"As part of this release we had [{0}]({1}) closed.", issuesText, _targetMilestone.HtmlUrl + "?closed=1");
                 }
             }
             else if (numberOfCommits > 0)
             {
-                var commitsLink = this.GetCommitsLink(previousMilestone);
+                var commitsLink = _vcsProvider.GetCommitsLink(_user, _repository, _targetMilestone, previousMilestone);
                 var commitsText = string.Format(numberOfCommits == 1 ? "{0} commit" : "{0} commits", numberOfCommits);
                 stringBuilder.AppendFormat(@"As part of this release we had [{0}]({1}).", commitsText, commitsLink);
             }
 
             stringBuilder.AppendLine();
 
-            stringBuilder.AppendLine(this.targetMilestone.Description);
+            stringBuilder.AppendLine(_targetMilestone.Description);
             stringBuilder.AppendLine();
 
-            this.AddIssues(stringBuilder, issues);
+            AddIssues(stringBuilder, issues);
 
-            if (this.configuration.Create.IncludeFooter)
+            if (_configuration.Create.IncludeFooter)
             {
-                this.AddFooter(stringBuilder);
+                AddFooter(stringBuilder);
             }
 
             return stringBuilder.ToString();
@@ -89,8 +89,8 @@ namespace GitReleaseManager.Core
 
             if (features.Count > 0)
             {
-                var singular = this.GetLabel(label, alias => alias.Header) ?? label;
-                var plural = this.GetLabel(label, alias => alias.Plural) ?? label + "s";
+                var singular = GetLabel(label, alias => alias.Header) ?? label;
+                var plural = GetLabel(label, alias => alias.Plural) ?? label + "s";
                 stringBuilder.AppendFormat("__{0}__\r\n\r\n", features.Count == 1 ? singular : plural);
 
                 foreach (var issue in features)
@@ -104,7 +104,7 @@ namespace GitReleaseManager.Core
 
         private string GetLabel(string label, Func<LabelAlias, string> func)
         {
-            var alias = this.configuration.LabelAliases.FirstOrDefault(x => x.Name.Equals(label, StringComparison.OrdinalIgnoreCase));
+            var alias = _configuration.LabelAliases.FirstOrDefault(x => x.Name.Equals(label, StringComparison.OrdinalIgnoreCase));
             return alias != null ? func(alias) : null;
         }
 
@@ -114,14 +114,14 @@ namespace GitReleaseManager.Core
 
             foreach (var issueLabel in issue.Labels)
             {
-                count += this.configuration.IssueLabelsInclude.Count(issueToInclude => issueLabel.Name.ToUpperInvariant() == issueToInclude.ToUpperInvariant());
+                count += _configuration.IssueLabelsInclude.Count(issueToInclude => issueLabel.Name.ToUpperInvariant() == issueToInclude.ToUpperInvariant());
 
-                count += this.configuration.IssueLabelsExclude.Count(issueToExclude => issueLabel.Name.ToUpperInvariant() == issueToExclude.ToUpperInvariant());
+                count += _configuration.IssueLabelsExclude.Count(issueToExclude => issueLabel.Name.ToUpperInvariant() == issueToExclude.ToUpperInvariant());
             }
 
             if (count != 1)
             {
-                var allIssueLabels = this.configuration.IssueLabelsInclude.Union(this.configuration.IssueLabelsExclude).ToList();
+                var allIssueLabels = _configuration.IssueLabelsInclude.Union(_configuration.IssueLabelsExclude).ToList();
                 var allIssuesExceptLast = allIssueLabels.Take(allIssueLabels.Count - 1);
                 var lastLabel = allIssueLabels.Last();
 
@@ -134,43 +134,33 @@ namespace GitReleaseManager.Core
 
         private void AddIssues(StringBuilder stringBuilder, List<Issue> issues)
         {
-            foreach (var issueLabel in this.configuration.IssueLabelsInclude)
+            foreach (var issueLabel in _configuration.IssueLabelsInclude)
             {
-                this.Append(issues, issueLabel, stringBuilder);
+                Append(issues, issueLabel, stringBuilder);
             }
         }
 
         private Milestone GetPreviousMilestone()
         {
-            var currentVersion = this.targetMilestone.Version();
-            return this.milestones
-                .OrderByDescending(m => m.Version())
+            var currentVersion = _targetMilestone.Version;
+            return _milestones
+                .OrderByDescending(m => m.Version)
                 .Distinct().ToList()
-                .SkipWhile(x => x.Version() >= currentVersion)
+                .SkipWhile(x => x.Version >= currentVersion)
                 .FirstOrDefault();
-        }
-
-        private string GetCommitsLink(Milestone previousMilestone)
-        {
-            if (previousMilestone == null)
-            {
-                return string.Format(CultureInfo.InvariantCulture, "https://github.com/{0}/{1}/commits/{2}", this.user, this.repository, this.targetMilestone.Title);
-            }
-
-            return string.Format(CultureInfo.InvariantCulture, "https://github.com/{0}/{1}/compare/{2}...{3}", this.user, this.repository, previousMilestone.Title, this.targetMilestone.Title);
         }
 
         private void AddFooter(StringBuilder stringBuilder)
         {
-            stringBuilder.AppendLine(string.Format(CultureInfo.InvariantCulture, "### {0}", this.configuration.Create.FooterHeading));
+            stringBuilder.AppendLine(string.Format(CultureInfo.InvariantCulture, "### {0}", _configuration.Create.FooterHeading));
 
-            var footerContent = this.configuration.Create.FooterContent;
+            var footerContent = _configuration.Create.FooterContent;
 
-            if (this.configuration.Create.FooterIncludesMilestone)
+            if (_configuration.Create.FooterIncludesMilestone)
             {
-                if (!string.IsNullOrEmpty(this.configuration.Create.MilestoneReplaceText))
+                if (!string.IsNullOrEmpty(_configuration.Create.MilestoneReplaceText))
                 {
-                    footerContent = footerContent.Replace(this.configuration.Create.MilestoneReplaceText, this.milestoneTitle);
+                    footerContent = footerContent.Replace(_configuration.Create.MilestoneReplaceText, _milestoneTitle);
                 }
             }
 
@@ -180,15 +170,15 @@ namespace GitReleaseManager.Core
 
         private void LoadMilestones()
         {
-            this.milestones = this.gitHubClient.GetMilestones();
+            _milestones = _vcsProvider.GetMilestones(_user, _repository);
         }
 
         private async Task<List<Issue>> GetIssues(Milestone milestone)
         {
-            var issues = await this.gitHubClient.GetIssues(milestone);
+            var issues = await _vcsProvider.GetIssues(milestone);
             foreach (var issue in issues)
             {
-                this.CheckForValidLabels(issue);
+                CheckForValidLabels(issue);
             }
 
             return issues;
@@ -196,11 +186,11 @@ namespace GitReleaseManager.Core
 
         private void GetTargetMilestone()
         {
-            this.targetMilestone = this.milestones.FirstOrDefault(x => x.Title == this.milestoneTitle);
+            _targetMilestone = _milestones.FirstOrDefault(x => x.Title == _milestoneTitle);
 
-            if (this.targetMilestone == null)
+            if (_targetMilestone == null)
             {
-                throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "Could not find milestone for '{0}'.", this.milestoneTitle));
+                throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "Could not find milestone for '{0}'.", _milestoneTitle));
             }
         }
     }

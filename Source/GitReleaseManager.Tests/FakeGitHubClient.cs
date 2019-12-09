@@ -6,20 +6,21 @@
 
 namespace GitReleaseManager.Tests
 {
+    using GitReleaseManager.Core.Model;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.Globalization;
     using System.Threading.Tasks;
-    using Octokit;
-    using IGitHubClient = GitReleaseManager.Core.IGitHubClient;
+    using IVcsProvider = Core.IVcsProvider;
 
-    public class FakeGitHubClient : IGitHubClient
+    public class FakeGitHubClient : IVcsProvider
     {
         public FakeGitHubClient()
         {
-            this.Milestones = new List<Milestone>();
-            this.Issues = new List<Issue>();
-            this.Releases = new List<Release>();
-            this.Release = new Release();
+            Milestones = new List<Milestone>();
+            Issues = new List<Issue>();
+            Releases = new List<Release>();
+            Release = new Release();
         }
 
         public List<Milestone> Milestones { get; private set; }
@@ -32,29 +33,74 @@ namespace GitReleaseManager.Tests
 
         public int NumberOfCommits { private get; set; }
 
-        public Task<int> GetNumberOfCommitsBetween(Milestone previousMilestone, Milestone currentMilestone)
+        public Task<int> GetNumberOfCommitsBetween(Milestone previousMilestone, Milestone currentMilestone, string user, string repository)
         {
-            return Task.FromResult(this.NumberOfCommits);
+            return Task.FromResult(NumberOfCommits);
         }
 
         public Task<List<Issue>> GetIssues(Milestone targetMilestone)
         {
-            return Task.FromResult(this.Issues);
+            return Task.FromResult(Issues);
         }
 
-        public Task<List<Release>> GetReleases()
+        public Task<List<Release>> GetReleases(string user, string repository)
         {
-            return Task.FromResult(this.Releases);
+            return Task.FromResult(Releases);
         }
 
-        public Task<Release> GetSpecificRelease(string tagName)
+        public Task<Release> GetSpecificRelease(string tagName, string user, string repository)
         {
-            return Task.FromResult(this.Release);
+            return Task.FromResult(Release);
         }
 
-        public ReadOnlyCollection<Milestone> GetMilestones()
+        public ReadOnlyCollection<Milestone> GetMilestones(string user, string repository)
         {
-            return new ReadOnlyCollection<Milestone>(this.Milestones);
+            return new ReadOnlyCollection<Milestone>(Milestones);
+        }
+
+        public string GetCommitsLink(string user, string repository, Milestone milestone, Milestone previousMilestone)
+        {
+            if (previousMilestone == null)
+            {
+                return string.Format(CultureInfo.InvariantCulture, "https://github.com/{0}/{1}/commits/{2}", user, repository, milestone.Title);
+            }
+
+            return string.Format(CultureInfo.InvariantCulture, "https://github.com/{0}/{1}/compare/{2}...{3}", user, repository, previousMilestone.Title, milestone.Title);
+        }
+
+        public Task<Release> CreateReleaseFromMilestone(string owner, string repository, string milestone, string releaseName, string targetCommitish, IList<string> assets, bool prerelease)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<Release> CreateReleaseFromInputFile(string owner, string repository, string name, string inputFilePath, string targetCommitish, IList<string> assets, bool prerelease)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task AddAssets(string owner, string repository, string tagName, IList<string> assets)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<string> ExportReleases(string owner, string repository, string tagName)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task CloseMilestone(string owner, string repository, string milestoneTitle)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task PublishRelease(string owner, string repository, string tagName)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task CreateLabels(string owner, string repository)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

@@ -32,16 +32,19 @@ namespace GitReleaseManager.Core
                 Milestone = milestone.Number.ToString(CultureInfo.InvariantCulture),
                 State = ItemStateFilter.Closed
             };
+
             var openIssueRequest = new RepositoryIssueRequest
             {
                 Milestone = milestone.Number.ToString(CultureInfo.InvariantCulture),
                 State = ItemStateFilter.Open
             };
+
             var parts = milestone.Url.Split('/');
             var user = parts[4];
             var repository = parts[5];
             var closedIssues = await gitHubClient.Issue.GetAllForRepository(user, repository, closedIssueRequest);
             var openIssues = await gitHubClient.Issue.GetAllForRepository(user, repository, openIssueRequest);
+            
             return openIssues.Union(closedIssues);
         }
 

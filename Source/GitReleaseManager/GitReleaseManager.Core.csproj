@@ -1,9 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <LangVersion>8.0</LangVersion>
     <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
     <BuildToolsFxCopVersion>1.0.1</BuildToolsFxCopVersion>
     <Title>GitReleaseManager.Core</Title>
-    <Description>Create release notes in markdown given a GitHub milestone</Description>
+    <Description>Create release notes in markdown given a milestone</Description>
     <RunCodeAnalysis>False</RunCodeAnalysis>
     <CodeAnalysisTreatWarningsAsErrors>True</CodeAnalysisTreatWarningsAsErrors>
     <CodeAnalysisRuleSet>..\GitReleaseManager.ruleset</CodeAnalysisRuleSet>

@@ -14,7 +14,7 @@ namespace GitReleaseManager.Core.Configuration
     {
         public Config()
         {
-            this.Create = new CreateConfig
+            Create = new CreateConfig
                               {
                                   IncludeFooter = false,
                                   FooterHeading = string.Empty,
@@ -26,7 +26,7 @@ namespace GitReleaseManager.Core.Configuration
                                   ShaSectionLineFormat = "- `{1}\t{0}`"
             };
 
-            this.Export = new ExportConfig
+            Export = new ExportConfig
                               {
                                   IncludeCreatedDateInTitle = false,
                                   CreatedDateStringFormat = string.Empty,
@@ -35,7 +35,7 @@ namespace GitReleaseManager.Core.Configuration
                                   IsMultilineRegex = false
                               };
 
-            this.IssueLabelsInclude = new List<string>
+            IssueLabelsInclude = new List<string>
                                    {
                                        "Bug",
                                        "Duplicate",
@@ -48,12 +48,12 @@ namespace GitReleaseManager.Core.Configuration
                                        "WontFix"
                                    };
 
-            this.IssueLabelsExclude = new List<string>
+            IssueLabelsExclude = new List<string>
                                    {
                                        "Internal Refactoring"
                                    };
 
-            this.LabelAliases = new List<LabelAlias>();
+            LabelAliases = new List<LabelAlias>();
         }
 
         [Description("Configuration values used when creating new releases")]

@@ -12,17 +12,21 @@ namespace GitReleaseManager.Core
     using System.Text.RegularExpressions;
     using System.Threading.Tasks;
     using GitReleaseManager.Core.Configuration;
-    using Octokit;
+    using GitReleaseManager.Core.Model;
 
     public class ReleaseNotesExporter
     {
-        private IGitHubClient gitHubClient;
-        private Config configuration;
+        private IVcsProvider _vcsProvider;
+        private Config _configuration;
+        private string _user;
+        private string _repository;
 
-        public ReleaseNotesExporter(IGitHubClient gitHubClient, Config configuration)
+        public ReleaseNotesExporter(IVcsProvider vcsProvider, Config configuration, string user, string repository)
         {
-            this.gitHubClient = gitHubClient;
-            this.configuration = configuration;
+            _vcsProvider = vcsProvider;
+            _configuration = configuration;
+            _user = user;
+            _repository = repository;
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Not appropriate.")]
@@ -32,13 +36,13 @@ namespace GitReleaseManager.Core
 
             if (string.IsNullOrEmpty(tagName))
             {
-                var releases = await this.gitHubClient.GetReleases();
+                var releases = await _vcsProvider.GetReleases(_user, _repository);
 
                 if (releases.Count > 0)
                 {
                     foreach (var release in releases)
                     {
-                        this.AppendVersionReleaseNotes(stringBuilder, release);
+                        AppendVersionReleaseNotes(stringBuilder, release);
                     }
                 }
                 else
@@ -48,9 +52,9 @@ namespace GitReleaseManager.Core
             }
             else
             {
-                var release = await this.gitHubClient.GetSpecificRelease(tagName);
+                var release = await _vcsProvider.GetSpecificRelease(tagName, _user, _repository);
 
-                this.AppendVersionReleaseNotes(stringBuilder, release);
+                AppendVersionReleaseNotes(stringBuilder, release);
             }
 
             return stringBuilder.ToString();
@@ -58,9 +62,9 @@ namespace GitReleaseManager.Core
 
         private void AppendVersionReleaseNotes(StringBuilder stringBuilder, Release release)
         {
-            if (this.configuration.Export.IncludeCreatedDateInTitle)
+            if (_configuration.Export.IncludeCreatedDateInTitle)
             {
-                stringBuilder.AppendLine(string.Format(CultureInfo.InvariantCulture, "## {0} ({1})", release.TagName, release.CreatedAt.ToString(this.configuration.Export.CreatedDateStringFormat, CultureInfo.InvariantCulture)));
+                stringBuilder.AppendLine(string.Format(CultureInfo.InvariantCulture, "## {0} ({1})", release.TagName, release.CreatedAt.ToString(_configuration.Export.CreatedDateStringFormat, CultureInfo.InvariantCulture)));
             }
             else
             {
@@ -69,9 +73,9 @@ namespace GitReleaseManager.Core
 
             stringBuilder.AppendLine(Environment.NewLine);
 
-            if (this.configuration.Export.PerformRegexRemoval)
+            if (_configuration.Export.PerformRegexRemoval)
             {
-                var regexPattern = new Regex(this.configuration.Export.RegexText, this.configuration.Export.IsMultilineRegex ? RegexOptions.Multiline : RegexOptions.Singleline);
+                var regexPattern = new Regex(_configuration.Export.RegexText, _configuration.Export.IsMultilineRegex ? RegexOptions.Multiline : RegexOptions.Singleline);
                 var replacement = string.Empty;
                 var replacedBody = regexPattern.Replace(release.Body, replacement);
                 stringBuilder.AppendLine(replacedBody);

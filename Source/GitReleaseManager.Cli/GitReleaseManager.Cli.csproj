@@ -1,5 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <LangVersion>8.0</LangVersion>
     <OutputType>Exe</OutputType>
     <AssemblyName>GitReleaseManager</AssemblyName>
     <TargetFrameworks>netcoreapp2.0;net461</TargetFrameworks>
@@ -20,7 +21,7 @@
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
     <Title>GitReleaseManager.Cli</Title>
-    <Description>Create release notes in markdown given a GitHub milestone</Description>
+    <Description>Create release notes in markdown given a milestone</Description>
     <RunCodeAnalysis>False</RunCodeAnalysis>
     <CodeAnalysisTreatWarningsAsErrors>True</CodeAnalysisTreatWarningsAsErrors>
     <CodeAnalysisRuleSet>..\GitReleaseManager.ruleset</CodeAnalysisRuleSet>
