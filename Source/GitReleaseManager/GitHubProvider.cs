@@ -329,15 +329,11 @@ namespace GitReleaseManager.Core
 
             var labels = await _gitHubClient.Issue.Labels.GetAllForRepository(owner, repository).ConfigureAwait(false);
 
-            foreach (var label in labels)
-            {
-                await _gitHubClient.Issue.Labels.Delete(owner, repository, label.Name).ConfigureAwait(false);
-            }
+            var deleteLabelsTasks = labels.Select(label => _gitHubClient.Issue.Labels.Delete(owner, repository, label.Name));
+            await Task.WhenAll(deleteLabelsTasks).ConfigureAwait(false);
 
-            foreach (var label in newLabels)
-            {
-                await _gitHubClient.Issue.Labels.Create(owner, repository, label).ConfigureAwait(false);
-            }
+            var createLabelsTasks = newLabels.Select(label => _gitHubClient.Issue.Labels.Create(owner, repository, label));
+            await Task.WhenAll(createLabelsTasks).ConfigureAwait(false);
         }
     }
 }
