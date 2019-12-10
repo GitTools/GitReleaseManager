@@ -162,16 +162,30 @@ namespace GitReleaseManager.Core
 
         public async Task<Release> CreateReleaseFromMilestone(string owner, string repository, string milestone, string releaseName, string targetCommitish, IList<string> assets, bool prerelease)
         {
+            var release = await GetRelease(owner, repository, milestone).ConfigureAwait(false);
             var releaseNotesBuilder = new ReleaseNotesBuilder(this, owner, repository, milestone, _configuration);
-
             var result = await releaseNotesBuilder.BuildReleaseNotes().ConfigureAwait(false);
 
-            var releaseUpdate = CreateNewRelease(releaseName, milestone, result, prerelease, targetCommitish);
+            if (release == null)
+            {
+                var releaseUpdate = CreateNewRelease(releaseName, milestone, result, prerelease, targetCommitish);
+                release = await _gitHubClient.Repository.Release.Create(owner, repository, releaseUpdate).ConfigureAwait(false);
+            }
+            else
+            {
+                Logger.WriteWarning(string.Format("A release for milestone {0} already exists, and will be updated", milestone));
 
-            var release = await _gitHubClient.Repository.Release.Create(owner, repository, releaseUpdate).ConfigureAwait(false);
+                if (!release.Draft)
+                {
+                    throw new Exception("Release is not in draft state, so not updating.");
+                }
+
+                var releaseUpdate = release.ToUpdate();
+                releaseUpdate.Body = result;
+                await _gitHubClient.Repository.Release.Edit(owner, repository, release.Id, releaseUpdate).ConfigureAwait(false);
+            }
 
             await AddAssets(owner, repository, milestone, assets).ConfigureAwait(false);
-
             return _mapper.Map<Octokit.Release, Release>(release);
         }
 
@@ -205,12 +219,13 @@ namespace GitReleaseManager.Core
 
             if (!release.Draft)
             {
-                throw new Exception("Release if not in draft state, so not discarding.");
+                throw new Exception("Release is not in draft state, so not discarding.");
             }
 
             await _gitHubClient.Repository.Release.Delete(owner, repository, release.Id);
             return;
         }
+
         public async Task AddAssets(string owner, string repository, string tagName, IList<string> assets)
         {
             var release = await GetRelease(owner, repository, tagName).ConfigureAwait(false);
@@ -227,12 +242,22 @@ namespace GitReleaseManager.Core
                 {
                     if (!File.Exists(asset))
                     {
+                        Logger.WriteWarning(string.Format("Requested asset to be uploaded doesn't exist: {0}", asset));
                         continue;
+                    }
+
+                    var assetFileName = Path.GetFileName(asset);
+
+                    var existingAsset = release.Assets.Where(a => a.Name == assetFileName).FirstOrDefault();
+                    if (existingAsset != null)
+                    {
+                        Logger.WriteWarning(string.Format("Requested asset to be uploaded already exists on draft release, replacing with new file: {0}", asset));
+                        await _gitHubClient.Repository.Release.DeleteAsset(owner, repository, existingAsset.Id).ConfigureAwait(false);
                     }
 
                     var upload = new ReleaseAssetUpload
                     {
-                        FileName = Path.GetFileName(asset),
+                        FileName = assetFileName,
                         ContentType = "application/octet-stream",
                         RawData = File.Open(asset, System.IO.FileMode.Open, FileAccess.Read, FileShare.ReadWrite)
                     };
