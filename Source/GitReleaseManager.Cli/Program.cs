@@ -31,7 +31,7 @@ namespace GitReleaseManager.Cli
         private static IVcsProvider _vcsProvider;
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "Not required")]
-        private static int Main(string[] args)
+        private static Task<int> Main(string[] args)
         {
             // Just add the TLS 1.2 protocol to the Service Point manager until
             // we've upgraded to latest Octokit.
@@ -40,20 +40,20 @@ namespace GitReleaseManager.Cli
             _fileSystem = new FileSystem();
 
             _mapper = AutoMapperConfiguration.Configure();
-
+            
             return Parser.Default.ParseArguments<CreateSubOptions, DiscardSubOptions, AddAssetSubOptions, CloseSubOptions, PublishSubOptions, ExportSubOptions, InitSubOptions, ShowConfigSubOptions, LabelSubOptions>(args)
                 .WithParsed<BaseSubOptions>(CreateFiglet)
                 .MapResult(
-                  (CreateSubOptions opts) => CreateReleaseAsync(opts).Result,
-                  (DiscardSubOptions opts) => DiscardReleaseAsync(opts).Result,
-                  (AddAssetSubOptions opts) => AddAssetsAsync(opts).Result,
-                  (CloseSubOptions opts) => CloseMilestoneAsync(opts).Result,
-                  (PublishSubOptions opts) => PublishReleaseAsync(opts).Result,
-                  (ExportSubOptions opts) => ExportReleasesAsync(opts).Result,
-                  (InitSubOptions opts) => CreateSampleConfigFile(opts),
-                  (ShowConfigSubOptions opts) => ShowConfig(opts),
-                  (LabelSubOptions opts) => CreateLabelsAsync(opts).Result,
-                  errs => 1);
+                  (CreateSubOptions opts) => CreateReleaseAsync(opts),
+                  (DiscardSubOptions opts) => DiscardReleaseAsync(opts),
+                  (AddAssetSubOptions opts) => AddAssetsAsync(opts),
+                  (CloseSubOptions opts) => CloseMilestoneAsync(opts),
+                  (PublishSubOptions opts) => PublishReleaseAsync(opts),
+                  (ExportSubOptions opts) => ExportReleasesAsync(opts),
+                  (InitSubOptions opts) => CreateSampleConfigFileAsync(opts),
+                  (ShowConfigSubOptions opts) => ShowConfigAsync(opts),
+                  (LabelSubOptions opts) => CreateLabelsAsync(opts),
+                  errs => Task.FromResult(1));
         }
 
         private static void CreateFiglet(BaseSubOptions options)
@@ -112,11 +112,11 @@ namespace GitReleaseManager.Cli
                         releaseName = subOptions.Milestone;
                     }
 
-                    release = await _vcsProvider.CreateReleaseFromMilestone(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone, releaseName, subOptions.TargetCommitish, subOptions.AssetPaths, subOptions.Prerelease);
+                    release = await _vcsProvider.CreateReleaseFromMilestone(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone, releaseName, subOptions.TargetCommitish, subOptions.AssetPaths, subOptions.Prerelease).ConfigureAwait(false);
                 }
                 else
                 {
-                    release = await _vcsProvider.CreateReleaseFromInputFile(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Name, subOptions.InputFilePath, subOptions.TargetCommitish, subOptions.AssetPaths, subOptions.Prerelease);
+                    release = await _vcsProvider.CreateReleaseFromInputFile(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Name, subOptions.InputFilePath, subOptions.TargetCommitish, subOptions.AssetPaths, subOptions.Prerelease).ConfigureAwait(false);
                 }
 
                 Console.WriteLine(release.HtmlUrl);
@@ -158,7 +158,7 @@ namespace GitReleaseManager.Cli
 
                 _vcsProvider = GetVcsProvider(subOptions);
 
-                await _vcsProvider.AddAssets(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.TagName, subOptions.AssetPaths);
+                await _vcsProvider.AddAssets(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.TagName, subOptions.AssetPaths).ConfigureAwait(false);
 
                 return 0;
             }
@@ -178,7 +178,7 @@ namespace GitReleaseManager.Cli
 
                 _vcsProvider = GetVcsProvider(subOptions);
 
-                await _vcsProvider.CloseMilestone(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone);
+                await _vcsProvider.CloseMilestone(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone).ConfigureAwait(false);
 
                 return 0;
             }
@@ -198,7 +198,7 @@ namespace GitReleaseManager.Cli
 
                 _vcsProvider = GetVcsProvider(subOptions);
 
-                await _vcsProvider.PublishRelease(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.TagName);
+                await _vcsProvider.PublishRelease(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.TagName).ConfigureAwait(false);
 
                 return 0;
             }
@@ -218,7 +218,7 @@ namespace GitReleaseManager.Cli
 
                 _vcsProvider = GetVcsProvider(subOptions);
 
-                var releasesMarkdown = await _vcsProvider.ExportReleases(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.TagName);
+                var releasesMarkdown = await _vcsProvider.ExportReleases(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.TagName).ConfigureAwait(false);
 
                 using (var sw = new StreamWriter(File.Open(subOptions.FileOutputPath, FileMode.OpenOrCreate)))
                 {
@@ -235,20 +235,20 @@ namespace GitReleaseManager.Cli
             }
         }
 
-        private static int CreateSampleConfigFile(InitSubOptions subOptions)
+        private static Task<int> CreateSampleConfigFileAsync(InitSubOptions subOptions)
         {
             ConfigureLogging(subOptions.LogFilePath);
 
             ConfigurationProvider.WriteSample(subOptions.TargetDirectory ?? Environment.CurrentDirectory, _fileSystem);
-            return 0;
+            return Task.FromResult(0);
         }
 
-        private static int ShowConfig(ShowConfigSubOptions subOptions)
+        private static Task<int> ShowConfigAsync(ShowConfigSubOptions subOptions)
         {
             ConfigureLogging(subOptions.LogFilePath);
 
             Console.WriteLine(ConfigurationProvider.GetEffectiveConfigAsString(subOptions.TargetDirectory ?? Environment.CurrentDirectory, _fileSystem));
-            return 0;
+            return Task.FromResult(0);
         }
 
         private static async Task<int> CreateLabelsAsync(LabelSubOptions subOptions)
@@ -259,7 +259,7 @@ namespace GitReleaseManager.Cli
 
                 _vcsProvider = GetVcsProvider(subOptions);
 
-                await _vcsProvider.CreateLabels(subOptions.RepositoryOwner, subOptions.RepositoryName);
+                await _vcsProvider.CreateLabels(subOptions.RepositoryOwner, subOptions.RepositoryName).ConfigureAwait(false);
 
                 return 0;
             }

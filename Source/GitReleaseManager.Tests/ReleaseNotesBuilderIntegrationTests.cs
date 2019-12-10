@@ -18,12 +18,17 @@ namespace GitReleaseManager.Tests
     [TestFixture]
     public class ReleaseNotesBuilderIntegrationTests
     {
+        public TestContext TestContext { get; set; }
+
         private IMapper _mapper;
 
         [OneTimeSetUp]
         public void Configure()
         {
             _mapper = AutoMapperConfiguration.Configure();
+            Logger.WriteError = s => TestContext.WriteLine($"Error: {s}");
+            Logger.WriteInfo = s => TestContext.WriteLine($"Info: {s}");
+            Logger.WriteWarning = s => TestContext.WriteLine($"Warning: {s}");
         }
 
         [Test]

@@ -40,10 +40,10 @@ namespace GitReleaseManager.Core
             LoadMilestones();
             GetTargetMilestone();
 
-            var issues = await GetIssues(_targetMilestone);
+            var issues = await GetIssues(_targetMilestone).ConfigureAwait(false);
             var stringBuilder = new StringBuilder();
             var previousMilestone = GetPreviousMilestone();
-            var numberOfCommits = await _vcsProvider.GetNumberOfCommitsBetween(previousMilestone, _targetMilestone, _user, _repository);
+            var numberOfCommits = await _vcsProvider.GetNumberOfCommitsBetween(previousMilestone, _targetMilestone, _user, _repository).ConfigureAwait(false);
 
             if (issues.Count > 0)
             {
@@ -175,7 +175,7 @@ namespace GitReleaseManager.Core
 
         private async Task<List<Issue>> GetIssues(Milestone milestone)
         {
-            var issues = await _vcsProvider.GetIssues(milestone);
+            var issues = await _vcsProvider.GetIssues(milestone).ConfigureAwait(false);
             foreach (var issue in issues)
             {
                 CheckForValidLabels(issue);
