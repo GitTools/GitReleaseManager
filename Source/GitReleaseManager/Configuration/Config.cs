@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="Config.cs" company="GitTools Contributors">
 //     Copyright (c) 2015 - Present - GitTools Contributors
 // </copyright>
@@ -15,25 +15,25 @@ namespace GitReleaseManager.Core.Configuration
         public Config()
         {
             Create = new CreateConfig
-                              {
-                                  IncludeFooter = false,
-                                  FooterHeading = string.Empty,
-                                  FooterContent = string.Empty,
-                                  FooterIncludesMilestone = false,
-                                  MilestoneReplaceText = string.Empty,
-                                  IncludeShaSection = false,
-                                  ShaSectionHeading = "SHA256 Hashes of the release artifacts",
-                                  ShaSectionLineFormat = "- `{1}\t{0}`",
-                              };
+            {
+                IncludeFooter = false,
+                FooterHeading = string.Empty,
+                FooterContent = string.Empty,
+                FooterIncludesMilestone = false,
+                MilestoneReplaceText = string.Empty,
+                IncludeShaSection = false,
+                ShaSectionHeading = "SHA256 Hashes of the release artifacts",
+                ShaSectionLineFormat = "- `{1}\t{0}`",
+            };
 
             Export = new ExportConfig
-                              {
-                                  IncludeCreatedDateInTitle = false,
-                                  CreatedDateStringFormat = string.Empty,
-                                  PerformRegexRemoval = false,
-                                  RegexText = string.Empty,
-                                  IsMultilineRegex = false,
-                              };
+            {
+                IncludeCreatedDateInTitle = false,
+                CreatedDateStringFormat = string.Empty,
+                PerformRegexRemoval = false,
+                RegexText = string.Empty,
+                IsMultilineRegex = false,
+            };
 
             IssueLabelsInclude = new List<string>
                                    {
