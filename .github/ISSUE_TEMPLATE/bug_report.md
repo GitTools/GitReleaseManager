@@ -1,9 +1,9 @@
 ---
 name: Report a bug
 about: Create a bug report to help us improve
-title: 'REPLACE THIS TEXT WITH A GENERAL SUMMARY OF THE ISSUE'
+title: "REPLACE THIS TEXT WITH A GENERAL SUMMARY OF THE ISSUE"
 labels: Bug, Investigating
-assignees: ''
+assignees: ""
 ---
 
 ## Description
@@ -29,6 +29,7 @@ assignees: ''
 ## Your Environment
 <!-- Include as many relevant details about the environment -->
 <!-- you experienced the bug in -->
+
 - Version Used:
 - Edition Used (.NET Core, .NET Framework):
 - Operating System and version (Windows 10, Ubuntu 18.04):

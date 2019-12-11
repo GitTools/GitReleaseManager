@@ -1,3 +1,4 @@
+---
 #---------------------------------#
 #  Build Image                    #
 #---------------------------------#
@@ -7,7 +8,7 @@ image: Visual Studio 2019
 #  Build Script                   #
 #---------------------------------#
 build_script:
-  - ps: .\build.ps1 -Target ContinuousIntegration
+    - ps: .\build.ps1 -Target ContinuousIntegration
 
 # Tests
 test: off
@@ -16,14 +17,14 @@ test: off
 #        Branches to build        #
 #---------------------------------#
 branches:
-  # Whitelist
-  only:
-    - develop
-    - master
+    # Whitelist
+    only:
+        - develop
+        - master
 
 #---------------------------------#
 #  Build Cache                    #
 #---------------------------------#
 cache:
-- Source\packages -> Source\**\packages.config
-- Tools -> recipe.cake
+    - Source\packages -> Source\**\packages.config
+    - Tools -> recipe.cake

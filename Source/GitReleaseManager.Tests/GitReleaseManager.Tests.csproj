@@ -1,29 +1,29 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <LangVersion>8.0</LangVersion>
-    <TargetFrameworks>net472;netcoreapp3.0</TargetFrameworks>
-    <Title>GitReleaseManager.Tests</Title>
-    <Description>Test Project for GitReleaseManager</Description>
-    <DebugType>full</DebugType>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <NoWarn>CA1707</NoWarn>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <Optimize>false</Optimize>
-    <DebugSymbols>true</DebugSymbols>
-  </PropertyGroup>
-  <ItemGroup>
-    <Compile Include="..\SolutionInfo.cs" Link="SolutionInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\GitReleaseManager\GitReleaseManager.Core.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.4.0" />
-    <PackageReference Include="ApprovalTests" Version="4.4.0" />
-    <PackageReference Include="NUnit" Version="3.12.0" />
-    <PackageReference Include="NUnit3TestAdapter" Version="3.15.1" />
-    <PackageReference Include="Octokit" Version="0.36.0" />
-    <PackageReference Include="TextCopy" Version="1.7.1" />
-  </ItemGroup>
+    <PropertyGroup>
+        <LangVersion>8.0</LangVersion>
+        <TargetFrameworks>net472;netcoreapp3.0</TargetFrameworks>
+        <Title>GitReleaseManager.Tests</Title>
+        <Description>Test Project for GitReleaseManager</Description>
+        <DebugType>full</DebugType>
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <NoWarn>CA1707</NoWarn>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+        <Optimize>false</Optimize>
+        <DebugSymbols>true</DebugSymbols>
+    </PropertyGroup>
+    <ItemGroup>
+        <Compile Include="..\SolutionInfo.cs" Link="SolutionInfo.cs" />
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\GitReleaseManager\GitReleaseManager.Core.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.4.0" />
+        <PackageReference Include="ApprovalTests" Version="4.4.0" />
+        <PackageReference Include="NUnit" Version="3.12.0" />
+        <PackageReference Include="NUnit3TestAdapter" Version="3.15.1" />
+        <PackageReference Include="Octokit" Version="0.36.0" />
+        <PackageReference Include="TextCopy" Version="1.7.1" />
+    </ItemGroup>
 </Project>

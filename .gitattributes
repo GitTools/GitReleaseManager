@@ -5,7 +5,7 @@
 *.md text whitespace=-blank-at-eol
 
 # Custom for Visual Studio
-*.cs     diff=csharp
+*.cs     text diff=csharp
 *.sln    merge=union
 *.csproj merge=union
 *.vbproj merge=union

@@ -4,6 +4,7 @@
 root = true
 
 [*]
+charset = utf-8 # Just for consistency
 # Indentation and spacing
 indent_size = 4
 indent_style = space
@@ -19,8 +20,10 @@ end_of_line = lf
 
 [*.md]
 trim_trailing_whitespace = false
+insert_final_newline = true # Conflicts with markdownlint when false
 
 [*.ps1]
+charset = utf-8-bom
 indent_style = space
 indent_size = 2
 

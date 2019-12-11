@@ -1,7 +1,7 @@
 # What is GitReleaseManager?
 
 GitReleaseManager is a tool that will help create a set of release notes for
-your application/product.  It does this using the collection of issues which
+your application/product. It does this using the collection of issues which
 are stored on the GitHub Issue Tracker for your application/product.
 
 By inspecting the issues that have been assigned to a particular milestone,

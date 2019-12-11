@@ -13,24 +13,24 @@ using the tagName parameter.
 
 ## **Required Parameters**
 
-* `-u, --username`: The username to access GitHub with.  This can't be used when
-using the token parameter.
-* `-p, --password`: The password to access GitHub with.  This can't be used when
-using the token parameter.
-* `--token`: The access token to access GitHub with.  This can't be used when
-using the username and password parameters.
-* `-o, --owner`: The owner of the repository.
-* `-r, --repository`: The name of the repository.
-* `-f, --fileOutputPath`: Path to the file export releases.
+- `-u, --username`: The username to access GitHub with. This can't be used when
+    using the token parameter.
+- `-p, --password`: The password to access GitHub with. This can't be used when
+    using the token parameter.
+- `--token`: The access token to access GitHub with. This can't be used when
+    using the username and password parameters.
+- `-o, --owner`: The owner of the repository.
+- `-r, --repository`: The name of the repository.
+- `-f, --fileOutputPath`: Path to the file export releases.
 
 ## **Optional Parameters**
 
-* `-t, --tagName`: The name of the release (Typically this is the generated
-SemVer Version Number).
-* `-d, --targetDirectory`: The directory on which GitReleaseManager should be
-executed. Defaults to current directory.
-* `-l, --logFilePath`: Path to where log file should be created. Defaults to
-logging to console.
+- `-t, --tagName`: The name of the release (Typically this is the generated
+    SemVer Version Number).
+- `-d, --targetDirectory`: The directory on which GitReleaseManager should be
+    executed. Defaults to current directory.
+- `-l, --logFilePath`: Path to where log file should be created. Defaults to
+    logging to console.
 
 ## **Notes**
 
