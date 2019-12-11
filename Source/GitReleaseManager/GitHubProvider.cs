@@ -78,8 +78,7 @@ namespace GitReleaseManager.Core
 
         public async Task<Release> GetSpecificRelease(string tagName, string user, string repository)
         {
-            var allReleases = await _gitHubClient.Repository.Release.GetAll(user, repository).ConfigureAwait(false);
-            return _mapper.Map<Release>(allReleases.FirstOrDefault(r => r.TagName == tagName));
+            return _mapper.Map<Release>(await GetReleaseFromTagNameAsync(user, repository, tagName).ConfigureAwait(false));
         }
 
         public ReadOnlyCollection<Milestone> GetReadOnlyMilestones(string user, string repository)
@@ -131,7 +130,7 @@ namespace GitReleaseManager.Core
 
         public async Task<Release> CreateReleaseFromMilestone(string owner, string repository, string milestone, string releaseName, string targetCommitish, IList<string> assets, bool prerelease)
         {
-            var release = await GetRelease(owner, repository, milestone).ConfigureAwait(false);
+            var release = await GetReleaseFromTagNameAsync(owner, repository, milestone).ConfigureAwait(false);
             var releaseNotesBuilder = new ReleaseNotesBuilder(this, owner, repository, milestone, _configuration);
             var result = await releaseNotesBuilder.BuildReleaseNotes().ConfigureAwait(false);
 
@@ -178,8 +177,7 @@ namespace GitReleaseManager.Core
 
         public async Task DiscardRelease(string owner, string repository, string name)
         {
-            var allReleases = await _gitHubClient.Repository.Release.GetAll(owner, repository).ConfigureAwait(false);
-            var release = allReleases.FirstOrDefault(r => r.TagName == name);
+            var release = await GetReleaseFromTagNameAsync(owner, repository, name).ConfigureAwait(false);
 
             if (release == null)
             {
@@ -197,7 +195,7 @@ namespace GitReleaseManager.Core
 
         public async Task AddAssets(string owner, string repository, string tagName, IList<string> assets)
         {
-            var release = await GetRelease(owner, repository, tagName).ConfigureAwait(false);
+            var release = await GetReleaseFromTagNameAsync(owner, repository, tagName).ConfigureAwait(false);
 
             if (release == null)
             {
@@ -291,7 +289,7 @@ namespace GitReleaseManager.Core
 
         public async Task PublishRelease(string owner, string repository, string tagName)
         {
-            var release = await GetRelease(owner, repository, tagName).ConfigureAwait(false);
+            var release = await GetReleaseFromTagNameAsync(owner, repository, tagName).ConfigureAwait(false);
 
             if (release == null)
             {
@@ -368,9 +366,10 @@ namespace GitReleaseManager.Core
             }
         }
 
-        private async Task<Octokit.Release> GetRelease(string owner, string repository, string tagName)
+        private async Task<Octokit.Release> GetReleaseFromTagNameAsync(string owner, string repository, string tagName)
         {
             var releases = await _gitHubClient.Repository.Release.GetAll(owner, repository).ConfigureAwait(false);
+
             var release = releases.FirstOrDefault(r => r.TagName == tagName);
             return release;
         }
