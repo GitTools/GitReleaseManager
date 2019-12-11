@@ -4,7 +4,6 @@
     <OutputType>Exe</OutputType>
     <AssemblyName>GitReleaseManager</AssemblyName>
     <TargetFrameworks>netcoreapp2.0;net461</TargetFrameworks>
-    <BuildToolsFxCopVersion>1.0.1</BuildToolsFxCopVersion>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
@@ -22,26 +21,11 @@
     <BootstrapperEnabled>true</BootstrapperEnabled>
     <Title>GitReleaseManager.Cli</Title>
     <Description>Create release notes in markdown given a milestone</Description>
-    <RunCodeAnalysis>False</RunCodeAnalysis>
-    <CodeAnalysisTreatWarningsAsErrors>True</CodeAnalysisTreatWarningsAsErrors>
-    <CodeAnalysisRuleSet>..\GitReleaseManager.ruleset</CodeAnalysisRuleSet>
     <IsPackable>false</IsPackable>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <RunCodeAnalysisRestore>False</RunCodeAnalysisRestore>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <RunCodeAnalysisRestore>True</RunCodeAnalysisRestore>
-  </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\SolutionInfo.cs" Link="SolutionInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <CodeAnalysisDictionary Include="..\CustomDictionary.xml">
-      <Link>CustomDictionary.xml</Link>
-      <SubType>Designer</SubType>
-    </CodeAnalysisDictionary>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GitReleaseManager\GitReleaseManager.Core.csproj" />
