@@ -24,9 +24,9 @@ namespace GitReleaseManager.Core
 
     public class GitHubProvider : IVcsProvider
     {
+        private readonly Config _configuration;
+        private readonly IMapper _mapper;
         private GitHubClient _gitHubClient;
-        private IMapper _mapper;
-        private Config _configuration;
 
         public GitHubProvider(IMapper mapper, Config configuration, string userName, string password, string token)
         {
@@ -37,6 +37,11 @@ namespace GitReleaseManager.Core
 
         public async Task<int> GetNumberOfCommitsBetween(Milestone previousMilestone, Milestone currentMilestone, string user, string repository)
         {
+            if (currentMilestone is null)
+            {
+                throw new ArgumentNullException(nameof(currentMilestone));
+            }
+
             try
             {
                 if (previousMilestone == null)
@@ -58,14 +63,14 @@ namespace GitReleaseManager.Core
             }
         }
 
-        public async Task<List<Issue>> GetIssues(Milestone targetMilestone)
+        public async Task<List<Issue>> GetIssuesAsync(Milestone targetMilestone)
         {
             var githubMilestone = _mapper.Map<Octokit.Milestone>(targetMilestone);
             var allIssues = await _gitHubClient.AllIssuesForMilestone(githubMilestone).ConfigureAwait(false);
             return _mapper.Map<List<Issue>>(allIssues.Where(x => x.State == ItemState.Closed).ToList());
         }
 
-        public async Task<List<Release>> GetReleases(string user, string repository)
+        public async Task<List<Release>> GetReleasesAsync(string user, string repository)
         {
             var allReleases = await _gitHubClient.Repository.Release.GetAll(user, repository).ConfigureAwait(false);
             return _mapper.Map<List<Release>>(allReleases.OrderByDescending(r => r.CreatedAt).ToList());
@@ -77,7 +82,7 @@ namespace GitReleaseManager.Core
             return _mapper.Map<Release>(allReleases.FirstOrDefault(r => r.TagName == tagName));
         }
 
-        public ReadOnlyCollection<Milestone> GetMilestones(string user, string repository)
+        public ReadOnlyCollection<Milestone> GetReadOnlyMilestones(string user, string repository)
         {
             var milestonesClient = _gitHubClient.Issue.Milestone;
             var closed = milestonesClient.GetAllForRepository(
@@ -111,7 +116,12 @@ namespace GitReleaseManager.Core
 
         public string GetCommitsLink(string user, string repository, Milestone milestone, Milestone previousMilestone)
         {
-            if (previousMilestone == null)
+            if (milestone is null)
+            {
+                throw new ArgumentNullException(nameof(milestone));
+            }
+
+            if (previousMilestone is null)
             {
                 return string.Format(CultureInfo.InvariantCulture, "https://github.com/{0}/{1}/commits/{2}", user, repository, milestone.Title);
             }
@@ -168,7 +178,7 @@ namespace GitReleaseManager.Core
 
         public async Task DiscardRelease(string owner, string repository, string name)
         {
-            var allReleases = await _gitHubClient.Repository.Release.GetAll(owner, repository);
+            var allReleases = await _gitHubClient.Repository.Release.GetAll(owner, repository).ConfigureAwait(false);
             var release = allReleases.FirstOrDefault(r => r.TagName == name);
 
             if (release == null)
@@ -181,7 +191,7 @@ namespace GitReleaseManager.Core
                 throw new Exception("Release is not in draft state, so not discarding.");
             }
 
-            await _gitHubClient.Repository.Release.Delete(owner, repository, release.Id);
+            await _gitHubClient.Repository.Release.Delete(owner, repository, release.Id).ConfigureAwait(false);
             return;
         }
 
@@ -295,16 +305,18 @@ namespace GitReleaseManager.Core
 
         public async Task CreateLabels(string owner, string repository)
         {
-            var newLabels = new List<NewLabel>();
-            newLabels.Add(new NewLabel("Breaking change", "b60205"));
-            newLabels.Add(new NewLabel("Bug", "ee0701"));
-            newLabels.Add(new NewLabel("Build", "009800"));
-            newLabels.Add(new NewLabel("Documentation", "d4c5f9"));
-            newLabels.Add(new NewLabel("Feature", "84b6eb"));
-            newLabels.Add(new NewLabel("Improvement", "207de5"));
-            newLabels.Add(new NewLabel("Question", "cc317c"));
-            newLabels.Add(new NewLabel("good first issue", "7057ff"));
-            newLabels.Add(new NewLabel("help wanted", "33aa3f"));
+            var newLabels = new List<NewLabel>
+            {
+                new NewLabel("Breaking change", "b60205"),
+                new NewLabel("Bug", "ee0701"),
+                new NewLabel("Build", "009800"),
+                new NewLabel("Documentation", "d4c5f9"),
+                new NewLabel("Feature", "84b6eb"),
+                new NewLabel("Improvement", "207de5"),
+                new NewLabel("Question", "cc317c"),
+                new NewLabel("good first issue", "7057ff"),
+                new NewLabel("help wanted", "33aa3f"),
+            };
 
             var labels = await _gitHubClient.Issue.Labels.GetAllForRepository(owner, repository).ConfigureAwait(false);
 

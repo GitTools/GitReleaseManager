@@ -18,8 +18,8 @@ namespace GitReleaseManager.Tests
     [TestFixture]
     public class ReleaseNotesExporterTests
     {
-        private FileSystem _fileSystem = new FileSystem();
-        private string _currentDirectory = Environment.CurrentDirectory;
+        private readonly FileSystem _fileSystem = new FileSystem();
+        private readonly string _currentDirectory = Environment.CurrentDirectory;
 
         [Test]
         public void NoReleases()
@@ -32,7 +32,7 @@ namespace GitReleaseManager.Tests
         public void SingleRelease()
         {
             var configuration = ConfigurationProvider.Provide(_currentDirectory, _fileSystem);
-            AcceptTest(configuration, CreateRelease(1, new DateTime(2015, 3, 12), "0.1.0"));
+            AcceptTest(configuration, CreateRelease(new DateTime(2015, 3, 12), "0.1.0"));
         }
 
         [Test]
@@ -41,7 +41,7 @@ namespace GitReleaseManager.Tests
             var configuration = ConfigurationProvider.Provide(_currentDirectory, _fileSystem);
             configuration.Export.IncludeCreatedDateInTitle = false;
 
-            AcceptTest(configuration, CreateRelease(1, new DateTime(2015, 3, 12), "0.1.0"));
+            AcceptTest(configuration, CreateRelease(new DateTime(2015, 3, 12), "0.1.0"));
         }
 
         [Test]
@@ -50,7 +50,7 @@ namespace GitReleaseManager.Tests
             var configuration = ConfigurationProvider.Provide(_currentDirectory, _fileSystem);
             configuration.Export.PerformRegexRemoval = false;
 
-            AcceptTest(configuration, CreateRelease(1, new DateTime(2015, 3, 12), "0.1.0"));
+            AcceptTest(configuration, CreateRelease(new DateTime(2015, 3, 12), "0.1.0"));
         }
 
         private static void AcceptTest(Config configuration, params Release[] releases)
@@ -68,7 +68,7 @@ namespace GitReleaseManager.Tests
             Approvals.Verify(notes);
         }
 
-        private static Release CreateRelease(int id, DateTime createdDateTime, string milestone)
+        private static Release CreateRelease(DateTime createdDateTime, string milestone)
         {
             var stringBuilder = new StringBuilder();
             stringBuilder.AppendLine("As part of this release we had [3 issues](https://github.com/FakeRepository/issues/issues?milestone=0&state=closed) closed.");

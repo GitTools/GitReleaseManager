@@ -24,7 +24,7 @@ namespace GitReleaseManager.Cli
 
     public static class Program
     {
-        private static StringBuilder _log = new StringBuilder();
+        private static readonly StringBuilder _log = new StringBuilder();
         private static FileSystem _fileSystem;
         private static Config _configuration;
         private static IMapper _mapper;

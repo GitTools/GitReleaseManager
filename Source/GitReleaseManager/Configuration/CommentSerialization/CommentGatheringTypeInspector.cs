@@ -23,12 +23,7 @@ namespace GitReleaseManager.Core.Configuration.CommentSerialization
 
         public CommentGatheringTypeInspector(ITypeInspector innerTypeDescriptor)
         {
-            if (innerTypeDescriptor == null)
-            {
-                throw new ArgumentNullException(nameof(innerTypeDescriptor));
-            }
-
-            _innerTypeDescriptor = innerTypeDescriptor;
+            _innerTypeDescriptor = innerTypeDescriptor ?? throw new ArgumentNullException(nameof(innerTypeDescriptor));
         }
 
         public override IEnumerable<IPropertyDescriptor> GetProperties(Type type, object container)

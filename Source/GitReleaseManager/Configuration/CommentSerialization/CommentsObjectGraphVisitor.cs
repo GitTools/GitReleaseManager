@@ -23,8 +23,7 @@ namespace GitReleaseManager.Core.Configuration.CommentSerialization
 
         public override bool EnterMapping(IPropertyDescriptor key, IObjectDescriptor value, IEmitter context)
         {
-            var commentsDescriptor = value as CommentsObjectDescriptor;
-            if (commentsDescriptor != null && commentsDescriptor.Comment != null)
+            if (value is CommentsObjectDescriptor commentsDescriptor && commentsDescriptor.Comment != null)
             {
                 context?.Emit(new Comment(commentsDescriptor.Comment, false));
             }

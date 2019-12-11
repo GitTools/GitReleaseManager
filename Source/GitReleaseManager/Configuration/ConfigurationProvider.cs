@@ -27,12 +27,14 @@ namespace GitReleaseManager.Core.Configuration
             if (fileSystem.Exists(configFilePath))
             {
                 var readAllText = fileSystem.ReadAllText(configFilePath);
+                using (var stringReader = new StringReader(readAllText))
+                {
+                    var deserializedConfig = ConfigSerializer.Read(stringReader);
 
-                var deserializedConfig = ConfigSerializer.Read(new StringReader(readAllText));
+                    EnsureDefaultConfig(deserializedConfig);
 
-                EnsureDefaultConfig(deserializedConfig);
-
-                return deserializedConfig;
+                    return deserializedConfig;
+                }
             }
 
             return new Config();

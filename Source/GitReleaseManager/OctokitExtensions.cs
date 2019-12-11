@@ -17,9 +17,9 @@ namespace GitReleaseManager.Core
     {
         public static bool IsPullRequest(this Issue issue)
         {
-            if (issue == null)
+            if (issue is null)
             {
-                throw new ArgumentNullException("issue");
+                throw new ArgumentNullException(nameof(issue));
             }
 
             return issue.PullRequest != null;
@@ -27,6 +27,16 @@ namespace GitReleaseManager.Core
 
         public static async Task<IEnumerable<Issue>> AllIssuesForMilestone(this GitHubClient gitHubClient, Milestone milestone)
         {
+            if (gitHubClient is null)
+            {
+                throw new ArgumentNullException(nameof(gitHubClient));
+            }
+
+            if (milestone is null)
+            {
+                throw new ArgumentNullException(nameof(milestone));
+            }
+
             var closedIssueRequest = new RepositoryIssueRequest
             {
                 Milestone = milestone.Number.ToString(CultureInfo.InvariantCulture),

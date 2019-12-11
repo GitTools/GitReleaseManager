@@ -23,6 +23,7 @@ namespace GitReleaseManager.Tests
             Release = new Release();
         }
 
+#pragma warning disable CA1044 // Properties should not be write only
         public List<Milestone> Milestones { get; private set; }
 
         public List<Issue> Issues { get; private set; }
@@ -32,18 +33,19 @@ namespace GitReleaseManager.Tests
         public Release Release { get; private set; }
 
         public int NumberOfCommits { private get; set; }
+#pragma warning restore CA1044 // Properties should not be write only
 
         public Task<int> GetNumberOfCommitsBetween(Milestone previousMilestone, Milestone currentMilestone, string user, string repository)
         {
             return Task.FromResult(NumberOfCommits);
         }
 
-        public Task<List<Issue>> GetIssues(Milestone targetMilestone)
+        public Task<List<Issue>> GetIssuesAsync(Milestone targetMilestone)
         {
             return Task.FromResult(Issues);
         }
 
-        public Task<List<Release>> GetReleases(string user, string repository)
+        public Task<List<Release>> GetReleasesAsync(string user, string repository)
         {
             return Task.FromResult(Releases);
         }
@@ -53,14 +55,19 @@ namespace GitReleaseManager.Tests
             return Task.FromResult(Release);
         }
 
-        public ReadOnlyCollection<Milestone> GetMilestones(string user, string repository)
+        public ReadOnlyCollection<Milestone> GetReadOnlyMilestones(string user, string repository)
         {
             return new ReadOnlyCollection<Milestone>(Milestones);
         }
 
         public string GetCommitsLink(string user, string repository, Milestone milestone, Milestone previousMilestone)
         {
-            if (previousMilestone == null)
+            if (milestone is null)
+            {
+                throw new System.ArgumentNullException(nameof(milestone));
+            }
+
+            if (previousMilestone is null)
             {
                 return string.Format(CultureInfo.InvariantCulture, "https://github.com/{0}/{1}/commits/{2}", user, repository, milestone.Title);
             }
@@ -78,7 +85,7 @@ namespace GitReleaseManager.Tests
             throw new System.NotImplementedException();
         }
 
-        public async Task DiscardRelease(string owner, string repository, string name)
+        public Task DiscardRelease(string owner, string repository, string name)
         {
             throw new System.NotImplementedException();
         }

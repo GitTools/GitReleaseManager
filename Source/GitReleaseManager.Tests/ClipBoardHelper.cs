@@ -9,7 +9,7 @@ namespace GitReleaseManager.Tests
     using System.Threading;
     using TextCopy;
 
-    public class ClipBoardHelper
+    public static class ClipBoardHelper
     {
         public static void SetClipboard(string result)
         {

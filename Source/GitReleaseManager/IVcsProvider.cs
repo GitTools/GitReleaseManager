@@ -17,13 +17,13 @@ namespace GitReleaseManager.Core
 
         string GetCommitsLink(string user, string repository, Milestone milestone, Milestone previousMilestone);
 
-        Task<List<Issue>> GetIssues(Milestone targetMilestone);
+        Task<List<Issue>> GetIssuesAsync(Milestone targetMilestone);
 
-        Task<List<Release>> GetReleases(string user, string repository);
+        Task<List<Release>> GetReleasesAsync(string user, string repository);
 
         Task<Release> GetSpecificRelease(string tagName, string user, string repository);
 
-        ReadOnlyCollection<Milestone> GetMilestones(string user, string repository);
+        ReadOnlyCollection<Milestone> GetReadOnlyMilestones(string user, string repository);
 
         Task<Release> CreateReleaseFromMilestone(string owner, string repository, string milestone, string releaseName, string targetCommitish, IList<string> assets, bool prerelease);
 

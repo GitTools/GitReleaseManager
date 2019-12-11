@@ -6,6 +6,7 @@
     <Description>Test Project for GitReleaseManager</Description>
     <DebugType>full</DebugType>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <NoWarn>CA1707</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <Optimize>false</Optimize>
