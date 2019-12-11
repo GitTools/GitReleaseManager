@@ -119,7 +119,7 @@ namespace GitReleaseManager.Core
                 count += _configuration.IssueLabelsExclude.Count(issueToExclude => issueLabel.Name.ToUpperInvariant() == issueToExclude.ToUpperInvariant());
             }
 
-            if (count != 1)
+            if (count != 1 && !this.configuration.IssueLabelsMany)
             {
                 var allIssueLabels = _configuration.IssueLabelsInclude.Union(_configuration.IssueLabelsExclude).ToList();
                 var allIssuesExceptLast = allIssueLabels.Take(allIssueLabels.Count - 1);

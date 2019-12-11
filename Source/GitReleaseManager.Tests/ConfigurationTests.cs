@@ -127,5 +127,31 @@ namespace GitReleaseManager.Tests
             var expectedText = string.Format("#  footer-content: >-{0}#    You can download this release from{0}#{0}#    [chocolatey](https://chocolatey.org/packages/chocolateyGUI/{{milestone}})", Environment.NewLine);
             Assert.That(text, Contains.Substring(expectedText));
         }
+
+        [Test]
+        public void Many_Labels_For_Issue_Disabled_By_Default()
+        {
+            // Given
+            var text = Resources.Default_Configuration_Yaml;
+
+            // When
+            var config = ConfigSerializer.Read(new StringReader(text));
+
+            // Then
+            Assert.AreEqual(false, config.IssueLabelsMany);
+        }
+
+        [Test]
+        public void Should_Read_Many_Labels_Issue()
+        {
+            // Given
+            var text = Resources.Many_Labels_For_Issue_Configuration_Yaml;
+
+            // When
+            var config = ConfigSerializer.Read(new StringReader(text));
+
+            // Then
+            Assert.AreEqual(true, config.IssueLabelsMany);
+        }
     }
 }

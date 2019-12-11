@@ -1,0 +1,3 @@
+﻿As part of this release we had [1 issue](https://github.com/FakeRepository/issues/issues?milestone=0&state=closed) closed.
+
+

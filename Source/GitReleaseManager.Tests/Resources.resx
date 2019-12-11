@@ -154,4 +154,38 @@ issue-labels-alias:
       header:  Baz
       plural:  Qux</value>
   </data>
+  <data name="Many_Labels_For_Issue_Configuration_Yaml" xml:space="preserve">
+    <value>create:
+  include-footer: false
+  footer-heading:
+  footer-content:
+  footer-includes-milestone: false
+  milestone-replace-text:
+  
+export:
+  include-created-date-in-title: false
+  created-date-string-format:
+  perform-regex-removal: false
+  regex-text:
+  multiline-regex: false
+  
+issue-labels-include:
+- Bug
+- Feature
+- Improvement
+
+issue-labels-exclude:
+- Internal Refactoring
+
+issue-labels-alias:
+    - name:    Bug
+      header:  Foo
+      plural:  Bar
+
+    - name:    Improvement
+      header:  Baz
+      plural:  Qux
+
+issue-labels-many: true</value>
+  </data>
 </root>

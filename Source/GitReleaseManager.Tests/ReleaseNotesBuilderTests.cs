@@ -111,6 +111,19 @@ namespace GitReleaseManager.Tests
         }
 
         [Test]
+        public void SomeIssuesWithMultipleLabelsWhenManyLabelsDisabled()
+        {
+            Assert.Throws<AggregateException>(() => AcceptTest(5, CreateIssue(1, "Help Wanted", "Bug"), CreateIssue(2, "Help Wanted")));
+        }
+
+        [Test]
+        public void SomeIssuesWithMultipleLabelsWhenManyLabelsEnabled()
+        {
+            var config = new Config {IssueLabelsMany = true};
+            AcceptTest(5, config, CreateIssue(1, "Help Wanted", "Bug", "Internal Refactoring"), CreateIssue(2, "Help Wanted"));
+        }
+
+        [Test]
         public void SomeCommitsWrongIssueLabel()
         {
             Assert.Throws<AggregateException>(() => AcceptTest(5, CreateIssue(1, "Test")));

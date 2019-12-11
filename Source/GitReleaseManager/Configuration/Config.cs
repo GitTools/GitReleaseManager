@@ -75,5 +75,8 @@ namespace GitReleaseManager.Core.Configuration
         [Description("Overrides default pluralization and header names for specific labels.")]
         [YamlMember(Alias = "issue-labels-alias")]
         public IList<LabelAlias> LabelAliases { get; private set; }
+
+        [YamlMember(Alias = "issue-labels-many")]
+        public bool IssueLabelsMany { get; set; }
     }
 }
