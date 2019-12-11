@@ -17,9 +17,9 @@ namespace GitReleaseManager.Core
     {
         public static bool IsPullRequest(this Issue issue)
         {
-            if (issue == null)
+            if (issue is null)
             {
-                throw new ArgumentNullException("issue");
+                throw new ArgumentNullException(nameof(issue));
             }
 
             return issue.PullRequest != null;
@@ -27,16 +27,26 @@ namespace GitReleaseManager.Core
 
         public static async Task<IEnumerable<Issue>> AllIssuesForMilestone(this GitHubClient gitHubClient, Milestone milestone)
         {
+            if (gitHubClient is null)
+            {
+                throw new ArgumentNullException(nameof(gitHubClient));
+            }
+
+            if (milestone is null)
+            {
+                throw new ArgumentNullException(nameof(milestone));
+            }
+
             var closedIssueRequest = new RepositoryIssueRequest
             {
                 Milestone = milestone.Number.ToString(CultureInfo.InvariantCulture),
-                State = ItemStateFilter.Closed
+                State = ItemStateFilter.Closed,
             };
 
             var openIssueRequest = new RepositoryIssueRequest
             {
                 Milestone = milestone.Number.ToString(CultureInfo.InvariantCulture),
-                State = ItemStateFilter.Open
+                State = ItemStateFilter.Open,
             };
 
             var parts = milestone.Url.Split('/');
@@ -44,7 +54,7 @@ namespace GitReleaseManager.Core
             var repository = parts[5];
             var closedIssues = await gitHubClient.Issue.GetAllForRepository(user, repository, closedIssueRequest).ConfigureAwait(false);
             var openIssues = await gitHubClient.Issue.GetAllForRepository(user, repository, openIssueRequest).ConfigureAwait(false);
-            
+
             return openIssues.Union(closedIssues);
         }
 

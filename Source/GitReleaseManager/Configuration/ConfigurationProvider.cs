@@ -27,12 +27,14 @@ namespace GitReleaseManager.Core.Configuration
             if (fileSystem.Exists(configFilePath))
             {
                 var readAllText = fileSystem.ReadAllText(configFilePath);
+                using (var stringReader = new StringReader(readAllText))
+                {
+                    var deserializedConfig = ConfigSerializer.Read(stringReader);
 
-                var deserializedConfig = ConfigSerializer.Read(new StringReader(readAllText));
+                    EnsureDefaultConfig(deserializedConfig);
 
-                EnsureDefaultConfig(deserializedConfig);
-
-                return deserializedConfig;
+                    return deserializedConfig;
+                }
             }
 
             return new Config();
@@ -82,12 +84,12 @@ namespace GitReleaseManager.Core.Configuration
 
         private static void EnsureDefaultConfig(Config configuration)
         {
-            if(configuration.Create.ShaSectionHeading == null)
+            if (configuration.Create.ShaSectionHeading == null)
             {
                 configuration.Create.ShaSectionHeading = "SHA256 Hashes of the release artifacts";
             }
 
-            if(configuration.Create.ShaSectionLineFormat == null)
+            if (configuration.Create.ShaSectionLineFormat == null)
             {
                 configuration.Create.ShaSectionLineFormat = "- `{1}\t{0}`";
             }

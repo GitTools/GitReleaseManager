@@ -24,21 +24,8 @@
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/GitTools/GitReleaseManager.git</RepositoryUrl>
   </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <RunCodeAnalysisRestore>False</RunCodeAnalysisRestore>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <RunCodeAnalysisRestore>True</RunCodeAnalysisRestore>
-  </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\SolutionInfo.cs" Link="SolutionInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <CodeAnalysisDictionary Include="..\CustomDictionary.xml">
-      <Link>CustomDictionary.xml</Link>
-      <SubType>Designer</SubType>
-    </CodeAnalysisDictionary>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GitReleaseManager\GitReleaseManager.Core.csproj" />

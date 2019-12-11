@@ -18,13 +18,13 @@ namespace GitReleaseManager.Core
 
     public class ReleaseNotesBuilder
     {
-        private IVcsProvider _vcsProvider;
-        private string _user;
-        private string _repository;
-        private string _milestoneTitle;
+        private readonly IVcsProvider _vcsProvider;
+        private readonly string _user;
+        private readonly string _repository;
+        private readonly string _milestoneTitle;
+        private readonly Config _configuration;
         private ReadOnlyCollection<Milestone> _milestones;
         private Milestone _targetMilestone;
-        private Config _configuration;
 
         public ReleaseNotesBuilder(IVcsProvider vcsProvider, string user, string repository, string milestoneTitle, Config configuration)
         {
@@ -170,12 +170,12 @@ namespace GitReleaseManager.Core
 
         private void LoadMilestones()
         {
-            _milestones = _vcsProvider.GetMilestones(_user, _repository);
+            _milestones = _vcsProvider.GetReadOnlyMilestones(_user, _repository);
         }
 
         private async Task<List<Issue>> GetIssues(Milestone milestone)
         {
-            var issues = await _vcsProvider.GetIssues(milestone).ConfigureAwait(false);
+            var issues = await _vcsProvider.GetIssuesAsync(milestone).ConfigureAwait(false);
             foreach (var issue in issues)
             {
                 CheckForValidLabels(issue);

@@ -13,15 +13,18 @@ namespace GitReleaseManager.Core
     {
         public static Version Version(this Milestone ver)
         {
+            if (ver is null)
+            {
+                throw new ArgumentNullException(nameof(ver));
+            }
+
             var nameWithoutPrerelease = ver.Title.Split('-')[0];
             if (nameWithoutPrerelease.StartsWith("v", StringComparison.OrdinalIgnoreCase))
             {
                 nameWithoutPrerelease = nameWithoutPrerelease.Remove(0, 1);
             }
 
-            Version parsedVersion;
-
-            if (!System.Version.TryParse(nameWithoutPrerelease, out parsedVersion))
+            if (!System.Version.TryParse(nameWithoutPrerelease, out Version parsedVersion))
             {
                 return new Version(0, 0);
             }

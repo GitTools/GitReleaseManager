@@ -2,29 +2,14 @@
   <PropertyGroup>
     <LangVersion>8.0</LangVersion>
     <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
-    <BuildToolsFxCopVersion>1.0.1</BuildToolsFxCopVersion>
     <Title>GitReleaseManager.Core</Title>
     <Description>Create release notes in markdown given a milestone</Description>
-    <RunCodeAnalysis>False</RunCodeAnalysis>
-    <CodeAnalysisTreatWarningsAsErrors>True</CodeAnalysisTreatWarningsAsErrors>
-    <CodeAnalysisRuleSet>..\GitReleaseManager.ruleset</CodeAnalysisRuleSet>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <DebugType>full</DebugType>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <RunCodeAnalysisRestore>False</RunCodeAnalysisRestore>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <RunCodeAnalysisRestore>True</RunCodeAnalysisRestore>
-  </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\SolutionInfo.cs" Link="SolutionInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <CodeAnalysisDictionary Include="..\CustomDictionary.xml">
-      <Link>CustomDictionary.xml</Link>
-    </CodeAnalysisDictionary>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Octokit" Version="0.36.0" />

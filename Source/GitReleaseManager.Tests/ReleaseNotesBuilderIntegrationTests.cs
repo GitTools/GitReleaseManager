@@ -18,9 +18,9 @@ namespace GitReleaseManager.Tests
     [TestFixture]
     public class ReleaseNotesBuilderIntegrationTests
     {
-        public TestContext TestContext { get; set; }
-
         private IMapper _mapper;
+
+        public TestContext TestContext { get; set; }
 
         [OneTimeSetUp]
         public void Configure()
@@ -41,7 +41,7 @@ namespace GitReleaseManager.Tests
 
             var vcsProvider = new GitHubProvider(_mapper, configuration, "username", "password", "token");
             var releaseNotesBuilder = new ReleaseNotesBuilder(vcsProvider, "Chocolatey", "ChocolateyGUI", "0.12.4", configuration);
-            var result = await releaseNotesBuilder.BuildReleaseNotes();
+            var result = await releaseNotesBuilder.BuildReleaseNotes().ConfigureAwait(false);
             Debug.WriteLine(result);
             ClipBoardHelper.SetClipboard(result);
         }
@@ -56,7 +56,7 @@ namespace GitReleaseManager.Tests
 
             var vcsProvider = new GitHubProvider(_mapper, configuration, "username", "password", "token");
             var releaseNotesBuilder = new ReleaseNotesBuilder(vcsProvider, "Chocolatey", "ChocolateyGUI", "0.13.0", configuration);
-            var result = await releaseNotesBuilder.BuildReleaseNotes();
+            var result = await releaseNotesBuilder.BuildReleaseNotes().ConfigureAwait(false);
             Debug.WriteLine(result);
             ClipBoardHelper.SetClipboard(result);
         }
@@ -65,7 +65,14 @@ namespace GitReleaseManager.Tests
         [Explicit]
         public void OctokitTests()
         {
-            ClientBuilder.Build();
+            try
+            {
+                ClientBuilder.Build();
+            }
+            finally
+            {
+                ClientBuilder.Cleanup();
+            }
         }
     }
 }

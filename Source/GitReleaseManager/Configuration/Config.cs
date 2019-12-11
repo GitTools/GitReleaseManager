@@ -23,8 +23,8 @@ namespace GitReleaseManager.Core.Configuration
                                   MilestoneReplaceText = string.Empty,
                                   IncludeShaSection = false,
                                   ShaSectionHeading = "SHA256 Hashes of the release artifacts",
-                                  ShaSectionLineFormat = "- `{1}\t{0}`"
-            };
+                                  ShaSectionLineFormat = "- `{1}\t{0}`",
+                              };
 
             Export = new ExportConfig
                               {
@@ -32,7 +32,7 @@ namespace GitReleaseManager.Core.Configuration
                                   CreatedDateStringFormat = string.Empty,
                                   PerformRegexRemoval = false,
                                   RegexText = string.Empty,
-                                  IsMultilineRegex = false
+                                  IsMultilineRegex = false,
                               };
 
             IssueLabelsInclude = new List<string>
@@ -45,12 +45,12 @@ namespace GitReleaseManager.Core.Configuration
                                        "Improvement",
                                        "Invalid",
                                        "Question",
-                                       "WontFix"
+                                       "WontFix",
                                    };
 
             IssueLabelsExclude = new List<string>
                                    {
-                                       "Internal Refactoring"
+                                       "Internal Refactoring",
                                    };
 
             LabelAliases = new List<LabelAlias>();

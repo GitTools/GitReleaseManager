@@ -53,7 +53,7 @@ namespace GitReleaseManager.Core.Configuration
             {
                 Header = "Documentation",
                 Name = "Documentation",
-                Plural = "Documentation"
+                Plural = "Documentation",
             });
             var configType = config.GetType();
 

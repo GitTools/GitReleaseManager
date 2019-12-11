@@ -20,18 +20,20 @@ namespace GitReleaseManager.Tests
         {
             // Given
             var text = Resources.Default_Configuration_Yaml;
+            using (var stringReader = new StringReader(text))
+            {
+                // When
+                var config = ConfigSerializer.Read(stringReader);
 
-            // When
-            var config = ConfigSerializer.Read(new StringReader(text));
-
-            // Then
-            Assert.AreEqual(2, config.LabelAliases.Count);
-            Assert.AreEqual("Bug", config.LabelAliases[0].Name);
-            Assert.AreEqual("Foo", config.LabelAliases[0].Header);
-            Assert.AreEqual("Bar", config.LabelAliases[0].Plural);
-            Assert.AreEqual("Improvement", config.LabelAliases[1].Name);
-            Assert.AreEqual("Baz", config.LabelAliases[1].Header);
-            Assert.AreEqual("Qux", config.LabelAliases[1].Plural);
+                // Then
+                Assert.AreEqual(2, config.LabelAliases.Count);
+                Assert.AreEqual("Bug", config.LabelAliases[0].Name);
+                Assert.AreEqual("Foo", config.LabelAliases[0].Header);
+                Assert.AreEqual("Bar", config.LabelAliases[0].Plural);
+                Assert.AreEqual("Improvement", config.LabelAliases[1].Name);
+                Assert.AreEqual("Baz", config.LabelAliases[1].Header);
+                Assert.AreEqual("Qux", config.LabelAliases[1].Plural);
+            }
         }
 
         [Test]
@@ -63,6 +65,7 @@ namespace GitReleaseManager.Tests
             {
                 ConfigSerializer.WriteSample(writer);
             }
+
             var text = builder.ToString();
 
             // Then
@@ -81,6 +84,7 @@ namespace GitReleaseManager.Tests
             {
                 ConfigSerializer.WriteSample(writer);
             }
+
             var text = builder.ToString();
 
             // Then
@@ -98,6 +102,7 @@ namespace GitReleaseManager.Tests
             {
                 ConfigSerializer.WriteSample(writer);
             }
+
             var text = builder.ToString();
 
             // Then
@@ -115,6 +120,7 @@ namespace GitReleaseManager.Tests
             {
                 ConfigSerializer.WriteSample(writer);
             }
+
             var text = builder.ToString();
 
             // Then
