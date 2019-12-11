@@ -18,9 +18,9 @@ namespace GitReleaseManager.Tests
     [TestFixture]
     public class ReleaseNotesBuilderIntegrationTests
     {
-        public TestContext TestContext { get; set; }
-
         private IMapper _mapper;
+
+        public TestContext TestContext { get; set; }
 
         [OneTimeSetUp]
         public void Configure()

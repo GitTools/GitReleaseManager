@@ -54,7 +54,7 @@ namespace GitReleaseManager.Core
             var repository = parts[5];
             var closedIssues = await gitHubClient.Issue.GetAllForRepository(user, repository, closedIssueRequest).ConfigureAwait(false);
             var openIssues = await gitHubClient.Issue.GetAllForRepository(user, repository, openIssueRequest).ConfigureAwait(false);
-            
+
             return openIssues.Union(closedIssues);
         }
 
