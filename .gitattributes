@@ -1,4 +1,8 @@
-* -text
+* text eol=crlf whitespace=tab-in-indent,tabwidth=4
+
+*.sh text eol=lf
+
+*.md text whitespace=-blank-at-eol
 
 # Custom for Visual Studio
 *.cs     diff=csharp
@@ -19,3 +23,5 @@
 *.PDF	 diff=astextplain
 *.rtf	 diff=astextplain
 *.RTF	 diff=astextplain
+
+*.png   binary
