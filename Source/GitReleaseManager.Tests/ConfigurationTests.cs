@@ -63,6 +63,7 @@ namespace GitReleaseManager.Tests
             {
                 ConfigSerializer.WriteSample(writer);
             }
+
             var text = builder.ToString();
 
             // Then
@@ -81,6 +82,7 @@ namespace GitReleaseManager.Tests
             {
                 ConfigSerializer.WriteSample(writer);
             }
+
             var text = builder.ToString();
 
             // Then
@@ -98,6 +100,7 @@ namespace GitReleaseManager.Tests
             {
                 ConfigSerializer.WriteSample(writer);
             }
+
             var text = builder.ToString();
 
             // Then
@@ -115,6 +118,7 @@ namespace GitReleaseManager.Tests
             {
                 ConfigSerializer.WriteSample(writer);
             }
+
             var text = builder.ToString();
 
             // Then

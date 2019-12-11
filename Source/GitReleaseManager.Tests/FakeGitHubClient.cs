@@ -6,12 +6,12 @@
 
 namespace GitReleaseManager.Tests
 {
-    using GitReleaseManager.Core.Model;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Globalization;
     using System.Threading.Tasks;
-    using IVcsProvider = Core.IVcsProvider;
+    using GitReleaseManager.Core.Model;
+    using IVcsProvider = GitReleaseManager.Core.IVcsProvider;
 
     public class FakeGitHubClient : IVcsProvider
     {

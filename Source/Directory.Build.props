@@ -1,13 +1,13 @@
 <Project>
     <PropertyGroup>
         <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)\GitReleaseManager.ruleset</CodeAnalysisRuleSet>
-        <CodeAnalysisTreatWarningsAsErrors>True</CodeAnalysisTreatWarningsAsErrors>
     </PropertyGroup>
 
     <ItemGroup>
         <CodeAnalysisDictionary Include="$(MSBuildThisFileDirectory)\CustomDictionary.xml">
             <Link>CustomDictionary.xml</Link>
         </CodeAnalysisDictionary>
+        <AdditionalFiles Include="$(MSBuildThisFileDirectory)\stylecop.json" Link="stylecop.json" />
     </ItemGroup>
 
     <ItemGroup>

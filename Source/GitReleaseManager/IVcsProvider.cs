@@ -6,10 +6,10 @@
 
 namespace GitReleaseManager.Core
 {
-    using GitReleaseManager.Core.Model;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Threading.Tasks;
+    using GitReleaseManager.Core.Model;
 
     public interface IVcsProvider
     {
@@ -30,7 +30,7 @@ namespace GitReleaseManager.Core
         Task<Release> CreateReleaseFromInputFile(string owner, string repository, string name, string inputFilePath, string targetCommitish, IList<string> assets, bool prerelease);
 
         Task DiscardRelease(string owner, string repository, string name);
-        
+
         Task AddAssets(string owner, string repository, string tagName, IList<string> assets);
 
         Task<string> ExportReleases(string owner, string repository, string tagName);

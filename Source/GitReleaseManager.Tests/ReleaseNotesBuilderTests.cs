@@ -79,7 +79,7 @@ namespace GitReleaseManager.Tests
             config.LabelAliases.Add(new LabelAlias
             {
                 Name = "Bug",
-                Header = "Foo"
+                Header = "Foo",
             });
 
             AcceptTest(1, config, CreateIssue(1, "Bug"));
@@ -155,7 +155,7 @@ namespace GitReleaseManager.Tests
             {
                 Title = version,
                 HtmlUrl = "https://github.com/gep13/FakeRepository/issues?q=milestone%3A" + version,
-                Version = new Version(version)
+                Version = new Version(version),
             };
         }
 
@@ -166,7 +166,7 @@ namespace GitReleaseManager.Tests
                 Number = number.ToString(),
                 Labels = labels.Select(l => new Label { Name = l }).ToList(),
                 HtmlUrl = "http://example.com/" + number,
-                Title = "Issue " + number
+                Title = "Issue " + number,
             };
         }
     }

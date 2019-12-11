@@ -82,12 +82,12 @@ namespace GitReleaseManager.Core.Configuration
 
         private static void EnsureDefaultConfig(Config configuration)
         {
-            if(configuration.Create.ShaSectionHeading == null)
+            if (configuration.Create.ShaSectionHeading == null)
             {
                 configuration.Create.ShaSectionHeading = "SHA256 Hashes of the release artifacts";
             }
 
-            if(configuration.Create.ShaSectionLineFormat == null)
+            if (configuration.Create.ShaSectionLineFormat == null)
             {
                 configuration.Create.ShaSectionLineFormat = "- `{1}\t{0}`";
             }

@@ -30,13 +30,13 @@ namespace GitReleaseManager.Core
             var closedIssueRequest = new RepositoryIssueRequest
             {
                 Milestone = milestone.Number.ToString(CultureInfo.InvariantCulture),
-                State = ItemStateFilter.Closed
+                State = ItemStateFilter.Closed,
             };
 
             var openIssueRequest = new RepositoryIssueRequest
             {
                 Milestone = milestone.Number.ToString(CultureInfo.InvariantCulture),
-                State = ItemStateFilter.Open
+                State = ItemStateFilter.Open,
             };
 
             var parts = milestone.Url.Split('/');

@@ -6,21 +6,21 @@
 
 namespace GitReleaseManager.Core
 {
+    using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
-    using System.Linq;
-    using System.Threading.Tasks;
-    using Octokit;
-    using Milestone = Model.Milestone;
-    using Release = Model.Release;
-    using Issue = Model.Issue;
-    using AutoMapper;
+    using System.Globalization;
     using System.IO;
+    using System.Linq;
     using System.Security.Cryptography;
     using System.Text;
-    using System;
+    using System.Threading.Tasks;
+    using AutoMapper;
     using GitReleaseManager.Core.Configuration;
-    using System.Globalization;
+    using Octokit;
+    using Issue = GitReleaseManager.Core.Model.Issue;
+    using Milestone = GitReleaseManager.Core.Model.Milestone;
+    using Release = GitReleaseManager.Core.Model.Release;
 
     public class GitHubProvider : IVcsProvider
     {
@@ -85,7 +85,7 @@ namespace GitReleaseManager.Core
                 repository,
                 new MilestoneRequest
                 {
-                    State = ItemStateFilter.Closed
+                    State = ItemStateFilter.Closed,
                 }).Result;
 
             var open = milestonesClient.GetAllForRepository(
@@ -93,51 +93,10 @@ namespace GitReleaseManager.Core
                 repository,
                 new MilestoneRequest
                 {
-                    State = ItemStateFilter.Open
+                    State = ItemStateFilter.Open,
                 }).Result;
 
             return new ReadOnlyCollection<Milestone>(_mapper.Map<List<Milestone>>(closed.Concat(open).ToList()));
-        }
-
-        private static NewRelease CreateNewRelease(string name, string tagName, string body, bool prerelease, string targetCommitish)
-        {
-            var newRelease = new NewRelease(tagName)
-            {
-                Draft = true,
-                Body = body,
-                Name = name,
-                Prerelease = prerelease
-            };
-
-            if (!string.IsNullOrEmpty(targetCommitish))
-            {
-                newRelease.TargetCommitish = targetCommitish;
-            }
-
-            return newRelease;
-        }
-
-        private static string ComputeSha256Hash(string asset)
-        {
-            // Create a SHA256
-            using (var sha256Hash = SHA256.Create())
-            {
-                using (var fileStream = File.Open(asset, System.IO.FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-                {
-                    // ComputeHash - returns byte array
-                    var bytes = sha256Hash.ComputeHash(fileStream);
-
-                    // Convert byte array to a string
-                    var builder = new StringBuilder();
-
-                    foreach (var t in bytes)
-                    {
-                        builder.Append(t.ToString("x2"));
-                    }
-
-                    return builder.ToString();
-                }
-            }
         }
 
         public void CreateClient(string userName, string password, string token)
@@ -259,7 +218,7 @@ namespace GitReleaseManager.Core
                     {
                         FileName = assetFileName,
                         ContentType = "application/octet-stream",
-                        RawData = File.Open(asset, System.IO.FileMode.Open, FileAccess.Read, FileShare.ReadWrite)
+                        RawData = File.Open(asset, System.IO.FileMode.Open, FileAccess.Read, FileShare.ReadWrite),
                     };
 
                     await _gitHubClient.Repository.Release.UploadAsset(release, upload).ConfigureAwait(false);
@@ -318,7 +277,6 @@ namespace GitReleaseManager.Core
             }
 
             await milestoneClient.Update(owner, repository, milestone.Number, new MilestoneUpdate { State = ItemState.Closed }).ConfigureAwait(false);
-
         }
 
         public async Task PublishRelease(string owner, string repository, string tagName)
@@ -333,7 +291,6 @@ namespace GitReleaseManager.Core
             var releaseUpdate = new ReleaseUpdate { TagName = tagName, Draft = false };
 
             await _gitHubClient.Repository.Release.Edit(owner, repository, release.Id, releaseUpdate).ConfigureAwait(false);
-
         }
 
         public async Task CreateLabels(string owner, string repository)
@@ -356,6 +313,47 @@ namespace GitReleaseManager.Core
 
             var createLabelsTasks = newLabels.Select(label => _gitHubClient.Issue.Labels.Create(owner, repository, label));
             await Task.WhenAll(createLabelsTasks).ConfigureAwait(false);
+        }
+
+        private static NewRelease CreateNewRelease(string name, string tagName, string body, bool prerelease, string targetCommitish)
+        {
+            var newRelease = new NewRelease(tagName)
+            {
+                Draft = true,
+                Body = body,
+                Name = name,
+                Prerelease = prerelease,
+            };
+
+            if (!string.IsNullOrEmpty(targetCommitish))
+            {
+                newRelease.TargetCommitish = targetCommitish;
+            }
+
+            return newRelease;
+        }
+
+        private static string ComputeSha256Hash(string asset)
+        {
+            // Create a SHA256
+            using (var sha256Hash = SHA256.Create())
+            {
+                using (var fileStream = File.Open(asset, System.IO.FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                {
+                    // ComputeHash - returns byte array
+                    var bytes = sha256Hash.ComputeHash(fileStream);
+
+                    // Convert byte array to a string
+                    var builder = new StringBuilder();
+
+                    foreach (var t in bytes)
+                    {
+                        builder.Append(t.ToString("x2"));
+                    }
+
+                    return builder.ToString();
+                }
+            }
         }
 
         private async Task<Octokit.Release> GetRelease(string owner, string repository, string tagName)
