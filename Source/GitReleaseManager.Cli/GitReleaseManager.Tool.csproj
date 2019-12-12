@@ -1,43 +1,43 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <LangVersion>8.0</LangVersion>
-    <OutputType>Exe</OutputType>
-    <AssemblyName>GitReleaseManager</AssemblyName>
+    <PropertyGroup>
+        <LangVersion>8.0</LangVersion>
+        <OutputType>Exe</OutputType>
+        <AssemblyName>GitReleaseManager</AssemblyName>
 
-    <PackAsTool>true</PackAsTool>
-    <TargetFrameworks>netcoreapp2.1;netcoreapp3.0</TargetFrameworks>
-    <ToolCommandName>dotnet-gitreleasemanager</ToolCommandName>
-    <PackageId>GitReleaseManager.Tool</PackageId>
+        <PackAsTool>true</PackAsTool>
+        <TargetFrameworks>netcoreapp2.1;netcoreapp3.0</TargetFrameworks>
+        <ToolCommandName>dotnet-gitreleasemanager</ToolCommandName>
+        <PackageId>GitReleaseManager.Tool</PackageId>
 
-    <Title>GitReleaseManager Tool</Title>
-    <Authors>GitTools Contributors</Authors>
-    <PackageProjectUrl>https://github.com/GitTools/GitReleaseManager</PackageProjectUrl>
-    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <PackageTags>github release notes create export</PackageTags>
-    <Description>Tool for creating and exporting releases for software applications from online Version Control Systems</Description>
-    <Copyright>Copyright (c) 2015 - Present - GitTools Contributors</Copyright>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageIcon>package_icon.png</PackageIcon>
-    <PackageReleaseNotes>https://github.com/GitTools/GitReleaseManager/releases</PackageReleaseNotes>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/GitTools/GitReleaseManager.git</RepositoryUrl>
-  </PropertyGroup>
-  <ItemGroup>
-    <Compile Include="..\SolutionInfo.cs" Link="SolutionInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\GitReleaseManager\GitReleaseManager.Core.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="CommandLineParser" Version="2.6.0" />
-    <PackageReference Include="Octokit" Version="0.36.0" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="../../Icons/package_icon.png">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
-  </ItemGroup>
+        <Title>GitReleaseManager Tool</Title>
+        <Authors>GitTools Contributors</Authors>
+        <PackageProjectUrl>https://github.com/GitTools/GitReleaseManager</PackageProjectUrl>
+        <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+        <PackageTags>github release notes create export</PackageTags>
+        <Description>Tool for creating and exporting releases for software applications from online Version Control Systems</Description>
+        <Copyright>Copyright (c) 2015 - Present - GitTools Contributors</Copyright>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageIcon>package_icon.png</PackageIcon>
+        <PackageReleaseNotes>https://github.com/GitTools/GitReleaseManager/releases</PackageReleaseNotes>
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <RepositoryType>git</RepositoryType>
+        <RepositoryUrl>https://github.com/GitTools/GitReleaseManager.git</RepositoryUrl>
+    </PropertyGroup>
+    <ItemGroup>
+        <Compile Include="..\SolutionInfo.cs" Link="SolutionInfo.cs" />
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\GitReleaseManager\GitReleaseManager.Core.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="CommandLineParser" Version="2.6.0" />
+        <PackageReference Include="Octokit" Version="0.36.0" />
+    </ItemGroup>
+    <ItemGroup>
+        <None Include="../../Icons/package_icon.png">
+            <Pack>True</Pack>
+            <PackagePath></PackagePath>
+        </None>
+    </ItemGroup>
 </Project>

@@ -1,19 +1,19 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <LangVersion>8.0</LangVersion>
-    <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
-    <Title>GitReleaseManager.Core</Title>
-    <Description>Create release notes in markdown given a milestone</Description>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <DebugType>full</DebugType>
-    <IsPackable>false</IsPackable>
-  </PropertyGroup>
-  <ItemGroup>
-    <Compile Include="..\SolutionInfo.cs" Link="SolutionInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Octokit" Version="0.36.0" />
-    <PackageReference Include="YamlDotNet" Version="8.0.0" />
-    <PackageReference Include="AutoMapper" Version="9.0.0" />
-  </ItemGroup>
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <LangVersion>8.0</LangVersion>
+        <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
+        <Title>GitReleaseManager.Core</Title>
+        <Description>Create release notes in markdown given a milestone</Description>
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <DebugType>full</DebugType>
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+    <ItemGroup>
+        <Compile Include="..\SolutionInfo.cs" Link="SolutionInfo.cs" />
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Octokit" Version="0.36.0" />
+        <PackageReference Include="YamlDotNet" Version="8.0.0" />
+        <PackageReference Include="AutoMapper" Version="9.0.0" />
+    </ItemGroup>
 </Project>

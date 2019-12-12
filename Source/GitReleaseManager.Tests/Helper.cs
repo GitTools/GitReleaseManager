@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="Helper.cs" company="GitTools Contributors">
 //     Copyright (c) 2015 - Present - GitTools Contributors
 // </copyright>
@@ -44,13 +44,13 @@ namespace GitReleaseManager.Tests
             get
             {
                 return null;
-/*
-                return new WebProxy(
-                    new System.Uri("http://myproxy:42"),
-                    true,
-                    new string[] {},
-                    new NetworkCredential(@"domain\login", "password"));
-*/
+                /*
+                                return new WebProxy(
+                                    new System.Uri("http://myproxy:42"),
+                                    true,
+                                    new string[] {},
+                                    new NetworkCredential(@"domain\login", "password"));
+                */
             }
         }
     }

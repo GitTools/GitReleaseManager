@@ -9,9 +9,6 @@
             "copyrightText": "Copyright (c) 2015 - Present - GitTools Contributors",
             "companyName": "GitTools Contributors",
             "xmlHeader": true
-        },
-        "namingRules": {
-            "allowedHungarianPrefixes": [ "_" ]
         }
     }
-  }
+}

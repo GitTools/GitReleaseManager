@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="Program.cs" company="GitTools Contributors">
 //     Copyright (c) 2015 - Present - GitTools Contributors
 // </copyright>
@@ -40,7 +40,7 @@ namespace GitReleaseManager.Cli
             _fileSystem = new FileSystem();
 
             _mapper = AutoMapperConfiguration.Configure();
-            
+
             return Parser.Default.ParseArguments<CreateSubOptions, DiscardSubOptions, AddAssetSubOptions, CloseSubOptions, PublishSubOptions, ExportSubOptions, InitSubOptions, ShowConfigSubOptions, LabelSubOptions>(args)
                 .WithParsed<BaseSubOptions>(CreateFiglet)
                 .MapResult(
@@ -69,7 +69,7 @@ namespace GitReleaseManager.Cli
                 version = version.Substring(0, version.IndexOf('+'));
             }
             var shortFormat = @"
-   ____ ____  __  __ 
+   ____ ____  __  __
   / ___|  _ \|  \/  |
  | |  _| |_) | |\/| |
  | |_| |  _ <| |  | |
@@ -149,7 +149,7 @@ namespace GitReleaseManager.Cli
                 return 1;
             }
         }
-        
+
         private static async Task<int> AddAssetsAsync(AddAssetSubOptions subOptions)
         {
             try

@@ -1,1 +1,1 @@
-Generate-BinFile "grm" "$packageFolder\Tools\GitReleaseManager.exe"
+﻿Generate-BinFile "grm" "$packageFolder\Tools\GitReleaseManager.exe"

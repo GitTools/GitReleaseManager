@@ -8,10 +8,10 @@ GitReleaseManager when executed against a specific directory.
 
 ## **Optional Parameters**
 
-* `-d, --targetDirectory`: The directory on which GitReleaseManager should be
-executed. Defaults to current directory.
-* `-l, --logFilePath`: Path to where log file should be created. Defaults to
-logging to console.
+- `-d, --targetDirectory`: The directory on which GitReleaseManager should be
+    executed. Defaults to current directory.
+- `-l, --logFilePath`: Path to where log file should be created. Defaults to
+    logging to console.
 
 ## **Examples**
 

@@ -8,7 +8,7 @@ GitReleaseManager into your workflow.
 
 :::{.alert .alert-info}
 GitReleaseManager works best when included within an automated Build Process,
-using something like psake, or Octopus Deploy, etc.  However, it can also be
+using something like psake, or Octopus Deploy, etc. However, it can also be
 used as a standalone tool, running directly at the command line.
 :::
 
@@ -27,7 +27,7 @@ included.
 
 Even if you don't want to use GitReleaseManager to create the release notes on
 GitHub, you may still want the ability to Publish a Release (which has the
-result of creating a tag in your repository).  This can be done using the
+result of creating a tag in your repository). This can be done using the
 [publish command](commands/publish).
 
 :::{.alert .alert-info}
@@ -37,18 +37,18 @@ Publishing a Release also closes the associated Milestone for the Release.
 ## Add Asset to Release
 
 As part of your Release process, you may want to include assets into the GitHub
-Release.  This could be the final MSI package for your application, or a NuGet
-package.  GitReleaseManager allows you to do this in two ways.  The first is
+Release. This could be the final MSI package for your application, or a NuGet
+package. GitReleaseManager allows you to do this in two ways. The first is
 using the [create command](commands/create), which includes the ability to add
-an asset at the time of Release creation.  However, at the time of Release
-creation, you might not have all the assets that you want to add.  As a result,
+an asset at the time of Release creation. However, at the time of Release
+creation, you might not have all the assets that you want to add. As a result,
 there is a separate [add asset](commands/add-assets) command that you can use to
 add an asset to an existing Release.
 
 ## Close Milestone
 
 When working directly in GitHub, publishing a Release doesn't close the
-associated milestone.  When using the GitReleaseManager's
+associated milestone. When using the GitReleaseManager's
 [publish command](commands/publish) the associated milestone is also closed.
 However, you can also use the [close command](commands/close) directly if you
 are not using the publish workflow as part of your process.
