@@ -380,6 +380,8 @@ namespace GitReleaseManager.Core
 
             foreach (var issue in issues)
             {
+                SleepWhenRateIsLimited();
+
                 Logger.WriteInfo(string.Format("Adding published comment for issue #{0}", issue.Number));
                 try
                 {
@@ -408,6 +410,17 @@ namespace GitReleaseManager.Core
 
             var release = releases.FirstOrDefault(r => r.TagName == tagName);
             return release;
+        }
+
+        private void SleepWhenRateIsLimited()
+        {
+            var lastApi = _gitHubClient.GetLastApiInfo();
+            if (lastApi?.RateLimit.Remaining == 0)
+            {
+                var sleepMs = lastApi.RateLimit.Reset.Millisecond - DateTimeOffset.Now.Millisecond;
+                Logger.WriteWarning(string.Format("Rate limit exceeded, sleeping for {0} MS", sleepMs));
+                Thread.Sleep(sleepMs);
+            }
         }
     }
 }
