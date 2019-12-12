@@ -74,7 +74,6 @@
 	<div id="infobar-headings"><h6>On This Page</h6><p><a href="#Syntax">Syntax</a></p>
 <p><a href="#Attributes">Attributes</a></p>
 <p><a href="#Properties">Properties</a></p>
-<p><a href="#Methods">Methods</a></p>
 <hr class="infobar-hidden">
 </div>
 
@@ -138,10 +137,11 @@
 		<li role="separator" class="divider"></li>
 			<li class="header">Class Types</li>
 				<li><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/AddAssetSubOptions">AddAssetSubOptions</a></li>
-				<li><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/BaseGitHubSubOptions">BaseGitHubSubOptions</a></li>
 				<li><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/BaseSubOptions">BaseSubOptions</a></li>
+				<li><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/BaseVcsOptions">BaseVcsOptions</a></li>
 				<li><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/CloseSubOptions">CloseSubOptions</a></li>
 				<li class="selected"><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/CreateSubOptions">CreateSubOptions</a></li>
+				<li><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/DiscardSubOptions">DiscardSubOptions</a></li>
 				<li><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/ExportSubOptions">ExportSubOptions</a></li>
 				<li><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/InitSubOptions">InitSubOptions</a></li>
 				<li><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/LabelSubOptions">LabelSubOptions</a></li>
@@ -183,7 +183,7 @@
 									<ul class="list-unstyled">										
 											<li>object</li>								
 											<li><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/BaseSubOptions">BaseSubOptions</a></li>								
-											<li><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/BaseGitHubSubOptions">BaseGitHubSubOptions</a></li>								
+											<li><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/BaseVcsOptions">BaseVcsOptions</a></li>								
 									</ul>
 								</dd>				
 							
@@ -193,8 +193,8 @@
 					<div class="col-md-6">
 						<div class="mermaid">
 							graph BT
-	Type--&gt;Base0["BaseGitHubSubOptions"]
-	click Base0 "/GitReleaseManager/api/GitReleaseManager.Cli.Options/BaseGitHubSubOptions"
+	Type--&gt;Base0["BaseVcsOptions"]
+	click Base0 "/GitReleaseManager/api/GitReleaseManager.Cli.Options/BaseVcsOptions"
 	Base0--&gt;Base1["BaseSubOptions"]
 	click Base1 "/GitReleaseManager/api/GitReleaseManager.Cli.Options/BaseSubOptions"
 	Base1--&gt;Base2["object"]
@@ -209,7 +209,7 @@ class Type type-node
 
 	<h1 id="Syntax">Syntax</h1>
 	<pre><code>[Verb("create", HelpText = "Creates a draft release notes from a milestone.")]
-public class CreateSubOptions : BaseGitHubSubOptions</code></pre>
+public class CreateSubOptions : BaseVcsOptions</code></pre>
 
 
 
@@ -293,11 +293,11 @@ public class CreateSubOptions : BaseGitHubSubOptions</code></pre>
 								</td>
 							</tr>
 							<tr>
-								<td><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/BaseGitHubSubOptions/91A6DE15">Password</a></td>
+								<td><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/BaseVcsOptions/4A0B6E5D">Password</a></td>
 								<td>string</td>
 								<td>
 									<div></div>
-											<div><small><em>Inherited from <a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/BaseGitHubSubOptions">BaseGitHubSubOptions</a></em></small></div>
+											<div><small><em>Inherited from <a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/BaseVcsOptions">BaseVcsOptions</a></em></small></div>
 								</td>
 							</tr>
 							<tr>
@@ -308,19 +308,19 @@ public class CreateSubOptions : BaseGitHubSubOptions</code></pre>
 								</td>
 							</tr>
 							<tr>
-								<td><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/BaseGitHubSubOptions/582FB865">RepositoryName</a></td>
+								<td><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/BaseVcsOptions/710A0DF6">RepositoryName</a></td>
 								<td>string</td>
 								<td>
 									<div></div>
-											<div><small><em>Inherited from <a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/BaseGitHubSubOptions">BaseGitHubSubOptions</a></em></small></div>
+											<div><small><em>Inherited from <a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/BaseVcsOptions">BaseVcsOptions</a></em></small></div>
 								</td>
 							</tr>
 							<tr>
-								<td><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/BaseGitHubSubOptions/DE018843">RepositoryOwner</a></td>
+								<td><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/BaseVcsOptions/972CA901">RepositoryOwner</a></td>
 								<td>string</td>
 								<td>
 									<div></div>
-											<div><small><em>Inherited from <a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/BaseGitHubSubOptions">BaseGitHubSubOptions</a></em></small></div>
+											<div><small><em>Inherited from <a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/BaseVcsOptions">BaseVcsOptions</a></em></small></div>
 								</td>
 							</tr>
 							<tr>
@@ -339,19 +339,19 @@ public class CreateSubOptions : BaseGitHubSubOptions</code></pre>
 								</td>
 							</tr>
 							<tr>
-								<td><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/BaseGitHubSubOptions/4D2F15D8">Token</a></td>
+								<td><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/BaseVcsOptions/98B79E62">Token</a></td>
 								<td>string</td>
 								<td>
 									<div></div>
-											<div><small><em>Inherited from <a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/BaseGitHubSubOptions">BaseGitHubSubOptions</a></em></small></div>
+											<div><small><em>Inherited from <a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/BaseVcsOptions">BaseVcsOptions</a></em></small></div>
 								</td>
 							</tr>
 							<tr>
-								<td><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/BaseGitHubSubOptions/0D497078">UserName</a></td>
+								<td><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/BaseVcsOptions/D6E4C030">UserName</a></td>
 								<td>string</td>
 								<td>
 									<div></div>
-											<div><small><em>Inherited from <a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/BaseGitHubSubOptions">BaseGitHubSubOptions</a></em></small></div>
+											<div><small><em>Inherited from <a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/BaseVcsOptions">BaseVcsOptions</a></em></small></div>
 								</td>
 							</tr>
 					</tbody></table>
@@ -359,29 +359,6 @@ public class CreateSubOptions : BaseGitHubSubOptions</code></pre>
 			</div>
 		
 
-			<h1 id="Methods">Methods</h1>
-			<div class="box">
-				<div class="box-body no-padding table-responsive">
-					<table class="table table-striped table-hover three-cols">
-						<thead>
-							<tr>
-								<th>Name</th>
-								<th>Value</th>
-								<th>Summary</th>
-							</tr>
-						</thead>
-							<tbody><tr>
-								<td><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/BaseGitHubSubOptions/89A55B1A">CreateGitHubClient<wbr>()<wbr></a></td>
-								<td>GitHubClient</td>
-								<td>
-									<div></div>
-											<div><small><em>Inherited from <a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/BaseGitHubSubOptions">BaseGitHubSubOptions</a></em></small></div>
-								</td>
-							</tr>
-					</tbody></table>
-				</div>
-			</div>
-		
 
 
 

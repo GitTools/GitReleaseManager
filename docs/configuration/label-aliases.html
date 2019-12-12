@@ -157,24 +157,24 @@
 		</section>
 	<section class="content">
 		<p>When there are more than one issue associated with a particular label,
-GitReleaseManager will attempt to pluralize the label name.  For example, <code>Bugs</code>
-instead of <code>Bug</code>.  However, there are times when this basic pluralization will
-not work.  For example, <code>Documentation</code> will be pluralized as <code>Documentations</code>
-which doesn't really make sense.  In these situations, it is possible to
+GitReleaseManager will attempt to pluralize the label name. For example, <code>Bugs</code>
+instead of <code>Bug</code>. However, there are times when this basic pluralization will
+not work. For example, <code>Documentation</code> will be pluralized as <code>Documentations</code>
+which doesn't really make sense. In these situations, it is possible to
 override the automatic title.</p>
 <p>This is possible for both the singular and plural cases.</p>
-<p>Here is an example of how to configure two label aliases.  The title <code>Foo</code> will
-be used instead of <code>Bug</code>, and <code>Baz</code> instead of <code>Improvement</code>.  If each label
+<p>Here is an example of how to configure two label aliases. The title <code>Foo</code> will
+be used instead of <code>Bug</code>, and <code>Baz</code> instead of <code>Improvement</code>. If each label
 contains more than one feature, <code>Bar</code> and <code>Qux</code> will be used instead in the
 release notes.</p>
 <pre><code class="language-yaml">issue-labels-alias:
-    - name:    Bug
-      header:  Foo
-      plural:  Bar
+    - name:   Bug
+      header: Foo
+      plural: Bar
 
-    - name:    Improvement
-      header:  Baz
-      plural:  Qux
+    - name:   Improvement
+      header: Baz
+      plural: Qux
 </code></pre>
 <div class="alert alert-info"><p>You can add as many label aliases as required.</p>
 </div>

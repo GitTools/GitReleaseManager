@@ -163,7 +163,7 @@
 		<p>There are a number of reasons that you would want to incorporate
 GitReleaseManager into your workflow.</p>
 <div class="alert alert-info"><p>GitReleaseManager works best when included within an automated Build Process,
-using something like psake, or Octopus Deploy, etc.  However, it can also be
+using something like psake, or Octopus Deploy, etc. However, it can also be
 used as a standalone tool, running directly at the command line.</p>
 </div>
 <p>Here are a few examples:</p>
@@ -177,22 +177,22 @@ included.</p>
 <h2 id="publish-release">Publish Release</h2>
 <p>Even if you don't want to use GitReleaseManager to create the release notes on
 GitHub, you may still want the ability to Publish a Release (which has the
-result of creating a tag in your repository).  This can be done using the
+result of creating a tag in your repository). This can be done using the
 <a href="commands/publish">publish command</a>.</p>
 <div class="alert alert-info"><p>Publishing a Release also closes the associated Milestone for the Release.</p>
 </div>
 <h2 id="add-asset-to-release">Add Asset to Release</h2>
 <p>As part of your Release process, you may want to include assets into the GitHub
-Release.  This could be the final MSI package for your application, or a NuGet
-package.  GitReleaseManager allows you to do this in two ways.  The first is
+Release. This could be the final MSI package for your application, or a NuGet
+package. GitReleaseManager allows you to do this in two ways. The first is
 using the <a href="commands/create">create command</a>, which includes the ability to add
-an asset at the time of Release creation.  However, at the time of Release
-creation, you might not have all the assets that you want to add.  As a result,
+an asset at the time of Release creation. However, at the time of Release
+creation, you might not have all the assets that you want to add. As a result,
 there is a separate <a href="commands/add-assets">add asset</a> command that you can use to
 add an asset to an existing Release.</p>
 <h2 id="close-milestone">Close Milestone</h2>
 <p>When working directly in GitHub, publishing a Release doesn't close the
-associated milestone.  When using the GitReleaseManager's
+associated milestone. When using the GitReleaseManager's
 <a href="commands/publish">publish command</a> the associated milestone is also closed.
 However, you can also use the <a href="commands/close">close command</a> directly if you
 are not using the publish workflow as part of your process.</p>

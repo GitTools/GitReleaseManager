@@ -160,15 +160,15 @@
 at an example workflow currently in use by the Chocolatey GUI project.</p>
 <div class="alert alert-info"><p>Chocolatey GUI uses a number of concepts, for example, GitFlow, psake build
 script engine, AppVeyor Continuous Integration, as well as using
-GitReleaseManager.  In order to understand the usage of GitReleaseManager for
-this project, you sort of have to understand the entire process.  As a result,
+GitReleaseManager. In order to understand the usage of GitReleaseManager for
+this project, you sort of have to understand the entire process. As a result,
 this walk-through steps you through the entire end to end process, which as a
 result, means it is quite lengthy.</p>
 </div>
 <h2 id="chocolatey-gui">Chocolatey GUI</h2>
 <p><a href="https://github.com/chocolatey/ChocolateyGUI">Chocolatey GUI</a> is an open source
 project, hosted on GitHub that makes use of GitReleaseManager to create and
-export it's release notes.  Before we can get into how GitReleaseManager is
+export it's release notes. Before we can get into how GitReleaseManager is
 used, we need to take a look at how Chocolatey GUI is setup.</p>
 <h3 id="github-setup">GitHub Setup</h3>
 <ul>
@@ -209,12 +209,12 @@ triggered, and the build artifacts are deployed to
 <p>The role of GitReleaseManager really comes into play when moving between a
 <strong>release</strong> or <strong>hotfix</strong> branch and the **master **branch.</p>
 <p>Let's say you have done a bunch of work on the develop branch, you want to move
-all of that work into the master branch, via a release branch.  When you do
+all of that work into the master branch, via a release branch. When you do
 this, you are effectively saying that the milestone that you were working on is
-almost ready for release.  It is at this point that you should really know, via
+almost ready for release. It is at this point that you should really know, via
 the issues list, everything that is being included in the release, and now would
-seem like a great time to create some release notes.  And this is exactly what
-the build process for Chocolatey GUI does.  Let's break this down further...</p>
+seem like a great time to create some release notes. And this is exactly what
+the build process for Chocolatey GUI does. Let's break this down further...</p>
 <ul>
 <li>A **release **branch is created from **develop **branch</li>
 <li>The release branch is merged into master branch, triggering a build (with
@@ -238,8 +238,8 @@ close the milestone associated with the release that has just been published - <
 </ul>
 <p>The end result of this process can be seen
 <a href="https://github.com/chocolatey/ChocolateyGUI/releases/tag/0.12.0">here</a>.
-This release included 218 commits, and 75 issues.  Personally, I simply wouldn't
-have created such a comprehensive set of release notes manually.  Instead, I
+This release included 218 commits, and 75 issues. Personally, I simply wouldn't
+have created such a comprehensive set of release notes manually. Instead, I
 would have written something like...</p>
 <pre><code class="language-text">#0.12.0
 
