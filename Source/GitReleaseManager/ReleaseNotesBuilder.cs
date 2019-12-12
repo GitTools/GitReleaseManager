@@ -14,6 +14,7 @@ namespace GitReleaseManager.Core
     using System.Text;
     using System.Threading.Tasks;
     using GitReleaseManager.Core.Configuration;
+    using GitReleaseManager.Core.Extensions;
     using GitReleaseManager.Core.Model;
 
     public class ReleaseNotesBuilder
@@ -160,7 +161,11 @@ namespace GitReleaseManager.Core
             {
                 if (!string.IsNullOrEmpty(_configuration.Create.MilestoneReplaceText))
                 {
-                    footerContent = footerContent.Replace(_configuration.Create.MilestoneReplaceText, _milestoneTitle);
+                    var replaceValues = new Dictionary<string, object>
+                    {
+                        { _configuration.Create.MilestoneReplaceText.Trim('{', '}'), _milestoneTitle },
+                    };
+                    footerContent = footerContent.ReplaceTemplate(replaceValues);
                 }
             }
 
