@@ -14,9 +14,11 @@ namespace GitReleaseManager.Core
     using System.Linq;
     using System.Security.Cryptography;
     using System.Text;
+    using System.Threading;
     using System.Threading.Tasks;
     using AutoMapper;
     using GitReleaseManager.Core.Configuration;
+    using GitReleaseManager.Core.Extensions;
     using Octokit;
     using Issue = GitReleaseManager.Core.Model.Issue;
     using Milestone = GitReleaseManager.Core.Model.Milestone;
@@ -285,6 +287,11 @@ namespace GitReleaseManager.Core
             }
 
             await milestoneClient.Update(owner, repository, milestone.Number, new MilestoneUpdate { State = ItemState.Closed }).ConfigureAwait(false);
+
+            if (_configuration.Close.IssueComments)
+            {
+                await AddIssueCommentsAsync(owner, repository, milestoneTitle).ConfigureAwait(false);
+            }
         }
 
         public async Task PublishRelease(string owner, string repository, string tagName)
@@ -364,6 +371,35 @@ namespace GitReleaseManager.Core
                     return builder.ToString();
                 }
             }
+        }
+
+        private async Task AddIssueCommentsAsync(string owner, string repository, string milestone)
+        {
+            var issueComment = _configuration.Close.IssueCommentFormat.ReplaceTemplate(new { owner, repository, Milestone = milestone });
+            var issues = await GetIssuesFromMilestoneAsync(owner, repository, milestone).ConfigureAwait(false);
+
+            foreach (var issue in issues)
+            {
+                Logger.WriteInfo(string.Format("Adding published comment for issue #{0}", issue.Number));
+                try
+                {
+                    await _gitHubClient.Issue.Comment.Create(owner, repository, issue.Number, issueComment).ConfigureAwait(false);
+                }
+                catch (ForbiddenException)
+                {
+                    Logger.WriteWarning(string.Format("Unable to add comment to issue #{0}. Insufficient permissions.", issue.Number));
+                    break;
+                }
+            }
+        }
+
+        private Task<IReadOnlyList<Octokit.Issue>> GetIssuesFromMilestoneAsync(string owner, string repository, string milestone, ItemStateFilter state = ItemStateFilter.Closed)
+        {
+            return _gitHubClient.Issue.GetAllForRepository(owner, repository, new RepositoryIssueRequest
+            {
+                Milestone = milestone,
+                State = state,
+            });
         }
 
         private async Task<Octokit.Release> GetReleaseFromTagNameAsync(string owner, string repository, string tagName)
