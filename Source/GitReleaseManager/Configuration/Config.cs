@@ -12,6 +12,14 @@ namespace GitReleaseManager.Core.Configuration
 
     public class Config
     {
+        internal const string IssueCommentFormat = @":tada: This issue has been resolved in version {milestone} :tada:
+
+The release is available on:
+
+- [GitHub release](https://github.com/{owner}/{repository}/releases/tag/{milestone})
+
+Your **[GitReleaseManager](https://github.com/GitTools/GitReleaseManager)** bot :package::rocket:";
+
         public Config()
         {
             Create = new CreateConfig
@@ -33,6 +41,12 @@ namespace GitReleaseManager.Core.Configuration
                 PerformRegexRemoval = false,
                 RegexText = string.Empty,
                 IsMultilineRegex = false,
+            };
+
+            Close = new CloseConfig
+            {
+                IssueComments = false,
+                IssueCommentFormat = IssueCommentFormat,
             };
 
             IssueLabelsInclude = new List<string>
@@ -63,6 +77,13 @@ namespace GitReleaseManager.Core.Configuration
         [Description("Configuration values used when exporting release notes")]
         [YamlMember(Alias = "export")]
         public ExportConfig Export { get; private set; }
+
+        /// <summary>
+        /// Gets or sets the close configuration values.
+        /// </summary>
+        [Description("Configuration values used when closing a milestone")]
+        [YamlMember(Alias = "close")]
+        public CloseConfig Close { get; set; }
 
         [Description("The labels that will be used to include issues in release notes.")]
         [YamlMember(Alias = "issue-labels-include")]

@@ -14,9 +14,11 @@ namespace GitReleaseManager.Core
     using System.Linq;
     using System.Security.Cryptography;
     using System.Text;
+    using System.Threading;
     using System.Threading.Tasks;
     using AutoMapper;
     using GitReleaseManager.Core.Configuration;
+    using GitReleaseManager.Core.Extensions;
     using Octokit;
     using Issue = GitReleaseManager.Core.Model.Issue;
     using Milestone = GitReleaseManager.Core.Model.Milestone;
@@ -285,6 +287,11 @@ namespace GitReleaseManager.Core
             }
 
             await milestoneClient.Update(owner, repository, milestone.Number, new MilestoneUpdate { State = ItemState.Closed }).ConfigureAwait(false);
+
+            if (_configuration.Close.IssueComments)
+            {
+                await AddIssueCommentsAsync(owner, repository, milestoneTitle).ConfigureAwait(false);
+            }
         }
 
         public async Task PublishRelease(string owner, string repository, string tagName)
@@ -366,12 +373,74 @@ namespace GitReleaseManager.Core
             }
         }
 
+        private async Task AddIssueCommentsAsync(string owner, string repository, string milestone)
+        {
+            const string detectionComment = "<!-- GitReleaseManager release comment -->";
+            var issueComment = detectionComment + "\n" + _configuration.Close.IssueCommentFormat.ReplaceTemplate(new { owner, repository, Milestone = milestone });
+            var issues = await GetIssuesFromMilestoneAsync(owner, repository, milestone).ConfigureAwait(false);
+
+            foreach (var issue in issues)
+            {
+                if (issue.State != ItemState.Closed)
+                {
+                    continue;
+                }
+
+                SleepWhenRateIsLimited();
+
+                try
+                {
+                    if (!await CommentsIncludeString(owner, repository, issue.Number, detectionComment).ConfigureAwait(false))
+                    {
+                        Logger.WriteInfo(string.Format("Adding release comment for issue #{0}", issue.Number));
+                        await _gitHubClient.Issue.Comment.Create(owner, repository, issue.Number, issueComment).ConfigureAwait(false);
+                }
+                    else
+                    {
+                        Logger.WriteInfo(string.Format("Issue #{0} already contains release comment, skipping...", issue.Number));
+                    }
+                }
+                catch (ForbiddenException)
+                {
+                    Logger.WriteWarning(string.Format("Unable to add comment to issue #{0}. Insufficient permissions.", issue.Number));
+                    break;
+                }
+            }
+        }
+
+        private async Task<bool> CommentsIncludeString(string owner, string repository, int issueNumber, string comment)
+        {
+            var issueComments = await _gitHubClient.Issue.Comment.GetAllForIssue(owner, repository, issueNumber).ConfigureAwait(false);
+
+            return issueComments.Any(c => c.Body.Contains(comment));
+        }
+
+        private Task<IReadOnlyList<Octokit.Issue>> GetIssuesFromMilestoneAsync(string owner, string repository, string milestone, ItemStateFilter state = ItemStateFilter.Closed)
+        {
+            return _gitHubClient.Issue.GetAllForRepository(owner, repository, new RepositoryIssueRequest
+            {
+                Milestone = milestone,
+                State = state,
+            });
+        }
+
         private async Task<Octokit.Release> GetReleaseFromTagNameAsync(string owner, string repository, string tagName)
         {
             var releases = await _gitHubClient.Repository.Release.GetAll(owner, repository).ConfigureAwait(false);
 
             var release = releases.FirstOrDefault(r => r.TagName == tagName);
             return release;
+        }
+
+        private void SleepWhenRateIsLimited()
+        {
+            var lastApi = _gitHubClient.GetLastApiInfo();
+            if (lastApi?.RateLimit.Remaining == 0)
+            {
+                var sleepMs = lastApi.RateLimit.Reset.Millisecond - DateTimeOffset.Now.Millisecond;
+                Logger.WriteWarning(string.Format("Rate limit exceeded, sleeping for {0} MS", sleepMs));
+                Thread.Sleep(sleepMs);
+            }
         }
     }
 }
