@@ -380,6 +380,11 @@ namespace GitReleaseManager.Core
 
             foreach (var issue in issues)
             {
+                if (issue.State != ItemState.Closed)
+                {
+                    continue;
+                }
+
                 SleepWhenRateIsLimited();
 
                 Logger.WriteInfo(string.Format("Adding published comment for issue #{0}", issue.Number));
