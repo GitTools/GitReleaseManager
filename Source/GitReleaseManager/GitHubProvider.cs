@@ -375,7 +375,8 @@ namespace GitReleaseManager.Core
 
         private async Task AddIssueCommentsAsync(string owner, string repository, string milestone)
         {
-            var issueComment = _configuration.Close.IssueCommentFormat.ReplaceTemplate(new { owner, repository, Milestone = milestone });
+            const string detectionComment = "<!-- GitReleaseManager release comment -->";
+            var issueComment = detectionComment + "\n" + _configuration.Close.IssueCommentFormat.ReplaceTemplate(new { owner, repository, Milestone = milestone });
             var issues = await GetIssuesFromMilestoneAsync(owner, repository, milestone).ConfigureAwait(false);
 
             foreach (var issue in issues)
@@ -387,10 +388,17 @@ namespace GitReleaseManager.Core
 
                 SleepWhenRateIsLimited();
 
-                Logger.WriteInfo(string.Format("Adding published comment for issue #{0}", issue.Number));
                 try
                 {
-                    await _gitHubClient.Issue.Comment.Create(owner, repository, issue.Number, issueComment).ConfigureAwait(false);
+                    if (!await CommentsIncludeString(owner, repository, issue.Number, detectionComment).ConfigureAwait(false))
+                    {
+                        Logger.WriteInfo(string.Format("Adding release comment for issue #{0}", issue.Number));
+                        await _gitHubClient.Issue.Comment.Create(owner, repository, issue.Number, issueComment).ConfigureAwait(false);
+                }
+                    else
+                    {
+                        Logger.WriteInfo(string.Format("Issue #{0} already contains release comment, skipping...", issue.Number));
+                    }
                 }
                 catch (ForbiddenException)
                 {
@@ -398,6 +406,13 @@ namespace GitReleaseManager.Core
                     break;
                 }
             }
+        }
+
+        private async Task<bool> CommentsIncludeString(string owner, string repository, int issueNumber, string comment)
+        {
+            var issueComments = await _gitHubClient.Issue.Comment.GetAllForIssue(owner, repository, issueNumber).ConfigureAwait(false);
+
+            return issueComments.Any(c => c.Body.Contains(comment));
         }
 
         private Task<IReadOnlyList<Octokit.Issue>> GetIssuesFromMilestoneAsync(string owner, string repository, string milestone, ItemStateFilter state = ItemStateFilter.Closed)
