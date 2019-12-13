@@ -12,6 +12,14 @@ namespace GitReleaseManager.Core.Configuration
 
     public class Config
     {
+        internal const string IssueCommentFormat = @":tada: This issue has been resolved in version {milestone} :tada:
+
+The release is available on:
+
+- [GitHub release](https://github.com/{owner}/{repository}/releases/tag/{milestone})
+
+Your **[GitReleaseManager](https://github.com/GitTools/GitReleaseManager)** bot :package::rocket:";
+
         public Config()
         {
             Create = new CreateConfig
@@ -38,13 +46,7 @@ namespace GitReleaseManager.Core.Configuration
             Close = new CloseConfig
             {
                 IssueComments = false,
-                IssueCommentFormat = @":tada: This issue has been resolved in version {milestone} :tada:
-
-The release is available on:
-
-- [GitHub release](https://github.com/{owner}/{repository}/releases/tag/{milestone})
-
-Your **[GitReleaseManager](https://github.com/GitTools/GitReleaseManager)** bot :package::rocket:",
+                IssueCommentFormat = IssueCommentFormat,
             };
 
             IssueLabelsInclude = new List<string>

@@ -93,6 +93,11 @@ namespace GitReleaseManager.Core.Configuration
             {
                 configuration.Create.ShaSectionLineFormat = "- `{1}\t{0}`";
             }
+
+            if (configuration.Close.IssueCommentFormat == null)
+            {
+                configuration.Close.IssueCommentFormat = Config.IssueCommentFormat;
+            }
         }
     }
 }
