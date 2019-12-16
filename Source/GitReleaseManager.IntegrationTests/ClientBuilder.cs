@@ -4,7 +4,7 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-namespace GitReleaseManager.Tests
+namespace GitReleaseManager.IntegrationTests
 {
     using Octokit;
     using Octokit.Internal;
