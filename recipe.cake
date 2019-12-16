@@ -11,7 +11,9 @@ BuildParameters.SetParameters(context: Context,
                             repositoryName: "GitReleaseManager",
                             appVeyorAccountName: "GitTools",
                             shouldRunGitVersion: true,
-                            shouldRunDotNetCorePack: true);
+                            shouldRunDotNetCorePack: true,
+                            shouldRunIntegrationTests: true,
+                            integrationTestScriptPath: "./tests/integration/tests.cake");
 
 BuildParameters.PackageSources.Add(new PackageSourceData(Context, "GPR", "https://nuget.pkg.github.com/GitTools/index.json", FeedType.NuGet, false));
 
