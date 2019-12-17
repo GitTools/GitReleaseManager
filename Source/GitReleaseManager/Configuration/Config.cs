@@ -50,22 +50,22 @@ Your **[GitReleaseManager](https://github.com/GitTools/GitReleaseManager)** bot 
             };
 
             IssueLabelsInclude = new List<string>
-                                   {
-                                       "Bug",
-                                       "Duplicate",
-                                       "Enhancement",
-                                       "Feature",
-                                       "Help Wanted",
-                                       "Improvement",
-                                       "Invalid",
-                                       "Question",
-                                       "WontFix",
-                                   };
+                                    {
+                                        "Bug",
+                                        "Duplicate",
+                                        "Enhancement",
+                                        "Feature",
+                                        "Help Wanted",
+                                        "Improvement",
+                                        "Invalid",
+                                        "Question",
+                                        "WontFix",
+                                    };
 
             IssueLabelsExclude = new List<string>
-                                   {
-                                       "Internal Refactoring",
-                                   };
+                                    {
+                                        "Internal Refactoring",
+                                    };
 
             LabelAliases = new List<LabelAlias>();
         }

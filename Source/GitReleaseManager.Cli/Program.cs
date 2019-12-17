@@ -44,16 +44,16 @@ namespace GitReleaseManager.Cli
             return Parser.Default.ParseArguments<CreateSubOptions, DiscardSubOptions, AddAssetSubOptions, CloseSubOptions, PublishSubOptions, ExportSubOptions, InitSubOptions, ShowConfigSubOptions, LabelSubOptions>(args)
                 .WithParsed<BaseSubOptions>(CreateFiglet)
                 .MapResult(
-                  (CreateSubOptions opts) => CreateReleaseAsync(opts),
-                  (DiscardSubOptions opts) => DiscardReleaseAsync(opts),
-                  (AddAssetSubOptions opts) => AddAssetsAsync(opts),
-                  (CloseSubOptions opts) => CloseMilestoneAsync(opts),
-                  (PublishSubOptions opts) => PublishReleaseAsync(opts),
-                  (ExportSubOptions opts) => ExportReleasesAsync(opts),
-                  (InitSubOptions opts) => CreateSampleConfigFileAsync(opts),
-                  (ShowConfigSubOptions opts) => ShowConfigAsync(opts),
-                  (LabelSubOptions opts) => CreateLabelsAsync(opts),
-                  errs => Task.FromResult(1));
+                (CreateSubOptions opts) => CreateReleaseAsync(opts),
+                (DiscardSubOptions opts) => DiscardReleaseAsync(opts),
+                (AddAssetSubOptions opts) => AddAssetsAsync(opts),
+                (CloseSubOptions opts) => CloseMilestoneAsync(opts),
+                (PublishSubOptions opts) => PublishReleaseAsync(opts),
+                (ExportSubOptions opts) => ExportReleasesAsync(opts),
+                (InitSubOptions opts) => CreateSampleConfigFileAsync(opts),
+                (ShowConfigSubOptions opts) => ShowConfigAsync(opts),
+                (LabelSubOptions opts) => CreateLabelsAsync(opts),
+                errs => Task.FromResult(1));
         }
 
         private static void CreateFiglet(BaseSubOptions options)
@@ -68,23 +68,21 @@ namespace GitReleaseManager.Cli
             {
                 version = version.Substring(0, version.IndexOf('+'));
             }
-            var shortFormat = @"
-   ____ ____  __  __
-  / ___|  _ \|  \/  |
- | |  _| |_) | |\/| |
- | |_| |  _ <| |  | |
-  \____|_| \_\_|  |_|
-{0,21}
-";
-            var longFormat = @"
-   ____ _ _   ____      _                     __  __
-  / ___(_) |_|  _ \ ___| | ___  __ _ ___  ___|  \/  | __ _ _ __   __ _  __ _  ___ _ __
- | |  _| | __| |_) / _ \ |/ _ \/ _` / __|/ _ \ |\/| |/ _` | '_ \ / _` |/ _` |/ _ \ '__|
- | |_| | | |_|  _ <  __/ |  __/ (_| \__ \  __/ |  | | (_| | | | | (_| | (_| |  __/ |
-  \____|_|\__|_| \_\___|_|\___|\__,_|___/\___|_|  |_|\__,_|_| |_|\__,_|\__, |\___|_|
-                                                                       |___/
-{0,87}
-";
+            // The following ugly formats is to prevent incorrect indentation
+            // detected by editorconfig formatters.
+            var shortFormat = "\n   ____ ____  __  __\n"
+                + "  / ___|  _ \\|  \\/  |\n"
+                + " | |  _| |_) | |\\/| |\n"
+                + " | |_| |  _ <| |  | |\n"
+                + "  \\____|_| \\_\\_|  |_|\n"
+                + "{0,21}\n";
+            var longFormat = "\n   ____ _ _   ____      _                     __  __\n"
+                + "  / ___(_) |_|  _ \\ ___| | ___  __ _ ___  ___|  \\/  | __ _ _ __   __ _  __ _  ___ _ __\n"
+                + " | |  _| | __| |_) / _ \\ |/ _ \\/ _` / __|/ _ \\ |\\/| |/ _` | '_ \\ / _` |/ _` |/ _ \\ '__|\n"
+                + " | |_| | | |_|  _ <  __/ |  __/ (_| \\__ \\  __/ |  | | (_| | | | | (_| | (_| |  __/ |\n"
+                + "  \\____|_|\\__|_| \\_\\___|_|\\___|\\__,_|___/\\___|_|  |_|\\__,_|_| |_|\\__,_|\\__, |\\___|_|\n"
+                + "                                                                       |___/\n"
+                + "{0,87}\n";
             if (Console.WindowWidth > 87)
             {
                 Console.WriteLine(longFormat, version);
