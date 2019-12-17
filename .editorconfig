@@ -18,9 +18,18 @@ trim_trailing_whitespace = true
 [*.sh]
 end_of_line = lf
 
+[*.sln]
+# Visual studio defaults
+insert_final_newline = true
+indent_style = tab
+
 [*.md]
 trim_trailing_whitespace = false
 insert_final_newline = true # Conflicts with markdownlint when false
+indent_size = 2 # Incorrect indentation happens when this is not 2
+
+[*.{yml,yaml}]
+indent_size = 2 # Incorrect indentation happens when this is not 2
 
 [*.ps1]
 charset = utf-8-bom
