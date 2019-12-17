@@ -1,6 +1,7 @@
 <Project>
     <PropertyGroup>
         <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)\GitReleaseManager.ruleset</CodeAnalysisRuleSet>
+        <DebugType>pdbonly</DebugType>
     </PropertyGroup>
 
     <ItemGroup>
