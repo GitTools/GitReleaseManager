@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <LangVersion>8.0</LangVersion>
-        <TargetFrameworks>net472;netcoreapp3.0</TargetFrameworks>
+        <TargetFrameworks>net472;netcoreapp2.2</TargetFrameworks>
         <Title>GitReleaseManager.Tests</Title>
         <Description>Test Project for GitReleaseManager</Description>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
