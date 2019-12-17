@@ -4,7 +4,6 @@
         <TargetFrameworks>net472;netcoreapp3.0</TargetFrameworks>
         <Title>GitReleaseManager.IntegrationTests</Title>
         <Description>Integration Test Project for GitReleaseManager</Description>
-        <DebugType>full</DebugType>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <NoWarn>CA1707</NoWarn>
     </PropertyGroup>

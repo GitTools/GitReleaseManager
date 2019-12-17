@@ -5,7 +5,6 @@
         <Title>GitReleaseManager.Core</Title>
         <Description>Create release notes in markdown given a milestone</Description>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-        <DebugType>full</DebugType>
         <IsPackable>false</IsPackable>
     </PropertyGroup>
     <ItemGroup>

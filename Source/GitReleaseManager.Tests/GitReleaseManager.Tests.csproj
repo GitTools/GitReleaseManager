@@ -4,13 +4,8 @@
         <TargetFrameworks>net472;netcoreapp3.0</TargetFrameworks>
         <Title>GitReleaseManager.Tests</Title>
         <Description>Test Project for GitReleaseManager</Description>
-        <DebugType>full</DebugType>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <NoWarn>CA1707</NoWarn>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-        <Optimize>false</Optimize>
-        <DebugSymbols>true</DebugSymbols>
     </PropertyGroup>
     <ItemGroup>
         <Compile Include="..\SolutionInfo.cs" Link="SolutionInfo.cs" />
