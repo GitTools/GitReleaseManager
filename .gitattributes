@@ -6,7 +6,7 @@
 
 # Custom for Visual Studio
 *.cs     text diff=csharp
-*.sln    merge=union
+*.sln    merge=union whitespace=-tab-in-indent,-blank-at-eof,indent-with-non-tab
 *.csproj merge=union
 *.vbproj merge=union
 *.fsproj merge=union
