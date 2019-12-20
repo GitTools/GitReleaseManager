@@ -13,11 +13,11 @@ namespace GitReleaseManager.Cli.Options
         [Option('u', "username", HelpText = "The username to access Version Control System with.", Required = true, SetName = "Basic Auth")]
         public string UserName { get; set; }
 
-        [LogMasked]
+        [LogMasked(Text = "[REDACTED]")]
         [Option('p', "password", HelpText = "The password to access Version Control System with.", Required = true, SetName = "Basic Auth")]
         public string Password { get; set; }
 
-        [LogMasked]
+        [LogMasked(Text = "[REDACTED]")]
         [Option("token", HelpText = "The Access Token to access Version Control System with.", Required = true, SetName = "OAuth flow")]
         public string Token { get; set; }
 
