@@ -37,6 +37,8 @@ namespace GitReleaseManager.Core
 
         Task CloseMilestone(string owner, string repository, string milestoneTitle);
 
+        Task OpenMilestone(string owner, string repository, string milestoneTitle);
+
         Task PublishRelease(string owner, string repository, string tagName);
 
         Task CreateLabels(string owner, string repository);

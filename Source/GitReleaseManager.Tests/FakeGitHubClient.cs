@@ -105,6 +105,11 @@ namespace GitReleaseManager.Tests
             throw new System.NotImplementedException();
         }
 
+        public Task OpenMilestone(string owner, string repository, string milestoneTitle)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public Task PublishRelease(string owner, string repository, string tagName)
         {
             throw new System.NotImplementedException();
