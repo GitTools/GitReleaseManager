@@ -38,7 +38,7 @@ namespace GitReleaseManager.Core
 
         public async Task<string> BuildReleaseNotes()
         {
-            await LoadMilestones();
+            await LoadMilestones().ConfigureAwait(false);
             GetTargetMilestone();
 
             var issues = await GetIssues(_targetMilestone).ConfigureAwait(false);
