@@ -45,6 +45,7 @@ namespace GitReleaseManager.Cli
                 return await Parser.Default.ParseArguments<CreateSubOptions, DiscardSubOptions, AddAssetSubOptions, CloseSubOptions, PublishSubOptions, ExportSubOptions, InitSubOptions, ShowConfigSubOptions, LabelSubOptions>(args)
                     .WithParsed<BaseSubOptions>(CreateFiglet)
                     .WithParsed<BaseSubOptions>(ConfigureLogging)
+                    .WithParsed<BaseSubOptions>(LogOptions)
                     .MapResult(
                     (CreateSubOptions opts) => CreateReleaseAsync(opts),
                     (DiscardSubOptions opts) => DiscardReleaseAsync(opts),
@@ -235,5 +236,8 @@ namespace GitReleaseManager.Cli
 
             Log.Logger = config.CreateLogger();
         }
+
+        private static void LogOptions(BaseSubOptions options)
+            => Log.Verbose("{@Options}", options);
     }
 }
