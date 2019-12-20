@@ -23,7 +23,7 @@ namespace GitReleaseManager.Core
 
         Task<Release> GetSpecificRelease(string tagName, string user, string repository);
 
-        ReadOnlyCollection<Milestone> GetReadOnlyMilestones(string user, string repository);
+        Task<ReadOnlyCollection<Milestone>> GetReadOnlyMilestonesAsync(string user, string repository);
 
         Task<Release> CreateReleaseFromMilestone(string owner, string repository, string milestone, string releaseName, string targetCommitish, IList<string> assets, bool prerelease);
 

@@ -55,9 +55,9 @@ namespace GitReleaseManager.Tests
             return Task.FromResult(Release);
         }
 
-        public ReadOnlyCollection<Milestone> GetReadOnlyMilestones(string user, string repository)
+        public Task<ReadOnlyCollection<Milestone>> GetReadOnlyMilestonesAsync(string user, string repository)
         {
-            return new ReadOnlyCollection<Milestone>(Milestones);
+            return Task.FromResult(new ReadOnlyCollection<Milestone>(Milestones));
         }
 
         public string GetCommitsLink(string user, string repository, Milestone milestone, Milestone previousMilestone)
