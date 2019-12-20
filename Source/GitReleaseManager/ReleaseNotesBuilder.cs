@@ -38,7 +38,7 @@ namespace GitReleaseManager.Core
 
         public async Task<string> BuildReleaseNotes()
         {
-            LoadMilestones();
+            await LoadMilestones();
             GetTargetMilestone();
 
             var issues = await GetIssues(_targetMilestone).ConfigureAwait(false);
@@ -173,9 +173,9 @@ namespace GitReleaseManager.Core
             stringBuilder.AppendLine();
         }
 
-        private void LoadMilestones()
+        private async Task LoadMilestones()
         {
-            _milestones = _vcsProvider.GetReadOnlyMilestones(_user, _repository);
+            _milestones = await _vcsProvider.GetReadOnlyMilestonesAsync(_user, _repository).ConfigureAwait(false);
         }
 
         private async Task<List<Issue>> GetIssues(Milestone milestone)

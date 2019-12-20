@@ -83,24 +83,24 @@ namespace GitReleaseManager.Core
             return _mapper.Map<Release>(await GetReleaseFromTagNameAsync(user, repository, tagName).ConfigureAwait(false));
         }
 
-        public ReadOnlyCollection<Milestone> GetReadOnlyMilestones(string user, string repository)
+        public async Task<ReadOnlyCollection<Milestone>> GetReadOnlyMilestonesAsync(string user, string repository)
         {
             var milestonesClient = _gitHubClient.Issue.Milestone;
-            var closed = milestonesClient.GetAllForRepository(
+            var closed = await milestonesClient.GetAllForRepository(
                 user,
                 repository,
                 new MilestoneRequest
                 {
                     State = ItemStateFilter.Closed,
-                }).Result;
+                }).ConfigureAwait(false);
 
-            var open = milestonesClient.GetAllForRepository(
+            var open = await milestonesClient.GetAllForRepository(
                 user,
                 repository,
                 new MilestoneRequest
                 {
                     State = ItemStateFilter.Open,
-                }).Result;
+                }).ConfigureAwait(false);
 
             return new ReadOnlyCollection<Milestone>(_mapper.Map<List<Milestone>>(closed.Concat(open).ToList()));
         }
