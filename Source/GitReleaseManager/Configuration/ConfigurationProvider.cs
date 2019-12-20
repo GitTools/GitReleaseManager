@@ -11,9 +11,12 @@ namespace GitReleaseManager.Core.Configuration
     using System.IO;
     using System.Text;
     using GitReleaseManager.Core.Helpers;
+    using Serilog;
 
     public static class ConfigurationProvider
     {
+        private static readonly ILogger _logger = Log.ForContext(typeof(ConfigurationProvider));
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "Not required, as direct return of object")]
         public static Config Provide(string gitDirectory, IFileSystem fileSystem)
         {
@@ -73,7 +76,7 @@ namespace GitReleaseManager.Core.Configuration
             }
             else
             {
-                Logger.WriteError("Cannot write sample, GitReleaseManager.yaml already exists");
+                _logger.Error("Cannot write sample, '{File}' already exists", configFilePath);
             }
         }
 

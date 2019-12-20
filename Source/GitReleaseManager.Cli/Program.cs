@@ -127,7 +127,8 @@ namespace GitReleaseManager.Cli
                 release = await _vcsProvider.CreateReleaseFromInputFile(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Name, subOptions.InputFilePath, subOptions.TargetCommitish, subOptions.AssetPaths, subOptions.Prerelease).ConfigureAwait(false);
             }
 
-            Console.WriteLine(release.HtmlUrl);
+            Log.Information("Drafted release is available at:\n{HtmlUrl}", release.HtmlUrl);
+            Log.Verbose("Body:\n{Body}", release.Body);
             return 0;
         }
 

@@ -20,12 +20,15 @@ namespace GitReleaseManager.Core
     using GitReleaseManager.Core.Configuration;
     using GitReleaseManager.Core.Extensions;
     using Octokit;
+    using Serilog;
     using Issue = GitReleaseManager.Core.Model.Issue;
     using Milestone = GitReleaseManager.Core.Model.Milestone;
     using Release = GitReleaseManager.Core.Model.Release;
 
     public class GitHubProvider : IVcsProvider
     {
+        private readonly ILogger _logger = Log.ForContext<GitHubProvider>();
+
         private readonly Config _configuration;
         private readonly IMapper _mapper;
         private GitHubClient _gitHubClient;
@@ -57,7 +60,7 @@ namespace GitReleaseManager.Core
             }
             catch (NotFoundException)
             {
-                Logger.WriteWarning("Unable to find tag for milestone, so commit count will be returned as zero");
+                _logger.Warning("Unable to find tag for milestone, so commit count will be returned as zero");
 
                 // If there is no tag yet the Compare will return a NotFoundException
                 // we can safely ignore
@@ -143,7 +146,7 @@ namespace GitReleaseManager.Core
             }
             else
             {
-                Logger.WriteWarning(string.Format("A release for milestone {0} already exists, and will be updated", milestone));
+                _logger.Warning("A release for milestone {Milestone} already exists, and will be updated", milestone);
 
                 if (!release.Draft)
                 {
@@ -201,7 +204,7 @@ namespace GitReleaseManager.Core
 
             if (release == null)
             {
-                Logger.WriteError("Unable to find Release with specified tagName");
+                _logger.Error("Unable to find Release with specified tagName");
                 return;
             }
 
@@ -212,7 +215,6 @@ namespace GitReleaseManager.Core
                     if (!File.Exists(asset))
                     {
                         var logMessage = string.Format("Requested asset to be uploaded doesn't exist: {0}", asset);
-                        Logger.WriteError(logMessage);
                         throw new Exception(logMessage);
                     }
 
@@ -221,7 +223,7 @@ namespace GitReleaseManager.Core
                     var existingAsset = release.Assets.Where(a => a.Name == assetFileName).FirstOrDefault();
                     if (existingAsset != null)
                     {
-                        Logger.WriteWarning(string.Format("Requested asset to be uploaded already exists on draft release, replacing with new file: {0}", asset));
+                        _logger.Warning("Requested asset to be uploaded already exists on draft release, replacing with new file: {AssetPath}", asset);
                         await _gitHubClient.Repository.Release.DeleteAsset(owner, repository, existingAsset.Id).ConfigureAwait(false);
                     }
 
@@ -407,17 +409,17 @@ namespace GitReleaseManager.Core
                 {
                     if (!await CommentsIncludeString(owner, repository, issue.Number, detectionComment).ConfigureAwait(false))
                     {
-                        Logger.WriteInfo(string.Format("Adding release comment for issue #{0}", issue.Number));
+                        _logger.Information("Adding release comment for issue #{IssueNumber}", issue.Number);
                         await _gitHubClient.Issue.Comment.Create(owner, repository, issue.Number, issueComment).ConfigureAwait(false);
-                }
+                    }
                     else
                     {
-                        Logger.WriteInfo(string.Format("Issue #{0} already contains release comment, skipping...", issue.Number));
+                        _logger.Information("Issue #{IssueNumber} already contains release comment, skipping...", issue.Number);
                     }
                 }
                 catch (ForbiddenException)
                 {
-                    Logger.WriteWarning(string.Format("Unable to add comment to issue #{0}. Insufficient permissions.", issue.Number));
+                    _logger.Error("Unable to add comment to issue #{IssueNumber}. Insufficient permissions.", issue.Number);
                     break;
                 }
             }
@@ -453,7 +455,7 @@ namespace GitReleaseManager.Core
             if (lastApi?.RateLimit.Remaining == 0)
             {
                 var sleepMs = lastApi.RateLimit.Reset.Millisecond - DateTimeOffset.Now.Millisecond;
-                Logger.WriteWarning(string.Format("Rate limit exceeded, sleeping for {0} MS", sleepMs));
+                _logger.Warning("Rate limit exceeded, sleeping for {MilliSeconds} MS", sleepMs);
                 Thread.Sleep(sleepMs);
             }
         }

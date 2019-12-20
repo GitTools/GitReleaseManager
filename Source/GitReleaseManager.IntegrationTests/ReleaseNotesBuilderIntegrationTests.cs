@@ -14,6 +14,7 @@ namespace GitReleaseManager.IntegrationTests
     using GitReleaseManager.Core.Configuration;
     using GitReleaseManager.Core.Helpers;
     using NUnit.Framework;
+    using Serilog;
 
     [TestFixture]
     public class ReleaseNotesBuilderIntegrationTests
@@ -29,13 +30,19 @@ namespace GitReleaseManager.IntegrationTests
         public void Configure()
         {
             _mapper = AutoMapperConfiguration.Configure();
-            Logger.WriteError = s => TestContext.WriteLine($"Error: {s}");
-            Logger.WriteInfo = s => TestContext.WriteLine($"Info: {s}");
-            Logger.WriteWarning = s => TestContext.WriteLine($"Warning: {s}");
+#pragma warning disable DF0037 // Marks undisposed objects assinged to a property, originated from a method invocation.
+            Log.Logger = new LoggerConfiguration().WriteTo.Console().CreateLogger();
+#pragma warning restore DF0037 // Marks undisposed objects assinged to a property, originated from a method invocation.
 
             _username = Environment.GetEnvironmentVariable("GITTOOLS_GITHUB_USERNAME");
             _password = Environment.GetEnvironmentVariable("GITTOOLS_GITHUB_PASSWORD");
             _token = Environment.GetEnvironmentVariable("GITTOOLS_GITHUB_TOKEN");
+        }
+
+        [OneTimeTearDown]
+        public void TearDown()
+        {
+            Log.CloseAndFlush();
         }
 
         [Test]
