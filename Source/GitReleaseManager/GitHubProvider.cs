@@ -294,6 +294,20 @@ namespace GitReleaseManager.Core
             }
         }
 
+        public async Task OpenMilestone(string owner, string repository, string milestoneTitle)
+        {
+            var milestoneClient = _gitHubClient.Issue.Milestone;
+            var closedMilestones = await milestoneClient.GetAllForRepository(owner, repository, new MilestoneRequest { State = ItemStateFilter.Closed }).ConfigureAwait(false);
+            var milestone = closedMilestones.FirstOrDefault(m => m.Title == milestoneTitle);
+
+            if (milestone == null)
+            {
+                return;
+            }
+
+            await milestoneClient.Update(owner, repository, milestone.Number, new MilestoneUpdate { State = ItemState.Open }).ConfigureAwait(false);
+        }
+
         public async Task PublishRelease(string owner, string repository, string tagName)
         {
             var release = await GetReleaseFromTagNameAsync(owner, repository, tagName).ConfigureAwait(false);

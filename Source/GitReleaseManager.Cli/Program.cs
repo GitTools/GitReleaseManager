@@ -41,7 +41,7 @@ namespace GitReleaseManager.Cli
 
             _mapper = AutoMapperConfiguration.Configure();
 
-            return Parser.Default.ParseArguments<CreateSubOptions, DiscardSubOptions, AddAssetSubOptions, CloseSubOptions, PublishSubOptions, ExportSubOptions, InitSubOptions, ShowConfigSubOptions, LabelSubOptions>(args)
+            return Parser.Default.ParseArguments<CreateSubOptions, DiscardSubOptions, AddAssetSubOptions, CloseSubOptions, PublishSubOptions, ExportSubOptions, InitSubOptions, ShowConfigSubOptions, LabelSubOptions, OpenSubOptions>(args)
                 .WithParsed<BaseSubOptions>(CreateFiglet)
                 .MapResult(
                 (CreateSubOptions opts) => CreateReleaseAsync(opts),
@@ -53,6 +53,7 @@ namespace GitReleaseManager.Cli
                 (InitSubOptions opts) => CreateSampleConfigFileAsync(opts),
                 (ShowConfigSubOptions opts) => ShowConfigAsync(opts),
                 (LabelSubOptions opts) => CreateLabelsAsync(opts),
+                (OpenSubOptions opts) => OpenMilestoneAsync(opts),
                 errs => Task.FromResult(1));
         }
 
@@ -177,6 +178,26 @@ namespace GitReleaseManager.Cli
                 _vcsProvider = GetVcsProvider(subOptions);
 
                 await _vcsProvider.CloseMilestone(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone).ConfigureAwait(false);
+
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+
+                return 1;
+            }
+        }
+
+        private static async Task<int> OpenMilestoneAsync(OpenSubOptions subOptions)
+        {
+            try
+            {
+                ConfigureLogging(subOptions.LogFilePath);
+
+                _vcsProvider = GetVcsProvider(subOptions);
+
+                await _vcsProvider.OpenMilestone(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone).ConfigureAwait(false);
 
                 return 0;
             }
