@@ -211,8 +211,9 @@ namespace GitReleaseManager.Core
                 {
                     if (!File.Exists(asset))
                     {
-                        Logger.WriteWarning(string.Format("Requested asset to be uploaded doesn't exist: {0}", asset));
-                        continue;
+                        var logMessage = string.Format("Requested asset to be uploaded doesn't exist: {0}", asset);
+                        Logger.WriteError(logMessage);
+                        throw new Exception(logMessage);
                     }
 
                     var assetFileName = Path.GetFileName(asset);
