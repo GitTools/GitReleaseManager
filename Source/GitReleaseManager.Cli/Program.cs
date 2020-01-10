@@ -10,18 +10,15 @@ namespace GitReleaseManager.Cli
     using System.IO;
     using System.Net;
     using System.Reflection;
-    using System.Text;
     using System.Threading.Tasks;
     using AutoMapper;
     using CommandLine;
-    using Destructurama;
+    using GitReleaseManager.Cli.Logging;
     using GitReleaseManager.Cli.Options;
     using GitReleaseManager.Core;
     using GitReleaseManager.Core.Configuration;
     using GitReleaseManager.Core.Helpers;
     using Serilog;
-    using Serilog.Events;
-    using Serilog.Sinks.SystemConsole.Themes;
 
     public static class Program
     {
@@ -43,8 +40,8 @@ namespace GitReleaseManager.Cli
             try
             {
                 return await Parser.Default.ParseArguments<CreateSubOptions, DiscardSubOptions, AddAssetSubOptions, CloseSubOptions, PublishSubOptions, ExportSubOptions, InitSubOptions, ShowConfigSubOptions, LabelSubOptions>(args)
+                    .WithParsed<BaseSubOptions>(LogConfiguration.ConfigureLogging)
                     .WithParsed<BaseSubOptions>(CreateFiglet)
-                    .WithParsed<BaseSubOptions>(ConfigureLogging)
                     .WithParsed<BaseSubOptions>(LogOptions)
                     .MapResult(
                     (CreateSubOptions opts) => CreateReleaseAsync(opts),
@@ -99,11 +96,11 @@ namespace GitReleaseManager.Cli
                 + "{0,87}\n";
             if (Console.WindowWidth > 87)
             {
-                Console.WriteLine(longFormat, version);
+                Log.Information(longFormat, version);
             }
             else
             {
-                Console.WriteLine(shortFormat, version);
+                Log.Information(shortFormat, version);
             }
         }
 
@@ -198,7 +195,7 @@ namespace GitReleaseManager.Cli
 
         private static Task<int> ShowConfigAsync(ShowConfigSubOptions subOptions)
         {
-            Console.WriteLine(ConfigurationProvider.GetEffectiveConfigAsString(subOptions.TargetDirectory ?? Environment.CurrentDirectory, _fileSystem));
+            Log.Information(ConfigurationProvider.GetEffectiveConfigAsString(subOptions.TargetDirectory ?? Environment.CurrentDirectory, _fileSystem));
             return Task.FromResult(0);
         }
 
@@ -214,28 +211,6 @@ namespace GitReleaseManager.Cli
         {
             _configuration = ConfigurationProvider.Provide(subOptions.TargetDirectory ?? Environment.CurrentDirectory, _fileSystem);
             return new GitHubProvider(_mapper, _configuration, subOptions.UserName, subOptions.Password, subOptions.Token);
-        }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "Not required.")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "This is required here.")]
-        private static void ConfigureLogging(BaseSubOptions options)
-        {
-            string consoleTemplate = "[{Level:u3}] {Message:l}{NewLine}{Exception}";
-
-            var config = new LoggerConfiguration()
-                .MinimumLevel.Verbose()
-                .Destructure.UsingAttributes()
-                .WriteTo.Console(outputTemplate: consoleTemplate,
-                                restrictedToMinimumLevel: LogEventLevel.Information,
-                                standardErrorFromLevel: LogEventLevel.Warning,
-                                theme: AnsiConsoleTheme.Code);
-
-            if (!string.IsNullOrEmpty(options.LogFilePath))
-            {
-                config = config.WriteTo.File(options.LogFilePath, encoding: new UTF8Encoding(false));
-            }
-
-            Log.Logger = config.CreateLogger();
         }
 
         private static void LogOptions(BaseSubOptions options)
