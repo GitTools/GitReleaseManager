@@ -230,6 +230,6 @@ namespace GitReleaseManager.Cli
         }
 
         private static void LogOptions(BaseSubOptions options)
-            => Log.Verbose("{@Options}", options);
+            => Log.Debug("{@Options}", options);
     }
 }

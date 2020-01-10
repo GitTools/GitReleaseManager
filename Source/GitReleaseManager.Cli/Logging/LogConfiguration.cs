@@ -31,7 +31,7 @@ namespace GitReleaseManager.Cli.Logging
 
             CreateDebugLogger(config);
             CreateConsoleInformationLogger(config, CONSOLE_INFO_TEMPLATE, _consoleTheme);
-            CreateConsoleFullLogger(config, CONSOLE_FULL_TEMPLATE, _consoleTheme);
+            CreateConsoleFullLogger(config, CONSOLE_FULL_TEMPLATE, _consoleTheme, options);
 
             if (!string.IsNullOrEmpty(options.LogFilePath))
             {
@@ -41,13 +41,14 @@ namespace GitReleaseManager.Cli.Logging
             Log.Logger = config.CreateLogger();
         }
 
-        private static void CreateConsoleFullLogger(LoggerConfiguration config, string consoleTemplate, ConsoleTheme consoleTheme)
+        private static void CreateConsoleFullLogger(LoggerConfiguration config, string consoleTemplate, ConsoleTheme consoleTheme, BaseSubOptions options)
         {
             config.WriteTo.Logger((config) => config
                 .Filter.ByExcluding((logEvent) => logEvent.Level == LogEventLevel.Information)
+                .Filter.ByExcluding((logEvent) => !options.Debug && logEvent.Level == LogEventLevel.Debug)
+                .Filter.ByExcluding((logEvent) => !options.Verbose && logEvent.Level == LogEventLevel.Verbose)
                 .WriteTo.Console(
                     outputTemplate: consoleTemplate,
-                    restrictedToMinimumLevel: LogEventLevel.Information,
                     standardErrorFromLevel: LogEventLevel.Warning,
                     theme: consoleTheme));
         }
