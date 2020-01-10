@@ -6,6 +6,7 @@
 
 namespace GitReleaseManager.Cli.Logging
 {
+    using System.Diagnostics;
     using System.Text;
     using Destructurama;
     using GitReleaseManager.Cli.Options;
@@ -28,6 +29,7 @@ namespace GitReleaseManager.Cli.Logging
                 .Destructure.UsingAttributes()
                 .Destructure.ByTransforming<ReleaseAssetUpload>(asset => new { asset.FileName, asset.ContentType });
 
+            CreateDebugLogger(config);
             CreateConsoleInformationLogger(config, CONSOLE_INFO_TEMPLATE, _consoleTheme);
             CreateConsoleFullLogger(config, CONSOLE_FULL_TEMPLATE, _consoleTheme);
 
@@ -62,6 +64,12 @@ namespace GitReleaseManager.Cli.Logging
         private static void CreateFileLogger(LoggerConfiguration config, string logFilePath, string logTemplate)
         {
             config.WriteTo.File(logFilePath, outputTemplate: logTemplate, encoding: new UTF8Encoding(false));
+        }
+
+        [Conditional("DEBUG")]
+        private static void CreateDebugLogger(LoggerConfiguration config)
+        {
+            config.WriteTo.Debug();
         }
     }
 }
