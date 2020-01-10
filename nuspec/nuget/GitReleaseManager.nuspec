@@ -20,12 +20,9 @@
         <tags>github release notes create export</tags>
     </metadata>
     <files>
-        <file src="..\..\BuildArtifacts\temp\_PublishedApplications\GitReleaseManager.Cli\net461\AutoMapper.dll" target="tools" />
-        <file src="..\..\BuildArtifacts\temp\_PublishedApplications\GitReleaseManager.Cli\net461\CommandLine.dll" target="tools" />
-        <file src="..\..\BuildArtifacts\temp\_PublishedApplications\GitReleaseManager.Cli\net461\GitReleaseManager.Core.dll" target="tools" />
-        <file src="..\..\BuildArtifacts\temp\_PublishedApplications\GitReleaseManager.Cli\net461\GitReleaseManager.exe" target="tools" />
-        <file src="..\..\BuildArtifacts\temp\_PublishedApplications\GitReleaseManager.Cli\net461\Octokit.dll" target="tools" />
-        <file src="..\..\BuildArtifacts\temp\_PublishedApplications\GitReleaseManager.Cli\net461\YamlDotNet.dll" target="tools" />
+        <file src="..\..\BuildArtifacts\temp\_PublishedApplications\GitReleaseManager.Cli\net461\*.exe" target="tools" />
+        <file src="..\..\BuildArtifacts\temp\_PublishedApplications\GitReleaseManager.Cli\net461\*.dll" target="tools" />
+        <file src="..\..\BuildArtifacts\temp\_PublishedApplications\GitReleaseManager.Cli\net461\*.pdb" target="tools" />
         <file src="..\..\Icons\package_icon.png" target="" />
     </files>
 </package>
