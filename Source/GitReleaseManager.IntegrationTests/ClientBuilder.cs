@@ -17,9 +17,7 @@ namespace GitReleaseManager.IntegrationTests
         {
             var credentialStore = new InMemoryCredentialStore(Helper.Credentials);
 
-#pragma warning disable DF0024 // Marks undisposed objects assinged to a field, originated in an object creation.
             _httpClient = new HttpClientAdapter(HttpMessageHandlerFactory.CreateDefault);
-#pragma warning restore DF0024 // Marks undisposed objects assinged to a field, originated in an object creation.
 
             var connection = new Connection(
                 new ProductHeaderValue("GitReleaseManager"),

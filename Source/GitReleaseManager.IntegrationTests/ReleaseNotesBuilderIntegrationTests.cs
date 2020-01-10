@@ -30,9 +30,7 @@ namespace GitReleaseManager.IntegrationTests
         public void Configure()
         {
             _mapper = AutoMapperConfiguration.Configure();
-#pragma warning disable DF0037 // Marks undisposed objects assinged to a property, originated from a method invocation.
             Log.Logger = new LoggerConfiguration().WriteTo.Console().CreateLogger();
-#pragma warning restore DF0037 // Marks undisposed objects assinged to a property, originated from a method invocation.
 
             _username = Environment.GetEnvironmentVariable("GITTOOLS_GITHUB_USERNAME");
             _password = Environment.GetEnvironmentVariable("GITTOOLS_GITHUB_PASSWORD");
