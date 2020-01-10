@@ -46,6 +46,13 @@ namespace GitReleaseManager.Core
             var previousMilestone = GetPreviousMilestone();
             var numberOfCommits = await _vcsProvider.GetNumberOfCommitsBetween(previousMilestone, _targetMilestone, _user, _repository).ConfigureAwait(false);
 
+            if (issues.Count == 0)
+            {
+                var logMessage = string.Format("No closed issues have been found for milestone {0}, or all assigned issues are meant to be excluded from release notes, aborting creation of release.", _milestoneTitle);
+                Logger.WriteError(logMessage);
+                throw new Exception(logMessage);
+            }
+
             if (issues.Count > 0)
             {
                 var issuesText = string.Format(issues.Count == 1 ? "{0} issue" : "{0} issues", issues.Count);
@@ -109,18 +116,19 @@ namespace GitReleaseManager.Core
             return alias != null ? func(alias) : null;
         }
 
-        private void CheckForValidLabels(Issue issue)
+        private bool CheckForValidLabels(Issue issue)
         {
-            var count = 0;
+            var includedIssuesCount = 0;
+            var excludedIssuesCount = 0;
 
             foreach (var issueLabel in issue.Labels)
             {
-                count += _configuration.IssueLabelsInclude.Count(issueToInclude => issueLabel.Name.ToUpperInvariant() == issueToInclude.ToUpperInvariant());
+                includedIssuesCount += _configuration.IssueLabelsInclude.Count(issueToInclude => issueLabel.Name.ToUpperInvariant() == issueToInclude.ToUpperInvariant());
 
-                count += _configuration.IssueLabelsExclude.Count(issueToExclude => issueLabel.Name.ToUpperInvariant() == issueToExclude.ToUpperInvariant());
+                excludedIssuesCount += _configuration.IssueLabelsExclude.Count(issueToExclude => issueLabel.Name.ToUpperInvariant() == issueToExclude.ToUpperInvariant());
             }
 
-            if (count != 1)
+            if (includedIssuesCount + excludedIssuesCount != 1)
             {
                 var allIssueLabels = _configuration.IssueLabelsInclude.Union(_configuration.IssueLabelsExclude).ToList();
                 var allIssuesExceptLast = allIssueLabels.Take(allIssueLabels.Count - 1);
@@ -131,6 +139,13 @@ namespace GitReleaseManager.Core
                 var message = string.Format(CultureInfo.InvariantCulture, "Bad Issue {0} expected to find a single label with either {1} or {2}.", issue.HtmlUrl, allIssuesExceptLastString, lastLabel);
                 throw new InvalidOperationException(message);
             }
+
+            if (includedIssuesCount > 0)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         private void AddIssues(StringBuilder stringBuilder, List<Issue> issues)
@@ -181,9 +196,24 @@ namespace GitReleaseManager.Core
         private async Task<List<Issue>> GetIssues(Milestone milestone)
         {
             var issues = await _vcsProvider.GetIssuesAsync(milestone).ConfigureAwait(false);
+
+            var hasIncludedIssues = false;
+
             foreach (var issue in issues)
             {
-                CheckForValidLabels(issue);
+                if (CheckForValidLabels(issue))
+                {
+                    hasIncludedIssues = true;
+                }
+            }
+
+            // If there are no issues assigned to the milestone that have a label that is part
+            // of the labels to include array, then that is essentially the same as having no
+            // closed issues assigned to the milestone.  In this scenario, we want to raise an
+            // error, so return an emtpy issues list.
+            if (!hasIncludedIssues)
+            {
+                return new List<Issue>();
             }
 
             return issues;

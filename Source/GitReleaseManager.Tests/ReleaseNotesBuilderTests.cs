@@ -18,10 +18,20 @@ namespace GitReleaseManager.Tests
     [TestFixture]
     public class ReleaseNotesBuilderTests
     {
+        public TestContext TestContext { get; set; }
+
+        [OneTimeSetUp]
+        public void Configure()
+        {
+            Logger.WriteError = s => TestContext.WriteLine($"Error: {s}");
+            Logger.WriteInfo = s => TestContext.WriteLine($"Info: {s}");
+            Logger.WriteWarning = s => TestContext.WriteLine($"Warning: {s}");
+        }
+
         [Test]
         public void NoCommitsNoIssues()
         {
-            AcceptTest(0);
+            Assert.Throws<AggregateException>(() => AcceptTest(0));
         }
 
         [Test]
@@ -33,7 +43,7 @@ namespace GitReleaseManager.Tests
         [Test]
         public void SomeCommitsNoIssues()
         {
-            AcceptTest(5);
+            Assert.Throws<AggregateException>(() => AcceptTest(5));
         }
 
         [Test]
@@ -45,7 +55,7 @@ namespace GitReleaseManager.Tests
         [Test]
         public void SingularCommitsNoIssues()
         {
-            AcceptTest(1);
+            Assert.Throws<AggregateException>(() => AcceptTest(1));
         }
 
         [Test]
