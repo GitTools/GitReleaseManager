@@ -81,13 +81,13 @@ namespace GitReleaseManager.Cli
             }
             // The following ugly formats is to prevent incorrect indentation
             // detected by editorconfig formatters.
-            var shortFormat = "\n   ____ ____  __  __\n"
+            const string shortFormat = "\n   ____ ____  __  __\n"
                 + "  / ___|  _ \\|  \\/  |\n"
                 + " | |  _| |_) | |\\/| |\n"
                 + " | |_| |  _ <| |  | |\n"
                 + "  \\____|_| \\_\\_|  |_|\n"
                 + "{0,21}\n";
-            var longFormat = "\n   ____ _ _   ____      _                     __  __\n"
+            const string longFormat = "\n   ____ _ _   ____      _                     __  __\n"
                 + "  / ___(_) |_|  _ \\ ___| | ___  __ _ ___  ___|  \\/  | __ _ _ __   __ _  __ _  ___ _ __\n"
                 + " | |  _| | __| |_) / _ \\ |/ _ \\/ _` / __|/ _ \\ |\\/| |/ _` | '_ \\ / _` |/ _` |/ _ \\ '__|\n"
                 + " | |_| | | |_|  _ <  __/ |  __/ (_| \\__ \\  __/ |  | | (_| | | | | (_| | (_| |  __/ |\n"
@@ -106,14 +106,17 @@ namespace GitReleaseManager.Cli
 
         private static async Task<int> CreateReleaseAsync(CreateSubOptions subOptions)
         {
+            Log.Information("Creating release...");
             _vcsProvider = GetVcsProvider(subOptions);
 
             Core.Model.Release release;
             if (!string.IsNullOrEmpty(subOptions.Milestone))
             {
+                Log.Verbose("Milestone {Milestone} was specified", subOptions.Milestone);
                 var releaseName = subOptions.Name;
                 if (string.IsNullOrWhiteSpace(releaseName))
                 {
+                    Log.Verbose("No Release Name was specified, using {Milestone}.", subOptions.Milestone);
                     releaseName = subOptions.Milestone;
                 }
 
@@ -121,6 +124,7 @@ namespace GitReleaseManager.Cli
             }
             else
             {
+                Log.Verbose("No milestone was specified, switching to release creating from input file");
                 release = await _vcsProvider.CreateReleaseFromInputFile(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Name, subOptions.InputFilePath, subOptions.TargetCommitish, subOptions.AssetPaths, subOptions.Prerelease).ConfigureAwait(false);
             }
 
@@ -131,6 +135,7 @@ namespace GitReleaseManager.Cli
 
         private static async Task<int> DiscardReleaseAsync(DiscardSubOptions subOptions)
         {
+            Log.Information("Discarding release {Milestone}", subOptions.Milestone);
             _vcsProvider = GetVcsProvider(subOptions);
 
             await _vcsProvider.DiscardRelease(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone);
@@ -140,6 +145,7 @@ namespace GitReleaseManager.Cli
 
         private static async Task<int> AddAssetsAsync(AddAssetSubOptions subOptions)
         {
+            Log.Information("Uploading assets");
             _vcsProvider = GetVcsProvider(subOptions);
 
             await _vcsProvider.AddAssets(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.TagName, subOptions.AssetPaths).ConfigureAwait(false);
@@ -149,6 +155,7 @@ namespace GitReleaseManager.Cli
 
         private static async Task<int> CloseMilestoneAsync(CloseSubOptions subOptions)
         {
+            Log.Information("Closing milestone {Milestone}", subOptions.Milestone);
             _vcsProvider = GetVcsProvider(subOptions);
 
             await _vcsProvider.CloseMilestone(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone).ConfigureAwait(false);
@@ -158,6 +165,7 @@ namespace GitReleaseManager.Cli
 
         private static async Task<int> OpenMilestoneAsync(OpenSubOptions subOptions)
         {
+            Log.Information("Opening milestone {Milestone}", subOptions.Milestone);
             _vcsProvider = GetVcsProvider(subOptions);
 
             await _vcsProvider.OpenMilestone(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone).ConfigureAwait(false);
@@ -175,6 +183,7 @@ namespace GitReleaseManager.Cli
 
         private static async Task<int> ExportReleasesAsync(ExportSubOptions subOptions)
         {
+            Log.Information("Exporting release {TagName}", subOptions.TagName);
             _vcsProvider = GetVcsProvider(subOptions);
 
             var releasesMarkdown = await _vcsProvider.ExportReleases(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.TagName).ConfigureAwait(false);
@@ -189,18 +198,23 @@ namespace GitReleaseManager.Cli
 
         private static Task<int> CreateSampleConfigFileAsync(InitSubOptions subOptions)
         {
-            ConfigurationProvider.WriteSample(subOptions.TargetDirectory ?? Environment.CurrentDirectory, _fileSystem);
+            Log.Information("Creating sample configuration file");
+            var directory = subOptions.TargetDirectory ?? Environment.CurrentDirectory;
+            ConfigurationProvider.WriteSample(directory, _fileSystem);
             return Task.FromResult(0);
         }
 
         private static Task<int> ShowConfigAsync(ShowConfigSubOptions subOptions)
         {
-            Log.Information(ConfigurationProvider.GetEffectiveConfigAsString(subOptions.TargetDirectory ?? Environment.CurrentDirectory, _fileSystem));
+            var configuration = ConfigurationProvider.GetEffectiveConfigAsString(subOptions.TargetDirectory ?? Environment.CurrentDirectory, _fileSystem);
+
+            Log.Information("{Configuration}", configuration);
             return Task.FromResult(0);
         }
 
         private static async Task<int> CreateLabelsAsync(LabelSubOptions subOptions)
         {
+            Log.Information("Creating standard labels");
             _vcsProvider = GetVcsProvider(subOptions);
 
             await _vcsProvider.CreateLabels(subOptions.RepositoryOwner, subOptions.RepositoryName).ConfigureAwait(false);
@@ -210,6 +224,8 @@ namespace GitReleaseManager.Cli
         private static IVcsProvider GetVcsProvider(BaseVcsOptions subOptions)
         {
             _configuration = ConfigurationProvider.Provide(subOptions.TargetDirectory ?? Environment.CurrentDirectory, _fileSystem);
+
+            Log.Information("Using {Provider} as VCS Provider", "GitHub");
             return new GitHubProvider(_mapper, _configuration, subOptions.UserName, subOptions.Password, subOptions.Token);
         }
 

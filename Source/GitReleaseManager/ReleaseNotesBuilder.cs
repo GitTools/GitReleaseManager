@@ -16,9 +16,11 @@ namespace GitReleaseManager.Core
     using GitReleaseManager.Core.Configuration;
     using GitReleaseManager.Core.Extensions;
     using GitReleaseManager.Core.Model;
+    using Serilog;
 
     public class ReleaseNotesBuilder
     {
+        private readonly ILogger _logger = Log.ForContext<ReleaseNotesBuilder>();
         private readonly IVcsProvider _vcsProvider;
         private readonly string _user;
         private readonly string _repository;
@@ -38,6 +40,7 @@ namespace GitReleaseManager.Core
 
         public async Task<string> BuildReleaseNotes()
         {
+            _logger.Verbose("Building release notes...");
             await LoadMilestones().ConfigureAwait(false);
             GetTargetMilestone();
 
@@ -86,6 +89,8 @@ namespace GitReleaseManager.Core
             {
                 AddFooter(stringBuilder);
             }
+
+            _logger.Verbose("Finished building release notes");
 
             return stringBuilder.ToString();
         }

@@ -9,6 +9,7 @@ namespace GitReleaseManager.Cli.Logging
     using System.Text;
     using Destructurama;
     using GitReleaseManager.Cli.Options;
+    using Octokit;
     using Serilog;
     using Serilog.Events;
     using Serilog.Sinks.SystemConsole.Themes;
@@ -24,7 +25,8 @@ namespace GitReleaseManager.Cli.Logging
         {
             var config = new LoggerConfiguration()
                 .MinimumLevel.Verbose()
-                .Destructure.UsingAttributes();
+                .Destructure.UsingAttributes()
+                .Destructure.ByTransforming<ReleaseAssetUpload>(asset => new { asset.FileName, asset.ContentType });
 
             CreateConsoleInformationLogger(config, CONSOLE_INFO_TEMPLATE, _consoleTheme);
             CreateConsoleFullLogger(config, CONSOLE_FULL_TEMPLATE, _consoleTheme);

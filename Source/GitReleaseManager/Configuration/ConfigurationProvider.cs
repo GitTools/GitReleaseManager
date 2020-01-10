@@ -20,7 +20,7 @@ namespace GitReleaseManager.Core.Configuration
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "Not required, as direct return of object")]
         public static Config Provide(string gitDirectory, IFileSystem fileSystem)
         {
-            if (fileSystem == null)
+            if (fileSystem is null)
             {
                 throw new ArgumentNullException(nameof(fileSystem));
             }
@@ -29,6 +29,8 @@ namespace GitReleaseManager.Core.Configuration
 
             if (fileSystem.Exists(configFilePath))
             {
+                _logger.Verbose("Loading configuration from file: {FilePath}", configFilePath);
+
                 var readAllText = fileSystem.ReadAllText(configFilePath);
                 using (var stringReader = new StringReader(readAllText))
                 {
@@ -39,6 +41,8 @@ namespace GitReleaseManager.Core.Configuration
                     return deserializedConfig;
                 }
             }
+
+            _logger.Verbose("No configuration file was found. Loading default configuration.");
 
             return new Config();
         }
@@ -68,6 +72,7 @@ namespace GitReleaseManager.Core.Configuration
 
             if (!fileSystem.Exists(configFilePath))
             {
+                _logger.Information("Writing sample file to '{ConfigFilePath}'", configFilePath);
                 using (var stream = fileSystem.OpenWrite(configFilePath))
                 using (var writer = new StreamWriter(stream))
                 {
@@ -87,18 +92,21 @@ namespace GitReleaseManager.Core.Configuration
 
         private static void EnsureDefaultConfig(Config configuration)
         {
-            if (configuration.Create.ShaSectionHeading == null)
+            if (configuration.Create.ShaSectionHeading is null)
             {
+                _logger.Debug("Setting default Create.ShaSectionHeading configuration value");
                 configuration.Create.ShaSectionHeading = "SHA256 Hashes of the release artifacts";
             }
 
             if (configuration.Create.ShaSectionLineFormat == null)
             {
+                _logger.Debug("Setting default Create.ShaSectionLineFormat configuration value");
                 configuration.Create.ShaSectionLineFormat = "- `{1}\t{0}`";
             }
 
             if (configuration.Close.IssueCommentFormat == null)
             {
+                _logger.Debug("Setting default Close.IssueCommentFormat configuration value");
                 configuration.Close.IssueCommentFormat = Config.IssueCommentFormat;
             }
         }
