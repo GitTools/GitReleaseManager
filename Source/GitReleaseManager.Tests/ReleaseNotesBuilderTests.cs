@@ -21,7 +21,8 @@ namespace GitReleaseManager.Tests
         [Test]
         public void NoCommitsNoIssues()
         {
-            Assert.Throws<AggregateException>(() => AcceptTest(0));
+            var exception = Assert.Throws<AggregateException>(() => AcceptTest(0));
+            Assert.That(exception.InnerException, Is.Not.Null.And.TypeOf<InvalidOperationException>());
         }
 
         [Test]
@@ -34,7 +35,8 @@ namespace GitReleaseManager.Tests
         [Test]
         public void SomeCommitsNoIssues()
         {
-            Assert.Throws<AggregateException>(() => AcceptTest(5));
+            var exception = Assert.Throws<AggregateException>(() => AcceptTest(5));
+            Assert.That(exception.InnerException, Is.Not.Null.And.TypeOf<InvalidOperationException>());
         }
 
         [Test]
@@ -47,7 +49,8 @@ namespace GitReleaseManager.Tests
         [Test]
         public void SingularCommitsNoIssues()
         {
-            Assert.Throws<AggregateException>(() => AcceptTest(1));
+            var exception = Assert.Throws<AggregateException>(() => AcceptTest(1));
+            Assert.That(exception.InnerException, Is.Not.Null.And.TypeOf<InvalidOperationException>());
         }
 
         [Test]
@@ -116,13 +119,15 @@ namespace GitReleaseManager.Tests
         [Test]
         public void NoCommitsWrongIssueLabel()
         {
-            Assert.Throws<AggregateException>(() => AcceptTest(0, CreateIssue(1, "Test")));
+            var exception = Assert.Throws<AggregateException>(() => AcceptTest(0, CreateIssue(1, "Test")));
+            Assert.That(exception.InnerException, Is.Not.Null.And.TypeOf<InvalidOperationException>());
         }
 
         [Test]
         public void SomeCommitsWrongIssueLabel()
         {
-            Assert.Throws<AggregateException>(() => AcceptTest(5, CreateIssue(1, "Test")));
+            var exception = Assert.Throws<AggregateException>(() => AcceptTest(5, CreateIssue(1, "Test")));
+            Assert.That(exception.InnerException, Is.Not.Null.And.TypeOf<InvalidOperationException>());
         }
 
         [Test]

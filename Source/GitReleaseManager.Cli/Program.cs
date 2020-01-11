@@ -55,6 +55,16 @@ namespace GitReleaseManager.Cli
                     (LabelSubOptions opts) => CreateLabelsAsync(opts),
                     errs => Task.FromResult(1)).ConfigureAwait(false);
             }
+            catch (AggregateException ex)
+            {
+                Log.Fatal("{Message}", ex.Message);
+                foreach (var innerException in ex.InnerExceptions)
+                {
+                    Log.Fatal(ex, "{Message}", ex.Message);
+                }
+
+                return 1;
+            }
             catch (Exception ex)
             {
                 Log.Fatal(ex, "{Message}", ex.Message);
