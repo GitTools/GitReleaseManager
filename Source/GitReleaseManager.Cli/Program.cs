@@ -39,7 +39,7 @@ namespace GitReleaseManager.Cli
 
             try
             {
-                return await Parser.Default.ParseArguments<CreateSubOptions, DiscardSubOptions, AddAssetSubOptions, CloseSubOptions, PublishSubOptions, ExportSubOptions, InitSubOptions, ShowConfigSubOptions, LabelSubOptions>(args)
+                return await Parser.Default.ParseArguments<CreateSubOptions, DiscardSubOptions, AddAssetSubOptions, CloseSubOptions, OpenSubOptions, PublishSubOptions, ExportSubOptions, InitSubOptions, ShowConfigSubOptions, LabelSubOptions>(args)
                     .WithParsed<BaseSubOptions>(LogConfiguration.ConfigureLogging)
                     .WithParsed<BaseSubOptions>(CreateFiglet)
                     .WithParsed<BaseSubOptions>(LogOptions)
