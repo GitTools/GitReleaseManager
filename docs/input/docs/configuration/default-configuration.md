@@ -1,6 +1,7 @@
 ---
 Order: 10
 Title: Default Configuration
+RedirectFrom: docs/yaml/index.html
 ---
 
 GitReleaseManager configuration can be controlled using a GitReleaseManager.yaml

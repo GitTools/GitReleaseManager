@@ -44,8 +44,6 @@ namespace GitReleaseManager.Core.Configuration
 
             _logger.Warning("Yaml not found, that's ok! Learn more at {Url}", "https://gittools.github.io/GitReleaseManager/docs/yaml");
 
-            _logger.Verbose("No configuration file was found. Loading default configuration.");
-
             return new Config();
         }
 
