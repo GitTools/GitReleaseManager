@@ -93,7 +93,8 @@ namespace GitReleaseManager.IntegrationTests
         {
             try
             {
-                ClientBuilder.Build();
+                var client = ClientBuilder.Build();
+                Assert.That(client, Is.Not.Null);
             }
             finally
             {

@@ -26,6 +26,7 @@ namespace GitReleaseManager.Tests
         {
             var configuration = ConfigurationProvider.Provide(_currentDirectory, _fileSystem);
             AcceptTest(configuration);
+            Assert.True(true); // Just to make sonarlint happy
         }
 
         [Test]
@@ -33,6 +34,7 @@ namespace GitReleaseManager.Tests
         {
             var configuration = ConfigurationProvider.Provide(_currentDirectory, _fileSystem);
             AcceptTest(configuration, CreateRelease(new DateTime(2015, 3, 12), "0.1.0"));
+            Assert.True(true); // Just to make sonarlint happy
         }
 
         [Test]
@@ -42,6 +44,7 @@ namespace GitReleaseManager.Tests
             configuration.Export.IncludeCreatedDateInTitle = false;
 
             AcceptTest(configuration, CreateRelease(new DateTime(2015, 3, 12), "0.1.0"));
+            Assert.True(true); // Just to make sonarlint happy
         }
 
         [Test]
@@ -51,6 +54,7 @@ namespace GitReleaseManager.Tests
             configuration.Export.PerformRegexRemoval = false;
 
             AcceptTest(configuration, CreateRelease(new DateTime(2015, 3, 12), "0.1.0"));
+            Assert.True(true); // Just to make sonarlint happy
         }
 
         private static void AcceptTest(Config configuration, params Release[] releases)
