@@ -28,9 +28,8 @@ namespace GitReleaseManager.Core
 
     public class GitHubProvider : IVcsProvider
     {
-        private readonly ILogger _logger = Log.ForContext<GitHubProvider>();
-
         private readonly Config _configuration;
+        private readonly ILogger _logger = Log.ForContext<GitHubProvider>();
         private readonly IMapper _mapper;
         private GitHubClient _gitHubClient;
 
@@ -41,34 +40,14 @@ namespace GitReleaseManager.Core
             CreateClient(userName, password, token);
         }
 
-        public async Task<int> GetNumberOfCommitsBetween(Milestone previousMilestone, Milestone currentMilestone, string user, string repository)
+        public Task<int> GetNumberOfCommitsBetween(Milestone previousMilestone, Milestone currentMilestone, string user, string repository)
         {
             if (currentMilestone is null)
             {
                 throw new ArgumentNullException(nameof(currentMilestone));
             }
 
-            try
-            {
-                if (previousMilestone == null)
-                {
-                    _logger.Verbose("Getting commit count between base '{Base}' and head '{Head}'", "master", currentMilestone.Title);
-                    var gitHubClientRepositoryCommitsCompare = await _gitHubClient.Repository.Commit.Compare(user, repository, "master", currentMilestone.Title).ConfigureAwait(false);
-                    return gitHubClientRepositoryCommitsCompare.AheadBy;
-                }
-
-                _logger.Verbose("Getting commit count between base '{Base}' and head '{Head}'", previousMilestone.Title, "master");
-                var compareResult = await _gitHubClient.Repository.Commit.Compare(user, repository, previousMilestone.Title, "master").ConfigureAwait(false);
-                return compareResult.AheadBy;
-            }
-            catch (NotFoundException)
-            {
-                _logger.Warning("Unable to find tag for milestone, so commit count will be returned as zero");
-
-                // If there is no tag yet the Compare will return a NotFoundException
-                // we can safely ignore
-                return 0;
-            }
+            return GetNumberOfCommitsBetweenInternal(previousMilestone, currentMilestone, user, repository);
         }
 
         public async Task<List<Issue>> GetIssuesAsync(Milestone targetMilestone)
@@ -174,27 +153,14 @@ namespace GitReleaseManager.Core
             return _mapper.Map<Octokit.Release, Release>(release);
         }
 
-        public async Task<Release> CreateReleaseFromInputFile(string owner, string repository, string name, string inputFilePath, string targetCommitish, IList<string> assets, bool prerelease)
+        public Task<Release> CreateReleaseFromInputFile(string owner, string repository, string name, string inputFilePath, string targetCommitish, IList<string> assets, bool prerelease)
         {
             if (!File.Exists(inputFilePath))
             {
                 throw new ArgumentException("Unable to locate input file.");
             }
 
-            _logger.Verbose("Reading release notes from: '{FilePath}'", inputFilePath);
-
-            var inputFileContents = File.ReadAllText(inputFilePath);
-
-            var releaseUpdate = CreateNewRelease(name, name, inputFileContents, prerelease, targetCommitish);
-
-            _logger.Verbose("Creating new release on '{Owner}/{Repository}'", owner, repository);
-            _logger.Debug("{@ReleaseUpdate}", releaseUpdate);
-
-            var release = await _gitHubClient.Repository.Release.Create(owner, repository, releaseUpdate).ConfigureAwait(false);
-
-            await AddAssets(owner, repository, name, assets).ConfigureAwait(false);
-
-            return _mapper.Map<Octokit.Release, Release>(release);
+            return CreateReleaseFromInputFileInternal(owner, repository, name, inputFilePath, targetCommitish, assets, prerelease);
         }
 
         public async Task DiscardRelease(string owner, string repository, string name)
@@ -472,6 +438,24 @@ namespace GitReleaseManager.Core
             return issueComments.Any(c => c.Body.Contains(comment));
         }
 
+        private async Task<Release> CreateReleaseFromInputFileInternal(string owner, string repository, string name, string inputFilePath, string targetCommitish, IList<string> assets, bool prerelease)
+        {
+            _logger.Verbose("Reading release notes from: '{FilePath}'", inputFilePath);
+
+            var inputFileContents = File.ReadAllText(inputFilePath);
+
+            var releaseUpdate = CreateNewRelease(name, name, inputFileContents, prerelease, targetCommitish);
+
+            _logger.Verbose("Creating new release on '{Owner}/{Repository}'", owner, repository);
+            _logger.Debug("{@ReleaseUpdate}", releaseUpdate);
+
+            var release = await _gitHubClient.Repository.Release.Create(owner, repository, releaseUpdate).ConfigureAwait(false);
+
+            await AddAssets(owner, repository, name, assets).ConfigureAwait(false);
+
+            return _mapper.Map<Octokit.Release, Release>(release);
+        }
+
         private Task<IReadOnlyList<Octokit.Issue>> GetIssuesFromMilestoneAsync(string owner, string repository, string milestone, ItemStateFilter state = ItemStateFilter.Closed)
         {
             _logger.Verbose("Finding issues with milestone: '{Milestone}", milestone);
@@ -480,6 +464,31 @@ namespace GitReleaseManager.Core
                 Milestone = milestone,
                 State = state,
             });
+        }
+
+        private async Task<int> GetNumberOfCommitsBetweenInternal(Milestone previousMilestone, Milestone currentMilestone, string user, string repository)
+        {
+            try
+            {
+                if (previousMilestone == null)
+                {
+                    _logger.Verbose("Getting commit count between base '{Base}' and head '{Head}'", "master", currentMilestone.Title);
+                    var gitHubClientRepositoryCommitsCompare = await _gitHubClient.Repository.Commit.Compare(user, repository, "master", currentMilestone.Title).ConfigureAwait(false);
+                    return gitHubClientRepositoryCommitsCompare.AheadBy;
+                }
+
+                _logger.Verbose("Getting commit count between base '{Base}' and head '{Head}'", previousMilestone.Title, "master");
+                var compareResult = await _gitHubClient.Repository.Commit.Compare(user, repository, previousMilestone.Title, "master").ConfigureAwait(false);
+                return compareResult.AheadBy;
+            }
+            catch (NotFoundException)
+            {
+                _logger.Warning("Unable to find tag for milestone, so commit count will be returned as zero");
+
+                // If there is no tag yet the Compare will return a NotFoundException
+                // we can safely ignore
+                return 0;
+            }
         }
 
         private async Task<Octokit.Release> GetReleaseFromTagNameAsync(string owner, string repository, string tagName)

@@ -28,7 +28,7 @@ namespace GitReleaseManager.Core
             return !(issue.PullRequest is null);
         }
 
-        public static async Task<IEnumerable<Issue>> AllIssuesForMilestone(this GitHubClient gitHubClient, Milestone milestone)
+        public static Task<IEnumerable<Issue>> AllIssuesForMilestone(this GitHubClient gitHubClient, Milestone milestone)
         {
             if (gitHubClient is null)
             {
@@ -40,6 +40,25 @@ namespace GitReleaseManager.Core
                 throw new ArgumentNullException(nameof(milestone));
             }
 
+            return AllIssuesForMilestoneInternal(gitHubClient, milestone);
+        }
+
+        public static Uri HtmlUrl(this Milestone milestone)
+        {
+            if (milestone is null)
+            {
+                throw new ArgumentNullException(nameof(milestone));
+            }
+
+            var parts = milestone.Url.Split('/');
+            var user = parts[2];
+            var repository = parts[3];
+
+            return new Uri(string.Format(CultureInfo.InvariantCulture, "https://github.com/{0}/{1}/issues?milestone={2}&state=closed", user, repository, milestone.Number));
+        }
+
+        private static async Task<IEnumerable<Issue>> AllIssuesForMilestoneInternal(GitHubClient gitHubClient, Milestone milestone)
+        {
             var closedIssueRequest = new RepositoryIssueRequest
             {
                 Milestone = milestone.Number.ToString(CultureInfo.InvariantCulture),
@@ -62,20 +81,6 @@ namespace GitReleaseManager.Core
             var openIssues = await gitHubClient.Issue.GetAllForRepository(user, repository, openIssueRequest).ConfigureAwait(false);
 
             return openIssues.Union(closedIssues);
-        }
-
-        public static Uri HtmlUrl(this Milestone milestone)
-        {
-            if (milestone is null)
-            {
-                throw new ArgumentNullException(nameof(milestone));
-            }
-
-            var parts = milestone.Url.Split('/');
-            var user = parts[2];
-            var repository = parts[3];
-
-            return new Uri(string.Format(CultureInfo.InvariantCulture, "https://github.com/{0}/{1}/issues?milestone={2}&state=closed", user, repository, milestone.Number));
         }
     }
 }
