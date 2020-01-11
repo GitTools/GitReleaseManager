@@ -73,10 +73,22 @@ namespace GitReleaseManager.Core.Configuration
             if (!fileSystem.Exists(configFilePath))
             {
                 _logger.Information("Writing sample file to '{ConfigFilePath}'", configFilePath);
-                using (var stream = fileSystem.OpenWrite(configFilePath))
-                using (var writer = new StreamWriter(stream))
+
+                // The following try/finally statements is to ensure that
+                // any stream is not disposed more than once.
+                Stream stream = null;
+                try
                 {
-                    ConfigSerializer.WriteSample(writer);
+                    stream = fileSystem.OpenWrite(configFilePath);
+                    using (var writer = new StreamWriter(stream))
+                    {
+                        stream = null;
+                        ConfigSerializer.WriteSample(writer);
+                    }
+                }
+                finally
+                {
+                    stream?.Dispose();
                 }
             }
             else

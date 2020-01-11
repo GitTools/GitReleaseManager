@@ -52,7 +52,7 @@ namespace GitReleaseManager.Core
             if (issues.Count == 0)
             {
                 var logMessage = string.Format("No closed issues have been found for milestone {0}, or all assigned issues are meant to be excluded from release notes, aborting creation of release.", _milestoneTitle);
-                throw new Exception(logMessage);
+                throw new InvalidOperationException(logMessage);
             }
 
             if (issues.Count > 0)
@@ -165,7 +165,7 @@ namespace GitReleaseManager.Core
             var currentVersion = _targetMilestone.Version;
             return _milestones
                 .OrderByDescending(m => m.Version)
-                .Distinct().ToList()
+                .Distinct()
                 .SkipWhile(x => x.Version >= currentVersion)
                 .FirstOrDefault();
         }
@@ -176,16 +176,14 @@ namespace GitReleaseManager.Core
 
             var footerContent = _configuration.Create.FooterContent;
 
-            if (_configuration.Create.FooterIncludesMilestone)
+            if (_configuration.Create.FooterIncludesMilestone
+                && !string.IsNullOrEmpty(_configuration.Create.MilestoneReplaceText))
             {
-                if (!string.IsNullOrEmpty(_configuration.Create.MilestoneReplaceText))
-                {
-                    var replaceValues = new Dictionary<string, object>
+                var replaceValues = new Dictionary<string, object>
                     {
                         { _configuration.Create.MilestoneReplaceText.Trim('{', '}'), _milestoneTitle },
                     };
-                    footerContent = footerContent.ReplaceTemplate(replaceValues);
-                }
+                footerContent = footerContent.ReplaceTemplate(replaceValues);
             }
 
             stringBuilder.Append(footerContent);

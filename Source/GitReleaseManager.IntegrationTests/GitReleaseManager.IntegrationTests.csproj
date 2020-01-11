@@ -5,7 +5,7 @@
         <Title>GitReleaseManager.IntegrationTests</Title>
         <Description>Integration Test Project for GitReleaseManager</Description>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-        <NoWarn>CA1707</NoWarn>
+        <NoWarn>$(NoWarn);CA1707</NoWarn>
     </PropertyGroup>
     <ItemGroup>
         <Compile Include="..\SolutionInfo.cs" Link="SolutionInfo.cs" />
