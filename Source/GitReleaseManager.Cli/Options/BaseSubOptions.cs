@@ -22,7 +22,7 @@ namespace GitReleaseManager.Cli.Options
         [Option('d', "targetDirectory", HelpText = "The directory on which GitReleaseManager should be executed. Defaults to current directory.", Required = false)]
         public string TargetDirectory { get; set; }
 
-        [Option("verbose", HelpText = "Enabled verbose console output")]
+        [Option("verbose", HelpText = "Enable verbose console output")]
         public bool Verbose { get; set; }
     }
 }
