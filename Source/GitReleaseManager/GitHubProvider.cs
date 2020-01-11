@@ -236,7 +236,7 @@ namespace GitReleaseManager.Core
 
                     var assetFileName = Path.GetFileName(asset);
 
-                    var existingAsset = release.Assets.Where(a => a.Name == assetFileName).FirstOrDefault();
+                    var existingAsset = release.Assets.FirstOrDefault(a => a.Name == assetFileName);
                     if (existingAsset != null)
                     {
                         _logger.Warning("Requested asset to be uploaded already exists on draft release, replacing with new file: {AssetPath}", asset);

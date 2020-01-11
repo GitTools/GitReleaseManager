@@ -23,7 +23,6 @@ namespace GitReleaseManager.Cli
     public static class Program
     {
         private static FileSystem _fileSystem;
-        private static Config _configuration;
         private static IMapper _mapper;
         private static IVcsProvider _vcsProvider;
 
@@ -75,7 +74,7 @@ namespace GitReleaseManager.Cli
             }
 
             var version = Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
-            if (version.IndexOf('+') > 0)
+            if (version.IndexOf('+') >= 0)
             {
                 version = version.Substring(0, version.IndexOf('+'));
             }
@@ -223,10 +222,10 @@ namespace GitReleaseManager.Cli
 
         private static IVcsProvider GetVcsProvider(BaseVcsOptions subOptions)
         {
-            _configuration = ConfigurationProvider.Provide(subOptions.TargetDirectory ?? Environment.CurrentDirectory, _fileSystem);
+            var configuration = ConfigurationProvider.Provide(subOptions.TargetDirectory ?? Environment.CurrentDirectory, _fileSystem);
 
             Log.Information("Using {Provider} as VCS Provider", "GitHub");
-            return new GitHubProvider(_mapper, _configuration, subOptions.UserName, subOptions.Password, subOptions.Token);
+            return new GitHubProvider(_mapper, configuration, subOptions.UserName, subOptions.Password, subOptions.Token);
         }
 
         private static void LogOptions(BaseSubOptions options)
