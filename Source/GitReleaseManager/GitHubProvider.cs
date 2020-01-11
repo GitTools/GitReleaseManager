@@ -18,6 +18,7 @@ namespace GitReleaseManager.Core
     using System.Threading.Tasks;
     using AutoMapper;
     using GitReleaseManager.Core.Configuration;
+    using GitReleaseManager.Core.Exceptions;
     using GitReleaseManager.Core.Extensions;
     using Octokit;
     using Serilog;
@@ -159,7 +160,7 @@ namespace GitReleaseManager.Core
 
                 if (!release.Draft)
                 {
-                    throw new Exception("Release is not in draft state, so not updating.");
+                    throw new InvalidOperationException("Release is not in draft state, so not updating.");
                 }
 
                 var releaseUpdate = release.ToUpdate();
@@ -202,12 +203,12 @@ namespace GitReleaseManager.Core
 
             if (release is null)
             {
-                throw new Exception(string.Format("Unable to find a release with name {0}", name));
+                throw new MissingReleaseException(string.Format("Unable to find a release with name {0}", name));
             }
 
             if (!release.Draft)
             {
-                throw new Exception("Release is not in draft state, so not discarding.");
+                throw new InvalidStateException("Release is not in draft state, so not discarding.");
             }
 
             await _gitHubClient.Repository.Release.Delete(owner, repository, release.Id).ConfigureAwait(false);
@@ -230,7 +231,7 @@ namespace GitReleaseManager.Core
                     if (!File.Exists(asset))
                     {
                         var logMessage = string.Format("Requested asset to be uploaded doesn't exist: {0}", asset);
-                        throw new Exception(logMessage);
+                        throw new FileNotFoundException(logMessage);
                     }
 
                     var assetFileName = Path.GetFileName(asset);

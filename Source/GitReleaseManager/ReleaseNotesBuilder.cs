@@ -52,7 +52,7 @@ namespace GitReleaseManager.Core
             if (issues.Count == 0)
             {
                 var logMessage = string.Format("No closed issues have been found for milestone {0}, or all assigned issues are meant to be excluded from release notes, aborting creation of release.", _milestoneTitle);
-                throw new Exception(logMessage);
+                throw new InvalidOperationException(logMessage);
             }
 
             if (issues.Count > 0)
