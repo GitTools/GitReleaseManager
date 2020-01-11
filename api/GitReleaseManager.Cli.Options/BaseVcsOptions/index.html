@@ -189,13 +189,13 @@
 								<dt>Derived Types</dt>
 								<dd>
 									<ul class="list-unstyled">
-											<li><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/PublishSubOptions">PublishSubOptions</a></li>								
-											<li><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/OpenSubOptions">OpenSubOptions</a></li>								
+											<li><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/CloseSubOptions">CloseSubOptions</a></li>								
+											<li><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/ExportSubOptions">ExportSubOptions</a></li>								
 											<li><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/LabelSubOptions">LabelSubOptions</a></li>								
 											<li><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/AddAssetSubOptions">AddAssetSubOptions</a></li>								
+											<li><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/PublishSubOptions">PublishSubOptions</a></li>								
 											<li><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/CreateSubOptions">CreateSubOptions</a></li>								
-											<li><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/ExportSubOptions">ExportSubOptions</a></li>								
-											<li><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/CloseSubOptions">CloseSubOptions</a></li>								
+											<li><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/OpenSubOptions">OpenSubOptions</a></li>								
 											<li><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/DiscardSubOptions">DiscardSubOptions</a></li>								
 									</ul>
 								</dd>			
@@ -210,20 +210,20 @@
 	Base0--&gt;Base1["object"]
 	Type["BaseVcsOptions"]
 class Type type-node
-	Derived0["PublishSubOptions"]--&gt;Type
-	click Derived0 "/GitReleaseManager/api/GitReleaseManager.Cli.Options/PublishSubOptions"
-	Derived1["OpenSubOptions"]--&gt;Type
-	click Derived1 "/GitReleaseManager/api/GitReleaseManager.Cli.Options/OpenSubOptions"
+	Derived0["CloseSubOptions"]--&gt;Type
+	click Derived0 "/GitReleaseManager/api/GitReleaseManager.Cli.Options/CloseSubOptions"
+	Derived1["ExportSubOptions"]--&gt;Type
+	click Derived1 "/GitReleaseManager/api/GitReleaseManager.Cli.Options/ExportSubOptions"
 	Derived2["LabelSubOptions"]--&gt;Type
 	click Derived2 "/GitReleaseManager/api/GitReleaseManager.Cli.Options/LabelSubOptions"
 	Derived3["AddAssetSubOptions"]--&gt;Type
 	click Derived3 "/GitReleaseManager/api/GitReleaseManager.Cli.Options/AddAssetSubOptions"
-	Derived4["CreateSubOptions"]--&gt;Type
-	click Derived4 "/GitReleaseManager/api/GitReleaseManager.Cli.Options/CreateSubOptions"
-	Derived5["ExportSubOptions"]--&gt;Type
-	click Derived5 "/GitReleaseManager/api/GitReleaseManager.Cli.Options/ExportSubOptions"
-	Derived6["CloseSubOptions"]--&gt;Type
-	click Derived6 "/GitReleaseManager/api/GitReleaseManager.Cli.Options/CloseSubOptions"
+	Derived4["PublishSubOptions"]--&gt;Type
+	click Derived4 "/GitReleaseManager/api/GitReleaseManager.Cli.Options/PublishSubOptions"
+	Derived5["CreateSubOptions"]--&gt;Type
+	click Derived5 "/GitReleaseManager/api/GitReleaseManager.Cli.Options/CreateSubOptions"
+	Derived6["OpenSubOptions"]--&gt;Type
+	click Derived6 "/GitReleaseManager/api/GitReleaseManager.Cli.Options/OpenSubOptions"
 	Derived7["DiscardSubOptions"]--&gt;Type
 	click Derived7 "/GitReleaseManager/api/GitReleaseManager.Cli.Options/DiscardSubOptions"
 
@@ -257,6 +257,14 @@ class Type type-node
 							</tr>
 						</thead>
 							<tbody><tr>
+								<td><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/BaseSubOptions/B51A70B6">Debug</a></td>
+								<td>bool</td>
+								<td>
+									<div></div>
+											<div><small><em>Inherited from <a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/BaseSubOptions">BaseSubOptions</a></em></small></div>
+								</td>
+							</tr>
+							<tr>
 								<td><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/BaseSubOptions/4959B463">LogFilePath</a></td>
 								<td>string</td>
 								<td>
@@ -313,6 +321,14 @@ class Type type-node
 								<td>string</td>
 								<td>
 									<div></div>
+								</td>
+							</tr>
+							<tr>
+								<td><a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/BaseSubOptions/119CBF4F">Verbose</a></td>
+								<td>bool</td>
+								<td>
+									<div></div>
+											<div><small><em>Inherited from <a href="/GitReleaseManager/api/GitReleaseManager.Cli.Options/BaseSubOptions">BaseSubOptions</a></em></small></div>
 								</td>
 							</tr>
 					</tbody></table>
