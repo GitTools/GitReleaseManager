@@ -13,25 +13,42 @@ when no yaml file is placed in the root directory):
 ```yaml
 create:
     include-footer: false
-    footer-heading:
-    footer-content:
+    footer-heading: ''
+    footer-content: ''
     footer-includes-milestone: false
-    milestone-replace-text:
+    milestone-replace-text: ''
     include-sha-section: false
     sha-section-heading: "SHA256 Hashes of the release artifacts"
     sha-section-line-format: "- `{1}\t{0}`"
 export:
     include-created-date-in-title: false
-    created-date-string-format:
+    created-date-string-format: ''
     perform-regex-removal: false
-    regex-text:
+    regex-text: ''
     multiline-regex: false
+close:
+  use-issue-comments: false
+  issue-comment: |-
+    :tada: This issue has been resolved in version {milestone} :tada:
+
+    The release is available on:
+
+    - [GitHub release](https://github.com/{owner}/{repository}/releases/tag/{milestone})
+
+    Your **[GitReleaseManager](https://github.com/GitTools/GitReleaseManager)** bot :package::rocket:
 issue-labels-include:
     - Bug
+    - Duplicate
+    - Enhancement
     - Feature
+    - Help Wanted
     - Improvement
+    - Invalid
+    - Question
+    - Wontfix
 issue-labels-exclude:
     - Internal Refactoring
+issue-labels-alias: []
 ```
 
 Essentially, the only settings that are enabled by default are those that
@@ -114,6 +131,24 @@ example of how a footer can be configured.
 See the [example export configuration section](export-configuration) to see an
 example of how the export can be configured.
 
+## Close Options
+
+When it comes to closing a milestone with GitReleaseManager, it is possible to
+add a comment to any closed issues that were included within that milestone.
+This is useful to inform any users who are subscribed to an issue, that this
+feature or bug, has actually been shipped.  It is possible to completely control
+the content of the issue comment that is added, as well as replace some
+tokenized values, such as milestone, owner, repository, with the actual values.
+
+- **use-issue-comments**
+  - A boolean value which indicates whether or not comments are added to any
+      closed issues that are included within a milestone, when it is being
+      closed.
+  - **issue-comment**
+    - This is a template for what comment should be added to each issue.  Within
+      this comment template, it is possible to replace information for example,
+      the milestone name, the owner/repository information, etc.
+
 ## Issues to include
 
 See the [Issues to include](include-issues) section.
@@ -121,3 +156,7 @@ See the [Issues to include](include-issues) section.
 ## Issues to exclude
 
 See the [Issues to exclude](exclude-issues) section.
+
+## Issue Labels Alias
+
+See the [Issue Label Alias](label-aliases) section.
