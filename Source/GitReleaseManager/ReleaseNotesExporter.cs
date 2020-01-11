@@ -13,9 +13,11 @@ namespace GitReleaseManager.Core
     using System.Threading.Tasks;
     using GitReleaseManager.Core.Configuration;
     using GitReleaseManager.Core.Model;
+    using Serilog;
 
     public class ReleaseNotesExporter
     {
+        private readonly ILogger _logger = Log.ForContext<ReleaseNotesExporter>();
         private readonly IVcsProvider _vcsProvider;
         private readonly Config _configuration;
         private readonly string _user;
@@ -32,6 +34,7 @@ namespace GitReleaseManager.Core
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Not appropriate.")]
         public async Task<string> ExportReleaseNotes(string tagName)
         {
+            _logger.Verbose("Exporting release notes");
             var stringBuilder = new StringBuilder();
 
             if (string.IsNullOrEmpty(tagName))
@@ -56,6 +59,8 @@ namespace GitReleaseManager.Core
 
                 AppendVersionReleaseNotes(stringBuilder, release);
             }
+
+            _logger.Verbose("Finished exporting release notes");
 
             return stringBuilder.ToString();
         }

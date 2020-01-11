@@ -18,16 +18,6 @@ namespace GitReleaseManager.Tests
     [TestFixture]
     public class ReleaseNotesBuilderTests
     {
-        public TestContext TestContext { get; set; }
-
-        [OneTimeSetUp]
-        public void Configure()
-        {
-            Logger.WriteError = s => TestContext.WriteLine($"Error: {s}");
-            Logger.WriteInfo = s => TestContext.WriteLine($"Info: {s}");
-            Logger.WriteWarning = s => TestContext.WriteLine($"Warning: {s}");
-        }
-
         [Test]
         public void NoCommitsNoIssues()
         {

@@ -12,9 +12,12 @@ namespace GitReleaseManager.Core
     using System.Linq;
     using System.Threading.Tasks;
     using Octokit;
+    using Serilog;
 
     public static class OctokitExtensions
     {
+        private static readonly ILogger _logger = Log.ForContext(typeof(OctokitExtensions));
+
         public static bool IsPullRequest(this Issue issue)
         {
             if (issue is null)
@@ -22,7 +25,7 @@ namespace GitReleaseManager.Core
                 throw new ArgumentNullException(nameof(issue));
             }
 
-            return issue.PullRequest != null;
+            return !(issue.PullRequest is null);
         }
 
         public static async Task<IEnumerable<Issue>> AllIssuesForMilestone(this GitHubClient gitHubClient, Milestone milestone)
@@ -52,7 +55,10 @@ namespace GitReleaseManager.Core
             var parts = milestone.Url.Split('/');
             var user = parts[4];
             var repository = parts[5];
+
+            _logger.Verbose("Finding closed issues for milestone {Milestone} on {Owner}/{Repository}", milestone.Title, user, repository);
             var closedIssues = await gitHubClient.Issue.GetAllForRepository(user, repository, closedIssueRequest).ConfigureAwait(false);
+            _logger.Verbose("Finding open issues for milestone {Milestone} on {Owner}/{Repository}", milestone.Title, user, repository);
             var openIssues = await gitHubClient.Issue.GetAllForRepository(user, repository, openIssueRequest).ConfigureAwait(false);
 
             return openIssues.Union(closedIssues);
@@ -60,7 +66,7 @@ namespace GitReleaseManager.Core
 
         public static Uri HtmlUrl(this Milestone milestone)
         {
-            if (milestone == null)
+            if (milestone is null)
             {
                 throw new ArgumentNullException(nameof(milestone));
             }

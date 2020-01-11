@@ -23,7 +23,6 @@ namespace GitReleaseManager.Tests
             Release = new Release();
         }
 
-#pragma warning disable CA1044 // Properties should not be write only
         public List<Milestone> Milestones { get; private set; }
 
         public List<Issue> Issues { get; private set; }
@@ -32,8 +31,7 @@ namespace GitReleaseManager.Tests
 
         public Release Release { get; private set; }
 
-        public int NumberOfCommits { private get; set; }
-#pragma warning restore CA1044 // Properties should not be write only
+        public int NumberOfCommits { get; set; }
 
         public Task<int> GetNumberOfCommitsBetween(Milestone previousMilestone, Milestone currentMilestone, string user, string repository)
         {

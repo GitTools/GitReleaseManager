@@ -11,42 +11,57 @@ namespace GitReleaseManager.Core.Configuration
     using System.Reflection;
     using GitReleaseManager.Core.Attributes;
     using GitReleaseManager.Core.Configuration.CommentSerialization;
+    using Serilog;
     using YamlDotNet.Serialization;
     using YamlDotNet.Serialization.NamingConventions;
 
     public static class ConfigSerializer
     {
+        private static readonly ILogger _logger = Log.ForContext(typeof(ConfigSerializer));
+
         public static Config Read(TextReader reader)
         {
+            _logger.Debug("Starting deserializing yaml configuration file...");
             var deserializerBuilder = new DeserializerBuilder().WithNamingConvention(HyphenatedNamingConvention.Instance);
             var deserializer = deserializerBuilder.Build();
             var deserialize = deserializer.Deserialize<Config>(reader);
 
-            if (deserialize == null)
+            if (deserialize is null)
             {
-                return new Config();
+                _logger.Verbose("Deseriazing failed, returning default configuration!");
+                deserialize = new Config();
             }
+            else
+            {
+                _logger.Verbose("Successfully deserialized configuration!");
+            }
+
+            _logger.Debug("{@Config}", deserialize);
 
             return deserialize;
         }
 
         public static void Write(Config config, TextWriter writer)
         {
+            _logger.Debug("Starting serializing yaml configuration...");
             var serializerBuilder = new SerializerBuilder()
                 .WithTypeInspector(inner => new CommentGatheringTypeInspector(inner))
                 .WithEmissionPhaseObjectGraphVisitor(args => new CommentsObjectGraphVisitor(args.InnerVisitor))
                 .WithNamingConvention(HyphenatedNamingConvention.Instance);
             var serializer = serializerBuilder.Build();
             serializer.Serialize(writer, config);
+            _logger.Verbose("Successfully serialized configuration!");
         }
 
         // TODO: Need to expand this to include all options
         public static void WriteSample(TextWriter writer)
         {
-            if (writer == null)
+            if (writer is null)
             {
                 throw new ArgumentNullException(nameof(writer));
             }
+
+            _logger.Debug("Starting sample generation...");
 
             var config = new Config();
             config.LabelAliases.Add(new LabelAlias
@@ -61,6 +76,7 @@ namespace GitReleaseManager.Core.Configuration
             writer.NewLine = Environment.NewLine + "#";
             SetConfigurationSamples(config, configType, writer);
 
+            _logger.Verbose("Writing sample");
             Write(config, writer);
         }
 
@@ -83,6 +99,7 @@ namespace GitReleaseManager.Core.Configuration
                     var value = Environment.OSVersion.Platform == PlatformID.Win32NT && propertyType == typeof(string)
                         ? sampleAttribute.Value.ToString().Replace("\n", Environment.NewLine)
                         : sampleAttribute.Value;
+                    _logger.Debug("Found property: '{Name}' with value '{Value}'", property.Name, value);
                     property.SetValue(config, value);
                 }
             }
