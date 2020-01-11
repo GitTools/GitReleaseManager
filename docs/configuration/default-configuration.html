@@ -74,8 +74,10 @@
         <div><p><a href="https://github.com/GitTools/GitReleaseManager/tree/develop/docs/input/docs/configuration/default-configuration.md"><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit Content</a></p></div>
     <div id="infobar-headings"><h6>On This Page</h6><p><a href="#create-options">Create Options</a></p>
 <p><a href="#export-options">Export Options</a></p>
+<p><a href="#close-options">Close Options</a></p>
 <p><a href="#issues-to-include">Issues to include</a></p>
 <p><a href="#issues-to-exclude">Issues to exclude</a></p>
+<p><a href="#issue-labels-alias">Issue Labels Alias</a></p>
 <hr class="infobar-hidden">
 </div>
 
@@ -168,25 +170,42 @@ file, which is typically stored at the root of your project.</p>
 when no yaml file is placed in the root directory):</p>
 <pre><code class="language-yaml">create:
     include-footer: false
-    footer-heading:
-    footer-content:
+    footer-heading: ''
+    footer-content: ''
     footer-includes-milestone: false
-    milestone-replace-text:
+    milestone-replace-text: ''
     include-sha-section: false
     sha-section-heading: "SHA256 Hashes of the release artifacts"
     sha-section-line-format: "- `{1}\t{0}`"
 export:
     include-created-date-in-title: false
-    created-date-string-format:
+    created-date-string-format: ''
     perform-regex-removal: false
-    regex-text:
+    regex-text: ''
     multiline-regex: false
+close:
+  use-issue-comments: false
+  issue-comment: |-
+    :tada: This issue has been resolved in version {milestone} :tada:
+
+    The release is available on:
+
+    - [GitHub release](https://github.com/{owner}/{repository}/releases/tag/{milestone})
+
+    Your **[GitReleaseManager](https://github.com/GitTools/GitReleaseManager)** bot :package::rocket:
 issue-labels-include:
     - Bug
+    - Duplicate
+    - Enhancement
     - Feature
+    - Help Wanted
     - Improvement
+    - Invalid
+    - Question
+    - Wontfix
 issue-labels-exclude:
     - Internal Refactoring
+issue-labels-alias: []
 </code></pre>
 <p>Essentially, the only settings that are enabled by default are those that
 specify which labels to include and which to exclude.</p>
@@ -301,10 +320,35 @@ multiple lines. Default is false.</li>
 </ul>
 <p>See the <a href="export-configuration">example export configuration section</a> to see an
 example of how the export can be configured.</p>
+<h2 id="close-options">Close Options</h2>
+<p>When it comes to closing a milestone with GitReleaseManager, it is possible to
+add a comment to any closed issues that were included within that milestone.
+This is useful to inform any users who are subscribed to an issue, that this
+feature or bug, has actually been shipped.  It is possible to completely control
+the content of the issue comment that is added, as well as replace some
+tokenized values, such as milestone, owner, repository, with the actual values.</p>
+<ul>
+<li><strong>use-issue-comments</strong>
+<ul>
+<li>A boolean value which indicates whether or not comments are added to any
+closed issues that are included within a milestone, when it is being
+closed.</li>
+<li><strong>issue-comment</strong>
+<ul>
+<li>This is a template for what comment should be added to each issue.  Within
+this comment template, it is possible to replace information for example,
+the milestone name, the owner/repository information, etc.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
 <h2 id="issues-to-include">Issues to include</h2>
 <p>See the <a href="include-issues">Issues to include</a> section.</p>
 <h2 id="issues-to-exclude">Issues to exclude</h2>
 <p>See the <a href="exclude-issues">Issues to exclude</a> section.</p>
+<h2 id="issue-labels-alias">Issue Labels Alias</h2>
+<p>See the <a href="label-aliases">Issue Label Alias</a> section.</p>
 
 	</section>
                 
