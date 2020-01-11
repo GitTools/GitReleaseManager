@@ -21,6 +21,7 @@
     </metadata>
     <files>
         <file src="..\..\BuildArtifacts\temp\_PublishedApplications\GitReleaseManager.Cli\net461\*.exe" target="tools" />
+        <file src="..\..\BuildArtifacts\temp\_PublishedApplications\GitReleaseManager.Cli\net461\*.xml" target="tools" />
         <file src="..\..\BuildArtifacts\temp\_PublishedApplications\GitReleaseManager.Cli\net461\*.dll" target="tools" exclude="**\Serilog.Sinks.Debug.dll" />
         <file src="..\..\BuildArtifacts\temp\_PublishedApplications\GitReleaseManager.Cli\net461\*.pdb" target="tools" />
         <file src="..\..\Icons\package_icon.png" target="" />
