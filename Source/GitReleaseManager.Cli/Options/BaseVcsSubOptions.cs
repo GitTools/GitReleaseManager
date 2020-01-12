@@ -5,16 +5,21 @@
 
 namespace GitReleaseManager.Cli.Options
 {
+    using System;
     using CommandLine;
     using Destructurama.Attributed;
 
     public abstract class BaseVcsOptions : BaseSubOptions
     {
-        [Option('u', "username", HelpText = "The username to access Version Control System with.", Required = true, SetName = "Basic Auth")]
+        internal const string OBSOLETE_MESSAGE = "Authentication using username and password have been deprecated, and will be removed in a future release. Please use --token instead!";
+
+        [Obsolete(OBSOLETE_MESSAGE)]
+        [Option('u', "username", HelpText = "(DEPRECATED) The username to access Version Control System with.", Required = true, SetName = "Basic Auth")]
         public string UserName { get; set; }
 
+        [Obsolete(OBSOLETE_MESSAGE)]
         [LogMasked(Text = "[REDACTED]")]
-        [Option('p', "password", HelpText = "The password to access Version Control System with.", Required = true, SetName = "Basic Auth")]
+        [Option('p', "password", HelpText = "(DEPRECATED) The password to access Version Control System with.", Required = true, SetName = "Basic Auth")]
         public string Password { get; set; }
 
         [LogMasked(Text = "[REDACTED]")]

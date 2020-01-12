@@ -33,11 +33,19 @@ namespace GitReleaseManager.Core
         private readonly IMapper _mapper;
         private GitHubClient _gitHubClient;
 
+        [Obsolete("Use overload with token only instead")]
         public GitHubProvider(IMapper mapper, Config configuration, string userName, string password, string token)
         {
             _mapper = mapper;
             _configuration = configuration;
             CreateClient(userName, password, token);
+        }
+
+        public GitHubProvider(IMapper mapper, Config configuration, string token)
+        {
+            _mapper = mapper;
+            _configuration = configuration;
+            CreateClient(token);
         }
 
         public Task<int> GetNumberOfCommitsBetween(Milestone previousMilestone, Milestone currentMilestone, string user, string repository)
@@ -95,12 +103,20 @@ namespace GitReleaseManager.Core
             return new ReadOnlyCollection<Milestone>(_mapper.Map<List<Milestone>>(closed.Concat(open).ToList()));
         }
 
+        [Obsolete("Use overload with token only instead")]
         public void CreateClient(string userName, string password, string token)
         {
             var credentials = string.IsNullOrWhiteSpace(token)
                 ? new Credentials(userName, password)
                 : new Credentials(token);
 
+            var github = new GitHubClient(new ProductHeaderValue("GitReleaseManager")) { Credentials = credentials };
+            _gitHubClient = github;
+        }
+
+        public void CreateClient(string token)
+        {
+            var credentials = new Credentials(token);
             var github = new GitHubClient(new ProductHeaderValue("GitReleaseManager")) { Credentials = credentials };
             _gitHubClient = github;
         }

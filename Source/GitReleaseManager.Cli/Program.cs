@@ -42,6 +42,7 @@ namespace GitReleaseManager.Cli
                     .WithParsed<BaseSubOptions>(LogConfiguration.ConfigureLogging)
                     .WithParsed<BaseSubOptions>(CreateFiglet)
                     .WithParsed<BaseSubOptions>(LogOptions)
+                    .WithParsed<BaseVcsOptions>(ReportUsernamePasswordDeprecation)
                     .MapResult(
                     (CreateSubOptions opts) => CreateReleaseAsync(opts),
                     (DiscardSubOptions opts) => DiscardReleaseAsync(opts),
@@ -73,6 +74,14 @@ namespace GitReleaseManager.Cli
             finally
             {
                 Log.CloseAndFlush();
+            }
+        }
+
+        private static void ReportUsernamePasswordDeprecation(BaseVcsOptions options)
+        {
+            if (!string.IsNullOrEmpty(options.UserName) || !string.IsNullOrEmpty(options.Password))
+            {
+                Log.Warning(BaseVcsOptions.OBSOLETE_MESSAGE);
             }
         }
 
