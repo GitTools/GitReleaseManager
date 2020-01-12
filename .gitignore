@@ -323,3 +323,7 @@ BuildArtifacts/*
 config.wyam.dll
 config.wyam.hash
 config.wyam.packages.xml
+
+# Integration Tests
+tests/integration/tools
+tests/integration/output
