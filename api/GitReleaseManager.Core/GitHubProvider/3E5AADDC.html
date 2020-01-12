@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="shortcut icon" href="/GitReleaseManager/assets/img/favicon.ico" type="image/x-icon">
         <link rel="icon" href="/GitReleaseManager/assets/img/favicon.ico" type="image/x-icon">
-        <title>GitReleaseManager - API - GitHubProvider.AddAssets(string, string, string, IList&lt;string&gt;) Method</title>
+        <title>GitReleaseManager - API - GitHubProvider.CreateClient(string) Method</title>
         <link href="/GitReleaseManager/assets/css/highlight.css" rel="stylesheet">
         <link href="/GitReleaseManager/assets/css/bootstrap/bootstrap.css" rel="stylesheet">
         <link href="/GitReleaseManager/assets/css/adminlte/AdminLTE.css" rel="stylesheet">
@@ -141,10 +141,10 @@
 				<li><a href="/GitReleaseManager/api/GitReleaseManager.Core/GitHubProvider/BD3A1D6A">GitHubProvider<wbr>(IMapper, <wbr>Config, <wbr>string, <wbr>string, <wbr>string)<wbr></a></li>
 				<li><a href="/GitReleaseManager/api/GitReleaseManager.Core/GitHubProvider/8AC8F0C2">GitHubProvider<wbr>(IMapper, <wbr>Config, <wbr>string)<wbr></a></li>
 			<li class="header">Method Members</li>
-				<li class="selected"><a href="/GitReleaseManager/api/GitReleaseManager.Core/GitHubProvider/B421ADAD">AddAssets<wbr>(string, <wbr>string, <wbr>string, <wbr>IList<wbr>&lt;string&gt;<wbr>)<wbr></a></li>
+				<li><a href="/GitReleaseManager/api/GitReleaseManager.Core/GitHubProvider/B421ADAD">AddAssets<wbr>(string, <wbr>string, <wbr>string, <wbr>IList<wbr>&lt;string&gt;<wbr>)<wbr></a></li>
 				<li><a href="/GitReleaseManager/api/GitReleaseManager.Core/GitHubProvider/7B4D026A">CloseMilestone<wbr>(string, <wbr>string, <wbr>string)<wbr></a></li>
 				<li><a href="/GitReleaseManager/api/GitReleaseManager.Core/GitHubProvider/5406616F">CreateClient<wbr>(string, <wbr>string, <wbr>string)<wbr></a></li>
-				<li><a href="/GitReleaseManager/api/GitReleaseManager.Core/GitHubProvider/3E5AADDC">CreateClient<wbr>(string)<wbr></a></li>
+				<li class="selected"><a href="/GitReleaseManager/api/GitReleaseManager.Core/GitHubProvider/3E5AADDC">CreateClient<wbr>(string)<wbr></a></li>
 				<li><a href="/GitReleaseManager/api/GitReleaseManager.Core/GitHubProvider/53518C2D">CreateLabels<wbr>(string, <wbr>string)<wbr></a></li>
 				<li><a href="/GitReleaseManager/api/GitReleaseManager.Core/GitHubProvider/068D06D3">Create<wbr>Release<wbr>From<wbr>Input<wbr>File<wbr>(string, <wbr>string, <wbr>string, <wbr>string, <wbr>string, <wbr>IList<wbr>&lt;string&gt;<wbr>, <wbr>bool)<wbr></a></li>
 				<li><a href="/GitReleaseManager/api/GitReleaseManager.Core/GitHubProvider/2E1A4F58">Create<wbr>Release<wbr>From<wbr>Milestone<wbr>(string, <wbr>string, <wbr>string, <wbr>string, <wbr>string, <wbr>IList<wbr>&lt;string&gt;<wbr>, <wbr>bool)<wbr></a></li>
@@ -173,7 +173,7 @@
 
 <section class="content-header">
 			<h3><a href="/GitReleaseManager/api/GitReleaseManager.Core/GitHubProvider">GitHubProvider</a>.</h3>
-	<h1>AddAssets<wbr>(string, <wbr>string, <wbr>string, <wbr>IList<wbr>&lt;string&gt;<wbr>)<wbr> <small>Method</small></h1>
+	<h1>CreateClient<wbr>(string)<wbr> <small>Method</small></h1>
 </section>
 <section class="content">
 	
@@ -194,7 +194,7 @@
 		</div>
 
 	<h1 id="Syntax">Syntax</h1>
-	<pre><code>public Task AddAssets(string owner, string repository, string tagName, IList&lt;string&gt; assets)</code></pre>
+	<pre><code>public void CreateClient(string token)</code></pre>
 
 
 
@@ -212,23 +212,8 @@
 					</tr>
 				</thead>
 					<tbody><tr>
-						<td>owner</td>
+						<td>token</td>
 						<td>string</td>
-						<td></td>
-					</tr>
-					<tr>
-						<td>repository</td>
-						<td>string</td>
-						<td></td>
-					</tr>
-					<tr>
-						<td>tagName</td>
-						<td>string</td>
-						<td></td>
-					</tr>
-					<tr>
-						<td>assets</td>
-						<td>IList<wbr>&lt;string&gt;<wbr></td>
 						<td></td>
 					</tr>
 			</tbody></table>
@@ -246,7 +231,7 @@
 					</tr>
 				</thead>
 				<tbody><tr>
-					<td>Task</td>
+					<td>void</td>
 					<td></td>
 				</tr>
 			</tbody></table>

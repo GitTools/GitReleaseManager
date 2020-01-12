@@ -184,8 +184,9 @@
 		</div>
 
 	<h1 id="Syntax">Syntax</h1>
-	<pre><code>[LogMasked(Text = "[REDACTED]")]
-[Option('p', "password", HelpText = "The password to access Version Control System with.", Required = true, SetName = "Basic Auth")]
+	<pre><code>[Obsolete(OBSOLETE_MESSAGE)]
+[LogMasked(Text = "[REDACTED]")]
+[Option('p', "password", HelpText = "(DEPRECATED) The password to access Version Control System with.", Required = true, SetName = "Basic Auth")]
 public string Password { get; set; }</code></pre>
 
 
@@ -201,6 +202,10 @@ public string Password { get; set; }</code></pre>
 					</tr>
 				</thead>
 					<tbody><tr>
+						<td>ObsoleteAttribute</td>
+						<td></td>
+					</tr>
+					<tr>
 						<td>LogMasked</td>
 						<td></td>
 					</tr>

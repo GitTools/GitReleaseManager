@@ -72,6 +72,7 @@
                 <section class="infobar" data-spy="affix" data-offset-top="60" data-offset-bottom="200"> 
                     	
 	<div id="infobar-headings"><h6>On This Page</h6><p><a href="#Syntax">Syntax</a></p>
+<p><a href="#Attributes">Attributes</a></p>
 <p><a href="#Parameters">Parameters</a></p>
 <p><a href="#ReturnValue">Return Value</a></p>
 <hr class="infobar-hidden">
@@ -139,10 +140,12 @@
 		<li role="separator" class="divider"></li>
 			<li class="header">Constructors</li>
 				<li class="selected"><a href="/GitReleaseManager/api/GitReleaseManager.Core/GitHubProvider/BD3A1D6A">GitHubProvider<wbr>(IMapper, <wbr>Config, <wbr>string, <wbr>string, <wbr>string)<wbr></a></li>
+				<li><a href="/GitReleaseManager/api/GitReleaseManager.Core/GitHubProvider/8AC8F0C2">GitHubProvider<wbr>(IMapper, <wbr>Config, <wbr>string)<wbr></a></li>
 			<li class="header">Method Members</li>
 				<li><a href="/GitReleaseManager/api/GitReleaseManager.Core/GitHubProvider/B421ADAD">AddAssets<wbr>(string, <wbr>string, <wbr>string, <wbr>IList<wbr>&lt;string&gt;<wbr>)<wbr></a></li>
 				<li><a href="/GitReleaseManager/api/GitReleaseManager.Core/GitHubProvider/7B4D026A">CloseMilestone<wbr>(string, <wbr>string, <wbr>string)<wbr></a></li>
 				<li><a href="/GitReleaseManager/api/GitReleaseManager.Core/GitHubProvider/5406616F">CreateClient<wbr>(string, <wbr>string, <wbr>string)<wbr></a></li>
+				<li><a href="/GitReleaseManager/api/GitReleaseManager.Core/GitHubProvider/3E5AADDC">CreateClient<wbr>(string)<wbr></a></li>
 				<li><a href="/GitReleaseManager/api/GitReleaseManager.Core/GitHubProvider/53518C2D">CreateLabels<wbr>(string, <wbr>string)<wbr></a></li>
 				<li><a href="/GitReleaseManager/api/GitReleaseManager.Core/GitHubProvider/068D06D3">Create<wbr>Release<wbr>From<wbr>Input<wbr>File<wbr>(string, <wbr>string, <wbr>string, <wbr>string, <wbr>string, <wbr>IList<wbr>&lt;string&gt;<wbr>, <wbr>bool)<wbr></a></li>
 				<li><a href="/GitReleaseManager/api/GitReleaseManager.Core/GitHubProvider/2E1A4F58">Create<wbr>Release<wbr>From<wbr>Milestone<wbr>(string, <wbr>string, <wbr>string, <wbr>string, <wbr>string, <wbr>IList<wbr>&lt;string&gt;<wbr>, <wbr>bool)<wbr></a></li>
@@ -192,10 +195,28 @@
 		</div>
 
 	<h1 id="Syntax">Syntax</h1>
-	<pre><code>public GitHubProvider(IMapper mapper, Config configuration, string userName, string password, string token)</code></pre>
+	<pre><code>[Obsolete("Use overload with token only instead")]
+public GitHubProvider(IMapper mapper, Config configuration, string userName, string password, string token)</code></pre>
 
 
 
+	<h1 id="Attributes">Attributes</h1>
+	<div class="box">
+		<div class="box-body no-padding table-responsive">
+			<table class="table table-striped table-hover two-cols">
+				<thead>
+					<tr>
+						<th>Type</th>
+						<th>Description</th>
+					</tr>
+				</thead>
+					<tbody><tr>
+						<td>ObsoleteAttribute</td>
+						<td></td>
+					</tr>
+			</tbody></table>
+		</div>
+	</div>	
 
 
 	<h1 id="Parameters">Parameters</h1>

@@ -184,7 +184,8 @@
 		</div>
 
 	<h1 id="Syntax">Syntax</h1>
-	<pre><code>[Option('u', "username", HelpText = "The username to access Version Control System with.", Required = true, SetName = "Basic Auth")]
+	<pre><code>[Obsolete(OBSOLETE_MESSAGE)]
+[Option('u', "username", HelpText = "(DEPRECATED) The username to access Version Control System with.", Required = true, SetName = "Basic Auth")]
 public string UserName { get; set; }</code></pre>
 
 
@@ -200,6 +201,10 @@ public string UserName { get; set; }</code></pre>
 					</tr>
 				</thead>
 					<tbody><tr>
+						<td>ObsoleteAttribute</td>
+						<td></td>
+					</tr>
+					<tr>
 						<td>Option</td>
 						<td></td>
 					</tr>
