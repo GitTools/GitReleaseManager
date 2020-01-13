@@ -1,25 +1,25 @@
 <Dictionary>
-  <Words>
-    <Unrecognized>
-      <Word />
-    </Unrecognized>
-    <Recognized>
-      <Word>Cli</Word>
-      <Word>commitish</Word>
-      <Word>Git</Word>
-      <Word>Octokit</Word>
-      <Word>Prerelease</Word>
-    </Recognized>
-    <Deprecated>
-      <Term />
-    </Deprecated>
-    <DiscreteExceptions>
-      <Term />
-    </DiscreteExceptions>
-  </Words>
-  <Acronyms>
-    <CasingExceptions>
-      <Acronym />
-    </CasingExceptions>
-  </Acronyms>
+    <Words>
+        <Unrecognized>
+            <Word />
+        </Unrecognized>
+        <Recognized>
+            <Word>Cli</Word>
+            <Word>commitish</Word>
+            <Word>Git</Word>
+            <Word>Octokit</Word>
+            <Word>Prerelease</Word>
+        </Recognized>
+        <Deprecated>
+            <Term />
+        </Deprecated>
+        <DiscreteExceptions>
+            <Term />
+        </DiscreteExceptions>
+    </Words>
+    <Acronyms>
+        <CasingExceptions>
+            <Acronym />
+        </CasingExceptions>
+    </Acronyms>
 </Dictionary>

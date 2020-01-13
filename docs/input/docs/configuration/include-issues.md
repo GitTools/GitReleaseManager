@@ -12,9 +12,9 @@ tagged with one of the following labels:
 
 ```yaml
 issue-labels-include:
-- Bug
-- Feature
-- Improvement
+    - Bug
+    - Feature
+    - Improvement
 ```
 
 :::{.alert .alert-info}

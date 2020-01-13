@@ -1,39 +1,19 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net451</TargetFrameworks>
-    <BuildToolsFxCopVersion>1.0.1</BuildToolsFxCopVersion>
-    <Title>GitReleaseManager.Core</Title>
-    <Description>Create release notes in markdown given a GitHub milestone</Description>
-    <RunCodeAnalysis>False</RunCodeAnalysis>
-    <CodeAnalysisTreatWarningsAsErrors>True</CodeAnalysisTreatWarningsAsErrors>
-    <CodeAnalysisRuleSet>..\GitReleaseManager.ruleset</CodeAnalysisRuleSet>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <DebugType>full</DebugType>
-    <IsPackable>false</IsPackable>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <RunCodeAnalysisRestore>False</RunCodeAnalysisRestore>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <RunCodeAnalysisRestore>True</RunCodeAnalysisRestore>
-  </PropertyGroup>
-  <Import Project="..\..\BuildScripts\CodeAnalysis.props" Condition="Exists('..\..\BuildScripts\CodeAnalysis.props')" />
-  <Import Project="..\..\BuildScripts\StyleCop.props" Condition="Exists('..\..\BuildScripts\StyleCop.props')" />
-  <ItemGroup>
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\SolutionInfo.cs" Link="SolutionInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <CodeAnalysisDictionary Include="..\CustomDictionary.xml">
-      <Link>CustomDictionary.xml</Link>
-    </CodeAnalysisDictionary>
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Octokit" Version="0.32.0" />
-    <PackageReference Include="YamlDotNet" Version="5.3.0" />
-  </ItemGroup>
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <LangVersion>8.0</LangVersion>
+        <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
+        <Title>GitReleaseManager.Core</Title>
+        <Description>Create release notes in markdown given a milestone</Description>
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+    <ItemGroup>
+        <Compile Include="..\SolutionInfo.cs" Link="SolutionInfo.cs" />
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Octokit" Version="0.36.0" />
+        <PackageReference Include="seriloganalyzer" Version="0.15.0" />
+        <PackageReference Include="YamlDotNet" Version="8.0.0" />
+        <PackageReference Include="AutoMapper" Version="9.0.0" />
+    </ItemGroup>
 </Project>

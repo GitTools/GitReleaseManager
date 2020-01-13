@@ -3,7 +3,7 @@ Order: 30
 Title: Via .Net Global Tool
 ---
 
-It is possible to install GitReleaseManager as a .Net Global Tool.  Simply
+It is possible to install GitReleaseManager as a .Net Global Tool. Simply
 execute the following command:
 
 ```bash
@@ -16,7 +16,7 @@ trying to install the .Net Global Tool.
 :::
 
 Once installed, GitReleaseManager should be immediately available on the command
-line.  You can call:
+line. You can call:
 
 ```bash
 dotnet-gitreleasemanager

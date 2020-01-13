@@ -1,20 +1,8 @@
-﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.168
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29519.181
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuSpecs", "NuSpecs", "{87E2E61F-5F5D-45F1-8C4A-98E0BF8CA01D}"
-	ProjectSection(SolutionItems) = preProject
-		..\Packaging\nuget\chocolateyInstall.ps1 = ..\Packaging\nuget\chocolateyInstall.ps1
-		..\Packaging\nuget\chocolateyUninstall.ps1 = ..\Packaging\nuget\chocolateyUninstall.ps1
-		..\Packaging\nuget\GitReleaseManager.nuspec = ..\Packaging\nuget\GitReleaseManager.nuspec
-		..\Packaging\nuget\GitReleaseManager.Portable.nuspec = ..\Packaging\nuget\GitReleaseManager.Portable.nuspec
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AppVeyor", "AppVeyor", "{EF94B2A3-E548-43B3-8A63-C7B28B5779D4}"
-	ProjectSection(SolutionItems) = preProject
-		..\appveyor.yml = ..\appveyor.yml
-	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GitReleaseManager.Tests", "GitReleaseManager.Tests\GitReleaseManager.Tests.csproj", "{FAD045A3-CF63-48CA-BA49-8F4D79E3EF4F}"
 EndProject
@@ -22,12 +10,28 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GitReleaseManager.Cli", "Gi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GitReleaseManager.Core", "GitReleaseManager\GitReleaseManager.Core.csproj", "{B02A026E-CA3A-48F4-BBA9-EB337B0A2035}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{38C8B147-E382-4176-95D4-42B83E560A1A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GitReleaseManager.Tool", "GitReleaseManager.Cli\GitReleaseManager.Tool.csproj", "{56F96DA7-E286-46C7-88DB-068F4BE96538}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C87778A7-B100-4D05-A050-BA37BD59058C}"
 	ProjectSection(SolutionItems) = preProject
-		.nuget\packages.config = .nuget\packages.config
+		Directory.Build.props = Directory.Build.props
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GitReleaseManager.Tool", "GitReleaseManager.Cli\GitReleaseManager.Tool.csproj", "{56F96DA7-E286-46C7-88DB-068F4BE96538}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GitReleaseManager.IntegrationTests", "GitReleaseManager.IntegrationTests\GitReleaseManager.IntegrationTests.csproj", "{53D8DA02-2BF8-454A-997C-B6BE62F90F9E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuGet", "NuGet", "{29340E98-B35A-4738-9784-580D48C6AD3D}"
+	ProjectSection(SolutionItems) = preProject
+		..\nuspec\nuget\GitReleaseManager.nuspec = ..\nuspec\nuget\GitReleaseManager.nuspec
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Chocolatey", "Chocolatey", "{2EB7AC4C-8600-4F99-9029-E9F36B83D1C2}"
+	ProjectSection(SolutionItems) = preProject
+		..\nuspec\chocolatey\chocolateyInstall.ps1 = ..\nuspec\chocolatey\chocolateyInstall.ps1
+		..\nuspec\chocolatey\chocolateyUninstall.ps1 = ..\nuspec\chocolatey\chocolateyUninstall.ps1
+		..\nuspec\chocolatey\GitReleaseManager.Portable.nuspec = ..\nuspec\chocolatey\GitReleaseManager.Portable.nuspec
+		..\nuspec\chocolatey\LICENSE.TXT = ..\nuspec\chocolatey\LICENSE.TXT
+		..\nuspec\chocolatey\VERIFICATION.TXT = ..\nuspec\chocolatey\VERIFICATION.TXT
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,12 +55,17 @@ Global
 		{56F96DA7-E286-46C7-88DB-068F4BE96538}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{56F96DA7-E286-46C7-88DB-068F4BE96538}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{56F96DA7-E286-46C7-88DB-068F4BE96538}.Release|Any CPU.Build.0 = Release|Any CPU
+		{53D8DA02-2BF8-454A-997C-B6BE62F90F9E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53D8DA02-2BF8-454A-997C-B6BE62F90F9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53D8DA02-2BF8-454A-997C-B6BE62F90F9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53D8DA02-2BF8-454A-997C-B6BE62F90F9E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{EF94B2A3-E548-43B3-8A63-C7B28B5779D4} = {38C8B147-E382-4176-95D4-42B83E560A1A}
+		{29340E98-B35A-4738-9784-580D48C6AD3D} = {87E2E61F-5F5D-45F1-8C4A-98E0BF8CA01D}
+		{2EB7AC4C-8600-4F99-9029-E9F36B83D1C2} = {87E2E61F-5F5D-45F1-8C4A-98E0BF8CA01D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DBDED135-9696-4CB2-9D4D-EACFF30B4A99}

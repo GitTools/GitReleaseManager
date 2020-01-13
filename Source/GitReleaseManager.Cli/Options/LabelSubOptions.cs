@@ -9,7 +9,7 @@ namespace GitReleaseManager.Cli.Options
     using CommandLine;
 
     [Verb("label", HelpText = "Deletes existing labels and replaces with set of default labels.")]
-    public class LabelSubOptions : BaseGitHubSubOptions
+    public class LabelSubOptions : BaseVcsOptions
     {
     }
 }

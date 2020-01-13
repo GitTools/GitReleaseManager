@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="ReleaseNotesBuilderTests.cs" company="GitTools Contributors">
 //     Copyright (c) 2015 - Present - GitTools Contributors
 // </copyright>
@@ -12,8 +12,8 @@ namespace GitReleaseManager.Tests
     using GitReleaseManager.Core;
     using GitReleaseManager.Core.Configuration;
     using GitReleaseManager.Core.Helpers;
+    using GitReleaseManager.Core.Model;
     using NUnit.Framework;
-    using Octokit;
 
     [TestFixture]
     public class ReleaseNotesBuilderTests
@@ -21,55 +21,64 @@ namespace GitReleaseManager.Tests
         [Test]
         public void NoCommitsNoIssues()
         {
-            AcceptTest(0);
+            var exception = Assert.Throws<AggregateException>(() => AcceptTest(0));
+            Assert.That(exception.InnerException, Is.Not.Null.And.TypeOf<InvalidOperationException>());
         }
 
         [Test]
         public void NoCommitsSomeIssues()
         {
             AcceptTest(0, CreateIssue(1, "Bug"), CreateIssue(2, "Feature"), CreateIssue(3, "Improvement"));
+            Assert.True(true); // Just to make sonarlint happy
         }
 
         [Test]
         public void SomeCommitsNoIssues()
         {
-            AcceptTest(5);
+            var exception = Assert.Throws<AggregateException>(() => AcceptTest(5));
+            Assert.That(exception.InnerException, Is.Not.Null.And.TypeOf<InvalidOperationException>());
         }
 
         [Test]
         public void SomeCommitsSomeIssues()
         {
             AcceptTest(5, CreateIssue(1, "Bug"), CreateIssue(2, "Feature"), CreateIssue(3, "Improvement"));
+            Assert.True(true); // Just to make sonarlint happy
         }
 
         [Test]
         public void SingularCommitsNoIssues()
         {
-            AcceptTest(1);
+            var exception = Assert.Throws<AggregateException>(() => AcceptTest(1));
+            Assert.That(exception.InnerException, Is.Not.Null.And.TypeOf<InvalidOperationException>());
         }
 
         [Test]
         public void SingularCommitsSomeIssues()
         {
             AcceptTest(1, CreateIssue(1, "Bug"), CreateIssue(2, "Feature"), CreateIssue(3, "Improvement"));
+            Assert.True(true); // Just to make sonarlint happy
         }
 
         [Test]
         public void SingularCommitsSingularIssues()
         {
             AcceptTest(1, CreateIssue(1, "Bug"));
+            Assert.True(true); // Just to make sonarlint happy
         }
 
         [Test]
         public void NoCommitsSingularIssues()
         {
             AcceptTest(0, CreateIssue(1, "Bug"));
+            Assert.True(true); // Just to make sonarlint happy
         }
 
         [Test]
         public void SomeCommitsSingularIssues()
         {
             AcceptTest(5, CreateIssue(1, "Bug"));
+            Assert.True(true); // Just to make sonarlint happy
         }
 
         [Test]
@@ -79,10 +88,11 @@ namespace GitReleaseManager.Tests
             config.LabelAliases.Add(new LabelAlias
             {
                 Name = "Bug",
-                Header = "Foo"
+                Header = "Foo",
             });
 
             AcceptTest(1, config, CreateIssue(1, "Bug"));
+            Assert.True(true); // Just to make sonarlint happy
         }
 
         [Test]
@@ -96,35 +106,41 @@ namespace GitReleaseManager.Tests
             });
 
             AcceptTest(5, config, CreateIssue(1, "Help Wanted"), CreateIssue(2, "Help Wanted"));
+            Assert.True(true); // Just to make sonarlint happy
         }
 
         [Test]
         public void SomeCommitsWithoutPluralizedLabelAlias()
         {
             AcceptTest(5, CreateIssue(1, "Help Wanted"), CreateIssue(2, "Help Wanted"));
+            Assert.True(true); // Just to make sonarlint happy
         }
 
         [Test]
         public void NoCommitsWrongIssueLabel()
         {
-            Assert.Throws<AggregateException>(() => AcceptTest(0, CreateIssue(1, "Test")));
+            var exception = Assert.Throws<AggregateException>(() => AcceptTest(0, CreateIssue(1, "Test")));
+            Assert.That(exception.InnerException, Is.Not.Null.And.TypeOf<InvalidOperationException>());
         }
 
         [Test]
         public void SomeCommitsWrongIssueLabel()
         {
-            Assert.Throws<AggregateException>(() => AcceptTest(5, CreateIssue(1, "Test")));
+            var exception = Assert.Throws<AggregateException>(() => AcceptTest(5, CreateIssue(1, "Test")));
+            Assert.That(exception.InnerException, Is.Not.Null.And.TypeOf<InvalidOperationException>());
         }
 
         [Test]
         public void CorrectlyExcludeIssues()
         {
             AcceptTest(5, CreateIssue(1, "Internal Refactoring"), CreateIssue(2, "Bug"));
+            Assert.True(true); // Just to make sonarlint happy
         }
 
         private static void AcceptTest(int commits, params Issue[] issues)
         {
             AcceptTest(commits, null, issues);
+            Assert.True(true); // Just to make sonarlint happy
         }
 
         private static void AcceptTest(int commits, Config config, params Issue[] issues)
@@ -151,38 +167,23 @@ namespace GitReleaseManager.Tests
 
         private static Milestone CreateMilestone(string version)
         {
-            return new Milestone(null, "https://github.com/gep13/FakeRepository/issues?q=milestone%3A" + version, 0, null, ItemState.Open, version, String.Empty, null, 0, 0, DateTimeOffset.Now, null, null, null);
+            return new Milestone
+            {
+                Title = version,
+                HtmlUrl = "https://github.com/gep13/FakeRepository/issues?q=milestone%3A" + version,
+                Version = new Version(version),
+            };
         }
 
         private static Issue CreateIssue(int number, params string[] labels)
         {
-            var user = new User(null, null, null, 0, null, DateTimeOffset.Now, DateTimeOffset.Now, 0, null, 0, 0, null, null, 0, 0, null, null, "gep13", "gep31", 0, null, 0, 0, 0, null, null, false, null, null);
-
-            return new Issue(
-                null,
-                "http://example.com/" + number,
-                null,
-                null,
-                number,
-                ItemState.Open,
-                "Issue " + number,
-                "Some issue",
-                null,
-                user,
-                labels.Select(x => new Label(null, x, null, null, null, false)).ToArray(),
-                null,
-                null,
-                null,
-                0,
-                null,
-                null,
-                DateTimeOffset.Now,
-                null,
-                0,
-                null,
-                false,
-                null,
-                null);
+            return new Issue
+            {
+                Number = number.ToString(),
+                Labels = labels.Select(l => new Label { Name = l }).ToList(),
+                HtmlUrl = "http://example.com/" + number,
+                Title = "Issue " + number,
+            };
         }
     }
 }

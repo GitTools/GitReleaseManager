@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="ConfigurationProvider.cs" company="GitTools Contributors">
 //     Copyright (c) 2015 - Present - GitTools Contributors
 // </copyright>
@@ -11,13 +11,16 @@ namespace GitReleaseManager.Core.Configuration
     using System.IO;
     using System.Text;
     using GitReleaseManager.Core.Helpers;
+    using Serilog;
 
     public static class ConfigurationProvider
     {
+        private static readonly ILogger _logger = Log.ForContext(typeof(ConfigurationProvider));
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "Not required, as direct return of object")]
         public static Config Provide(string gitDirectory, IFileSystem fileSystem)
         {
-            if (fileSystem == null)
+            if (fileSystem is null)
             {
                 throw new ArgumentNullException(nameof(fileSystem));
             }
@@ -26,14 +29,20 @@ namespace GitReleaseManager.Core.Configuration
 
             if (fileSystem.Exists(configFilePath))
             {
+                _logger.Verbose("Loading configuration from file: {FilePath}", configFilePath);
+
                 var readAllText = fileSystem.ReadAllText(configFilePath);
+                using (var stringReader = new StringReader(readAllText))
+                {
+                    var deserializedConfig = ConfigSerializer.Read(stringReader);
 
-                var deserializedConfig = ConfigSerializer.Read(new StringReader(readAllText));
+                    EnsureDefaultConfig(deserializedConfig);
 
-                EnsureDefaultConfig(deserializedConfig);
-
-                return deserializedConfig;
+                    return deserializedConfig;
+                }
             }
+
+            _logger.Warning("Yaml not found, that's ok! Learn more at {Url}", "https://gittools.github.io/GitReleaseManager/docs/yaml");
 
             return new Config();
         }
@@ -63,15 +72,28 @@ namespace GitReleaseManager.Core.Configuration
 
             if (!fileSystem.Exists(configFilePath))
             {
-                using (var stream = fileSystem.OpenWrite(configFilePath))
-                using (var writer = new StreamWriter(stream))
+                _logger.Information("Writing sample file to '{ConfigFilePath}'", configFilePath);
+
+                // The following try/finally statements is to ensure that
+                // any stream is not disposed more than once.
+                Stream stream = null;
+                try
                 {
-                    ConfigSerializer.WriteSample(writer);
+                    stream = fileSystem.OpenWrite(configFilePath);
+                    using (var writer = new StreamWriter(stream))
+                    {
+                        stream = null;
+                        ConfigSerializer.WriteSample(writer);
+                    }
+                }
+                finally
+                {
+                    stream?.Dispose();
                 }
             }
             else
             {
-                Logger.WriteError("Cannot write sample, GitReleaseManager.yaml already exists");
+                _logger.Error("Cannot write sample, '{File}' already exists", configFilePath);
             }
         }
 
@@ -82,14 +104,22 @@ namespace GitReleaseManager.Core.Configuration
 
         private static void EnsureDefaultConfig(Config configuration)
         {
-            if(configuration.Create.ShaSectionHeading == null)
+            if (configuration.Create.ShaSectionHeading is null)
             {
+                _logger.Debug("Setting default Create.ShaSectionHeading configuration value");
                 configuration.Create.ShaSectionHeading = "SHA256 Hashes of the release artifacts";
             }
 
-            if(configuration.Create.ShaSectionLineFormat == null)
+            if (configuration.Create.ShaSectionLineFormat == null)
             {
+                _logger.Debug("Setting default Create.ShaSectionLineFormat configuration value");
                 configuration.Create.ShaSectionLineFormat = "- `{1}\t{0}`";
+            }
+
+            if (configuration.Close.IssueCommentFormat == null)
+            {
+                _logger.Debug("Setting default Close.IssueCommentFormat configuration value");
+                configuration.Close.IssueCommentFormat = Config.IssueCommentFormat;
             }
         }
     }

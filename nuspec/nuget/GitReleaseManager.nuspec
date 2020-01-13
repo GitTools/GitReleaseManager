@@ -1,27 +1,29 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<package xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
-  <metadata xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
-    <id>GitReleaseManager</id>
-    <title>GitReleaseManager</title>
-    <version>$version$</version>
-    <authors>GitTools Contributors</authors>
-    <owners>gep13</owners>
-    <license type="expression">MIT</license>
-    <projectUrl>https://github.com/GitTools/GitReleaseManager</projectUrl>
-    <repository type="git" url="https://github.com/GitTools/GitReleaseManager.git"/>
-    <iconUrl>https://cdn.jsdelivr.net/gh/GitTools/GitReleaseManager@9c547452a10afaf83fce1b5833f4762487b017b7/Icons/package_icon.svg</iconUrl>
-    <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>Tool for creating and exporting releases for software applications hosted on GitHub</description>
-    <summary>Tool for creating and exporting releases for software applications hosted on GitHub</summary>
-    <copyright>Copyright (c) 2015 - Present - GitTools Contributors</copyright>
-    <language>en-GB</language>
-    <tags>github release notes create export</tags>
-  </metadata>
-  <files>
-    <file src="..\..\BuildArtifacts\temp\_PublishedApplications\GitReleaseManager.Cli\net451\CommandLine.dll" target="tools" />
-    <file src="..\..\BuildArtifacts\temp\_PublishedApplications\GitReleaseManager.Cli\net451\GitReleaseManager.Core.dll" target="tools" />
-    <file src="..\..\BuildArtifacts\temp\_PublishedApplications\GitReleaseManager.Cli\net451\GitReleaseManager.exe" target="tools" />
-    <file src="..\..\BuildArtifacts\temp\_PublishedApplications\GitReleaseManager.Cli\net451\Octokit.dll" target="tools" />
-    <file src="..\..\BuildArtifacts\temp\_PublishedApplications\GitReleaseManager.Cli\net451\YamlDotNet.dll" target="tools" />
-  </files>
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <metadata xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+        <id>GitReleaseManager</id>
+        <title>GitReleaseManager</title>
+        <version>$version$</version>
+        <authors>GitTools Contributors</authors>
+        <owners>gep13</owners>
+        <license type="expression">MIT</license>
+        <projectUrl>https://github.com/GitTools/GitReleaseManager</projectUrl>
+        <repository type="git" url="https://github.com/GitTools/GitReleaseManager.git"/>
+        <icon>package_icon.png</icon>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>Tool for creating and exporting releases for software applications from online Version Control Systems</description>
+        <summary>Tool for creating and exporting releases for software applications</summary>
+        <copyright>Copyright (c) 2015 - Present - GitTools Contributors</copyright>
+        <language>en-GB</language>
+        <tags>github release notes create export</tags>
+    </metadata>
+    <files>
+        <file src="..\..\BuildArtifacts\temp\_PublishedApplications\GitReleaseManager.Cli\net461\*.exe" target="tools" />
+        <file src="..\..\BuildArtifacts\temp\_PublishedApplications\GitReleaseManager.Cli\net461\*.xml" target="tools" />
+        <file src="..\..\BuildArtifacts\temp\_PublishedApplications\GitReleaseManager.Cli\net461\*.dll" target="tools" exclude="**\Serilog.Sinks.Debug.dll" />
+        <file src="..\..\BuildArtifacts\temp\_PublishedApplications\GitReleaseManager.Cli\net461\*.pdb" target="tools" />
+        <file src="..\..\Icons\package_icon.png" target="" />
+    </files>
 </package>

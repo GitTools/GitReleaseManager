@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="OctokitExtensions.cs" company="GitTools Contributors">
 //     Copyright (c) 2015 - Present - GitTools Contributors
 // </copyright>
@@ -12,42 +12,40 @@ namespace GitReleaseManager.Core
     using System.Linq;
     using System.Threading.Tasks;
     using Octokit;
+    using Serilog;
 
     public static class OctokitExtensions
     {
+        private static readonly ILogger _logger = Log.ForContext(typeof(OctokitExtensions));
+
         public static bool IsPullRequest(this Issue issue)
         {
-            if (issue == null)
+            if (issue is null)
             {
-                throw new ArgumentNullException("issue");
+                throw new ArgumentNullException(nameof(issue));
             }
 
-            return issue.PullRequest != null;
+            return !(issue.PullRequest is null);
         }
 
-        public static async Task<IEnumerable<Issue>> AllIssuesForMilestone(this GitHubClient gitHubClient, Milestone milestone)
+        public static Task<IEnumerable<Issue>> AllIssuesForMilestone(this GitHubClient gitHubClient, Milestone milestone)
         {
-            var closedIssueRequest = new RepositoryIssueRequest
+            if (gitHubClient is null)
             {
-                Milestone = milestone.Number.ToString(CultureInfo.InvariantCulture),
-                State = ItemStateFilter.Closed
-            };
-            var openIssueRequest = new RepositoryIssueRequest
+                throw new ArgumentNullException(nameof(gitHubClient));
+            }
+
+            if (milestone is null)
             {
-                Milestone = milestone.Number.ToString(CultureInfo.InvariantCulture),
-                State = ItemStateFilter.Open
-            };
-            var parts = milestone.Url.Split('/');
-            var user = parts[4];
-            var repository = parts[5];
-            var closedIssues = await gitHubClient.Issue.GetAllForRepository(user, repository, closedIssueRequest);
-            var openIssues = await gitHubClient.Issue.GetAllForRepository(user, repository, openIssueRequest);
-            return openIssues.Union(closedIssues);
+                throw new ArgumentNullException(nameof(milestone));
+            }
+
+            return AllIssuesForMilestoneInternal(gitHubClient, milestone);
         }
 
         public static Uri HtmlUrl(this Milestone milestone)
         {
-            if (milestone == null)
+            if (milestone is null)
             {
                 throw new ArgumentNullException(nameof(milestone));
             }
@@ -57,6 +55,32 @@ namespace GitReleaseManager.Core
             var repository = parts[3];
 
             return new Uri(string.Format(CultureInfo.InvariantCulture, "https://github.com/{0}/{1}/issues?milestone={2}&state=closed", user, repository, milestone.Number));
+        }
+
+        private static async Task<IEnumerable<Issue>> AllIssuesForMilestoneInternal(GitHubClient gitHubClient, Milestone milestone)
+        {
+            var closedIssueRequest = new RepositoryIssueRequest
+            {
+                Milestone = milestone.Number.ToString(CultureInfo.InvariantCulture),
+                State = ItemStateFilter.Closed,
+            };
+
+            var openIssueRequest = new RepositoryIssueRequest
+            {
+                Milestone = milestone.Number.ToString(CultureInfo.InvariantCulture),
+                State = ItemStateFilter.Open,
+            };
+
+            var parts = milestone.Url.Split('/');
+            var user = parts[4];
+            var repository = parts[5];
+
+            _logger.Verbose("Finding closed issues for milestone {Milestone} on {Owner}/{Repository}", milestone.Title, user, repository);
+            var closedIssues = await gitHubClient.Issue.GetAllForRepository(user, repository, closedIssueRequest).ConfigureAwait(false);
+            _logger.Verbose("Finding open issues for milestone {Milestone} on {Owner}/{Repository}", milestone.Title, user, repository);
+            var openIssues = await gitHubClient.Issue.GetAllForRepository(user, repository, openIssueRequest).ConfigureAwait(false);
+
+            return openIssues.Union(closedIssues);
         }
     }
 }

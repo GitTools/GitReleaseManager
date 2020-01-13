@@ -1,0 +1,14 @@
+{
+    "$schema": "https://raw.githubusercontent.com/DotNetAnalyzers/StyleCopAnalyzers/master/StyleCop.Analyzers/StyleCop.Analyzers/Settings/stylecop.schema.json",
+    "settings": {
+        "documentationRules": {
+            "documentExposedElements": false, // Should be changed to true before publishing a library
+            "documentInterfaces": false, // Should be changed to true before publishing a library
+            "documentInternalElements": false,
+            "headerDecoration": "-----------------------------------------------------------------------",
+            "copyrightText": "Copyright (c) 2015 - Present - GitTools Contributors",
+            "companyName": "GitTools Contributors",
+            "xmlHeader": true
+        }
+    }
+}

@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="AddAssetSubOptions.cs" company="GitTools Contributors">
 //     Copyright (c) 2015 - Present - GitTools Contributors
 // </copyright>
@@ -10,7 +10,7 @@ namespace GitReleaseManager.Cli.Options
     using CommandLine;
 
     [Verb("addasset", HelpText = "Adds an asset to an existing release.")]
-    public class AddAssetSubOptions : BaseGitHubSubOptions
+    public class AddAssetSubOptions : BaseVcsOptions
     {
         [Option('a', "assets", Separator = ',', HelpText = "Paths to the files to include in the release.", Required = true)]
         public IList<string> AssetPaths { get; set; }

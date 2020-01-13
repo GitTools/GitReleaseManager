@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="ReleaseNotesExporterTests.cs" company="GitTools Contributors">
 //     Copyright (c) 2015 - Present - GitTools Contributors
 // </copyright>
@@ -12,45 +12,49 @@ namespace GitReleaseManager.Tests
     using GitReleaseManager.Core;
     using GitReleaseManager.Core.Configuration;
     using GitReleaseManager.Core.Helpers;
+    using GitReleaseManager.Core.Model;
     using NUnit.Framework;
-    using Octokit;
 
     [TestFixture]
     public class ReleaseNotesExporterTests
     {
-        private FileSystem fileSystem = new FileSystem();
-        private string currentDirectory = Environment.CurrentDirectory;
+        private readonly FileSystem _fileSystem = new FileSystem();
+        private readonly string _currentDirectory = Environment.CurrentDirectory;
 
         [Test]
         public void NoReleases()
         {
-            var configuration = ConfigurationProvider.Provide(this.currentDirectory, this.fileSystem);
+            var configuration = ConfigurationProvider.Provide(_currentDirectory, _fileSystem);
             AcceptTest(configuration);
+            Assert.True(true); // Just to make sonarlint happy
         }
 
         [Test]
         public void SingleRelease()
         {
-            var configuration = ConfigurationProvider.Provide(this.currentDirectory, this.fileSystem);
-            AcceptTest(configuration, CreateRelease(1, new DateTime(2015, 3, 12), "0.1.0"));
+            var configuration = ConfigurationProvider.Provide(_currentDirectory, _fileSystem);
+            AcceptTest(configuration, CreateRelease(new DateTime(2015, 3, 12), "0.1.0"));
+            Assert.True(true); // Just to make sonarlint happy
         }
 
         [Test]
         public void SingleReleaseExcludeCreatedDateInTitle()
         {
-            var configuration = ConfigurationProvider.Provide(this.currentDirectory, this.fileSystem);
+            var configuration = ConfigurationProvider.Provide(_currentDirectory, _fileSystem);
             configuration.Export.IncludeCreatedDateInTitle = false;
 
-            AcceptTest(configuration, CreateRelease(1, new DateTime(2015, 3, 12), "0.1.0"));
+            AcceptTest(configuration, CreateRelease(new DateTime(2015, 3, 12), "0.1.0"));
+            Assert.True(true); // Just to make sonarlint happy
         }
 
         [Test]
         public void SingleReleaseExcludeRegexRemoval()
         {
-            var configuration = ConfigurationProvider.Provide(this.currentDirectory, this.fileSystem);
+            var configuration = ConfigurationProvider.Provide(_currentDirectory, _fileSystem);
             configuration.Export.PerformRegexRemoval = false;
 
-            AcceptTest(configuration, CreateRelease(1, new DateTime(2015, 3, 12), "0.1.0"));
+            AcceptTest(configuration, CreateRelease(new DateTime(2015, 3, 12), "0.1.0"));
+            Assert.True(true); // Just to make sonarlint happy
         }
 
         private static void AcceptTest(Config configuration, params Release[] releases)
@@ -62,13 +66,13 @@ namespace GitReleaseManager.Tests
                 fakeClient.Releases.Add(release);
             }
 
-            var builder = new ReleaseNotesExporter(fakeClient, configuration);
+            var builder = new ReleaseNotesExporter(fakeClient, configuration, "bob", "repo");
             var notes = builder.ExportReleaseNotes(null).Result;
 
             Approvals.Verify(notes);
         }
 
-        private static Release CreateRelease(int id, DateTime createdDateTime, string milestone)
+        private static Release CreateRelease(DateTime createdDateTime, string milestone)
         {
             var stringBuilder = new StringBuilder();
             stringBuilder.AppendLine("As part of this release we had [3 issues](https://github.com/FakeRepository/issues/issues?milestone=0&state=closed) closed.");
@@ -86,7 +90,7 @@ namespace GitReleaseManager.Tests
             stringBuilder.AppendLine();
             stringBuilder.AppendLine("- [__#3__](http://example.com/3) Issue 3");
 
-            return new Release(null, null, null, null, id, null, milestone, "master", milestone, stringBuilder.ToString(), false, false, createdDateTime, null, null, null, null, null);
+            return new Release { TagName = milestone, Body = stringBuilder.ToString(), CreatedAt = createdDateTime };
         }
     }
 }

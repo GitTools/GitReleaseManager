@@ -4,15 +4,37 @@
 root = true
 
 [*]
-end_of_line = CRLF
+charset = utf-8 # Just for consistency
+# Indentation and spacing
+indent_size = 4
+indent_style = space
+tab_width = 4
+
+# New line preferences
+end_of_line = crlf
+insert_final_newline = false
+trim_trailing_whitespace = true
+
+[*.sh]
+end_of_line = lf
+
+[*.sln]
+# Visual studio defaults
+insert_final_newline = true
+indent_style = tab
+
+[*.md]
+trim_trailing_whitespace = false
+insert_final_newline = true # Conflicts with markdownlint when false
+indent_size = 2 # Incorrect indentation happens when this is not 2
+
+[*.{yml,yaml}]
+indent_size = 2 # Incorrect indentation happens when this is not 2
 
 [*.ps1]
+charset = utf-8-bom
 indent_style = space
 indent_size = 2
-
-[*.cs]
-indent_style = space
-indent_size = 4
 
 [*.js]
 indent_style = tab

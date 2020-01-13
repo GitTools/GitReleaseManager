@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="Program.cs" company="GitTools Contributors">
 //     Copyright (c) 2015 - Present - GitTools Contributors
 // </copyright>
@@ -7,30 +7,26 @@
 namespace GitReleaseManager.Cli
 {
     using System;
-    using System.Collections.Generic;
-    using System.Globalization;
     using System.IO;
-    using System.Linq;
     using System.Net;
-    using System.Security.Cryptography;
-    using System.Text;
+    using System.Reflection;
     using System.Threading.Tasks;
+    using AutoMapper;
     using CommandLine;
+    using GitReleaseManager.Cli.Logging;
     using GitReleaseManager.Cli.Options;
     using GitReleaseManager.Core;
     using GitReleaseManager.Core.Configuration;
     using GitReleaseManager.Core.Helpers;
-    using Octokit;
-    using FileMode = System.IO.FileMode;
+    using Serilog;
 
     public static class Program
     {
-        private static StringBuilder _log = new StringBuilder();
         private static FileSystem _fileSystem;
-        private static Config _configuration;
+        private static IMapper _mapper;
+        private static IVcsProvider _vcsProvider;
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "Not required")]
-        private static int Main(string[] args)
+        private static async Task<int> Main(string[] args)
         {
             // Just add the TLS 1.2 protocol to the Service Point manager until
             // we've upgraded to latest Octokit.
@@ -38,432 +34,220 @@ namespace GitReleaseManager.Cli
 
             _fileSystem = new FileSystem();
 
-            return Parser.Default.ParseArguments<CreateSubOptions, AddAssetSubOptions, CloseSubOptions, PublishSubOptions, ExportSubOptions, InitSubOptions, ShowConfigSubOptions, LabelSubOptions>(args)
-                .MapResult(
-                  (CreateSubOptions opts) => CreateReleaseAsync(opts).Result,
-                  (AddAssetSubOptions opts) => AddAssetsAsync(opts).Result,
-                  (CloseSubOptions opts) => CloseMilestoneAsync(opts).Result,
-                  (PublishSubOptions opts) => PublishReleaseAsync(opts).Result,
-                  (ExportSubOptions opts) => ExportReleasesAsync(opts).Result,
-                  (InitSubOptions opts) => CreateSampleConfigFile(opts),
-                  (ShowConfigSubOptions opts) => ShowConfig(opts),
-                  (LabelSubOptions opts) => CreateLabelsAsync(opts).Result,
-                  errs => 1);
+            _mapper = AutoMapperConfiguration.Configure();
+
+            try
+            {
+                return await Parser.Default.ParseArguments<CreateSubOptions, DiscardSubOptions, AddAssetSubOptions, CloseSubOptions, OpenSubOptions, PublishSubOptions, ExportSubOptions, InitSubOptions, ShowConfigSubOptions, LabelSubOptions>(args)
+                    .WithParsed<BaseSubOptions>(LogConfiguration.ConfigureLogging)
+                    .WithParsed<BaseSubOptions>(CreateFiglet)
+                    .WithParsed<BaseSubOptions>(LogOptions)
+                    .WithParsed<BaseVcsOptions>(ReportUsernamePasswordDeprecation)
+                    .MapResult(
+                    (CreateSubOptions opts) => CreateReleaseAsync(opts),
+                    (DiscardSubOptions opts) => DiscardReleaseAsync(opts),
+                    (AddAssetSubOptions opts) => AddAssetsAsync(opts),
+                    (CloseSubOptions opts) => CloseMilestoneAsync(opts),
+                    (OpenSubOptions opts) => OpenMilestoneAsync(opts),
+                    (PublishSubOptions opts) => PublishReleaseAsync(opts),
+                    (ExportSubOptions opts) => ExportReleasesAsync(opts),
+                    (InitSubOptions opts) => CreateSampleConfigFileAsync(opts),
+                    (ShowConfigSubOptions opts) => ShowConfigAsync(opts),
+                    (LabelSubOptions opts) => CreateLabelsAsync(opts),
+                    errs => Task.FromResult(1)).ConfigureAwait(false);
+            }
+            catch (AggregateException ex)
+            {
+                Log.Fatal("{Message}", ex.Message);
+                foreach (var innerException in ex.InnerExceptions)
+                {
+                    Log.Fatal(ex, "{Message}", ex.Message);
+                }
+
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                Log.Fatal(ex, "{Message}", ex.Message);
+                return 1;
+            }
+            finally
+            {
+                Log.CloseAndFlush();
+            }
+        }
+
+        private static void ReportUsernamePasswordDeprecation(BaseVcsOptions options)
+        {
+            if (!string.IsNullOrEmpty(options.UserName) || !string.IsNullOrEmpty(options.Password))
+            {
+                Log.Warning(BaseVcsOptions.OBSOLETE_MESSAGE);
+            }
+        }
+
+        private static void CreateFiglet(BaseSubOptions options)
+        {
+            if (options.NoLogo)
+            {
+                return;
+            }
+
+            var version = Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
+            if (version.IndexOf('+') >= 0)
+            {
+                version = version.Substring(0, version.IndexOf('+'));
+            }
+            // The following ugly formats is to prevent incorrect indentation
+            // detected by editorconfig formatters.
+            const string shortFormat = "\n   ____ ____  __  __\n"
+                + "  / ___|  _ \\|  \\/  |\n"
+                + " | |  _| |_) | |\\/| |\n"
+                + " | |_| |  _ <| |  | |\n"
+                + "  \\____|_| \\_\\_|  |_|\n"
+                + "{0,21}\n";
+            const string longFormat = "\n   ____ _ _   ____      _                     __  __\n"
+                + "  / ___(_) |_|  _ \\ ___| | ___  __ _ ___  ___|  \\/  | __ _ _ __   __ _  __ _  ___ _ __\n"
+                + " | |  _| | __| |_) / _ \\ |/ _ \\/ _` / __|/ _ \\ |\\/| |/ _` | '_ \\ / _` |/ _` |/ _ \\ '__|\n"
+                + " | |_| | | |_|  _ <  __/ |  __/ (_| \\__ \\  __/ |  | | (_| | | | | (_| | (_| |  __/ |\n"
+                + "  \\____|_|\\__|_| \\_\\___|_|\\___|\\__,_|___/\\___|_|  |_|\\__,_|_| |_|\\__,_|\\__, |\\___|_|\n"
+                + "                                                                       |___/\n"
+                + "{0,87}\n";
+            if (Console.WindowWidth > 87)
+            {
+                Log.Information(longFormat, version);
+            }
+            else
+            {
+                Log.Information(shortFormat, version);
+            }
         }
 
         private static async Task<int> CreateReleaseAsync(CreateSubOptions subOptions)
         {
-            try
+            Log.Information("Creating release...");
+            _vcsProvider = GetVcsProvider(subOptions);
+
+            Core.Model.Release release;
+            if (!string.IsNullOrEmpty(subOptions.Milestone))
             {
-                ConfigureLogging(subOptions.LogFilePath);
-
-                var github = subOptions.CreateGitHubClient();
-                _configuration = ConfigurationProvider.Provide(subOptions.TargetDirectory ?? Environment.CurrentDirectory, _fileSystem);
-
-                Release release;
-                if (!string.IsNullOrEmpty(subOptions.Milestone))
+                Log.Verbose("Milestone {Milestone} was specified", subOptions.Milestone);
+                var releaseName = subOptions.Name;
+                if (string.IsNullOrWhiteSpace(releaseName))
                 {
-                    var releaseName = subOptions.Name;
-                    if (string.IsNullOrWhiteSpace(releaseName))
-                    {
-                        releaseName = subOptions.Milestone;
-                    }
-
-                    release = await CreateReleaseFromMilestone(github, subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone, releaseName, subOptions.TargetCommitish, subOptions.AssetPaths, subOptions.Prerelease);
-                }
-                else
-                {
-                    release = await CreateReleaseFromInputFile(github, subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Name, subOptions.InputFilePath, subOptions.TargetCommitish, subOptions.AssetPaths, subOptions.Prerelease);
+                    Log.Verbose("No Release Name was specified, using {Milestone}.", subOptions.Milestone);
+                    releaseName = subOptions.Milestone;
                 }
 
-                Console.WriteLine(release.HtmlUrl);
-                return 0;
+                release = await _vcsProvider.CreateReleaseFromMilestone(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone, releaseName, subOptions.TargetCommitish, subOptions.AssetPaths, subOptions.Prerelease).ConfigureAwait(false);
             }
-            catch (Exception ex)
+            else
             {
-                Console.WriteLine(ex);
-
-                return 1;
+                Log.Verbose("No milestone was specified, switching to release creating from input file");
+                release = await _vcsProvider.CreateReleaseFromInputFile(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Name, subOptions.InputFilePath, subOptions.TargetCommitish, subOptions.AssetPaths, subOptions.Prerelease).ConfigureAwait(false);
             }
+
+            Log.Information("Drafted release is available at:\n{HtmlUrl}", release.HtmlUrl);
+            Log.Verbose("Body:\n{Body}", release.Body);
+            return 0;
+        }
+
+        private static async Task<int> DiscardReleaseAsync(DiscardSubOptions subOptions)
+        {
+            Log.Information("Discarding release {Milestone}", subOptions.Milestone);
+            _vcsProvider = GetVcsProvider(subOptions);
+
+            await _vcsProvider.DiscardRelease(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone);
+
+            return 0;
         }
 
         private static async Task<int> AddAssetsAsync(AddAssetSubOptions subOptions)
         {
-            try
-            {
-                ConfigureLogging(subOptions.LogFilePath);
+            Log.Information("Uploading assets");
+            _vcsProvider = GetVcsProvider(subOptions);
 
-                var github = subOptions.CreateGitHubClient();
-                _configuration = ConfigurationProvider.Provide(subOptions.TargetDirectory ?? Environment.CurrentDirectory, _fileSystem);
+            await _vcsProvider.AddAssets(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.TagName, subOptions.AssetPaths).ConfigureAwait(false);
 
-                await AddAssets(github, subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.TagName, subOptions.AssetPaths);
-
-                return 0;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-
-                return 1;
-            }
+            return 0;
         }
 
         private static async Task<int> CloseMilestoneAsync(CloseSubOptions subOptions)
         {
-            try
-            {
-                ConfigureLogging(subOptions.LogFilePath);
+            Log.Information("Closing milestone {Milestone}", subOptions.Milestone);
+            _vcsProvider = GetVcsProvider(subOptions);
 
-                var github = subOptions.CreateGitHubClient();
-                _configuration = ConfigurationProvider.Provide(subOptions.TargetDirectory ?? Environment.CurrentDirectory, _fileSystem);
+            await _vcsProvider.CloseMilestone(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone).ConfigureAwait(false);
 
-                await CloseMilestone(github, subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone);
+            return 0;
+        }
 
-                return 0;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
+        private static async Task<int> OpenMilestoneAsync(OpenSubOptions subOptions)
+        {
+            Log.Information("Opening milestone {Milestone}", subOptions.Milestone);
+            _vcsProvider = GetVcsProvider(subOptions);
 
-                return 1;
-            }
+            await _vcsProvider.OpenMilestone(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone).ConfigureAwait(false);
+
+            return 0;
         }
 
         private static async Task<int> PublishReleaseAsync(PublishSubOptions subOptions)
         {
-            try
-            {
-                ConfigureLogging(subOptions.LogFilePath);
+            _vcsProvider = GetVcsProvider(subOptions);
 
-                var github = subOptions.CreateGitHubClient();
-                _configuration = ConfigurationProvider.Provide(subOptions.TargetDirectory ?? Environment.CurrentDirectory, _fileSystem);
-
-                await PublishRelease(github, subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.TagName);
-
-                return 0;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-
-                return 1;
-            }
+            await _vcsProvider.PublishRelease(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.TagName).ConfigureAwait(false);
+            return 0;
         }
 
         private static async Task<int> ExportReleasesAsync(ExportSubOptions subOptions)
         {
-            try
+            Log.Information("Exporting release {TagName}", subOptions.TagName);
+            _vcsProvider = GetVcsProvider(subOptions);
+
+            var releasesMarkdown = await _vcsProvider.ExportReleases(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.TagName).ConfigureAwait(false);
+
+            using (var sw = new StreamWriter(File.Open(subOptions.FileOutputPath, FileMode.OpenOrCreate)))
             {
-                ConfigureLogging(subOptions.LogFilePath);
-
-                var github = subOptions.CreateGitHubClient();
-                _configuration = ConfigurationProvider.Provide(subOptions.TargetDirectory ?? Environment.CurrentDirectory, _fileSystem);
-
-                var releasesMarkdown = await ExportReleases(github, subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.TagName);
-
-                using (var sw = new StreamWriter(File.Open(subOptions.FileOutputPath, FileMode.OpenOrCreate)))
-                {
-                    sw.Write(releasesMarkdown);
-                }
-
-                return 0;
+                sw.Write(releasesMarkdown);
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
 
-                return 1;
-            }
-        }
-
-        private static int CreateSampleConfigFile(InitSubOptions subOptions)
-        {
-            ConfigureLogging(subOptions.LogFilePath);
-
-            ConfigurationProvider.WriteSample(subOptions.TargetDirectory ?? Environment.CurrentDirectory, _fileSystem);
             return 0;
         }
 
-        private static int ShowConfig(ShowConfigSubOptions subOptions)
+        private static Task<int> CreateSampleConfigFileAsync(InitSubOptions subOptions)
         {
-            ConfigureLogging(subOptions.LogFilePath);
+            Log.Information("Creating sample configuration file");
+            var directory = subOptions.TargetDirectory ?? Environment.CurrentDirectory;
+            ConfigurationProvider.WriteSample(directory, _fileSystem);
+            return Task.FromResult(0);
+        }
 
-            Console.WriteLine(ConfigurationProvider.GetEffectiveConfigAsString(subOptions.TargetDirectory ?? Environment.CurrentDirectory, _fileSystem));
-            return 0;
+        private static Task<int> ShowConfigAsync(ShowConfigSubOptions subOptions)
+        {
+            var configuration = ConfigurationProvider.GetEffectiveConfigAsString(subOptions.TargetDirectory ?? Environment.CurrentDirectory, _fileSystem);
+
+            Log.Information("{Configuration}", configuration);
+            return Task.FromResult(0);
         }
 
         private static async Task<int> CreateLabelsAsync(LabelSubOptions subOptions)
         {
-            try
-            {
-                ConfigureLogging(subOptions.LogFilePath);
+            Log.Information("Creating standard labels");
+            _vcsProvider = GetVcsProvider(subOptions);
 
-                var newLabels = new List<NewLabel>();
-                newLabels.Add(new NewLabel("Breaking change", "b60205"));
-                newLabels.Add(new NewLabel("Bug", "ee0701"));
-                newLabels.Add(new NewLabel("Build", "009800"));
-                newLabels.Add(new NewLabel("Documentation", "d4c5f9"));
-                newLabels.Add(new NewLabel("Feature", "84b6eb"));
-                newLabels.Add(new NewLabel("Improvement", "207de5"));
-                newLabels.Add(new NewLabel("Question", "cc317c"));
-                newLabels.Add(new NewLabel("good first issue", "7057ff"));
-                newLabels.Add(new NewLabel("help wanted", "33aa3f"));
-
-                var github = subOptions.CreateGitHubClient();
-                _configuration = ConfigurationProvider.Provide(subOptions.TargetDirectory ?? Environment.CurrentDirectory, _fileSystem);
-
-                var labels = await github.Issue.Labels.GetAllForRepository(subOptions.RepositoryOwner, subOptions.RepositoryName);
-
-                foreach (var label in labels)
-                {
-                    await github.Issue.Labels.Delete(subOptions.RepositoryOwner, subOptions.RepositoryName, label.Name);
-                }
-
-                foreach (var label in newLabels)
-                {
-                    await github.Issue.Labels.Create(subOptions.RepositoryOwner, subOptions.RepositoryName, label);
-                }
-
-                return 0;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-
-                return 1;
-            }
+            await _vcsProvider.CreateLabels(subOptions.RepositoryOwner, subOptions.RepositoryName).ConfigureAwait(false);
+            return 0;
         }
 
-        private static async Task<Release> CreateReleaseFromMilestone(GitHubClient github, string owner, string repository, string milestone, string releaseName, string targetCommitish, IList<string> assets, bool prerelease)
+        private static IVcsProvider GetVcsProvider(BaseVcsOptions subOptions)
         {
-            var releaseNotesBuilder = new ReleaseNotesBuilder(new DefaultGitHubClient(github, owner, repository), owner, repository, milestone, _configuration);
+            var configuration = ConfigurationProvider.Provide(subOptions.TargetDirectory ?? Environment.CurrentDirectory, _fileSystem);
 
-            var result = await releaseNotesBuilder.BuildReleaseNotes();
-
-            var releaseUpdate = CreateNewRelease(releaseName, milestone, result, prerelease, targetCommitish);
-
-            var release = await github.Repository.Release.Create(owner, repository, releaseUpdate);
-
-            await AddAssets(github, owner, repository, assets, release);
-
-            return release;
+            Log.Information("Using {Provider} as VCS Provider", "GitHub");
+            return new GitHubProvider(_mapper, configuration, subOptions.UserName, subOptions.Password, subOptions.Token);
         }
 
-        private static async Task<Release> CreateReleaseFromInputFile(GitHubClient github, string owner, string repository, string name, string inputFilePath, string targetCommitish, IList<string> assets, bool prerelease)
-        {
-            if (!File.Exists(inputFilePath))
-            {
-                throw new ArgumentException("Unable to locate input file.");
-            }
-
-            var inputFileContents = File.ReadAllText(inputFilePath);
-
-            var releaseUpdate = CreateNewRelease(name, name, inputFileContents, prerelease, targetCommitish);
-
-            var release = await github.Repository.Release.Create(owner, repository, releaseUpdate);
-
-            await AddAssets(github, owner, repository, assets, release);
-
-            return release;
-        }
-
-        private static async Task AddAssets(GitHubClient github, string owner, string repository, string tagName, IList<string> assets)
-        {
-            var releases = await github.Repository.Release.GetAll(owner, repository);
-
-            var release = releases.FirstOrDefault(r => r.TagName == tagName);
-
-            if (release == null)
-            {
-                Logger.WriteError("Unable to find Release with specified tagName");
-                return;
-            }
-
-            await AddAssets(github, owner, repository, assets, release);
-        }
-
-        private static async Task<string> ExportReleases(GitHubClient github, string owner, string repository, string tagName)
-        {
-            var releaseNotesExporter = new ReleaseNotesExporter(new DefaultGitHubClient(github, owner, repository), _configuration);
-
-            var result = await releaseNotesExporter.ExportReleaseNotes(tagName);
-
-            return result;
-        }
-
-        private static async Task CloseMilestone(GitHubClient github, string owner, string repository, string milestoneTitle)
-        {
-            var milestoneClient = github.Issue.Milestone;
-            var openMilestones = await milestoneClient.GetAllForRepository(owner, repository, new MilestoneRequest { State = ItemStateFilter.Open });
-            var milestone = openMilestones.FirstOrDefault(m => m.Title == milestoneTitle);
-
-            if (milestone == null)
-            {
-                return;
-            }
-
-            await milestoneClient.Update(owner, repository, milestone.Number, new MilestoneUpdate { State = ItemState.Closed });
-        }
-
-        private static async Task PublishRelease(GitHubClient github, string owner, string repository, string tagName)
-        {
-            var releases = await github.Repository.Release.GetAll(owner, repository);
-            var release = releases.FirstOrDefault(r => r.TagName == tagName);
-
-            if (release == null)
-            {
-                return;
-            }
-
-            var releaseUpdate = new ReleaseUpdate { TagName = tagName, Draft = false };
-
-            await github.Repository.Release.Edit(owner, repository, release.Id, releaseUpdate);
-        }
-
-        private static async Task AddAssets(GitHubClient github, string owner, string repository, IList<string> assets, Release release)
-        {
-            if (assets != null)
-            {
-                foreach (var asset in assets)
-                {
-                    if (!File.Exists(asset))
-                    {
-                        continue;
-                    }
-
-                    var upload = new ReleaseAssetUpload
-                    {
-                        FileName = Path.GetFileName(asset),
-                        ContentType = "application/octet-stream",
-                        RawData = File.Open(asset, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)
-                    };
-
-                    await github.Repository.Release.UploadAsset(release, upload);
-
-                    // Make sure to tidy up the stream that was created above
-                    upload.RawData.Dispose();
-                }
-
-                await AddAssetsSha256(github, owner, repository, assets, release);
-            }
-        }
-
-        private static async Task AddAssetsSha256(GitHubClient github, string owner, string repository, IList<string> assets, Release release)
-        {
-            if (assets != null && assets.Any() && _configuration.Create.IncludeShaSection)
-            {
-                var stringBuilder = new StringBuilder(release.Body);
-
-                if (!release.Body.Contains(_configuration.Create.ShaSectionHeading))
-                {
-                    stringBuilder.AppendLine(string.Format("### {0}", _configuration.Create.ShaSectionHeading));
-                }
-
-                foreach (var asset in assets)
-                {
-                    var file = new FileInfo(asset);
-
-                    if (!file.Exists)
-                    {
-                        continue;
-                    }
-
-                    stringBuilder.AppendFormat(_configuration.Create.ShaSectionLineFormat, file.Name, ComputeSha256Hash(asset));
-                    stringBuilder.AppendLine();
-                }
-
-                stringBuilder.AppendLine();
-
-                var releaseUpdate = release.ToUpdate();
-                releaseUpdate.Body = stringBuilder.ToString();
-                await github.Repository.Release.Edit(owner, repository, release.Id, releaseUpdate);
-            }
-        }
-
-        private static NewRelease CreateNewRelease(string name, string tagName, string body, bool prerelease, string targetCommitish)
-        {
-            var newRelease = new NewRelease(tagName)
-            {
-                Draft = true,
-                Body = body,
-                Name = name,
-                Prerelease = prerelease
-            };
-
-            if (!string.IsNullOrEmpty(targetCommitish))
-            {
-                newRelease.TargetCommitish = targetCommitish;
-            }
-
-            return newRelease;
-        }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "Not required.")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "This is required here.")]
-        private static void ConfigureLogging(string logFilePath)
-        {
-            var writeActions = new List<Action<string>>
-            {
-                s => _log.AppendLine(s)
-            };
-
-            if (!string.IsNullOrEmpty(logFilePath))
-            {
-                try
-                {
-                    Directory.CreateDirectory(Path.GetDirectoryName(logFilePath));
-                    if (File.Exists(logFilePath))
-                    {
-                        using (File.CreateText(logFilePath))
-                        {
-                        }
-                    }
-
-                    writeActions.Add(x => WriteLogEntry(logFilePath, x));
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("Failed to configure logging: " + ex.Message);
-                }
-            }
-            else
-            {
-                // if nothing else is specified, write to console
-                writeActions.Add(Console.WriteLine);
-            }
-
-            Logger.WriteInfo = s => writeActions.ForEach(a => a(s));
-            Logger.WriteWarning = s => writeActions.ForEach(a => a(s));
-            Logger.WriteError = s => writeActions.ForEach(a => a(s));
-        }
-
-        private static void WriteLogEntry(string logFilePath, string s)
-        {
-            var contents = string.Format(CultureInfo.InvariantCulture, "{0}\t\t{1}\r\n", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture), s);
-            File.AppendAllText(logFilePath, contents);
-        }
-
-        private static string ComputeSha256Hash(string asset)
-        {
-            // Create a SHA256
-            using (var sha256Hash = SHA256.Create())
-            {
-                using (var fileStream = File.Open(asset, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-                {
-                    // ComputeHash - returns byte array
-                    var bytes = sha256Hash.ComputeHash(fileStream);
-
-                    // Convert byte array to a string
-                    var builder = new StringBuilder();
-
-                    foreach (var t in bytes)
-                    {
-                        builder.Append(t.ToString("x2"));
-                    }
-
-                    return builder.ToString();
-                }
-            }
-        }
+        private static void LogOptions(BaseSubOptions options)
+            => Log.Debug("{@Options}", options);
     }
 }

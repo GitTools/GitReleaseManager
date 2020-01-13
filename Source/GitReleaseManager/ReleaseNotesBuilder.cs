@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="ReleaseNotesBuilder.cs" company="GitTools Contributors">
 //     Copyright (c) 2015 - Present - GitTools Contributors
 // </copyright>
@@ -14,36 +14,46 @@ namespace GitReleaseManager.Core
     using System.Text;
     using System.Threading.Tasks;
     using GitReleaseManager.Core.Configuration;
-    using Octokit;
+    using GitReleaseManager.Core.Extensions;
+    using GitReleaseManager.Core.Model;
+    using Serilog;
 
     public class ReleaseNotesBuilder
     {
-        private IGitHubClient gitHubClient;
-        private string user;
-        private string repository;
-        private string milestoneTitle;
-        private ReadOnlyCollection<Milestone> milestones;
-        private Milestone targetMilestone;
-        private Config configuration;
+        private readonly ILogger _logger = Log.ForContext<ReleaseNotesBuilder>();
+        private readonly IVcsProvider _vcsProvider;
+        private readonly string _user;
+        private readonly string _repository;
+        private readonly string _milestoneTitle;
+        private readonly Config _configuration;
+        private ReadOnlyCollection<Milestone> _milestones;
+        private Milestone _targetMilestone;
 
-        public ReleaseNotesBuilder(IGitHubClient gitHubClient, string user, string repository, string milestoneTitle, Config configuration)
+        public ReleaseNotesBuilder(IVcsProvider vcsProvider, string user, string repository, string milestoneTitle, Config configuration)
         {
-            this.gitHubClient = gitHubClient;
-            this.user = user;
-            this.repository = repository;
-            this.milestoneTitle = milestoneTitle;
-            this.configuration = configuration;
+            _vcsProvider = vcsProvider;
+            _user = user;
+            _repository = repository;
+            _milestoneTitle = milestoneTitle;
+            _configuration = configuration;
         }
 
         public async Task<string> BuildReleaseNotes()
         {
-            this.LoadMilestones();
-            this.GetTargetMilestone();
+            _logger.Verbose("Building release notes...");
+            await LoadMilestones().ConfigureAwait(false);
+            GetTargetMilestone();
 
-            var issues = await this.GetIssues(this.targetMilestone);
+            var issues = await GetIssues(_targetMilestone).ConfigureAwait(false);
             var stringBuilder = new StringBuilder();
-            var previousMilestone = this.GetPreviousMilestone();
-            var numberOfCommits = await this.gitHubClient.GetNumberOfCommitsBetween(previousMilestone, this.targetMilestone);
+            var previousMilestone = GetPreviousMilestone();
+            var numberOfCommits = await _vcsProvider.GetNumberOfCommitsBetween(previousMilestone, _targetMilestone, _user, _repository).ConfigureAwait(false);
+
+            if (issues.Count == 0)
+            {
+                var logMessage = string.Format("No closed issues have been found for milestone {0}, or all assigned issues are meant to be excluded from release notes, aborting creation of release.", _milestoneTitle);
+                throw new InvalidOperationException(logMessage);
+            }
 
             if (issues.Count > 0)
             {
@@ -51,34 +61,36 @@ namespace GitReleaseManager.Core
 
                 if (numberOfCommits > 0)
                 {
-                    var commitsLink = this.GetCommitsLink(previousMilestone);
+                    var commitsLink = _vcsProvider.GetCommitsLink(_user, _repository, _targetMilestone, previousMilestone);
                     var commitsText = string.Format(numberOfCommits == 1 ? "{0} commit" : "{0} commits", numberOfCommits);
 
-                    stringBuilder.AppendFormat(@"As part of this release we had [{0}]({1}) which resulted in [{2}]({3}) being closed.", commitsText, commitsLink, issuesText, this.targetMilestone.HtmlUrl + "?closed=1");
+                    stringBuilder.AppendFormat(@"As part of this release we had [{0}]({1}) which resulted in [{2}]({3}) being closed.", commitsText, commitsLink, issuesText, _targetMilestone.HtmlUrl + "?closed=1");
                 }
                 else
                 {
-                    stringBuilder.AppendFormat(@"As part of this release we had [{0}]({1}) closed.", issuesText, this.targetMilestone.HtmlUrl + "?closed=1");
+                    stringBuilder.AppendFormat(@"As part of this release we had [{0}]({1}) closed.", issuesText, _targetMilestone.HtmlUrl + "?closed=1");
                 }
             }
             else if (numberOfCommits > 0)
             {
-                var commitsLink = this.GetCommitsLink(previousMilestone);
+                var commitsLink = _vcsProvider.GetCommitsLink(_user, _repository, _targetMilestone, previousMilestone);
                 var commitsText = string.Format(numberOfCommits == 1 ? "{0} commit" : "{0} commits", numberOfCommits);
                 stringBuilder.AppendFormat(@"As part of this release we had [{0}]({1}).", commitsText, commitsLink);
             }
 
             stringBuilder.AppendLine();
 
-            stringBuilder.AppendLine(this.targetMilestone.Description);
+            stringBuilder.AppendLine(_targetMilestone.Description);
             stringBuilder.AppendLine();
 
-            this.AddIssues(stringBuilder, issues);
+            AddIssues(stringBuilder, issues);
 
-            if (this.configuration.Create.IncludeFooter)
+            if (_configuration.Create.IncludeFooter)
             {
-                this.AddFooter(stringBuilder);
+                AddFooter(stringBuilder);
             }
+
+            _logger.Verbose("Finished building release notes");
 
             return stringBuilder.ToString();
         }
@@ -89,8 +101,8 @@ namespace GitReleaseManager.Core
 
             if (features.Count > 0)
             {
-                var singular = this.GetLabel(label, alias => alias.Header) ?? label;
-                var plural = this.GetLabel(label, alias => alias.Plural) ?? label + "s";
+                var singular = GetLabel(label, alias => alias.Header) ?? label;
+                var plural = GetLabel(label, alias => alias.Plural) ?? label + "s";
                 stringBuilder.AppendFormat("__{0}__\r\n\r\n", features.Count == 1 ? singular : plural);
 
                 foreach (var issue in features)
@@ -104,24 +116,25 @@ namespace GitReleaseManager.Core
 
         private string GetLabel(string label, Func<LabelAlias, string> func)
         {
-            var alias = this.configuration.LabelAliases.FirstOrDefault(x => x.Name.Equals(label, StringComparison.OrdinalIgnoreCase));
+            var alias = _configuration.LabelAliases.FirstOrDefault(x => x.Name.Equals(label, StringComparison.OrdinalIgnoreCase));
             return alias != null ? func(alias) : null;
         }
 
-        private void CheckForValidLabels(Issue issue)
+        private bool CheckForValidLabels(Issue issue)
         {
-            var count = 0;
+            var includedIssuesCount = 0;
+            var excludedIssuesCount = 0;
 
             foreach (var issueLabel in issue.Labels)
             {
-                count += this.configuration.IssueLabelsInclude.Count(issueToInclude => issueLabel.Name.ToUpperInvariant() == issueToInclude.ToUpperInvariant());
+                includedIssuesCount += _configuration.IssueLabelsInclude.Count(issueToInclude => issueLabel.Name.ToUpperInvariant() == issueToInclude.ToUpperInvariant());
 
-                count += this.configuration.IssueLabelsExclude.Count(issueToExclude => issueLabel.Name.ToUpperInvariant() == issueToExclude.ToUpperInvariant());
+                excludedIssuesCount += _configuration.IssueLabelsExclude.Count(issueToExclude => issueLabel.Name.ToUpperInvariant() == issueToExclude.ToUpperInvariant());
             }
 
-            if (count != 1)
+            if (includedIssuesCount + excludedIssuesCount != 1)
             {
-                var allIssueLabels = this.configuration.IssueLabelsInclude.Union(this.configuration.IssueLabelsExclude).ToList();
+                var allIssueLabels = _configuration.IssueLabelsInclude.Union(_configuration.IssueLabelsExclude).ToList();
                 var allIssuesExceptLast = allIssueLabels.Take(allIssueLabels.Count - 1);
                 var lastLabel = allIssueLabels.Last();
 
@@ -130,65 +143,79 @@ namespace GitReleaseManager.Core
                 var message = string.Format(CultureInfo.InvariantCulture, "Bad Issue {0} expected to find a single label with either {1} or {2}.", issue.HtmlUrl, allIssuesExceptLastString, lastLabel);
                 throw new InvalidOperationException(message);
             }
+
+            if (includedIssuesCount > 0)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         private void AddIssues(StringBuilder stringBuilder, List<Issue> issues)
         {
-            foreach (var issueLabel in this.configuration.IssueLabelsInclude)
+            foreach (var issueLabel in _configuration.IssueLabelsInclude)
             {
-                this.Append(issues, issueLabel, stringBuilder);
+                Append(issues, issueLabel, stringBuilder);
             }
         }
 
         private Milestone GetPreviousMilestone()
         {
-            var currentVersion = this.targetMilestone.Version();
-            return this.milestones
-                .OrderByDescending(m => m.Version())
-                .Distinct().ToList()
-                .SkipWhile(x => x.Version() >= currentVersion)
+            var currentVersion = _targetMilestone.Version;
+            return _milestones
+                .OrderByDescending(m => m.Version)
+                .Distinct()
+                .SkipWhile(x => x.Version >= currentVersion)
                 .FirstOrDefault();
-        }
-
-        private string GetCommitsLink(Milestone previousMilestone)
-        {
-            if (previousMilestone == null)
-            {
-                return string.Format(CultureInfo.InvariantCulture, "https://github.com/{0}/{1}/commits/{2}", this.user, this.repository, this.targetMilestone.Title);
-            }
-
-            return string.Format(CultureInfo.InvariantCulture, "https://github.com/{0}/{1}/compare/{2}...{3}", this.user, this.repository, previousMilestone.Title, this.targetMilestone.Title);
         }
 
         private void AddFooter(StringBuilder stringBuilder)
         {
-            stringBuilder.AppendLine(string.Format(CultureInfo.InvariantCulture, "### {0}", this.configuration.Create.FooterHeading));
+            stringBuilder.AppendLine(string.Format(CultureInfo.InvariantCulture, "### {0}", _configuration.Create.FooterHeading));
 
-            var footerContent = this.configuration.Create.FooterContent;
+            var footerContent = _configuration.Create.FooterContent;
 
-            if (this.configuration.Create.FooterIncludesMilestone)
+            if (_configuration.Create.FooterIncludesMilestone
+                && !string.IsNullOrEmpty(_configuration.Create.MilestoneReplaceText))
             {
-                if (!string.IsNullOrEmpty(this.configuration.Create.MilestoneReplaceText))
-                {
-                    footerContent = footerContent.Replace(this.configuration.Create.MilestoneReplaceText, this.milestoneTitle);
-                }
+                var replaceValues = new Dictionary<string, object>
+                    {
+                        { _configuration.Create.MilestoneReplaceText.Trim('{', '}'), _milestoneTitle },
+                    };
+                footerContent = footerContent.ReplaceTemplate(replaceValues);
             }
 
             stringBuilder.Append(footerContent);
             stringBuilder.AppendLine();
         }
 
-        private void LoadMilestones()
+        private async Task LoadMilestones()
         {
-            this.milestones = this.gitHubClient.GetMilestones();
+            _milestones = await _vcsProvider.GetReadOnlyMilestonesAsync(_user, _repository).ConfigureAwait(false);
         }
 
         private async Task<List<Issue>> GetIssues(Milestone milestone)
         {
-            var issues = await this.gitHubClient.GetIssues(milestone);
+            var issues = await _vcsProvider.GetIssuesAsync(milestone).ConfigureAwait(false);
+
+            var hasIncludedIssues = false;
+
             foreach (var issue in issues)
             {
-                this.CheckForValidLabels(issue);
+                if (CheckForValidLabels(issue))
+                {
+                    hasIncludedIssues = true;
+                }
+            }
+
+            // If there are no issues assigned to the milestone that have a label that is part
+            // of the labels to include array, then that is essentially the same as having no
+            // closed issues assigned to the milestone.  In this scenario, we want to raise an
+            // error, so return an emtpy issues list.
+            if (!hasIncludedIssues)
+            {
+                return new List<Issue>();
             }
 
             return issues;
@@ -196,11 +223,11 @@ namespace GitReleaseManager.Core
 
         private void GetTargetMilestone()
         {
-            this.targetMilestone = this.milestones.FirstOrDefault(x => x.Title == this.milestoneTitle);
+            _targetMilestone = _milestones.FirstOrDefault(x => x.Title == _milestoneTitle);
 
-            if (this.targetMilestone == null)
+            if (_targetMilestone == null)
             {
-                throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "Could not find milestone for '{0}'.", this.milestoneTitle));
+                throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "Could not find milestone for '{0}'.", _milestoneTitle));
             }
         }
     }
