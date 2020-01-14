@@ -23,6 +23,7 @@
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <RepositoryType>git</RepositoryType>
         <RepositoryUrl>https://github.com/GitTools/GitReleaseManager.git</RepositoryUrl>
+        <PackageVersion Condition="'$(PackageVersion)'!=''">$(PackageVersion.ToLower())</PackageVersion>
     </PropertyGroup>
     <ItemGroup>
         <Compile Include="..\SolutionInfo.cs" Link="SolutionInfo.cs" />
