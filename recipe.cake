@@ -1,7 +1,8 @@
 #load nuget:https://www.myget.org/F/cake-contrib/api/v2?package=Cake.Recipe&version=2.0.0-unstable0023&prerelease
 
 Environment.SetVariableNames(githubUserNameVariable: "GITTOOLS_GITHUB_USERNAME",
-                            githubPasswordVariable: "GITTOOLS_GITHUB_PASSWORD");
+                            githubPasswordVariable: "GITTOOLS_GITHUB_PASSWORD",
+                            githubTokenVariable: "GITTOOLS_GITHUB_TOKEN");
 
 BuildParameters.SetParameters(context: Context,
                             buildSystem: BuildSystem,
@@ -13,7 +14,9 @@ BuildParameters.SetParameters(context: Context,
                             shouldRunGitVersion: true,
                             shouldRunDotNetCorePack: true,
                             shouldRunIntegrationTests: true,
-                            integrationTestScriptPath: "./tests/integration/tests.cake");
+                            integrationTestScriptPath: "./tests/integration/tests.cake",
+                            twitterMessage: "A new version of GitReleaseManager has just been released.  Get it from Chocolatey, NuGet, or as a .Net Global Tool.",
+                            gitterMessage: "@/all A new version of GitReleaseManager has just been released.  Get it from Chocolatey, NuGet, or as a .Net Global Tool.");
 
 BuildParameters.PackageSources.Add(new PackageSourceData(Context, "GPR", "https://nuget.pkg.github.com/GitTools/index.json", FeedType.NuGet, false));
 
