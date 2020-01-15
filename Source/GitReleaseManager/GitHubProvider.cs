@@ -303,7 +303,7 @@ namespace GitReleaseManager.Core
 
             if (_configuration.Close.IssueComments)
             {
-                await AddIssueCommentsAsync(owner, repository, milestoneTitle).ConfigureAwait(false);
+                await AddIssueCommentsAsync(owner, repository, milestone).ConfigureAwait(false);
             }
         }
 
@@ -411,11 +411,11 @@ namespace GitReleaseManager.Core
             }
         }
 
-        private async Task AddIssueCommentsAsync(string owner, string repository, string milestone)
+        private async Task AddIssueCommentsAsync(string owner, string repository, Octokit.Milestone milestone)
         {
             const string detectionComment = "<!-- GitReleaseManager release comment -->";
-            var issueComment = detectionComment + "\n" + _configuration.Close.IssueCommentFormat.ReplaceTemplate(new { owner, repository, Milestone = milestone });
-            var issues = await GetIssuesFromMilestoneAsync(owner, repository, milestone).ConfigureAwait(false);
+            var issueComment = detectionComment + "\n" + _configuration.Close.IssueCommentFormat.ReplaceTemplate(new { owner, repository, Milestone = milestone.Title });
+            var issues = await GetIssuesFromMilestoneAsync(owner, repository, milestone.Number).ConfigureAwait(false);
 
             foreach (var issue in issues)
             {
@@ -472,12 +472,12 @@ namespace GitReleaseManager.Core
             return _mapper.Map<Octokit.Release, Release>(release);
         }
 
-        private Task<IReadOnlyList<Octokit.Issue>> GetIssuesFromMilestoneAsync(string owner, string repository, string milestone, ItemStateFilter state = ItemStateFilter.Closed)
+        private Task<IReadOnlyList<Octokit.Issue>> GetIssuesFromMilestoneAsync(string owner, string repository, int milestoneNumber, ItemStateFilter state = ItemStateFilter.Closed)
         {
-            _logger.Verbose("Finding issues with milestone: '{Milestone}", milestone);
+            _logger.Verbose("Finding issues with milestone: '{Milestone}", milestoneNumber);
             return _gitHubClient.Issue.GetAllForRepository(owner, repository, new RepositoryIssueRequest
             {
-                Milestone = milestone,
+                Milestone = milestoneNumber.ToString(),
                 State = state,
             });
         }
