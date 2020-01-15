@@ -112,13 +112,36 @@ namespace GitReleaseManager.Cli
                 + "  \\____|_|\\__|_| \\_\\___|_|\\___|\\__,_|___/\\___|_|  |_|\\__,_|_| |_|\\__,_|\\__, |\\___|_|\n"
                 + "                                                                       |___/\n"
                 + "{0,87}\n";
-            if (Console.WindowWidth > 87)
+
+            if (GetConsoleWidth() > 87)
             {
                 Log.Information(longFormat, version);
             }
             else
             {
                 Log.Information(shortFormat, version);
+            }
+        }
+
+        private static int GetConsoleWidth()
+        {
+            try
+            {
+                return Console.WindowWidth;
+            }
+            catch
+            {
+                Log.Verbose("Unable to get the width of the console.");
+            }
+
+            try
+            {
+                return Console.BufferWidth;
+            }
+            catch
+            {
+                Log.Verbose("Unable to get the width of the buffer");
+                return int.MaxValue;
             }
         }
 
