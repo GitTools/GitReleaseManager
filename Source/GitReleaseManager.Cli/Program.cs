@@ -61,7 +61,7 @@ namespace GitReleaseManager.Cli
                 Log.Fatal("{Message}", ex.Message);
                 foreach (var innerException in ex.InnerExceptions)
                 {
-                    Log.Fatal(ex, "{Message}", ex.Message);
+                    Log.Fatal(innerException, "{Message}", innerException.Message);
                 }
 
                 return 1;
