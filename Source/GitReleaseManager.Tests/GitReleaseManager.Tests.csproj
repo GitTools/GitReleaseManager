@@ -18,6 +18,6 @@
         <PackageReference Include="ApprovalTests" Version="4.5.0" />
         <PackageReference Include="NUnit" Version="3.12.0" />
         <PackageReference Include="NUnit3TestAdapter" Version="3.16.1" />
-        <PackageReference Include="Octokit" Version="0.40.0" />
+        <PackageReference Include="Octokit" Version="0.41.0" />
     </ItemGroup>
 </Project>
