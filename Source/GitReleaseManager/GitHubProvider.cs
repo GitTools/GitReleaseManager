@@ -153,7 +153,7 @@ namespace GitReleaseManager.Core
             {
                 _logger.Warning("A release for milestone {Milestone} already exists, and will be updated", milestone);
 
-                if (!release.Draft)
+                if (!release.Draft && !_configuration.Create.AllowUpdatePublishedRelease)
                 {
                     throw new InvalidOperationException("Release is not in draft state, so not updating.");
                 }

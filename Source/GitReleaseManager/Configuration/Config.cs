@@ -32,6 +32,7 @@ Your **[GitReleaseManager](https://github.com/GitTools/GitReleaseManager)** bot 
                 IncludeShaSection = false,
                 ShaSectionHeading = "SHA256 Hashes of the release artifacts",
                 ShaSectionLineFormat = "- `{1}\t{0}`",
+                AllowUpdatePublishedRelease = false,
             };
 
             Export = new ExportConfig
