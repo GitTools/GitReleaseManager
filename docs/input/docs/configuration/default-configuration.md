@@ -106,7 +106,7 @@ control the look and feel of the generated release notes.
         in version 0.9.0 of GitReleaseManager.
 - **allow-update-to-published**
   - A boolean value which indicates whether or not updates can be applied to
-        published releases.  The default value is false.   **NOTE:** This
+        published releases. The default value is false. **NOTE:** This
         configuration option was added in version 0.11.0 of GitReleaseManager.
 
 See the [example create configuration section](create-configuration) to see an
