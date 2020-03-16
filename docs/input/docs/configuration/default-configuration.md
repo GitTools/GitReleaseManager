@@ -20,6 +20,7 @@ create:
     include-sha-section: false
     sha-section-heading: "SHA256 Hashes of the release artifacts"
     sha-section-line-format: "- `{1}\t{0}`"
+    allow-update-to-published: false
 export:
     include-created-date-in-title: false
     created-date-string-format: ''
@@ -103,6 +104,10 @@ control the look and feel of the generated release notes.
         used when creating the SHA256 hash entries in the release notes.
         Default is ``- `{1}\t{0}` `` **NOTE:** This configuration option was added
         in version 0.9.0 of GitReleaseManager.
+- **allow-update-to-published**
+  - A boolean value which indicates whether or not updates can be applied to
+        published releases.  The default value is false.   **NOTE:** This
+        configuration option was added in version 0.11.0 of GitReleaseManager.
 
 See the [example create configuration section](create-configuration) to see an
 example of how a footer can be configured.
