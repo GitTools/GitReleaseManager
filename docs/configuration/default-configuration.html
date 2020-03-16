@@ -177,6 +177,7 @@ when no yaml file is placed in the root directory):</p>
     include-sha-section: false
     sha-section-heading: "SHA256 Hashes of the release artifacts"
     sha-section-line-format: "- `{1}\t{0}`"
+    allow-update-to-published: false
 export:
     include-created-date-in-title: false
     created-date-string-format: ''
@@ -277,6 +278,13 @@ in version 0.9.0 of GitReleaseManager.</li>
 used when creating the SHA256 hash entries in the release notes.
 Default is <code>- `{1}\t{0}` </code> <strong>NOTE:</strong> This configuration option was added
 in version 0.9.0 of GitReleaseManager.</li>
+</ul>
+</li>
+<li><strong>allow-update-to-published</strong>
+<ul>
+<li>A boolean value which indicates whether or not updates can be applied to
+published releases. The default value is false. <strong>NOTE:</strong> This
+configuration option was added in version 0.11.0 of GitReleaseManager.</li>
 </ul>
 </li>
 </ul>

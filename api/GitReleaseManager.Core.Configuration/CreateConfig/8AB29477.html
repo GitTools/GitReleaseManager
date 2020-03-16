@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="shortcut icon" href="/GitReleaseManager/assets/img/favicon.ico" type="image/x-icon">
         <link rel="icon" href="/GitReleaseManager/assets/img/favicon.ico" type="image/x-icon">
-        <title>GitReleaseManager - API - CreateConfig.IncludeFooter Property</title>
+        <title>GitReleaseManager - API - CreateConfig.AllowUpdateToPublishedRelease Property</title>
         <link href="/GitReleaseManager/assets/css/highlight.css" rel="stylesheet">
         <link href="/GitReleaseManager/assets/css/bootstrap/bootstrap.css" rel="stylesheet">
         <link href="/GitReleaseManager/assets/css/adminlte/AdminLTE.css" rel="stylesheet">
@@ -138,11 +138,11 @@
 		<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.Configuration/CreateConfig">CreateConfig</a></li>
 		<li role="separator" class="divider"></li>
 			<li class="header">Property Members</li>
-				<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.Configuration/CreateConfig/8AB29477">Allow<wbr>Update<wbr>To<wbr>Published<wbr>Release</a></li>
+				<li class="selected"><a href="/GitReleaseManager/api/GitReleaseManager.Core.Configuration/CreateConfig/8AB29477">Allow<wbr>Update<wbr>To<wbr>Published<wbr>Release</a></li>
 				<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.Configuration/CreateConfig/1067D093">FooterContent</a></li>
 				<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.Configuration/CreateConfig/7868A16F">FooterHeading</a></li>
 				<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.Configuration/CreateConfig/747FD816">Footer<wbr>Includes<wbr>Milestone</a></li>
-				<li class="selected"><a href="/GitReleaseManager/api/GitReleaseManager.Core.Configuration/CreateConfig/83C3B726">IncludeFooter</a></li>
+				<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.Configuration/CreateConfig/83C3B726">IncludeFooter</a></li>
 				<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.Configuration/CreateConfig/76230A38">IncludeShaSection</a></li>
 				<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.Configuration/CreateConfig/14A6BE2D">MilestoneReplaceText</a></li>
 				<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.Configuration/CreateConfig/81319259">ShaSectionHeading</a></li>
@@ -162,7 +162,7 @@
 
 <section class="content-header">
 			<h3><a href="/GitReleaseManager/api/GitReleaseManager.Core.Configuration/CreateConfig">CreateConfig</a>.</h3>
-	<h1>IncludeFooter <small>Property</small></h1>
+	<h1>Allow<wbr>Update<wbr>To<wbr>Published<wbr>Release <small>Property</small></h1>
 </section>
 <section class="content">
 	
@@ -183,9 +183,8 @@
 		</div>
 
 	<h1 id="Syntax">Syntax</h1>
-	<pre><code>[Sample(true)]
-[YamlMember(Alias = "include-footer")]
-public bool IncludeFooter { get; set; }</code></pre>
+	<pre><code>[YamlMember(Alias = "allow-update-to-published")]
+public bool AllowUpdateToPublishedRelease { get; set; }</code></pre>
 
 
 
@@ -200,10 +199,6 @@ public bool IncludeFooter { get; set; }</code></pre>
 					</tr>
 				</thead>
 					<tbody><tr>
-						<td><a href="/GitReleaseManager/api/GitReleaseManager.Core.Attributes/SampleAttribute">SampleAttribute</a></td>
-						<td></td>
-					</tr>
-					<tr>
 						<td>YamlMember</td>
 						<td></td>
 					</tr>
