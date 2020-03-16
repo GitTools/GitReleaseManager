@@ -38,5 +38,8 @@ namespace GitReleaseManager.Core.Configuration
 
         [YamlMember(Alias = "sha-section-line-format")]
         public string ShaSectionLineFormat { get; set; }
+
+        [YamlMember(Alias = "allow-update-to-published")]
+        public bool AllowUpdateToPublishedRelease { get; set; }
     }
 }
