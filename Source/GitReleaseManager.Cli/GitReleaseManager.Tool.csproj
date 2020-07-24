@@ -20,7 +20,6 @@
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageIcon>package_icon.png</PackageIcon>
         <PackageReleaseNotes>https://github.com/GitTools/GitReleaseManager/releases</PackageReleaseNotes>
-        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <RepositoryType>git</RepositoryType>
         <RepositoryUrl>https://github.com/GitTools/GitReleaseManager.git</RepositoryUrl>
     </PropertyGroup>
