@@ -7,11 +7,7 @@
         <Title>GitReleaseManager.Cli</Title>
         <Description>Create release notes in markdown given a milestone</Description>
         <IsPackable>false</IsPackable>
-        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     </PropertyGroup>
-    <ItemGroup>
-        <Compile Include="..\SolutionInfo.cs" Link="SolutionInfo.cs" />
-    </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\GitReleaseManager\GitReleaseManager.Core.csproj" />
     </ItemGroup>

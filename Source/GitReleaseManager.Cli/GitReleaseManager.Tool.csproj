@@ -25,9 +25,6 @@
         <RepositoryUrl>https://github.com/GitTools/GitReleaseManager.git</RepositoryUrl>
     </PropertyGroup>
     <ItemGroup>
-        <Compile Include="..\SolutionInfo.cs" Link="SolutionInfo.cs" />
-    </ItemGroup>
-    <ItemGroup>
         <ProjectReference Include="..\GitReleaseManager\GitReleaseManager.Core.csproj" />
     </ItemGroup>
     <ItemGroup>

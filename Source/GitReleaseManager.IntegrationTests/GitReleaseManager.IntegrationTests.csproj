@@ -4,12 +4,8 @@
         <TargetFrameworks>net472;netcoreapp2.2</TargetFrameworks>
         <Title>GitReleaseManager.IntegrationTests</Title>
         <Description>Integration Test Project for GitReleaseManager</Description>
-        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <NoWarn>$(NoWarn);CA1707</NoWarn>
     </PropertyGroup>
-    <ItemGroup>
-        <Compile Include="..\SolutionInfo.cs" Link="SolutionInfo.cs" />
-    </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\GitReleaseManager\GitReleaseManager.Core.csproj" />
     </ItemGroup>
