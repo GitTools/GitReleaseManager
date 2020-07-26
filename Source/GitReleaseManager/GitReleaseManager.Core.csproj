@@ -14,6 +14,6 @@
         <PackageReference Include="Octokit" Version="0.47.0" />
         <PackageReference Include="seriloganalyzer" Version="0.15.0" />
         <PackageReference Include="YamlDotNet" Version="8.1.2" />
-        <PackageReference Include="AutoMapper" Version="9.0.0" />
+        <PackageReference Include="AutoMapper" Version="10.0.0" />
     </ItemGroup>
 </Project>
