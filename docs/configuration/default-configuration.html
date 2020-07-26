@@ -75,6 +75,7 @@
     <div id="infobar-headings"><h6>On This Page</h6><p><a href="#create-options">Create Options</a></p>
 <p><a href="#export-options">Export Options</a></p>
 <p><a href="#close-options">Close Options</a></p>
+<p><a href="#labels">Labels</a></p>
 <p><a href="#issues-to-include">Issues to include</a></p>
 <p><a href="#issues-to-exclude">Issues to exclude</a></p>
 <p><a href="#issue-labels-alias">Issue Labels Alias</a></p>
@@ -194,6 +195,34 @@ close:
     - [GitHub release](https://github.com/{owner}/{repository}/releases/tag/{milestone})
 
     Your **[GitReleaseManager](https://github.com/GitTools/GitReleaseManager)** bot :package::rocket:
+labels:
+    - name: Breaking Change
+      description: Functionality breaking changes
+      color: b60205
+    - name: Bug
+      description: Something isn't working
+      color: ee0701
+    - name: Build
+      description: Build pipeline
+      color: 009800
+    - name: Documentation
+      description: Improvements or additions to documentation
+      color: d4c5f9
+    - name: Feature
+      description: Request for a new feature
+      color: 84b6eb
+    - name: Good First <a href="/GitReleaseManager/api/GitReleaseManager.Core.Model/Issue">Issue</a>
+      description: Good for newcomers
+      color: 7057ff
+    - name: Help Wanted
+      description: Extra attention is needed
+      color: 33aa3f
+    - name: Improvement
+      description: Improvement of an existing feature
+      color: 207de5
+    - name: Question
+      description: Further information is requested
+      color: cc317c
 issue-labels-include:
     - Bug
     - Duplicate
@@ -351,6 +380,8 @@ the milestone name, the owner/repository information, etc.</li>
 </ul>
 </li>
 </ul>
+<h2 id="labels">Labels</h2>
+<p>Pre-defined issue labels.</p>
 <h2 id="issues-to-include">Issues to include</h2>
 <p>See the <a href="include-issues">Issues to include</a> section.</p>
 <h2 id="issues-to-exclude">Issues to exclude</h2>

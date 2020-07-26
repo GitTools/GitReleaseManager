@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="shortcut icon" href="/GitReleaseManager/assets/img/favicon.ico" type="image/x-icon">
         <link rel="icon" href="/GitReleaseManager/assets/img/favicon.ico" type="image/x-icon">
-        <title>GitReleaseManager - API - CloseConfig Class</title>
+        <title>GitReleaseManager - API - LabelConfig Class</title>
         <link href="/GitReleaseManager/assets/css/highlight.css" rel="stylesheet">
         <link href="/GitReleaseManager/assets/css/bootstrap/bootstrap.css" rel="stylesheet">
         <link href="/GitReleaseManager/assets/css/adminlte/AdminLTE.css" rel="stylesheet">
@@ -71,8 +71,7 @@
             <aside class="main-sidebar ">
                 <section class="infobar" data-spy="affix" data-offset-top="60" data-offset-bottom="200"> 
                     	
-	<div id="infobar-headings"><h6>On This Page</h6><p><a href="#Summary">Summary</a></p>
-<p><a href="#Syntax">Syntax</a></p>
+	<div id="infobar-headings"><h6>On This Page</h6><p><a href="#Syntax">Syntax</a></p>
 <p><a href="#Properties">Properties</a></p>
 <hr class="infobar-hidden">
 </div>
@@ -136,14 +135,14 @@
 		<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.Configuration">GitReleaseManager<wbr>.Core<wbr>.Configuration</a></li>
 		<li role="separator" class="divider"></li>
 			<li class="header">Class Types</li>
-				<li class="selected"><a href="/GitReleaseManager/api/GitReleaseManager.Core.Configuration/CloseConfig">CloseConfig</a></li>
+				<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.Configuration/CloseConfig">CloseConfig</a></li>
 				<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.Configuration/Config">Config</a></li>
 				<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.Configuration/ConfigSerializer">ConfigSerializer</a></li>
 				<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.Configuration/ConfigurationProvider">Configuration<wbr>Provider</a></li>
 				<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.Configuration/CreateConfig">CreateConfig</a></li>
 				<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.Configuration/ExportConfig">ExportConfig</a></li>
 				<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.Configuration/LabelAlias">LabelAlias</a></li>
-				<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.Configuration/LabelConfig">LabelConfig</a></li>
+				<li class="selected"><a href="/GitReleaseManager/api/GitReleaseManager.Core.Configuration/LabelConfig">LabelConfig</a></li>
 
 
                     </ul>
@@ -158,16 +157,12 @@
 
 
 <section class="content-header">
-	<h1>CloseConfig <small>Class</small></h1>
+	<h1>LabelConfig <small>Class</small></h1>
 </section>
 <section class="content">
 	
 	
-		<h1 id="Summary">Summary</h1>
-	<div class="lead">
-    Class for holding configuration values used during milestone closing. This class cannot be inherited.
-    </div>
-
+	
 		<div class="panel panel-default">
   			<div class="panel-body">
 				<div class="row">
@@ -192,7 +187,7 @@
 						<div class="mermaid">
 							graph BT
 	Type--&gt;Base0["object"]
-	Type["CloseConfig"]
+	Type["LabelConfig"]
 class Type type-node
 
 						</div>
@@ -202,7 +197,7 @@ class Type type-node
 		</div>
 
 	<h1 id="Syntax">Syntax</h1>
-	<pre><code>public sealed class CloseConfig</code></pre>
+	<pre><code>public class LabelConfig</code></pre>
 
 
 
@@ -225,21 +220,24 @@ class Type type-node
 							</tr>
 						</thead>
 							<tbody><tr>
-								<td><a href="/GitReleaseManager/api/GitReleaseManager.Core.Configuration/CloseConfig/4D3E772C">IssueCommentFormat</a></td>
+								<td><a href="/GitReleaseManager/api/GitReleaseManager.Core.Configuration/LabelConfig/6CC4E1E5">Color</a></td>
 								<td>string</td>
 								<td>
-									<div>
-    Gets or sets the issue comment format to use when commenting on issues.
-    </div>
+									<div></div>
 								</td>
 							</tr>
 							<tr>
-								<td><a href="/GitReleaseManager/api/GitReleaseManager.Core.Configuration/CloseConfig/C68871F0">IssueComments</a></td>
-								<td>bool</td>
+								<td><a href="/GitReleaseManager/api/GitReleaseManager.Core.Configuration/LabelConfig/244B5934">Description</a></td>
+								<td>string</td>
 								<td>
-									<div>
-    Gets or sets a value indicating whether adding issue comments is enabled or not.
-    </div>
+									<div></div>
+								</td>
+							</tr>
+							<tr>
+								<td><a href="/GitReleaseManager/api/GitReleaseManager.Core.Configuration/LabelConfig/113C2A3A">Name</a></td>
+								<td>string</td>
+								<td>
+									<div></div>
 								</td>
 							</tr>
 					</tbody></table>
