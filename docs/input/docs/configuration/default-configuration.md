@@ -37,6 +37,34 @@ close:
     - [GitHub release](https://github.com/{owner}/{repository}/releases/tag/{milestone})
 
     Your **[GitReleaseManager](https://github.com/GitTools/GitReleaseManager)** bot :package::rocket:
+labels:
+    - name: Breaking Change
+      description: Functionality breaking changes
+      color: b60205
+    - name: Bug
+      description: Something isn't working
+      color: ee0701
+    - name: Build
+      description: Build pipeline
+      color: 009800
+    - name: Documentation
+      description: Improvements or additions to documentation
+      color: d4c5f9
+    - name: Feature
+      description: Request for a new feature
+      color: 84b6eb
+    - name: Good First Issue
+      description: Good for newcomers
+      color: 7057ff
+    - name: Help Wanted
+      description: Extra attention is needed
+      color: 33aa3f
+    - name: Improvement
+      description: Improvement of an existing feature
+      color: 207de5
+    - name: Question
+      description: Further information is requested
+      color: cc317c
 issue-labels-include:
     - Bug
     - Duplicate
@@ -153,6 +181,10 @@ tokenized values, such as milestone, owner, repository, with the actual values.
     - This is a template for what comment should be added to each issue.  Within
       this comment template, it is possible to replace information for example,
       the milestone name, the owner/repository information, etc.
+
+## Labels
+
+Pre-defined issue labels.
 
 ## Issues to include
 

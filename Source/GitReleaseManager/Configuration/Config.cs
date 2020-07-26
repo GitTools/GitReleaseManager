@@ -50,6 +50,72 @@ Your **[GitReleaseManager](https://github.com/GitTools/GitReleaseManager)** bot 
                 IssueCommentFormat = IssueCommentFormat,
             };
 
+            Labels = new List<LabelConfig>
+            {
+                new LabelConfig
+                {
+                    Name = "Breaking Change",
+                    Description = "Functionality breaking changes",
+                    Color = "b60205",
+                },
+
+                new LabelConfig
+                {
+                    Name = "Bug",
+                    Description = "Something isn't working",
+                    Color = "ee0701",
+                },
+
+                new LabelConfig
+                {
+                    Name = "Build",
+                    Description = "Build pipeline",
+                    Color = "009800",
+                },
+
+                new LabelConfig
+                {
+                    Name = "Documentation",
+                    Description = "Improvements or additions to documentation",
+                    Color = "d4c5f9",
+                },
+
+                new LabelConfig
+                {
+                    Name = "Feature",
+                    Description = "Request for a new feature",
+                    Color = "84b6eb",
+                },
+
+                new LabelConfig
+                {
+                    Name = "Good First Issue",
+                    Description = "Good for newcomers",
+                    Color = "7057ff",
+                },
+
+                new LabelConfig
+                {
+                    Name = "Help Wanted",
+                    Description = "Extra attention is needed",
+                    Color = "33aa3f",
+                },
+
+                new LabelConfig
+                {
+                    Name = "Improvement",
+                    Description = "Improvement of an existing feature",
+                    Color = "207de5",
+                },
+
+                new LabelConfig
+                {
+                    Name = "Question",
+                    Description = "Further information is requested",
+                    Color = "cc317c",
+                },
+            };
+
             IssueLabelsInclude = new List<string>
                                     {
                                         "Bug",
@@ -85,6 +151,10 @@ Your **[GitReleaseManager](https://github.com/GitTools/GitReleaseManager)** bot 
         [Description("Configuration values used when closing a milestone")]
         [YamlMember(Alias = "close")]
         public CloseConfig Close { get; set; }
+
+        [Description("Configuration values used when creating labels")]
+        [YamlMember(Alias = "labels")]
+        public IList<LabelConfig> Labels { get; }
 
         [Description("The labels that will be used to include issues in release notes.")]
         [YamlMember(Alias = "issue-labels-include")]
