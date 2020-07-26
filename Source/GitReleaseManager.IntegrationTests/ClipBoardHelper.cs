@@ -13,7 +13,7 @@ namespace GitReleaseManager.IntegrationTests
     {
         public static void SetClipboard(string result)
         {
-            var thread = new Thread(() => Clipboard.SetText(result));
+            var thread = new Thread(() => new Clipboard().SetText(result));
             thread.SetApartmentState(ApartmentState.STA);
             thread.Start();
             thread.Join();
