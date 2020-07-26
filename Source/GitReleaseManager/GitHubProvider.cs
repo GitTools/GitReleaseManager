@@ -343,31 +343,35 @@ namespace GitReleaseManager.Core
 
         public async Task CreateLabels(string owner, string repository)
         {
-            var newLabels = new List<NewLabel>
+            if (_configuration.Labels.Any())
             {
-                new NewLabel("Breaking change", "b60205"),
-                new NewLabel("Bug", "ee0701"),
-                new NewLabel("Build", "009800"),
-                new NewLabel("Documentation", "d4c5f9"),
-                new NewLabel("Feature", "84b6eb"),
-                new NewLabel("Improvement", "207de5"),
-                new NewLabel("Question", "cc317c"),
-                new NewLabel("good first issue", "7057ff"),
-                new NewLabel("help wanted", "33aa3f"),
-            };
+                var newLabels = new List<NewLabel>();
 
-            _logger.Verbose("Grabbing all existing labels on '{Owner}/{Repository}'", owner, repository);
-            var labels = await _gitHubClient.Issue.Labels.GetAllForRepository(owner, repository).ConfigureAwait(false);
+                foreach (var label in _configuration.Labels)
+                {
+                    newLabels.Add(new NewLabel(label.Name, label.Color)
+                    {
+                        Description = label.Description,
+                    });
+                }
 
-            _logger.Verbose("Removing existing labels");
-            _logger.Debug("{@Labels}", labels);
-            var deleteLabelsTasks = labels.Select(label => _gitHubClient.Issue.Labels.Delete(owner, repository, label.Name));
-            await Task.WhenAll(deleteLabelsTasks).ConfigureAwait(false);
+                _logger.Verbose("Grabbing all existing labels on '{Owner}/{Repository}'", owner, repository);
+                var labels = await _gitHubClient.Issue.Labels.GetAllForRepository(owner, repository).ConfigureAwait(false);
 
-            _logger.Verbose("Creating new standard labels");
-            _logger.Debug("{@Labels}", newLabels);
-            var createLabelsTasks = newLabels.Select(label => _gitHubClient.Issue.Labels.Create(owner, repository, label));
-            await Task.WhenAll(createLabelsTasks).ConfigureAwait(false);
+                _logger.Verbose("Removing existing labels");
+                _logger.Debug("{@Labels}", labels);
+                var deleteLabelsTasks = labels.Select(label => _gitHubClient.Issue.Labels.Delete(owner, repository, label.Name));
+                await Task.WhenAll(deleteLabelsTasks).ConfigureAwait(false);
+
+                _logger.Verbose("Creating new standard labels");
+                _logger.Debug("{@Labels}", newLabels);
+                var createLabelsTasks = newLabels.Select(label => _gitHubClient.Issue.Labels.Create(owner, repository, label));
+                await Task.WhenAll(createLabelsTasks).ConfigureAwait(false);
+            }
+            else
+            {
+                _logger.Warning("No labels defined");
+            }
         }
 
         private static NewRelease CreateNewRelease(string name, string tagName, string body, bool prerelease, string targetCommitish)
