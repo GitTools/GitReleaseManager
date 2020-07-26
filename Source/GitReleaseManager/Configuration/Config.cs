@@ -50,6 +50,8 @@ Your **[GitReleaseManager](https://github.com/GitTools/GitReleaseManager)** bot 
                 IssueCommentFormat = IssueCommentFormat,
             };
 
+            Label = new List<LabelConfig>();
+
             IssueLabelsInclude = new List<string>
                                     {
                                         "Bug",
@@ -85,6 +87,10 @@ Your **[GitReleaseManager](https://github.com/GitTools/GitReleaseManager)** bot 
         [Description("Configuration values used when closing a milestone")]
         [YamlMember(Alias = "close")]
         public CloseConfig Close { get; set; }
+
+        [Description("Configuration values used when creating labels")]
+        [YamlMember(Alias = "label")]
+        public IList<LabelConfig> Label { get; }
 
         [Description("The labels that will be used to include issues in release notes.")]
         [YamlMember(Alias = "issue-labels-include")]
