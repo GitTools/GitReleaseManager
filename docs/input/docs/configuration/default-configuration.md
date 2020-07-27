@@ -66,17 +66,16 @@ labels:
       description: Further information is requested
       color: cc317c
 issue-labels-include:
-    - Bug
-    - Duplicate
-    - Enhancement
+    - Breaking Change
+    - Bug    
+    - Documentation
     - Feature
+    - Good First Issue
     - Help Wanted
     - Improvement
-    - Invalid
     - Question
-    - Wontfix
 issue-labels-exclude:
-    - Internal Refactoring
+    - Build
 issue-labels-alias: []
 ```
 
