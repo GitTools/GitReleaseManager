@@ -138,30 +138,30 @@ Your **[GitReleaseManager](https://github.com/GitTools/GitReleaseManager)** bot 
 
         [Description("Configuration values used when creating new releases")]
         [YamlMember(Alias = "create")]
-        public CreateConfig Create { get; }
+        public CreateConfig Create { get; private set; }
 
         [Description("Configuration values used when exporting release notes")]
         [YamlMember(Alias = "export")]
-        public ExportConfig Export { get; }
+        public ExportConfig Export { get; private set; }
 
         [Description("Configuration values used when closing a milestone")]
         [YamlMember(Alias = "close")]
-        public CloseConfig Close { get; }
+        public CloseConfig Close { get; private set; }
 
         [Description("Configuration values used when creating labels")]
         [YamlMember(Alias = "labels")]
-        public IList<LabelConfig> Labels { get; }
+        public IList<LabelConfig> Labels { get; private set; }
 
         [Description("The labels that will be used to include issues in release notes.")]
         [YamlMember(Alias = "issue-labels-include")]
-        public IList<string> IssueLabelsInclude { get; }
+        public IList<string> IssueLabelsInclude { get; private set; }
 
         [Description("The labels that will NOT be used when including issues in release notes.")]
         [YamlMember(Alias = "issue-labels-exclude")]
-        public IList<string> IssueLabelsExclude { get; }
+        public IList<string> IssueLabelsExclude { get; private set; }
 
         [Description("Overrides default pluralization and header names for specific labels.")]
         [YamlMember(Alias = "issue-labels-alias")]
-        public IList<LabelAlias> LabelAliases { get; }
+        public IList<LabelAlias> LabelAliases { get; private set; }
     }
 }
