@@ -133,7 +133,7 @@ namespace GitReleaseManager.Tests
         [Test]
         public void CorrectlyExcludeIssues()
         {
-            AcceptTest(5, CreateIssue(1, "Internal Refactoring"), CreateIssue(2, "Bug"));
+            AcceptTest(5, CreateIssue(1, "Build"), CreateIssue(2, "Bug"));
             Assert.True(true); // Just to make sonarlint happy
         }
 
