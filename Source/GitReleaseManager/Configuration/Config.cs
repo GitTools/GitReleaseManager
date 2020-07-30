@@ -117,22 +117,21 @@ Your **[GitReleaseManager](https://github.com/GitTools/GitReleaseManager)** bot 
             };
 
             IssueLabelsInclude = new List<string>
-                                    {
-                                        "Bug",
-                                        "Duplicate",
-                                        "Enhancement",
-                                        "Feature",
-                                        "Help Wanted",
-                                        "Improvement",
-                                        "Invalid",
-                                        "Question",
-                                        "WontFix",
-                                    };
+            {
+                "Breaking Change",
+                "Bug",
+                "Documentation",
+                "Feature",
+                "Good First Issue",
+                "Help Wanted",
+                "Improvement",
+                "Question",
+            };
 
             IssueLabelsExclude = new List<string>
-                                    {
-                                        "Internal Refactoring",
-                                    };
+            {
+                "Build",
+            };
 
             LabelAliases = new List<LabelAlias>();
         }
@@ -145,16 +144,13 @@ Your **[GitReleaseManager](https://github.com/GitTools/GitReleaseManager)** bot 
         [YamlMember(Alias = "export")]
         public ExportConfig Export { get; private set; }
 
-        /// <summary>
-        /// Gets or sets the close configuration values.
-        /// </summary>
         [Description("Configuration values used when closing a milestone")]
         [YamlMember(Alias = "close")]
-        public CloseConfig Close { get; set; }
+        public CloseConfig Close { get; private set; }
 
         [Description("Configuration values used when creating labels")]
         [YamlMember(Alias = "labels")]
-        public IList<LabelConfig> Labels { get; }
+        public IList<LabelConfig> Labels { get; private set; }
 
         [Description("The labels that will be used to include issues in release notes.")]
         [YamlMember(Alias = "issue-labels-include")]

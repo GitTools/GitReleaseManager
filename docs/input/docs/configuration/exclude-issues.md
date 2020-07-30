@@ -16,7 +16,7 @@ tagged with the following labels:
 
 ```yaml
 issue-labels-exclude:
-    - Internal Refactoring
+    - Build
 ```
 
 :::{.alert .alert-info}
