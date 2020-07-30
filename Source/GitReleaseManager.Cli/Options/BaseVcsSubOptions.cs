@@ -41,7 +41,7 @@ namespace GitReleaseManager.Cli.Options
         [Option("provider", HelpText = "Version Control System provider", Default = VcsProvider.Github)]
         public VcsProvider Provider { get; set; }
 
-        [Option("providerUrl", HelpText = "URL of the custom provider's API")]
+        [Option("providerUrl", HelpText = "Custom URL of the chosen VCS provider")]
         public string ProviderUrl { get; set; }
     }
 }
