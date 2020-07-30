@@ -16,4 +16,7 @@
         <PackageReference Include="YamlDotNet" Version="8.1.2" />
         <PackageReference Include="AutoMapper" Version="10.0.0" />
     </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\Gitea\src\Gitea\Gitea.csproj" />
+    </ItemGroup>
 </Project>
