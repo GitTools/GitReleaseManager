@@ -11,6 +11,12 @@ namespace GitReleaseManager.Cli.Options
 
     public abstract class BaseVcsOptions : BaseSubOptions
     {
+        public enum VcsProvider
+        {
+            Github,
+            Gitea,
+        }
+
         internal const string OBSOLETE_MESSAGE = "Authentication using username and password has been deprecated, and will be removed in a future release. Please use --token instead!";
 
         [Obsolete(OBSOLETE_MESSAGE)]
@@ -31,5 +37,11 @@ namespace GitReleaseManager.Cli.Options
 
         [Option('r', "repository", HelpText = "The name of the repository.", Required = true)]
         public string RepositoryName { get; set; }
+
+        [Option("provider", HelpText = "Version Control System provider", Default = VcsProvider.Github)]
+        public VcsProvider Provider { get; set; }
+
+        [Option("providerUrl", HelpText = "URL of the custom provider's API")]
+        public string ProviderUrl { get; set; }
     }
 }
