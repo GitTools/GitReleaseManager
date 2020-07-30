@@ -38,21 +38,30 @@ namespace GitReleaseManager.Core
         {
             _logger.Verbose("Finding open milestone with title '{Title}' on '{Owner}/{Repository}'", milestoneTitle, owner, repository);
             var api = new IssueApi();
+
+            // find the requested milestone
             var milestones = await api.IssueGetMilestonesListAsync(owner, repository).ConfigureAwait(false);
             var milestone = milestones.FirstOrDefault(x => x.Title.Equals(milestoneTitle, StringComparison.InvariantCulture));
             if (milestone == null)
             {
+                // if no match has been found, return
                 _logger.Debug("No existing open milestone with title '{Title}' was found", milestoneTitle);
                 return;
             }
 
+            // close the milestone
             _logger.Verbose("Closing milestone '{Title}' on '{Owner}/{Repository}'", milestoneTitle, owner, repository);
             await api.IssueEditMilestoneAsync(owner, repository, milestone.Id, new EditMilestoneOption() { State = "closed" }).ConfigureAwait(false);
 
             if (_configuration.Close.IssueComments)
             {
+                // if configured accordingly, add a "issue has been fixed in this milestone" comment to all the issues in the milestone
                 const string detectionComment = "<!-- GitReleaseManager release comment -->";
+
+                // prepare the body for the comment
                 var issueComment = detectionComment + "\n" + _configuration.Close.IssueCommentFormat.ReplaceTemplate(new { owner, repository, Milestone = milestone.Title });
+
+                // get all the closed issues
                 var issues = await api.IssueListIssuesAsync(owner, repository, "closed", null, null, null, milestone.Title).ConfigureAwait(false);
 
                 foreach (var issue in issues)
@@ -61,6 +70,7 @@ namespace GitReleaseManager.Core
                     {
                         if (!await CommentsIncludeString(api, owner, repository, issue.Number, detectionComment).ConfigureAwait(false))
                         {
+                            // if no generated comment exists yet, create one
                             _logger.Information("Adding release comment for issue #{IssueNumber}", issue.Number);
                             await api.IssueCreateCommentAsync(owner, repository, issue.Number, new CreateIssueCommentOption(issueComment)).ConfigureAwait(false);
                         }
@@ -80,21 +90,30 @@ namespace GitReleaseManager.Core
 
         public async Task CreateLabels(string owner, string repository)
         {
-            var issueApi = new IssueApi(Gitea.Client.Configuration.Default);
+            _logger.Information("Deleting all existing labels");
+            var issueApi = new IssueApi();
+
+            // get a list containing all the labels
             var currentLabelList = await issueApi.IssueListLabelsAsync(owner, repository).ConfigureAwait(false);
             var deleteLabelTasks = new List<Task>();
             foreach (var label in currentLabelList)
             {
+                // delete each label
                  deleteLabelTasks.Add(issueApi.IssueDeleteLabelAsync(owner, repository, label.Id));
             }
 
+            // wait for all the deletion tasks to complete
             await Task.WhenAll(deleteLabelTasks.ToArray()).ConfigureAwait(false);
+            _logger.Information("Creating new labels");
+
+            // create new labels based on the configuration
             var createLabelTasks = new List<Task>();
             foreach (var label in _configuration.Labels)
             {
                 createLabelTasks.Add(issueApi.IssueCreateLabelAsync(owner, repository, new CreateLabelOption(label.Color, label.Description, label.Name)));
             }
 
+            // wait for all tasks before returning
             await Task.WhenAll(createLabelTasks).ConfigureAwait(false);
         }
 
