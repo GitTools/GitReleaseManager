@@ -71,8 +71,7 @@
             <aside class="main-sidebar ">
                 <section class="infobar" data-spy="affix" data-offset-top="60" data-offset-bottom="200"> 
                     	
-	<div id="infobar-headings"><h6>On This Page</h6><p><a href="#Summary">Summary</a></p>
-<p><a href="#Syntax">Syntax</a></p>
+	<div id="infobar-headings"><h6>On This Page</h6><p><a href="#Syntax">Syntax</a></p>
 <p><a href="#Attributes">Attributes</a></p>
 <p><a href="#Value">Value</a></p>
 <hr class="infobar-hidden">
@@ -168,11 +167,7 @@
 <section class="content">
 	
 	
-		<h1 id="Summary">Summary</h1>
-	<div class="lead">
-    Gets or sets the close configuration values.
-    </div>
-
+	
 		<div class="panel panel-default">
   			<div class="panel-body">
 				<dl class="dl-horizontal">	
@@ -190,7 +185,7 @@
 	<h1 id="Syntax">Syntax</h1>
 	<pre><code>[Description("Configuration values used when closing a milestone")]
 [YamlMember(Alias = "close")]
-public CloseConfig Close { get; set; }</code></pre>
+public CloseConfig Close { get; private set; }</code></pre>
 
 
 
