@@ -20,8 +20,8 @@ namespace GitReleaseManager.Core
 
     public class ReleaseNotesBuilder
     {
-        private readonly ILogger _logger = Log.ForContext<ReleaseNotesBuilder>();
         private readonly IVcsProvider _vcsProvider;
+        private readonly ILogger _logger;
         private readonly string _user;
         private readonly string _repository;
         private readonly string _milestoneTitle;
@@ -29,9 +29,10 @@ namespace GitReleaseManager.Core
         private ReadOnlyCollection<Milestone> _milestones;
         private Milestone _targetMilestone;
 
-        public ReleaseNotesBuilder(IVcsProvider vcsProvider, string user, string repository, string milestoneTitle, Config configuration)
+        public ReleaseNotesBuilder(IVcsProvider vcsProvider, ILogger logger, string user, string repository, string milestoneTitle, Config configuration)
         {
             _vcsProvider = vcsProvider;
+            _logger = logger;
             _user = user;
             _repository = repository;
             _milestoneTitle = milestoneTitle;
