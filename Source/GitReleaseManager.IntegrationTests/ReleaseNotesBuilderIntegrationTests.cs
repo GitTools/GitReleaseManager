@@ -4,6 +4,8 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
+using Octokit;
+
 namespace GitReleaseManager.IntegrationTests
 {
     using System;
@@ -19,6 +21,8 @@ namespace GitReleaseManager.IntegrationTests
     [TestFixture]
     public class ReleaseNotesBuilderIntegrationTests
     {
+        private IGitHubClient _gitHubClient;
+        private ILogger _logger;
         private IMapper _mapper;
         private string _username;
         private string _password;
@@ -30,11 +34,18 @@ namespace GitReleaseManager.IntegrationTests
         public void Configure()
         {
             _mapper = AutoMapperConfiguration.Configure();
-            Log.Logger = new LoggerConfiguration().WriteTo.Console().CreateLogger();
+            _logger = new LoggerConfiguration().WriteTo.Console().CreateLogger();
+            Log.Logger = _logger;
 
             _username = Environment.GetEnvironmentVariable("GITTOOLS_GITHUB_USERNAME");
             _password = Environment.GetEnvironmentVariable("GITTOOLS_GITHUB_PASSWORD");
             _token = Environment.GetEnvironmentVariable("GITTOOLS_GITHUB_TOKEN");
+
+            var credentials = string.IsNullOrWhiteSpace(_token)
+                ? new Credentials(_username, _password)
+                : new Credentials(_token);
+
+            _gitHubClient = new GitHubClient(new ProductHeaderValue("GitReleaseManager")) { Credentials = credentials };
         }
 
         [OneTimeTearDown]
@@ -57,8 +68,8 @@ namespace GitReleaseManager.IntegrationTests
                 var currentDirectory = Environment.CurrentDirectory;
                 var configuration = ConfigurationProvider.Provide(currentDirectory, fileSystem);
 
-                var vcsProvider = new GitHubProvider(_mapper, configuration, _username, _password, _token);
-                var releaseNotesBuilder = new ReleaseNotesBuilder(vcsProvider, "Chocolatey", "ChocolateyGUI", "0.12.4", configuration);
+                var vcsProvider = new GitHubProvider(_gitHubClient, _logger, _mapper, configuration);
+                var releaseNotesBuilder = new ReleaseNotesBuilder(vcsProvider, _logger, "Chocolatey", "ChocolateyGUI", "0.12.4", configuration);
                 var result = await releaseNotesBuilder.BuildReleaseNotes().ConfigureAwait(false);
                 Debug.WriteLine(result);
                 ClipBoardHelper.SetClipboard(result);
@@ -79,8 +90,8 @@ namespace GitReleaseManager.IntegrationTests
                 var currentDirectory = Environment.CurrentDirectory;
                 var configuration = ConfigurationProvider.Provide(currentDirectory, fileSystem);
 
-                var vcsProvider = new GitHubProvider(_mapper, configuration, _username, _password, _token);
-                var releaseNotesBuilder = new ReleaseNotesBuilder(vcsProvider, "Chocolatey", "ChocolateyGUI", "0.13.0", configuration);
+                var vcsProvider = new GitHubProvider(_gitHubClient, _logger, _mapper, configuration);
+                var releaseNotesBuilder = new ReleaseNotesBuilder(vcsProvider, _logger, "Chocolatey", "ChocolateyGUI", "0.13.0", configuration);
                 var result = await releaseNotesBuilder.BuildReleaseNotes().ConfigureAwait(false);
                 Debug.WriteLine(result);
                 ClipBoardHelper.SetClipboard(result);

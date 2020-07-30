@@ -4,6 +4,9 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
+using NSubstitute;
+using Serilog;
+
 namespace GitReleaseManager.Tests
 {
     using System;
@@ -146,6 +149,7 @@ namespace GitReleaseManager.Tests
         private static void AcceptTest(int commits, Config config, params Issue[] issues)
         {
             var fakeClient = new FakeGitHubClient();
+            var logger = Substitute.For<ILogger>();
             var fileSystem = new FileSystem();
             var currentDirectory = Environment.CurrentDirectory;
             var configuration = config ?? ConfigurationProvider.Provide(currentDirectory, fileSystem);
@@ -159,7 +163,7 @@ namespace GitReleaseManager.Tests
                 fakeClient.Issues.Add(issue);
             }
 
-            var builder = new ReleaseNotesBuilder(fakeClient, "TestUser", "FakeRepository", "1.2.3", configuration);
+            var builder = new ReleaseNotesBuilder(fakeClient, logger, "TestUser", "FakeRepository", "1.2.3", configuration);
             var notes = builder.BuildReleaseNotes().Result;
 
             Approvals.Verify(notes);
