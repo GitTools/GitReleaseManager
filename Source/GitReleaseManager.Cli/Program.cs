@@ -4,6 +4,8 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
+using Octokit;
+
 namespace GitReleaseManager.Cli
 {
     using System;
@@ -267,7 +269,15 @@ namespace GitReleaseManager.Cli
             var configuration = ConfigurationProvider.Provide(subOptions.TargetDirectory ?? Environment.CurrentDirectory, _fileSystem);
 
             Log.Information("Using {Provider} as VCS Provider", "GitHub");
-            return new GitHubProvider(_mapper, configuration, subOptions.UserName, subOptions.Password, subOptions.Token);
+            var credentials = string.IsNullOrWhiteSpace(subOptions.Token)
+                ? new Credentials(subOptions.UserName, subOptions.Password)
+                : new Credentials(subOptions.Token);
+
+            var gitHubClient = new GitHubClient(new ProductHeaderValue("GitReleaseManager")) { Credentials = credentials };
+
+            var logger = Log.ForContext<GitHubProvider>();
+
+            return new GitHubProvider(gitHubClient, logger, _mapper, configuration);
         }
 
         private static void LogOptions(BaseSubOptions options)
