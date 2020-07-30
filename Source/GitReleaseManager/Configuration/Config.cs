@@ -50,6 +50,8 @@ Your **[GitReleaseManager](https://github.com/GitTools/GitReleaseManager)** bot 
                 IssueCommentFormat = IssueCommentFormat,
             };
 
+            DefaultBranch = "master";
+
             Labels = new List<LabelConfig>
             {
                 new LabelConfig
@@ -147,6 +149,10 @@ Your **[GitReleaseManager](https://github.com/GitTools/GitReleaseManager)** bot 
         [Description("Configuration values used when closing a milestone")]
         [YamlMember(Alias = "close")]
         public CloseConfig Close { get; private set; }
+
+        [Description("The name of the default branch.")]
+        [YamlMember(Alias = "default-branch")]
+        public string DefaultBranch { get; private set; }
 
         [Description("Configuration values used when creating labels")]
         [YamlMember(Alias = "labels")]
