@@ -266,8 +266,16 @@ namespace GitReleaseManager.Cli
         {
             var configuration = ConfigurationProvider.Provide(subOptions.TargetDirectory ?? Environment.CurrentDirectory, _fileSystem);
 
-            Log.Information("Using {Provider} as VCS Provider", "GitHub");
-            return new GitHubProvider(_mapper, configuration, subOptions.UserName, subOptions.Password, subOptions.Token);
+            Log.Information("Using {Provider} as VCS Provider", subOptions.Provider);
+            if (subOptions.Provider == BaseVcsOptions.VcsProvider.Gitea)
+            {
+                return new GiteaProvider(configuration, subOptions.Token, subOptions.ProviderUrl);
+            }
+            else
+            {
+                // default to Github
+                return new GitHubProvider(_mapper, configuration, subOptions.UserName, subOptions.Password, subOptions.Token);
+            }
         }
 
         private static void LogOptions(BaseSubOptions options)
