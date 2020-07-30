@@ -107,6 +107,7 @@ namespace GitReleaseManager.Tests
 
             // Then
             Assert.That(text, Contains.Substring("#  footer-heading: Where to get it"));
+            Assert.That(text, Contains.Substring("#default-branch: master"));
         }
 
         [Test]

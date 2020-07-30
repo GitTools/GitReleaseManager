@@ -492,13 +492,13 @@ namespace GitReleaseManager.Core
             {
                 if (previousMilestone == null)
                 {
-                    _logger.Verbose("Getting commit count between base '{Base}' and head '{Head}'", "master", currentMilestone.Title);
-                    var gitHubClientRepositoryCommitsCompare = await _gitHubClient.Repository.Commit.Compare(user, repository, "master", currentMilestone.Title).ConfigureAwait(false);
+                    _logger.Verbose("Getting commit count between base '{Base}' and head '{Head}'", _configuration.DefaultBranch, currentMilestone.Title);
+                    var gitHubClientRepositoryCommitsCompare = await _gitHubClient.Repository.Commit.Compare(user, repository, _configuration.DefaultBranch, currentMilestone.Title).ConfigureAwait(false);
                     return gitHubClientRepositoryCommitsCompare.AheadBy;
                 }
 
-                _logger.Verbose("Getting commit count between base '{Base}' and head '{Head}'", previousMilestone.Title, "master");
-                var compareResult = await _gitHubClient.Repository.Commit.Compare(user, repository, previousMilestone.Title, "master").ConfigureAwait(false);
+                _logger.Verbose("Getting commit count between base '{Base}' and head '{Head}'", previousMilestone.Title, _configuration.DefaultBranch);
+                var compareResult = await _gitHubClient.Repository.Commit.Compare(user, repository, previousMilestone.Title, _configuration.DefaultBranch).ConfigureAwait(false);
                 return compareResult.AheadBy;
             }
             catch (NotFoundException)

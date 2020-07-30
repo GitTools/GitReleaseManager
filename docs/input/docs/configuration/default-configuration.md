@@ -37,6 +37,7 @@ close:
     - [GitHub release](https://github.com/{owner}/{repository}/releases/tag/{milestone})
 
     Your **[GitReleaseManager](https://github.com/GitTools/GitReleaseManager)** bot :package::rocket:
+default-branch: master
 labels:
     - name: Breaking Change
       description: Functionality breaking changes
@@ -180,6 +181,10 @@ tokenized values, such as milestone, owner, repository, with the actual values.
     - This is a template for what comment should be added to each issue.  Within
       this comment template, it is possible to replace information for example,
       the milestone name, the owner/repository information, etc.
+
+## Default branch
+
+The name of the default branch.
 
 ## Labels
 
