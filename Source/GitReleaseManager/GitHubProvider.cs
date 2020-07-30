@@ -254,7 +254,7 @@ namespace GitReleaseManager.Core
 
         public Task<string> ExportReleases(string owner, string repository, string tagName)
         {
-            var releaseNotesExporter = new ReleaseNotesExporter(this, _configuration, owner, repository);
+            var releaseNotesExporter = new ReleaseNotesExporter(this, _logger, _configuration, owner, repository);
 
             return releaseNotesExporter.ExportReleaseNotes(tagName);
         }

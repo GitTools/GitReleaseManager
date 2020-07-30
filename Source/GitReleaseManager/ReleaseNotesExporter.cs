@@ -17,15 +17,16 @@ namespace GitReleaseManager.Core
 
     public class ReleaseNotesExporter
     {
-        private readonly ILogger _logger = Log.ForContext<ReleaseNotesExporter>();
         private readonly IVcsProvider _vcsProvider;
+        private readonly ILogger _logger;
         private readonly Config _configuration;
         private readonly string _user;
         private readonly string _repository;
 
-        public ReleaseNotesExporter(IVcsProvider vcsProvider, Config configuration, string user, string repository)
+        public ReleaseNotesExporter(IVcsProvider vcsProvider, ILogger logger, Config configuration, string user, string repository)
         {
             _vcsProvider = vcsProvider;
+            _logger = logger;
             _configuration = configuration;
             _user = user;
             _repository = repository;
