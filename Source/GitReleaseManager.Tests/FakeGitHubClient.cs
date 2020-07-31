@@ -98,7 +98,7 @@ namespace GitReleaseManager.Tests
             throw new System.NotImplementedException();
         }
 
-        public Task CloseMilestone(string owner, string repository, string milestoneTitle)
+        public Task CloseMilestoneAsync(string owner, string repository, string milestoneTitle)
         {
             throw new System.NotImplementedException();
         }
@@ -113,7 +113,7 @@ namespace GitReleaseManager.Tests
             throw new System.NotImplementedException();
         }
 
-        public Task CreateLabels(string owner, string repository)
+        public Task CreateLabelsAsync(string owner, string repository)
         {
             throw new System.NotImplementedException();
         }

@@ -199,7 +199,7 @@ namespace GitReleaseManager.Cli
             Log.Information("Closing milestone {Milestone}", subOptions.Milestone);
             _vcsProvider = GetVcsProvider(subOptions);
 
-            await _vcsProvider.CloseMilestone(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone).ConfigureAwait(false);
+            await _vcsProvider.CloseMilestoneAsync(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone).ConfigureAwait(false);
 
             return 0;
         }
@@ -258,7 +258,7 @@ namespace GitReleaseManager.Cli
             Log.Information("Creating standard labels");
             _vcsProvider = GetVcsProvider(subOptions);
 
-            await _vcsProvider.CreateLabels(subOptions.RepositoryOwner, subOptions.RepositoryName).ConfigureAwait(false);
+            await _vcsProvider.CreateLabelsAsync(subOptions.RepositoryOwner, subOptions.RepositoryName).ConfigureAwait(false);
             return 0;
         }
 
@@ -266,8 +266,16 @@ namespace GitReleaseManager.Cli
         {
             var configuration = ConfigurationProvider.Provide(subOptions.TargetDirectory ?? Environment.CurrentDirectory, _fileSystem);
 
-            Log.Information("Using {Provider} as VCS Provider", "GitHub");
-            return new GitHubProvider(_mapper, configuration, subOptions.UserName, subOptions.Password, subOptions.Token);
+            Log.Information("Using {Provider} as VCS Provider", subOptions.Provider);
+            if (subOptions.Provider == BaseVcsOptions.VcsProvider.Gitea)
+            {
+                return new GiteaProvider(configuration, subOptions.Token, subOptions.ProviderUrl);
+            }
+            else
+            {
+                // default to Github
+                return new GitHubProvider(_mapper, configuration, subOptions.UserName, subOptions.Password, subOptions.Token);
+            }
         }
 
         private static void LogOptions(BaseSubOptions options)

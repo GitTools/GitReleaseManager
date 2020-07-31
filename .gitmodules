@@ -1,0 +1,3 @@
+[submodule "Source/Gitea"]
+	path = Source/Gitea
+	url = git@github.com:belidzs/Gitea.git
