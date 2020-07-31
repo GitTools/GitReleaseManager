@@ -35,12 +35,12 @@ namespace GitReleaseManager.Core
 
         Task<string> ExportReleases(string owner, string repository, string tagName);
 
-        Task CloseMilestone(string owner, string repository, string milestoneTitle);
+        Task CloseMilestoneAsync(string owner, string repository, string milestoneTitle);
 
         Task OpenMilestone(string owner, string repository, string milestoneTitle);
 
         Task PublishRelease(string owner, string repository, string tagName);
 
-        Task CreateLabels(string owner, string repository);
+        Task CreateLabelsAsync(string owner, string repository);
     }
 }

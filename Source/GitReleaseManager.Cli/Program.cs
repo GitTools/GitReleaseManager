@@ -199,7 +199,7 @@ namespace GitReleaseManager.Cli
             Log.Information("Closing milestone {Milestone}", subOptions.Milestone);
             _vcsProvider = GetVcsProvider(subOptions);
 
-            await _vcsProvider.CloseMilestone(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone).ConfigureAwait(false);
+            await _vcsProvider.CloseMilestoneAsync(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone).ConfigureAwait(false);
 
             return 0;
         }
@@ -258,7 +258,7 @@ namespace GitReleaseManager.Cli
             Log.Information("Creating standard labels");
             _vcsProvider = GetVcsProvider(subOptions);
 
-            await _vcsProvider.CreateLabels(subOptions.RepositoryOwner, subOptions.RepositoryName).ConfigureAwait(false);
+            await _vcsProvider.CreateLabelsAsync(subOptions.RepositoryOwner, subOptions.RepositoryName).ConfigureAwait(false);
             return 0;
         }
 

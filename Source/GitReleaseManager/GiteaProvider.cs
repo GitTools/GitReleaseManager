@@ -12,7 +12,7 @@ namespace GitReleaseManager.Core
     using GitReleaseManager.Core.Extensions;
     using Serilog;
 
-    public class GiteaProvider : VcsProvider
+    public class GiteaProvider : BaseVcsProvider
     {
         private readonly IssueApi _api;
 
@@ -34,7 +34,7 @@ namespace GitReleaseManager.Core
             throw new NotImplementedException();
         }
 
-        public override async Task CloseMilestone(string owner, string repository, string milestoneTitle)
+        public override async Task CloseMilestoneAsync(string owner, string repository, string milestoneTitle)
         {
             Logger.Verbose("Finding open milestone with title '{Title}' on '{Owner}/{Repository}'", milestoneTitle, owner, repository);
 

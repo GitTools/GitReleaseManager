@@ -284,7 +284,7 @@ namespace GitReleaseManager.Core
             return releaseNotesExporter.ExportReleaseNotes(tagName);
         }
 
-        public async Task CloseMilestone(string owner, string repository, string milestoneTitle)
+        public async Task CloseMilestoneAsync(string owner, string repository, string milestoneTitle)
         {
             _logger.Verbose("Finding open milestone with title '{Title}' on '{Owner}/{Repository}'", milestoneTitle, owner, repository);
             var milestoneClient = _gitHubClient.Issue.Milestone;
@@ -341,7 +341,7 @@ namespace GitReleaseManager.Core
             await _gitHubClient.Repository.Release.Edit(owner, repository, release.Id, releaseUpdate).ConfigureAwait(false);
         }
 
-        public async Task CreateLabels(string owner, string repository)
+        public async Task CreateLabelsAsync(string owner, string repository)
         {
             if (_configuration.Labels.Any())
             {

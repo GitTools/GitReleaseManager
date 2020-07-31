@@ -10,9 +10,9 @@ namespace GitReleaseManager.Core
     using GitReleaseManager.Core.Model;
     using Serilog;
 
-    public abstract class VcsProvider : IVcsProvider
+    public abstract class BaseVcsProvider : IVcsProvider
     {
-        public VcsProvider(Config configuration, ILogger logger)
+        public BaseVcsProvider(Config configuration, ILogger logger)
         {
             Configuration = configuration;
             Logger = logger;
@@ -24,7 +24,7 @@ namespace GitReleaseManager.Core
 
         public abstract Task AddAssets(string owner, string repository, string tagName, IList<string> assets);
 
-        public abstract Task CloseMilestone(string owner, string repository, string milestoneTitle);
+        public abstract Task CloseMilestoneAsync(string owner, string repository, string milestoneTitle);
 
         public abstract Task<Release> CreateReleaseFromInputFile(string owner, string repository, string name, string inputFilePath, string targetCommitish, IList<string> assets, bool prerelease);
 
@@ -50,7 +50,7 @@ namespace GitReleaseManager.Core
 
         public abstract Task PublishRelease(string owner, string repository, string tagName);
 
-        public virtual async Task CreateLabels(string owner, string repository)
+        public virtual async Task CreateLabelsAsync(string owner, string repository)
         {
             if (Configuration.Labels.Any())
             {
