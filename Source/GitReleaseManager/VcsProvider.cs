@@ -77,11 +77,11 @@ namespace GitReleaseManager.Core
 
         protected abstract Task<List<string>> GetCommentsForIssueAsync(string owner, string repository, long index);
 
+
         protected virtual async Task<bool> DoesAnyCommentIncludeStringAsync(string owner, string repository, long index, string comment)
         {
             Logger.Verbose("Finding issue comment created by GitReleaseManager for issue #{IssueNumber}", index);
             var issueComments = await GetCommentsForIssueAsync(owner, repository, index).ConfigureAwait(false);
-
             return issueComments.Any(c => c.Contains(comment));
         }
 
