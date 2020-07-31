@@ -181,7 +181,7 @@ namespace GitReleaseManager.Cli
             Log.Information("Discarding release {Milestone}", subOptions.Milestone);
             _vcsProvider = GetVcsProvider(subOptions);
 
-            await _vcsProvider.DiscardRelease(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone);
+            await _vcsProvider.DiscardRelease(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone).ConfigureAwait(false);
 
             return 0;
         }
