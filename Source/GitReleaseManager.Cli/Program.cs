@@ -199,7 +199,7 @@ namespace GitReleaseManager.Cli
             Log.Information("Closing milestone {Milestone}", subOptions.Milestone);
             _vcsProvider = GetVcsProvider(subOptions);
 
-            await _vcsProvider.CloseMilestoneAsync(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone).ConfigureAwait(false);
+            await _vcsProvider.CloseAndCommentMilestoneAsync(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone).ConfigureAwait(false);
 
             return 0;
         }

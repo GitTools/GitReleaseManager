@@ -53,7 +53,7 @@ namespace GitReleaseManager.Core
             return GetNumberOfCommitsBetweenInternal(previousMilestone, currentMilestone, user, repository);
         }
 
-        public override async Task<List<Issue>> GetIssuesAsync(Milestone targetMilestone)
+        public override async Task<List<Issue>> GetClosedIssuesForMilestoneAsync(string owner, string repository, Milestone targetMilestone)
         {
             var githubMilestone = Mapper.Map<Octokit.Milestone>(targetMilestone);
             Logger.Verbose("Finding issues on milestone: {@Milestone}", githubMilestone);
@@ -279,7 +279,7 @@ namespace GitReleaseManager.Core
             return releaseNotesExporter.ExportReleaseNotes(tagName);
         }
 
-        public override async Task CloseMilestoneAsync(string owner, string repository, string milestoneTitle)
+        public override async Task CloseAndCommentMilestoneAsync(string owner, string repository, string milestoneTitle)
         {
             Logger.Verbose("Finding open milestone with title '{Title}' on '{Owner}/{Repository}'", milestoneTitle, owner, repository);
             var milestoneClient = _gitHubClient.Issue.Milestone;
@@ -514,6 +514,7 @@ namespace GitReleaseManager.Core
             {
                 result.Add(comment.Body);
             }
+
             return result;
         }
     }

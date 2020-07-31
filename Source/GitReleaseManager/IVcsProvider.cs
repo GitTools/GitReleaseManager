@@ -17,7 +17,7 @@ namespace GitReleaseManager.Core
 
         string GetCommitsLink(string user, string repository, Milestone milestone, Milestone previousMilestone);
 
-        Task<List<Issue>> GetIssuesAsync(Milestone targetMilestone);
+        Task<List<Issue>> GetClosedIssuesForMilestoneAsync(string owner, string repository, Milestone targetMilestone);
 
         Task<List<Release>> GetReleasesAsync(string user, string repository);
 
@@ -35,7 +35,7 @@ namespace GitReleaseManager.Core
 
         Task<string> ExportReleases(string owner, string repository, string tagName);
 
-        Task CloseMilestoneAsync(string owner, string repository, string milestoneTitle);
+        Task CloseAndCommentMilestoneAsync(string owner, string repository, string milestoneTitle);
 
         Task OpenMilestone(string owner, string repository, string milestoneTitle);
 

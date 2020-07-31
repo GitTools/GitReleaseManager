@@ -197,7 +197,7 @@ namespace GitReleaseManager.Core
 
         private async Task<List<Issue>> GetIssues(Milestone milestone)
         {
-            var issues = await _vcsProvider.GetIssuesAsync(milestone).ConfigureAwait(false);
+            var issues = await _vcsProvider.GetClosedIssuesForMilestoneAsync(milestone).ConfigureAwait(false);
 
             var hasIncludedIssues = false;
 

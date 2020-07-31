@@ -35,59 +35,6 @@ namespace GitReleaseManager.Core
             throw new NotImplementedException();
         }
 
-        public override async Task CloseMilestoneAsync(string owner, string repository, string milestoneTitle)
-        {
-            Logger.Verbose("Finding open milestone with title '{Title}' on '{Owner}/{Repository}'", milestoneTitle, owner, repository);
-
-            // find the requested milestone
-            var milestones = await _api.IssueGetMilestonesListAsync(owner, repository).ConfigureAwait(false);
-            var milestone = milestones.FirstOrDefault(x => x.Title.Equals(milestoneTitle, StringComparison.InvariantCulture));
-            if (milestone == null)
-            {
-                // if no match has been found, return
-                Logger.Debug("No existing open milestone with title '{Title}' was found", milestoneTitle);
-                return;
-            }
-
-            // close the milestone
-            Logger.Verbose("Closing milestone '{Title}' on '{Owner}/{Repository}'", milestoneTitle, owner, repository);
-            await _api.IssueEditMilestoneAsync(owner, repository, milestone.Id, new EditMilestoneOption() { State = "closed" }).ConfigureAwait(false);
-
-            if (Configuration.Close.IssueComments)
-            {
-                // if configured accordingly, add a "issue has been fixed in this milestone" comment to all the issues in the milestone
-                const string detectionComment = "<!-- GitReleaseManager release comment -->";
-
-                // prepare the body for the comment
-                var issueComment = detectionComment + "\n" + Configuration.Close.IssueCommentFormat.ReplaceTemplate(new { owner, repository, Milestone = milestone.Title });
-
-                // get all the closed issues
-                var issues = await _api.IssueListIssuesAsync(owner, repository, "closed", null, null, null, milestone.Title).ConfigureAwait(false);
-
-                foreach (var issue in issues)
-                {
-                    try
-                    {
-                        if (!await DoesAnyCommentIncludeStringAsync(owner, repository, issue.Number, detectionComment).ConfigureAwait(false))
-                        {
-                            // if no generated comment exists yet, create one
-                            Logger.Information("Adding release comment for issue #{IssueNumber}", issue.Number);
-                            await _api.IssueCreateCommentAsync(owner, repository, issue.Number, new CreateIssueCommentOption(issueComment)).ConfigureAwait(false);
-                        }
-                        else
-                        {
-                            Logger.Information("Issue #{IssueNumber} already contains release comment, skipping...", issue.Number);
-                        }
-                    }
-                    catch (ApiException ex)
-                    {
-                        Logger.Error(ex, "Unable to add comment to issue #{IssueNumber}.", issue.Number);
-                        break;
-                    }
-                }
-            }
-        }
-
         public override Task<Model.Release> CreateReleaseFromInputFile(string owner, string repository, string name, string inputFilePath, string targetCommitish, IList<string> assets, bool prerelease)
         {
             throw new NotImplementedException();
@@ -108,12 +55,13 @@ namespace GitReleaseManager.Core
             throw new NotImplementedException();
         }
 
-        public override string GetCommitsLink(string user, string repository, Model.Milestone milestone, Model.Milestone previousMilestone)
+        public override async Task<List<Model.Issue>> GetClosedIssuesForMilestoneAsync(string owner, string repository, Model.Milestone targetMilestone)
         {
-            throw new NotImplementedException();
+            var issues = await _api.IssueListIssuesAsync(owner, repository, "closed", null, null, null, targetMilestone.Title).ConfigureAwait(false);
+            return Mapper.Map<List<Issue>, List<Model.Issue>>(issues);
         }
 
-        public override Task<List<Model.Issue>> GetIssuesAsync(Model.Milestone targetMilestone)
+        public override string GetCommitsLink(string user, string repository, Model.Milestone milestone, Model.Milestone previousMilestone)
         {
             throw new NotImplementedException();
         }
@@ -148,6 +96,17 @@ namespace GitReleaseManager.Core
             throw new NotImplementedException();
         }
 
+        protected override async Task CloseMilestoneAsync(string owner, string repository, Model.Milestone milestone)
+        {
+            // todo: milestone.Number should be number
+            await _api.IssueEditMilestoneAsync(owner, repository, Convert.ToInt64(milestone.Number), new EditMilestoneOption() { State = "closed" }).ConfigureAwait(false);
+        }
+
+        protected override async Task CreateCommentAsync(string owner, string repository, Model.Issue issue, string comment)
+        {
+            await _api.IssueCreateCommentAsync(owner, repository, Convert.ToInt64(issue.Number), new CreateIssueCommentOption(comment)).ConfigureAwait(false);
+        }
+
         protected override async Task CreateLabelAsync(string owner, string repository, LabelConfig label)
         {
             await _api.IssueCreateLabelAsync(owner, repository, new CreateLabelOption(label.Color, label.Description, label.Name)).ConfigureAwait(false);
@@ -180,6 +139,13 @@ namespace GitReleaseManager.Core
             }
 
             return result;
+        }
+
+        protected override async Task<Model.Milestone> GetMilestoneAsync(string owner, string repository, string milestoneTitle)
+        {
+            var milestones = await _api.IssueGetMilestonesListAsync(owner, repository).ConfigureAwait(false);
+            var milestone = milestones.FirstOrDefault(x => x.Title.Equals(milestoneTitle, StringComparison.InvariantCulture));
+            return Mapper.Map<Model.Milestone>(milestone);
         }
     }
 }

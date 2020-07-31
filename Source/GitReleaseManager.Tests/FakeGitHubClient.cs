@@ -38,7 +38,7 @@ namespace GitReleaseManager.Tests
             return Task.FromResult(NumberOfCommits);
         }
 
-        public Task<List<Issue>> GetIssuesAsync(Milestone targetMilestone)
+        public Task<List<Issue>> GetClosedIssuesForMilestoneAsync(Milestone targetMilestone)
         {
             return Task.FromResult(Issues);
         }
@@ -98,7 +98,7 @@ namespace GitReleaseManager.Tests
             throw new System.NotImplementedException();
         }
 
-        public Task CloseMilestoneAsync(string owner, string repository, string milestoneTitle)
+        public Task CloseAndCommentMilestoneAsync(string owner, string repository, string milestoneTitle)
         {
             throw new System.NotImplementedException();
         }
