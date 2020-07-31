@@ -31,7 +31,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Chocolatey", "Chocolatey", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GitReleaseManager.Tool", "GitReleaseManager.Tool\GitReleaseManager.Tool.csproj", "{E60129C7-706A-4B24-9D8D-6D5F23543280}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gitea", "..\..\Gitea\src\Gitea\Gitea.csproj", "{4D7C19A2-D318-4A3E-B0E5-8B91BE47EEAC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gitea", "Gitea\src\Gitea\Gitea.csproj", "{9E3EE633-423A-4705-971D-30C221A88E1C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -59,10 +59,10 @@ Global
 		{E60129C7-706A-4B24-9D8D-6D5F23543280}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E60129C7-706A-4B24-9D8D-6D5F23543280}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E60129C7-706A-4B24-9D8D-6D5F23543280}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4D7C19A2-D318-4A3E-B0E5-8B91BE47EEAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4D7C19A2-D318-4A3E-B0E5-8B91BE47EEAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4D7C19A2-D318-4A3E-B0E5-8B91BE47EEAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4D7C19A2-D318-4A3E-B0E5-8B91BE47EEAC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E3EE633-423A-4705-971D-30C221A88E1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E3EE633-423A-4705-971D-30C221A88E1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E3EE633-423A-4705-971D-30C221A88E1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E3EE633-423A-4705-971D-30C221A88E1C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

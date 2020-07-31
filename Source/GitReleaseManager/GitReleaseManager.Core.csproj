@@ -17,6 +17,6 @@
         <PackageReference Include="AutoMapper" Version="10.0.0" />
     </ItemGroup>
     <ItemGroup>
-      <ProjectReference Include="..\..\..\Gitea\src\Gitea\Gitea.csproj" />
+      <ProjectReference Include="..\Gitea\src\Gitea\Gitea.csproj" />
     </ItemGroup>
 </Project>
