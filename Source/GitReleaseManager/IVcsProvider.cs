@@ -41,6 +41,6 @@ namespace GitReleaseManager.Core
 
         Task PublishRelease(string owner, string repository, string tagName);
 
-        Task CreateLabelsAsync(string owner, string repository);
+        Task CreateDefaultLabelsAsync(string owner, string repository);
     }
 }

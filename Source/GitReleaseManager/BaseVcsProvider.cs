@@ -50,7 +50,7 @@ namespace GitReleaseManager.Core
 
         public abstract Task PublishRelease(string owner, string repository, string tagName);
 
-        public virtual async Task CreateLabelsAsync(string owner, string repository)
+        public virtual async Task CreateDefaultLabelsAsync(string owner, string repository)
         {
             if (Configuration.Labels.Any())
             {

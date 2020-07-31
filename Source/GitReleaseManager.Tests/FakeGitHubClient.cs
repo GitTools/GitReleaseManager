@@ -113,7 +113,7 @@ namespace GitReleaseManager.Tests
             throw new System.NotImplementedException();
         }
 
-        public Task CreateLabelsAsync(string owner, string repository)
+        public Task CreateDefaultLabelsAsync(string owner, string repository)
         {
             throw new System.NotImplementedException();
         }

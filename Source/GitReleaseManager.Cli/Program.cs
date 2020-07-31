@@ -258,7 +258,7 @@ namespace GitReleaseManager.Cli
             Log.Information("Creating standard labels");
             _vcsProvider = GetVcsProvider(subOptions);
 
-            await _vcsProvider.CreateLabelsAsync(subOptions.RepositoryOwner, subOptions.RepositoryName).ConfigureAwait(false);
+            await _vcsProvider.CreateDefaultLabelsAsync(subOptions.RepositoryOwner, subOptions.RepositoryName).ConfigureAwait(false);
             return 0;
         }
 

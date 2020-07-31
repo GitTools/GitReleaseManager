@@ -341,7 +341,7 @@ namespace GitReleaseManager.Core
             await _gitHubClient.Repository.Release.Edit(owner, repository, release.Id, releaseUpdate).ConfigureAwait(false);
         }
 
-        public async Task CreateLabelsAsync(string owner, string repository)
+        public async Task CreateDefaultLabelsAsync(string owner, string repository)
         {
             if (_configuration.Labels.Any())
             {
