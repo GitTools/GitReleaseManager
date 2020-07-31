@@ -5,6 +5,7 @@ namespace GitReleaseManager.Core
     using System.Collections.ObjectModel;
     using System.Linq;
     using System.Threading.Tasks;
+    using AutoMapper;
     using Gitea.Api;
     using Gitea.Client;
     using Gitea.Model;
@@ -16,8 +17,8 @@ namespace GitReleaseManager.Core
     {
         private readonly IssueApi _api;
 
-        public GiteaProvider(Config configuration, string token, string basePath)
-            : base(configuration, Log.ForContext<GiteaProvider>())
+        public GiteaProvider(IMapper mapper, Config configuration, string token, string basePath)
+            : base(mapper, configuration, Log.ForContext<GiteaProvider>())
         {
             /*
              * This will result in a HTTP header like this: "Authorization: token xxx"

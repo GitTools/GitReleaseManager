@@ -26,29 +26,24 @@ namespace GitReleaseManager.Core
     using Milestone = GitReleaseManager.Core.Model.Milestone;
     using Release = GitReleaseManager.Core.Model.Release;
 
-    public class GitHubProvider : IVcsProvider
+    public class GitHubProvider : BaseVcsProvider
     {
-        private readonly Config _configuration;
-        private readonly ILogger _logger = Log.ForContext<GitHubProvider>();
-        private readonly IMapper _mapper;
         private GitHubClient _gitHubClient;
 
         [Obsolete("Use overload with token only instead")]
         public GitHubProvider(IMapper mapper, Config configuration, string userName, string password, string token)
+            : base(mapper, configuration, Log.ForContext<GitHubProvider>())
         {
-            _mapper = mapper;
-            _configuration = configuration;
             CreateClient(userName, password, token);
         }
 
         public GitHubProvider(IMapper mapper, Config configuration, string token)
+            : base(mapper, configuration, Log.ForContext<GitHubProvider>())
         {
-            _mapper = mapper;
-            _configuration = configuration;
             CreateClient(token);
         }
 
-        public Task<int> GetNumberOfCommitsBetween(Milestone previousMilestone, Milestone currentMilestone, string user, string repository)
+        public override Task<int> GetNumberOfCommitsBetween(Milestone previousMilestone, Milestone currentMilestone, string user, string repository)
         {
             if (currentMilestone is null)
             {
@@ -58,31 +53,31 @@ namespace GitReleaseManager.Core
             return GetNumberOfCommitsBetweenInternal(previousMilestone, currentMilestone, user, repository);
         }
 
-        public async Task<List<Issue>> GetIssuesAsync(Milestone targetMilestone)
+        public override async Task<List<Issue>> GetIssuesAsync(Milestone targetMilestone)
         {
-            var githubMilestone = _mapper.Map<Octokit.Milestone>(targetMilestone);
-            _logger.Verbose("Finding issues on milestone: {@Milestone}", githubMilestone);
+            var githubMilestone = Mapper.Map<Octokit.Milestone>(targetMilestone);
+            Logger.Verbose("Finding issues on milestone: {@Milestone}", githubMilestone);
             var allIssues = await _gitHubClient.AllIssuesForMilestone(githubMilestone).ConfigureAwait(false);
-            return _mapper.Map<List<Issue>>(allIssues.Where(x => x.State == ItemState.Closed).ToList());
+            return Mapper.Map<List<Issue>>(allIssues.Where(x => x.State == ItemState.Closed).ToList());
         }
 
-        public async Task<List<Release>> GetReleasesAsync(string user, string repository)
+        public override async Task<List<Release>> GetReleasesAsync(string user, string repository)
         {
-            _logger.Verbose("Finding all releases on '{User}/{Repository}'", user, repository);
+            Logger.Verbose("Finding all releases on '{User}/{Repository}'", user, repository);
             var allReleases = await _gitHubClient.Repository.Release.GetAll(user, repository).ConfigureAwait(false);
-            return _mapper.Map<List<Release>>(allReleases.OrderByDescending(r => r.CreatedAt).ToList());
+            return Mapper.Map<List<Release>>(allReleases.OrderByDescending(r => r.CreatedAt).ToList());
         }
 
-        public async Task<Release> GetSpecificRelease(string tagName, string user, string repository)
+        public override async Task<Release> GetSpecificRelease(string tagName, string user, string repository)
         {
-            return _mapper.Map<Release>(await GetReleaseFromTagNameAsync(user, repository, tagName).ConfigureAwait(false));
+            return Mapper.Map<Release>(await GetReleaseFromTagNameAsync(user, repository, tagName).ConfigureAwait(false));
         }
 
-        public async Task<ReadOnlyCollection<Milestone>> GetReadOnlyMilestonesAsync(string user, string repository)
+        public override async Task<ReadOnlyCollection<Milestone>> GetReadOnlyMilestonesAsync(string user, string repository)
         {
             var milestonesClient = _gitHubClient.Issue.Milestone;
 
-            _logger.Verbose("Finding all closed milestones on '{User}/{Repository}'", user, repository);
+            Logger.Verbose("Finding all closed milestones on '{User}/{Repository}'", user, repository);
             var closed = await milestonesClient.GetAllForRepository(
                 user,
                 repository,
@@ -91,7 +86,7 @@ namespace GitReleaseManager.Core
                     State = ItemStateFilter.Closed,
                 }).ConfigureAwait(false);
 
-            _logger.Verbose("Finding all open milestones on '{User}/{Repository}'", user, repository);
+            Logger.Verbose("Finding all open milestones on '{User}/{Repository}'", user, repository);
             var open = await milestonesClient.GetAllForRepository(
                 user,
                 repository,
@@ -100,7 +95,7 @@ namespace GitReleaseManager.Core
                     State = ItemStateFilter.Open,
                 }).ConfigureAwait(false);
 
-            return new ReadOnlyCollection<Milestone>(_mapper.Map<List<Milestone>>(closed.Concat(open).ToList()));
+            return new ReadOnlyCollection<Milestone>(Mapper.Map<List<Milestone>>(closed.Concat(open).ToList()));
         }
 
         [Obsolete("Use overload with token only instead")]
@@ -121,7 +116,7 @@ namespace GitReleaseManager.Core
             _gitHubClient = github;
         }
 
-        public string GetCommitsLink(string user, string repository, Milestone milestone, Milestone previousMilestone)
+        public override string GetCommitsLink(string user, string repository, Milestone milestone, Milestone previousMilestone)
         {
             if (milestone is null)
             {
@@ -136,40 +131,40 @@ namespace GitReleaseManager.Core
             return string.Format(CultureInfo.InvariantCulture, "https://github.com/{0}/{1}/compare/{2}...{3}", user, repository, previousMilestone.Title, milestone.Title);
         }
 
-        public async Task<Release> CreateReleaseFromMilestone(string owner, string repository, string milestone, string releaseName, string targetCommitish, IList<string> assets, bool prerelease)
+        public override async Task<Release> CreateReleaseFromMilestone(string owner, string repository, string milestone, string releaseName, string targetCommitish, IList<string> assets, bool prerelease)
         {
             var release = await GetReleaseFromTagNameAsync(owner, repository, milestone).ConfigureAwait(false);
-            var releaseNotesBuilder = new ReleaseNotesBuilder(this, owner, repository, milestone, _configuration);
+            var releaseNotesBuilder = new ReleaseNotesBuilder(this, owner, repository, milestone, Configuration);
             var result = await releaseNotesBuilder.BuildReleaseNotes().ConfigureAwait(false);
 
             if (release == null)
             {
                 var releaseUpdate = CreateNewRelease(releaseName, milestone, result, prerelease, targetCommitish);
-                _logger.Verbose("Creating new release on '{Owner}/{Repository}'", owner, repository);
-                _logger.Debug("{@ReleaseUpdate}", releaseUpdate);
+                Logger.Verbose("Creating new release on '{Owner}/{Repository}'", owner, repository);
+                Logger.Debug("{@ReleaseUpdate}", releaseUpdate);
                 release = await _gitHubClient.Repository.Release.Create(owner, repository, releaseUpdate).ConfigureAwait(false);
             }
             else
             {
-                _logger.Warning("A release for milestone {Milestone} already exists, and will be updated", milestone);
+                Logger.Warning("A release for milestone {Milestone} already exists, and will be updated", milestone);
 
-                if (!release.Draft && !_configuration.Create.AllowUpdateToPublishedRelease)
+                if (!release.Draft && !Configuration.Create.AllowUpdateToPublishedRelease)
                 {
                     throw new InvalidOperationException("Release is not in draft state, so not updating.");
                 }
 
                 var releaseUpdate = release.ToUpdate();
                 releaseUpdate.Body = result;
-                _logger.Verbose("Updating release {Milestone} on '{Owner}/{Repository}'", milestone, owner, repository);
-                _logger.Debug("{@ReleaseUpdate}", releaseUpdate);
+                Logger.Verbose("Updating release {Milestone} on '{Owner}/{Repository}'", milestone, owner, repository);
+                Logger.Debug("{@ReleaseUpdate}", releaseUpdate);
                 await _gitHubClient.Repository.Release.Edit(owner, repository, release.Id, releaseUpdate).ConfigureAwait(false);
             }
 
             await AddAssets(owner, repository, milestone, assets).ConfigureAwait(false);
-            return _mapper.Map<Octokit.Release, Release>(release);
+            return Mapper.Map<Octokit.Release, Release>(release);
         }
 
-        public Task<Release> CreateReleaseFromInputFile(string owner, string repository, string name, string inputFilePath, string targetCommitish, IList<string> assets, bool prerelease)
+        public override Task<Release> CreateReleaseFromInputFile(string owner, string repository, string name, string inputFilePath, string targetCommitish, IList<string> assets, bool prerelease)
         {
             if (!File.Exists(inputFilePath))
             {
@@ -179,7 +174,7 @@ namespace GitReleaseManager.Core
             return CreateReleaseFromInputFileInternal(owner, repository, name, inputFilePath, targetCommitish, assets, prerelease);
         }
 
-        public async Task DiscardRelease(string owner, string repository, string name)
+        public override async Task DiscardRelease(string owner, string repository, string name)
         {
             var release = await GetReleaseFromTagNameAsync(owner, repository, name).ConfigureAwait(false);
 
@@ -196,13 +191,13 @@ namespace GitReleaseManager.Core
             await _gitHubClient.Repository.Release.Delete(owner, repository, release.Id).ConfigureAwait(false);
         }
 
-        public async Task AddAssets(string owner, string repository, string tagName, IList<string> assets)
+        public override async Task AddAssets(string owner, string repository, string tagName, IList<string> assets)
         {
             var release = await GetReleaseFromTagNameAsync(owner, repository, tagName).ConfigureAwait(false);
 
             if (release is null)
             {
-                _logger.Error("Unable to find Release with specified tagName");
+                Logger.Error("Unable to find Release with specified tagName");
                 return;
             }
 
@@ -221,7 +216,7 @@ namespace GitReleaseManager.Core
                     var existingAsset = release.Assets.FirstOrDefault(a => a.Name == assetFileName);
                     if (existingAsset != null)
                     {
-                        _logger.Warning("Requested asset to be uploaded already exists on draft release, replacing with new file: {AssetPath}", asset);
+                        Logger.Warning("Requested asset to be uploaded already exists on draft release, replacing with new file: {AssetPath}", asset);
                         await _gitHubClient.Repository.Release.DeleteAsset(owner, repository, existingAsset.Id).ConfigureAwait(false);
                     }
 
@@ -232,8 +227,8 @@ namespace GitReleaseManager.Core
                         RawData = File.Open(asset, System.IO.FileMode.Open, FileAccess.Read, FileShare.ReadWrite),
                     };
 
-                    _logger.Verbose("Uploading asset '{FileName}' to release '{TagName}' on '{Owner}/{Repository}'", assetFileName, tagName, owner, repository);
-                    _logger.Debug("{@Upload}", upload);
+                    Logger.Verbose("Uploading asset '{FileName}' to release '{TagName}' on '{Owner}/{Repository}'", assetFileName, tagName, owner, repository);
+                    Logger.Debug("{@Upload}", upload);
 
                     await _gitHubClient.Repository.Release.UploadAsset(release, upload).ConfigureAwait(false);
 
@@ -241,14 +236,14 @@ namespace GitReleaseManager.Core
                     upload.RawData.Dispose();
                 }
 
-                if (assets.Any() && _configuration.Create.IncludeShaSection)
+                if (assets.Any() && Configuration.Create.IncludeShaSection)
                 {
                     var stringBuilder = new StringBuilder(release.Body);
 
-                    if (!release.Body.Contains(_configuration.Create.ShaSectionHeading))
+                    if (!release.Body.Contains(Configuration.Create.ShaSectionHeading))
                     {
-                        _logger.Debug("Creating SHA section header");
-                        stringBuilder.AppendLine(string.Format("### {0}", _configuration.Create.ShaSectionHeading));
+                        Logger.Debug("Creating SHA section header");
+                        stringBuilder.AppendLine(string.Format("### {0}", Configuration.Create.ShaSectionHeading));
                     }
 
                     foreach (var asset in assets)
@@ -260,9 +255,9 @@ namespace GitReleaseManager.Core
                             continue;
                         }
 
-                        _logger.Debug("Creating SHA checksum for {Name}.", file.Name);
+                        Logger.Debug("Creating SHA checksum for {Name}.", file.Name);
 
-                        stringBuilder.AppendFormat(_configuration.Create.ShaSectionLineFormat, file.Name, ComputeSha256Hash(asset));
+                        stringBuilder.AppendFormat(Configuration.Create.ShaSectionLineFormat, file.Name, ComputeSha256Hash(asset));
                         stringBuilder.AppendLine();
                     }
 
@@ -270,108 +265,75 @@ namespace GitReleaseManager.Core
 
                     var releaseUpdate = release.ToUpdate();
                     releaseUpdate.Body = stringBuilder.ToString();
-                    _logger.Verbose("Updating release notes with sha checksum");
-                    _logger.Debug("{@ReleaseUpdate}", releaseUpdate);
+                    Logger.Verbose("Updating release notes with sha checksum");
+                    Logger.Debug("{@ReleaseUpdate}", releaseUpdate);
                     await _gitHubClient.Repository.Release.Edit(owner, repository, release.Id, releaseUpdate).ConfigureAwait(false);
                 }
             }
         }
 
-        public Task<string> ExportReleases(string owner, string repository, string tagName)
+        public override Task<string> ExportReleases(string owner, string repository, string tagName)
         {
-            var releaseNotesExporter = new ReleaseNotesExporter(this, _configuration, owner, repository);
+            var releaseNotesExporter = new ReleaseNotesExporter(this, Configuration, owner, repository);
 
             return releaseNotesExporter.ExportReleaseNotes(tagName);
         }
 
-        public async Task CloseMilestoneAsync(string owner, string repository, string milestoneTitle)
+        public override async Task CloseMilestoneAsync(string owner, string repository, string milestoneTitle)
         {
-            _logger.Verbose("Finding open milestone with title '{Title}' on '{Owner}/{Repository}'", milestoneTitle, owner, repository);
+            Logger.Verbose("Finding open milestone with title '{Title}' on '{Owner}/{Repository}'", milestoneTitle, owner, repository);
             var milestoneClient = _gitHubClient.Issue.Milestone;
             var openMilestones = await milestoneClient.GetAllForRepository(owner, repository, new MilestoneRequest { State = ItemStateFilter.Open }).ConfigureAwait(false);
             var milestone = openMilestones.FirstOrDefault(m => m.Title == milestoneTitle);
 
             if (milestone is null)
             {
-                _logger.Debug("No existing open milestone with title '{Title}' was found", milestoneTitle);
+                Logger.Debug("No existing open milestone with title '{Title}' was found", milestoneTitle);
                 return;
             }
 
-            _logger.Verbose("Closing milestone '{Title}' on '{Owner}/{Repository}'", milestoneTitle, owner, repository);
+            Logger.Verbose("Closing milestone '{Title}' on '{Owner}/{Repository}'", milestoneTitle, owner, repository);
 
             await milestoneClient.Update(owner, repository, milestone.Number, new MilestoneUpdate { State = ItemState.Closed }).ConfigureAwait(false);
 
-            if (_configuration.Close.IssueComments)
+            if (Configuration.Close.IssueComments)
             {
                 await AddIssueCommentsAsync(owner, repository, milestone).ConfigureAwait(false);
             }
         }
 
-        public async Task OpenMilestone(string owner, string repository, string milestoneTitle)
+        public override async Task OpenMilestone(string owner, string repository, string milestoneTitle)
         {
-            _logger.Verbose("Finding closed milestone with title '{Title}' on '{Owner}/{Repository}'", milestoneTitle, owner, repository);
+            Logger.Verbose("Finding closed milestone with title '{Title}' on '{Owner}/{Repository}'", milestoneTitle, owner, repository);
             var milestoneClient = _gitHubClient.Issue.Milestone;
             var closedMilestones = await milestoneClient.GetAllForRepository(owner, repository, new MilestoneRequest { State = ItemStateFilter.Closed }).ConfigureAwait(false);
             var milestone = closedMilestones.FirstOrDefault(m => m.Title == milestoneTitle);
 
             if (milestone is null)
             {
-                _logger.Debug("No existing closed milestone with title '{Title}' was found", milestoneTitle);
+                Logger.Debug("No existing closed milestone with title '{Title}' was found", milestoneTitle);
                 return;
             }
 
-            _logger.Verbose("Opening milestone '{Title}' on '{Owner}/{Repository}'", milestoneTitle, owner, repository);
+            Logger.Verbose("Opening milestone '{Title}' on '{Owner}/{Repository}'", milestoneTitle, owner, repository);
             await milestoneClient.Update(owner, repository, milestone.Number, new MilestoneUpdate { State = ItemState.Open }).ConfigureAwait(false);
         }
 
-        public async Task PublishRelease(string owner, string repository, string tagName)
+        public override async Task PublishRelease(string owner, string repository, string tagName)
         {
             var release = await GetReleaseFromTagNameAsync(owner, repository, tagName).ConfigureAwait(false);
 
             if (release is null)
             {
-                _logger.Verbose("No release with tag '{TagName}' was found on '{Owner}/{Repository}'", tagName, owner, repository);
+                Logger.Verbose("No release with tag '{TagName}' was found on '{Owner}/{Repository}'", tagName, owner, repository);
                 return;
             }
 
             var releaseUpdate = new ReleaseUpdate { TagName = tagName, Draft = false };
 
-            _logger.Verbose("Publishing release '{TagName}' on '{Owner}/{Repository}'", tagName, owner, repository);
-            _logger.Debug("{@ReleaseUpdate}", releaseUpdate);
+            Logger.Verbose("Publishing release '{TagName}' on '{Owner}/{Repository}'", tagName, owner, repository);
+            Logger.Debug("{@ReleaseUpdate}", releaseUpdate);
             await _gitHubClient.Repository.Release.Edit(owner, repository, release.Id, releaseUpdate).ConfigureAwait(false);
-        }
-
-        public async Task CreateDefaultLabelsAsync(string owner, string repository)
-        {
-            if (_configuration.Labels.Any())
-            {
-                var newLabels = new List<NewLabel>();
-
-                foreach (var label in _configuration.Labels)
-                {
-                    newLabels.Add(new NewLabel(label.Name, label.Color)
-                    {
-                        Description = label.Description,
-                    });
-                }
-
-                _logger.Verbose("Grabbing all existing labels on '{Owner}/{Repository}'", owner, repository);
-                var labels = await _gitHubClient.Issue.Labels.GetAllForRepository(owner, repository).ConfigureAwait(false);
-
-                _logger.Verbose("Removing existing labels");
-                _logger.Debug("{@Labels}", labels);
-                var deleteLabelsTasks = labels.Select(label => _gitHubClient.Issue.Labels.Delete(owner, repository, label.Name));
-                await Task.WhenAll(deleteLabelsTasks).ConfigureAwait(false);
-
-                _logger.Verbose("Creating new standard labels");
-                _logger.Debug("{@Labels}", newLabels);
-                var createLabelsTasks = newLabels.Select(label => _gitHubClient.Issue.Labels.Create(owner, repository, label));
-                await Task.WhenAll(createLabelsTasks).ConfigureAwait(false);
-            }
-            else
-            {
-                _logger.Warning("No labels defined");
-            }
         }
 
         private static NewRelease CreateNewRelease(string name, string tagName, string body, bool prerelease, string targetCommitish)
@@ -418,7 +380,7 @@ namespace GitReleaseManager.Core
         private async Task AddIssueCommentsAsync(string owner, string repository, Octokit.Milestone milestone)
         {
             const string detectionComment = "<!-- GitReleaseManager release comment -->";
-            var issueComment = detectionComment + "\n" + _configuration.Close.IssueCommentFormat.ReplaceTemplate(new { owner, repository, Milestone = milestone.Title });
+            var issueComment = detectionComment + "\n" + Configuration.Close.IssueCommentFormat.ReplaceTemplate(new { owner, repository, Milestone = milestone.Title });
             var issues = await GetIssuesFromMilestoneAsync(owner, repository, milestone.Number).ConfigureAwait(false);
 
             foreach (var issue in issues)
@@ -432,53 +394,45 @@ namespace GitReleaseManager.Core
 
                 try
                 {
-                    if (!await CommentsIncludeString(owner, repository, issue.Number, detectionComment).ConfigureAwait(false))
+                    if (!await DoesAnyCommentIncludeStringAsync(owner, repository, issue.Number, detectionComment).ConfigureAwait(false))
                     {
-                        _logger.Information("Adding release comment for issue #{IssueNumber}", issue.Number);
+                        Logger.Information("Adding release comment for issue #{IssueNumber}", issue.Number);
                         await _gitHubClient.Issue.Comment.Create(owner, repository, issue.Number, issueComment).ConfigureAwait(false);
                     }
                     else
                     {
-                        _logger.Information("Issue #{IssueNumber} already contains release comment, skipping...", issue.Number);
+                        Logger.Information("Issue #{IssueNumber} already contains release comment, skipping...", issue.Number);
                     }
                 }
                 catch (ForbiddenException)
                 {
-                    _logger.Error("Unable to add comment to issue #{IssueNumber}. Insufficient permissions.", issue.Number);
+                    Logger.Error("Unable to add comment to issue #{IssueNumber}. Insufficient permissions.", issue.Number);
                     break;
                 }
             }
         }
 
-        private async Task<bool> CommentsIncludeString(string owner, string repository, int issueNumber, string comment)
-        {
-            _logger.Verbose("Finding issue comment created by GitReleaseManager for issue #{IssueNumber}", issueNumber);
-            var issueComments = await _gitHubClient.Issue.Comment.GetAllForIssue(owner, repository, issueNumber).ConfigureAwait(false);
-
-            return issueComments.Any(c => c.Body.Contains(comment));
-        }
-
         private async Task<Release> CreateReleaseFromInputFileInternal(string owner, string repository, string name, string inputFilePath, string targetCommitish, IList<string> assets, bool prerelease)
         {
-            _logger.Verbose("Reading release notes from: '{FilePath}'", inputFilePath);
+            Logger.Verbose("Reading release notes from: '{FilePath}'", inputFilePath);
 
             var inputFileContents = File.ReadAllText(inputFilePath);
 
             var releaseUpdate = CreateNewRelease(name, name, inputFileContents, prerelease, targetCommitish);
 
-            _logger.Verbose("Creating new release on '{Owner}/{Repository}'", owner, repository);
-            _logger.Debug("{@ReleaseUpdate}", releaseUpdate);
+            Logger.Verbose("Creating new release on '{Owner}/{Repository}'", owner, repository);
+            Logger.Debug("{@ReleaseUpdate}", releaseUpdate);
 
             var release = await _gitHubClient.Repository.Release.Create(owner, repository, releaseUpdate).ConfigureAwait(false);
 
             await AddAssets(owner, repository, name, assets).ConfigureAwait(false);
 
-            return _mapper.Map<Octokit.Release, Release>(release);
+            return Mapper.Map<Octokit.Release, Release>(release);
         }
 
         private Task<IReadOnlyList<Octokit.Issue>> GetIssuesFromMilestoneAsync(string owner, string repository, int milestoneNumber, ItemStateFilter state = ItemStateFilter.Closed)
         {
-            _logger.Verbose("Finding issues with milestone: '{Milestone}", milestoneNumber);
+            Logger.Verbose("Finding issues with milestone: '{Milestone}", milestoneNumber);
             return _gitHubClient.Issue.GetAllForRepository(owner, repository, new RepositoryIssueRequest
             {
                 Milestone = milestoneNumber.ToString(),
@@ -492,18 +446,18 @@ namespace GitReleaseManager.Core
             {
                 if (previousMilestone == null)
                 {
-                    _logger.Verbose("Getting commit count between base '{Base}' and head '{Head}'", "master", currentMilestone.Title);
+                    Logger.Verbose("Getting commit count between base '{Base}' and head '{Head}'", "master", currentMilestone.Title);
                     var gitHubClientRepositoryCommitsCompare = await _gitHubClient.Repository.Commit.Compare(user, repository, "master", currentMilestone.Title).ConfigureAwait(false);
                     return gitHubClientRepositoryCommitsCompare.AheadBy;
                 }
 
-                _logger.Verbose("Getting commit count between base '{Base}' and head '{Head}'", previousMilestone.Title, "master");
+                Logger.Verbose("Getting commit count between base '{Base}' and head '{Head}'", previousMilestone.Title, "master");
                 var compareResult = await _gitHubClient.Repository.Commit.Compare(user, repository, previousMilestone.Title, "master").ConfigureAwait(false);
                 return compareResult.AheadBy;
             }
             catch (NotFoundException)
             {
-                _logger.Warning("Unable to find tag for milestone, so commit count will be returned as zero");
+                Logger.Warning("Unable to find tag for milestone, so commit count will be returned as zero");
 
                 // If there is no tag yet the Compare will return a NotFoundException
                 // we can safely ignore
@@ -513,7 +467,7 @@ namespace GitReleaseManager.Core
 
         private async Task<Octokit.Release> GetReleaseFromTagNameAsync(string owner, string repository, string tagName)
         {
-            _logger.Verbose("Finding release with tag name: '{TagName}'", tagName);
+            Logger.Verbose("Finding release with tag name: '{TagName}'", tagName);
             var releases = await _gitHubClient.Repository.Release.GetAll(owner, repository).ConfigureAwait(false);
 
             var release = releases.FirstOrDefault(r => r.TagName == tagName);
@@ -526,9 +480,41 @@ namespace GitReleaseManager.Core
             if (lastApi?.RateLimit.Remaining == 0)
             {
                 var sleepTime = lastApi.RateLimit.Reset - DateTimeOffset.Now;
-                _logger.Warning("Rate limit exceeded, sleeping for {$SleepTime}", sleepTime);
+                Logger.Warning("Rate limit exceeded, sleeping for {$SleepTime}", sleepTime);
                 Thread.Sleep(sleepTime);
             }
+        }
+
+        protected override async Task DeleteExistingLabelsAsync(string owner, string repository)
+        {
+            Logger.Verbose("Grabbing all existing labels on '{Owner}/{Repository}'", owner, repository);
+            var labels = await _gitHubClient.Issue.Labels.GetAllForRepository(owner, repository).ConfigureAwait(false);
+
+            Logger.Verbose("Removing existing labels");
+            Logger.Debug("{@Labels}", labels);
+            var deleteLabelsTasks = labels.Select(label => _gitHubClient.Issue.Labels.Delete(owner, repository, label.Name));
+            await Task.WhenAll(deleteLabelsTasks).ConfigureAwait(false);
+        }
+
+        protected override async Task CreateLabelAsync(string owner, string repository, LabelConfig label)
+        {
+            var githubLabel = new NewLabel(label.Name, label.Color)
+            {
+                Description = label.Description,
+            };
+
+            await _gitHubClient.Issue.Labels.Create(owner, repository, githubLabel).ConfigureAwait(false);
+        }
+
+        protected override async Task<List<string>> GetCommentsForIssueAsync(string owner, string repository, long index)
+        {
+            var issueComments = await _gitHubClient.Issue.Comment.GetAllForIssue(owner, repository, Convert.ToInt32(index)).ConfigureAwait(false);
+            var result = new List<string>();
+            foreach (var comment in issueComments)
+            {
+                result.Add(comment.Body);
+            }
+            return result;
         }
     }
 }

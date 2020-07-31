@@ -6,17 +6,20 @@ namespace GitReleaseManager.Core
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
+    using AutoMapper;
     using GitReleaseManager.Core.Configuration;
     using GitReleaseManager.Core.Model;
     using Serilog;
 
     public abstract class BaseVcsProvider : IVcsProvider
     {
-        public BaseVcsProvider(Config configuration, ILogger logger)
+        public BaseVcsProvider(IMapper mapper, Config configuration, ILogger logger)
         {
+            Mapper = mapper;
             Configuration = configuration;
             Logger = logger;
         }
+        protected IMapper Mapper { get; }
 
         protected Config Configuration { get; }
 
