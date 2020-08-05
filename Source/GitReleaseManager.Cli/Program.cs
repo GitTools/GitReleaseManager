@@ -24,7 +24,7 @@ namespace GitReleaseManager.Cli
     public static class Program
     {
         private static FileSystem _fileSystem;
-        private static IVcsProvider _vcsProvider;
+        private static IVcsService _vcsService;
         private static IServiceProvider _serviceProvider;
 
         private static async Task<int> Main(string[] args)
@@ -80,7 +80,7 @@ namespace GitReleaseManager.Cli
 
         private static void RegisterServices(BaseVcsOptions options)
         {
-            var logger = Log.ForContext<GitHubProvider>();
+            var logger = Log.ForContext<VcsService>();
             var mapper = AutoMapperConfiguration.Configure();
             var configuration = ConfigurationProvider.Provide(options.TargetDirectory ?? Environment.CurrentDirectory, _fileSystem);
 
@@ -95,7 +95,7 @@ namespace GitReleaseManager.Cli
                 .AddSingleton(mapper)
                 .AddSingleton(configuration)
                 .AddSingleton<IGitHubClient>(gitHubClient)
-                .AddSingleton<IVcsProvider, GitHubProvider>();
+                .AddSingleton<IVcsService, VcsService>();
 
             _serviceProvider = serviceCollection.BuildServiceProvider();
         }
@@ -179,7 +179,7 @@ namespace GitReleaseManager.Cli
         private static async Task<int> CreateReleaseAsync(CreateSubOptions subOptions)
         {
             Log.Information("Creating release...");
-            _vcsProvider = GetVcsProvider();
+            _vcsService = GetVcsService();
 
             Core.Model.Release release;
             if (!string.IsNullOrEmpty(subOptions.Milestone))
@@ -192,12 +192,12 @@ namespace GitReleaseManager.Cli
                     releaseName = subOptions.Milestone;
                 }
 
-                release = await _vcsProvider.CreateReleaseFromMilestone(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone, releaseName, subOptions.TargetCommitish, subOptions.AssetPaths, subOptions.Prerelease).ConfigureAwait(false);
+                release = await _vcsService.CreateReleaseFromMilestone(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone, releaseName, subOptions.TargetCommitish, subOptions.AssetPaths, subOptions.Prerelease).ConfigureAwait(false);
             }
             else
             {
                 Log.Verbose("No milestone was specified, switching to release creating from input file");
-                release = await _vcsProvider.CreateReleaseFromInputFile(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Name, subOptions.InputFilePath, subOptions.TargetCommitish, subOptions.AssetPaths, subOptions.Prerelease).ConfigureAwait(false);
+                release = await _vcsService.CreateReleaseFromInputFile(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Name, subOptions.InputFilePath, subOptions.TargetCommitish, subOptions.AssetPaths, subOptions.Prerelease).ConfigureAwait(false);
             }
 
             Log.Information("Drafted release is available at:\n{HtmlUrl}", release.HtmlUrl);
@@ -208,9 +208,9 @@ namespace GitReleaseManager.Cli
         private static async Task<int> DiscardReleaseAsync(DiscardSubOptions subOptions)
         {
             Log.Information("Discarding release {Milestone}", subOptions.Milestone);
-            _vcsProvider = GetVcsProvider();
+            _vcsService = GetVcsService();
 
-            await _vcsProvider.DiscardRelease(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone).ConfigureAwait(false);
+            await _vcsService.DiscardRelease(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone).ConfigureAwait(false);
 
             return 0;
         }
@@ -218,9 +218,9 @@ namespace GitReleaseManager.Cli
         private static async Task<int> AddAssetsAsync(AddAssetSubOptions subOptions)
         {
             Log.Information("Uploading assets");
-            _vcsProvider = GetVcsProvider();
+            _vcsService = GetVcsService();
 
-            await _vcsProvider.AddAssets(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.TagName, subOptions.AssetPaths).ConfigureAwait(false);
+            await _vcsService.AddAssets(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.TagName, subOptions.AssetPaths).ConfigureAwait(false);
 
             return 0;
         }
@@ -228,9 +228,9 @@ namespace GitReleaseManager.Cli
         private static async Task<int> CloseMilestoneAsync(CloseSubOptions subOptions)
         {
             Log.Information("Closing milestone {Milestone}", subOptions.Milestone);
-            _vcsProvider = GetVcsProvider();
+            _vcsService = GetVcsService();
 
-            await _vcsProvider.CloseMilestone(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone).ConfigureAwait(false);
+            await _vcsService.CloseMilestone(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone).ConfigureAwait(false);
 
             return 0;
         }
@@ -238,27 +238,27 @@ namespace GitReleaseManager.Cli
         private static async Task<int> OpenMilestoneAsync(OpenSubOptions subOptions)
         {
             Log.Information("Opening milestone {Milestone}", subOptions.Milestone);
-            _vcsProvider = GetVcsProvider();
+            _vcsService = GetVcsService();
 
-            await _vcsProvider.OpenMilestone(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone).ConfigureAwait(false);
+            await _vcsService.OpenMilestone(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone).ConfigureAwait(false);
 
             return 0;
         }
 
         private static async Task<int> PublishReleaseAsync(PublishSubOptions subOptions)
         {
-            _vcsProvider = GetVcsProvider();
+            _vcsService = GetVcsService();
 
-            await _vcsProvider.PublishRelease(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.TagName).ConfigureAwait(false);
+            await _vcsService.PublishRelease(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.TagName).ConfigureAwait(false);
             return 0;
         }
 
         private static async Task<int> ExportReleasesAsync(ExportSubOptions subOptions)
         {
             Log.Information("Exporting release {TagName}", subOptions.TagName);
-            _vcsProvider = GetVcsProvider();
+            _vcsService = GetVcsService();
 
-            var releasesMarkdown = await _vcsProvider.ExportReleases(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.TagName).ConfigureAwait(false);
+            var releasesMarkdown = await _vcsService.ExportReleases(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.TagName).ConfigureAwait(false);
 
             using (var sw = new StreamWriter(File.Open(subOptions.FileOutputPath, System.IO.FileMode.OpenOrCreate)))
             {
@@ -287,15 +287,15 @@ namespace GitReleaseManager.Cli
         private static async Task<int> CreateLabelsAsync(LabelSubOptions subOptions)
         {
             Log.Information("Creating standard labels");
-            _vcsProvider = GetVcsProvider();
+            _vcsService = GetVcsService();
 
-            await _vcsProvider.CreateLabels(subOptions.RepositoryOwner, subOptions.RepositoryName).ConfigureAwait(false);
+            await _vcsService.CreateLabels(subOptions.RepositoryOwner, subOptions.RepositoryName).ConfigureAwait(false);
             return 0;
         }
 
-        private static IVcsProvider GetVcsProvider()
+        private static IVcsService GetVcsService()
         {
-            return _serviceProvider.GetService<IVcsProvider>();
+            return _serviceProvider.GetService<IVcsService>();
         }
 
         private static void LogOptions(BaseSubOptions options)

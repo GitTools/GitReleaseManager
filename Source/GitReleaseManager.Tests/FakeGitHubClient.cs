@@ -11,9 +11,9 @@ namespace GitReleaseManager.Tests
     using System.Globalization;
     using System.Threading.Tasks;
     using GitReleaseManager.Core.Model;
-    using IVcsProvider = GitReleaseManager.Core.IVcsProvider;
+    using IVcsService = GitReleaseManager.Core.IVcsService;
 
-    public class FakeGitHubClient : IVcsProvider
+    public class FakeGitHubClient : IVcsService
     {
         public FakeGitHubClient()
         {

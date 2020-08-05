@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------
-// <copyright file="GitHubProvider.cs" company="GitTools Contributors">
+// <copyright file="VcsService.cs" company="GitTools Contributors">
 //     Copyright (c) 2015 - Present - GitTools Contributors
 // </copyright>
 //-----------------------------------------------------------------------
@@ -26,14 +26,14 @@ namespace GitReleaseManager.Core
     using Milestone = GitReleaseManager.Core.Model.Milestone;
     using Release = GitReleaseManager.Core.Model.Release;
 
-    public class GitHubProvider : IVcsProvider
+    public class VcsService : IVcsService
     {
         private readonly IGitHubClient _gitHubClient;
         private readonly ILogger _logger;
         private readonly IMapper _mapper;
         private readonly Config _configuration;
 
-        public GitHubProvider(IGitHubClient gitHubClient, ILogger logger, IMapper mapper, Config configuration)
+        public VcsService(IGitHubClient gitHubClient, ILogger logger, IMapper mapper, Config configuration)
         {
             _gitHubClient = gitHubClient;
             _logger = logger;

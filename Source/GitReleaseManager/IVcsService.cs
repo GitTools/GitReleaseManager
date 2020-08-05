@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------
-// <copyright file="IVcsProvider.cs" company="GitTools Contributors">
+// <copyright file="IVcsService.cs" company="GitTools Contributors">
 //     Copyright (c) 2015 - Present - GitTools Contributors
 // </copyright>
 //-----------------------------------------------------------------------
@@ -11,7 +11,7 @@ namespace GitReleaseManager.Core
     using System.Threading.Tasks;
     using GitReleaseManager.Core.Model;
 
-    public interface IVcsProvider
+    public interface IVcsService
     {
         Task<int> GetNumberOfCommitsBetween(Milestone previousMilestone, Milestone currentMilestone, string user, string repository);
 

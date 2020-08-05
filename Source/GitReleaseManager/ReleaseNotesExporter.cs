@@ -17,15 +17,15 @@ namespace GitReleaseManager.Core
 
     public class ReleaseNotesExporter
     {
-        private readonly IVcsProvider _vcsProvider;
+        private readonly IVcsService _vcsService;
         private readonly ILogger _logger;
         private readonly Config _configuration;
         private readonly string _user;
         private readonly string _repository;
 
-        public ReleaseNotesExporter(IVcsProvider vcsProvider, ILogger logger, Config configuration, string user, string repository)
+        public ReleaseNotesExporter(IVcsService vcsService, ILogger logger, Config configuration, string user, string repository)
         {
-            _vcsProvider = vcsProvider;
+            _vcsService = vcsService;
             _logger = logger;
             _configuration = configuration;
             _user = user;
@@ -40,7 +40,7 @@ namespace GitReleaseManager.Core
 
             if (string.IsNullOrEmpty(tagName))
             {
-                var releases = await _vcsProvider.GetReleasesAsync(_user, _repository).ConfigureAwait(false);
+                var releases = await _vcsService.GetReleasesAsync(_user, _repository).ConfigureAwait(false);
 
                 if (releases.Count > 0)
                 {
@@ -56,7 +56,7 @@ namespace GitReleaseManager.Core
             }
             else
             {
-                var release = await _vcsProvider.GetSpecificRelease(tagName, _user, _repository).ConfigureAwait(false);
+                var release = await _vcsService.GetSpecificRelease(tagName, _user, _repository).ConfigureAwait(false);
 
                 AppendVersionReleaseNotes(stringBuilder, release);
             }
