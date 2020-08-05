@@ -16,11 +16,13 @@ namespace GitReleaseManager.Core
     using GitReleaseManager.Core.Configuration;
     using GitReleaseManager.Core.Extensions;
     using GitReleaseManager.Core.Model;
+    using GitReleaseManager.Core.Provider;
     using Serilog;
 
     public class ReleaseNotesBuilder
     {
         private readonly IVcsService _vcsService;
+        private readonly IVcsProvider _vcsProvider;
         private readonly ILogger _logger;
         private readonly string _user;
         private readonly string _repository;
@@ -29,9 +31,10 @@ namespace GitReleaseManager.Core
         private ReadOnlyCollection<Milestone> _milestones;
         private Milestone _targetMilestone;
 
-        public ReleaseNotesBuilder(IVcsService vcsService, ILogger logger, string user, string repository, string milestoneTitle, Config configuration)
+        public ReleaseNotesBuilder(IVcsService vcsService, IVcsProvider vcsProvider, ILogger logger, string user, string repository, string milestoneTitle, Config configuration)
         {
             _vcsService = vcsService;
+            _vcsProvider = vcsProvider;
             _logger = logger;
             _user = user;
             _repository = repository;
@@ -62,7 +65,7 @@ namespace GitReleaseManager.Core
 
                 if (numberOfCommits > 0)
                 {
-                    var commitsLink = _vcsService.GetCommitsLink(_user, _repository, _targetMilestone, previousMilestone);
+                    var commitsLink = _vcsProvider.GetCommitsUrl(_user, _repository, _targetMilestone?.Title, previousMilestone?.Title);
                     var commitsText = string.Format(numberOfCommits == 1 ? "{0} commit" : "{0} commits", numberOfCommits);
 
                     stringBuilder.AppendFormat(@"As part of this release we had [{0}]({1}) which resulted in [{2}]({3}) being closed.", commitsText, commitsLink, issuesText, _targetMilestone.HtmlUrl + "?closed=1");
@@ -74,7 +77,7 @@ namespace GitReleaseManager.Core
             }
             else if (numberOfCommits > 0)
             {
-                var commitsLink = _vcsService.GetCommitsLink(_user, _repository, _targetMilestone, previousMilestone);
+                var commitsLink = _vcsProvider.GetCommitsUrl(_user, _repository, _targetMilestone?.Title, previousMilestone?.Title);
                 var commitsText = string.Format(numberOfCommits == 1 ? "{0} commit" : "{0} commits", numberOfCommits);
                 stringBuilder.AppendFormat(@"As part of this release we had [{0}]({1}).", commitsText, commitsLink);
             }

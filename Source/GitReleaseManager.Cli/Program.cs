@@ -17,6 +17,7 @@ namespace GitReleaseManager.Cli
     using GitReleaseManager.Core;
     using GitReleaseManager.Core.Configuration;
     using GitReleaseManager.Core.Helpers;
+    using GitReleaseManager.Core.Provider;
     using Microsoft.Extensions.DependencyInjection;
     using Octokit;
     using Serilog;
@@ -95,6 +96,7 @@ namespace GitReleaseManager.Cli
                 .AddSingleton(mapper)
                 .AddSingleton(configuration)
                 .AddSingleton<IGitHubClient>(gitHubClient)
+                .AddSingleton<IVcsProvider, GitHubProvider>()
                 .AddSingleton<IVcsService, VcsService>();
 
             _serviceProvider = serviceCollection.BuildServiceProvider();

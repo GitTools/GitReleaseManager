@@ -9,7 +9,6 @@ namespace GitReleaseManager.Core
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
-    using System.Globalization;
     using System.IO;
     using System.Linq;
     using System.Security.Cryptography;
@@ -20,6 +19,7 @@ namespace GitReleaseManager.Core
     using GitReleaseManager.Core.Configuration;
     using GitReleaseManager.Core.Exceptions;
     using GitReleaseManager.Core.Extensions;
+    using GitReleaseManager.Core.Provider;
     using Octokit;
     using Serilog;
     using Issue = GitReleaseManager.Core.Model.Issue;
@@ -28,13 +28,15 @@ namespace GitReleaseManager.Core
 
     public class VcsService : IVcsService
     {
+        private readonly IVcsProvider _vcsProvider;
         private readonly IGitHubClient _gitHubClient;
         private readonly ILogger _logger;
         private readonly IMapper _mapper;
         private readonly Config _configuration;
 
-        public VcsService(IGitHubClient gitHubClient, ILogger logger, IMapper mapper, Config configuration)
+        public VcsService(IVcsProvider vcsProvider, IGitHubClient gitHubClient, ILogger logger, IMapper mapper, Config configuration)
         {
+            _vcsProvider = vcsProvider;
             _gitHubClient = gitHubClient;
             _logger = logger;
             _mapper = mapper;
@@ -96,25 +98,10 @@ namespace GitReleaseManager.Core
             return new ReadOnlyCollection<Milestone>(_mapper.Map<List<Milestone>>(closed.Concat(open).ToList()));
         }
 
-        public string GetCommitsLink(string user, string repository, Milestone milestone, Milestone previousMilestone)
-        {
-            if (milestone is null)
-            {
-                throw new ArgumentNullException(nameof(milestone));
-            }
-
-            if (previousMilestone is null)
-            {
-                return string.Format(CultureInfo.InvariantCulture, "https://github.com/{0}/{1}/commits/{2}", user, repository, milestone.Title);
-            }
-
-            return string.Format(CultureInfo.InvariantCulture, "https://github.com/{0}/{1}/compare/{2}...{3}", user, repository, previousMilestone.Title, milestone.Title);
-        }
-
         public async Task<Release> CreateReleaseFromMilestone(string owner, string repository, string milestone, string releaseName, string targetCommitish, IList<string> assets, bool prerelease)
         {
             var release = await GetReleaseFromTagNameAsync(owner, repository, milestone).ConfigureAwait(false);
-            var releaseNotesBuilder = new ReleaseNotesBuilder(this, _logger, owner, repository, milestone, _configuration);
+            var releaseNotesBuilder = new ReleaseNotesBuilder(this, _vcsProvider, _logger, owner, repository, milestone, _configuration);
             var result = await releaseNotesBuilder.BuildReleaseNotes().ConfigureAwait(false);
 
             if (release == null)
