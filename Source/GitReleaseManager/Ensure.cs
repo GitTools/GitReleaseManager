@@ -26,7 +26,7 @@ namespace GitReleaseManager.Core
             }
             else if (string.IsNullOrWhiteSpace(str))
             {
-                throw new ArgumentException($"Value cannot be empty or white-space. (Parameter '{paramName}')", paramName);
+                throw new ArgumentException("Value cannot be empty or white-space.", paramName);
             }
         }
     }
