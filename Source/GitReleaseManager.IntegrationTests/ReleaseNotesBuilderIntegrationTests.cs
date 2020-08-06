@@ -19,6 +19,7 @@ namespace GitReleaseManager.IntegrationTests
     using Serilog;
 
     [TestFixture]
+    [Explicit]
     public class ReleaseNotesBuilderIntegrationTests
     {
         private IGitHubClient _gitHubClient;
