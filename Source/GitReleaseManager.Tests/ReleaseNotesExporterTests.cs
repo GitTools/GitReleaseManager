@@ -4,9 +4,6 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using NSubstitute;
-using Serilog;
-
 namespace GitReleaseManager.Tests
 {
     using System;
@@ -16,7 +13,9 @@ namespace GitReleaseManager.Tests
     using GitReleaseManager.Core.Configuration;
     using GitReleaseManager.Core.Helpers;
     using GitReleaseManager.Core.Model;
+    using NSubstitute;
     using NUnit.Framework;
+    using Serilog;
 
     [TestFixture]
     public class ReleaseNotesExporterTests
@@ -62,15 +61,15 @@ namespace GitReleaseManager.Tests
 
         private static void AcceptTest(Config configuration, params Release[] releases)
         {
-            var fakeClient = new FakeGitHubClient();
+            var vcsService = new VcsServiceMock();
             var logger = Substitute.For<ILogger>();
 
             foreach (var release in releases)
             {
-                fakeClient.Releases.Add(release);
+                vcsService.Releases.Add(release);
             }
 
-            var builder = new ReleaseNotesExporter(fakeClient, logger, configuration, "bob", "repo");
+            var builder = new ReleaseNotesExporter(vcsService, logger, configuration, "bob", "repo");
             var notes = builder.ExportReleaseNotes(null).Result;
 
             Approvals.Verify(notes);

@@ -4,6 +4,9 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
 namespace GitReleaseManager.Tests
 {
     using System;
@@ -148,23 +151,34 @@ namespace GitReleaseManager.Tests
 
         private static void AcceptTest(int commits, Config config, params Issue[] issues)
         {
-            var fakeClient = new FakeGitHubClient();
+            var owner = "TestUser";
+            var repository = "FakeRepository";
+            var milestoneNumber = 1;
+            var milestoneTitle = "1.2.3";
+
+            var vcsService = new VcsServiceMock();
             var logger = Substitute.For<ILogger>();
             var fileSystem = new FileSystem();
             var currentDirectory = Environment.CurrentDirectory;
             var configuration = config ?? ConfigurationProvider.Provide(currentDirectory, fileSystem);
 
-            fakeClient.Milestones.Add(CreateMilestone("1.2.3"));
+            vcsService.Milestones.Add(CreateMilestone(milestoneTitle));
 
-            fakeClient.NumberOfCommits = commits;
+            vcsService.NumberOfCommits = commits;
 
             foreach (var issue in issues)
             {
-                fakeClient.Issues.Add(issue);
+                vcsService.Issues.Add(issue);
             }
 
-            var vcsProvider = new GitHubProvider();
-            var builder = new ReleaseNotesBuilder(fakeClient, vcsProvider, logger, "TestUser", "FakeRepository", "1.2.3", configuration);
+            var vcsProvider = Substitute.For<IVcsProvider>();
+            vcsProvider.GetCommitsUrl(owner, repository, Arg.Any<string>(), Arg.Any<string>())
+                .Returns(o => new GitHubProvider(null, null).GetCommitsUrl((string)o[0], (string)o[1], (string)o[2], (string)o[3]));
+
+            vcsProvider.GetIssuesAsync(owner, repository, milestoneNumber, ItemStateFilter.Closed)
+                .Returns(Task.FromResult((IEnumerable<Issue>)issues));
+
+            var builder = new ReleaseNotesBuilder(vcsService, vcsProvider, logger, owner, repository, milestoneTitle, configuration);
             var notes = builder.BuildReleaseNotes().Result;
 
             Approvals.Verify(notes);
@@ -175,6 +189,7 @@ namespace GitReleaseManager.Tests
             return new Milestone
             {
                 Title = version,
+                Number = 1,
                 HtmlUrl = "https://github.com/gep13/FakeRepository/issues?q=milestone%3A" + version,
                 Version = new Version(version),
             };
