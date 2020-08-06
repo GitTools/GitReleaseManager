@@ -7,8 +7,6 @@
 namespace GitReleaseManager.Tests
 {
     using System.Collections.Generic;
-    using System.Collections.ObjectModel;
-    using System.Globalization;
     using System.Threading.Tasks;
     using GitReleaseManager.Core.Model;
     using IVcsService = GitReleaseManager.Core.IVcsService;
@@ -33,11 +31,6 @@ namespace GitReleaseManager.Tests
 
         public int NumberOfCommits { get; set; }
 
-        public Task<int> GetNumberOfCommitsBetween(Milestone previousMilestone, Milestone currentMilestone, string user, string repository)
-        {
-            return Task.FromResult(NumberOfCommits);
-        }
-
         public Task<List<Release>> GetReleasesAsync(string user, string repository)
         {
             return Task.FromResult(Releases);
@@ -46,26 +39,6 @@ namespace GitReleaseManager.Tests
         public Task<Release> GetSpecificRelease(string tagName, string user, string repository)
         {
             return Task.FromResult(Release);
-        }
-
-        public Task<ReadOnlyCollection<Milestone>> GetReadOnlyMilestonesAsync(string user, string repository)
-        {
-            return Task.FromResult(new ReadOnlyCollection<Milestone>(Milestones));
-        }
-
-        public string GetCommitsLink(string user, string repository, Milestone milestone, Milestone previousMilestone)
-        {
-            if (milestone is null)
-            {
-                throw new System.ArgumentNullException(nameof(milestone));
-            }
-
-            if (previousMilestone is null)
-            {
-                return string.Format(CultureInfo.InvariantCulture, "https://github.com/{0}/{1}/commits/{2}", user, repository, milestone.Title);
-            }
-
-            return string.Format(CultureInfo.InvariantCulture, "https://github.com/{0}/{1}/compare/{2}...{3}", user, repository, previousMilestone.Title, milestone.Title);
         }
 
         public Task<Release> CreateReleaseFromMilestone(string owner, string repository, string milestone, string releaseName, string targetCommitish, IList<string> assets, bool prerelease)

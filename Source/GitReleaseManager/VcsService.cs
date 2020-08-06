@@ -8,7 +8,6 @@ namespace GitReleaseManager.Core
 {
     using System;
     using System.Collections.Generic;
-    using System.Collections.ObjectModel;
     using System.IO;
     using System.Linq;
     using System.Security.Cryptography;
@@ -22,7 +21,6 @@ namespace GitReleaseManager.Core
     using GitReleaseManager.Core.Provider;
     using Octokit;
     using Serilog;
-    using Milestone = GitReleaseManager.Core.Model.Milestone;
     using Release = GitReleaseManager.Core.Model.Release;
 
     public class VcsService : IVcsService
@@ -42,16 +40,6 @@ namespace GitReleaseManager.Core
             _configuration = configuration;
         }
 
-        public Task<int> GetNumberOfCommitsBetween(Milestone previousMilestone, Milestone currentMilestone, string user, string repository)
-        {
-            if (currentMilestone is null)
-            {
-                throw new ArgumentNullException(nameof(currentMilestone));
-            }
-
-            return GetNumberOfCommitsBetweenInternal(previousMilestone, currentMilestone, user, repository);
-        }
-
         public async Task<List<Release>> GetReleasesAsync(string user, string repository)
         {
             _logger.Verbose("Finding all releases on '{User}/{Repository}'", user, repository);
@@ -64,35 +52,10 @@ namespace GitReleaseManager.Core
             return _mapper.Map<Release>(await GetReleaseFromTagNameAsync(user, repository, tagName).ConfigureAwait(false));
         }
 
-        public async Task<ReadOnlyCollection<Milestone>> GetReadOnlyMilestonesAsync(string user, string repository)
-        {
-            var milestonesClient = _gitHubClient.Issue.Milestone;
-
-            _logger.Verbose("Finding all closed milestones on '{User}/{Repository}'", user, repository);
-            var closed = await milestonesClient.GetAllForRepository(
-                user,
-                repository,
-                new MilestoneRequest
-                {
-                    State = ItemStateFilter.Closed,
-                }).ConfigureAwait(false);
-
-            _logger.Verbose("Finding all open milestones on '{User}/{Repository}'", user, repository);
-            var open = await milestonesClient.GetAllForRepository(
-                user,
-                repository,
-                new MilestoneRequest
-                {
-                    State = ItemStateFilter.Open,
-                }).ConfigureAwait(false);
-
-            return new ReadOnlyCollection<Milestone>(_mapper.Map<List<Milestone>>(closed.Concat(open).ToList()));
-        }
-
         public async Task<Release> CreateReleaseFromMilestone(string owner, string repository, string milestone, string releaseName, string targetCommitish, IList<string> assets, bool prerelease)
         {
             var release = await GetReleaseFromTagNameAsync(owner, repository, milestone).ConfigureAwait(false);
-            var releaseNotesBuilder = new ReleaseNotesBuilder(this, _vcsProvider, _logger, owner, repository, milestone, _configuration);
+            var releaseNotesBuilder = new ReleaseNotesBuilder(_vcsProvider, _logger, owner, repository, milestone, _configuration);
             var result = await releaseNotesBuilder.BuildReleaseNotes().ConfigureAwait(false);
 
             if (release == null)
@@ -437,31 +400,6 @@ namespace GitReleaseManager.Core
                 Milestone = milestoneNumber.ToString(),
                 State = state,
             });
-        }
-
-        private async Task<int> GetNumberOfCommitsBetweenInternal(Milestone previousMilestone, Milestone currentMilestone, string user, string repository)
-        {
-            try
-            {
-                if (previousMilestone == null)
-                {
-                    _logger.Verbose("Getting commit count between base '{Base}' and head '{Head}'", _configuration.DefaultBranch, currentMilestone.Title);
-                    var gitHubClientRepositoryCommitsCompare = await _gitHubClient.Repository.Commit.Compare(user, repository, _configuration.DefaultBranch, currentMilestone.Title).ConfigureAwait(false);
-                    return gitHubClientRepositoryCommitsCompare.AheadBy;
-                }
-
-                _logger.Verbose("Getting commit count between base '{Base}' and head '{Head}'", previousMilestone.Title, _configuration.DefaultBranch);
-                var compareResult = await _gitHubClient.Repository.Commit.Compare(user, repository, previousMilestone.Title, _configuration.DefaultBranch).ConfigureAwait(false);
-                return compareResult.AheadBy;
-            }
-            catch (NotFoundException)
-            {
-                _logger.Warning("Unable to find tag for milestone, so commit count will be returned as zero");
-
-                // If there is no tag yet the Compare will return a NotFoundException
-                // we can safely ignore
-                return 0;
-            }
         }
 
         private async Task<Octokit.Release> GetReleaseFromTagNameAsync(string owner, string repository, string tagName)

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
@@ -5,6 +6,7 @@ using AutoMapper;
 using Octokit;
 using Issue = GitReleaseManager.Core.Model.Issue;
 using ItemStateFilter = GitReleaseManager.Core.Model.ItemStateFilter;
+using Milestone = GitReleaseManager.Core.Model.Milestone;
 
 namespace GitReleaseManager.Core.Provider
 {
@@ -19,21 +21,40 @@ namespace GitReleaseManager.Core.Provider
             _mapper = mapper;
         }
 
-        public string GetCommitsUrl(string owner, string repository, string milestoneTitle, string compareMilestoneTitle = null)
+        public async Task<int> GetCommitsCount(string owner, string repository, string @base, string head)
+        {
+            try
+            {
+                var result = await _gitHubClient.Repository.Commit.Compare(owner, repository, @base, head).ConfigureAwait(false);
+                return result.AheadBy;
+            }
+            catch (NotFoundException)
+            {
+                // If there is no tag yet the Compare will return a NotFoundException
+                // we can safely ignore
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                throw new ApiException(ex.Message, ex);
+            }
+        }
+
+        public string GetCommitsUrl(string owner, string repository, string head, string @base = null)
         {
             Ensure.IsNotNullOrWhiteSpace(owner, nameof(owner));
             Ensure.IsNotNullOrWhiteSpace(repository, nameof(repository));
-            Ensure.IsNotNullOrWhiteSpace(milestoneTitle, nameof(milestoneTitle));
+            Ensure.IsNotNullOrWhiteSpace(head, nameof(head));
 
             string url;
 
-            if (string.IsNullOrWhiteSpace(compareMilestoneTitle))
+            if (string.IsNullOrWhiteSpace(@base))
             {
-                url = string.Format(CultureInfo.InvariantCulture, "https://github.com/{0}/{1}/commits/{2}", owner, repository, milestoneTitle);
+                url = string.Format(CultureInfo.InvariantCulture, "https://github.com/{0}/{1}/commits/{2}", owner, repository, head);
             }
             else
             {
-                url = string.Format(CultureInfo.InvariantCulture, "https://github.com/{0}/{1}/compare/{2}...{3}", owner, repository, compareMilestoneTitle, milestoneTitle);
+                url = string.Format(CultureInfo.InvariantCulture, "https://github.com/{0}/{1}/compare/{2}...{3}", owner, repository, @base, head);
             }
 
             return url;
@@ -53,7 +74,22 @@ namespace GitReleaseManager.Core.Provider
 
                 return _mapper.Map<IEnumerable<Issue>>(issues);
             }
-            catch (ApiValidationException ex)
+            catch (Exception ex)
+            {
+                throw new ApiException(ex.Message, ex);
+            }
+        }
+
+        public async Task<IEnumerable<Milestone>> GetMilestonesAsync(string owner, string repository, ItemStateFilter itemStateFilter = ItemStateFilter.All)
+        {
+            try
+            {
+                var request = new MilestoneRequest { State = (Octokit.ItemStateFilter)itemStateFilter };
+                var milestones = await _gitHubClient.Issue.Milestone.GetAllForRepository(owner, repository, request).ConfigureAwait(false);
+
+                return _mapper.Map<IEnumerable<Milestone>>(milestones);
+            }
+            catch (Exception ex)
             {
                 throw new ApiException(ex.Message, ex);
             }

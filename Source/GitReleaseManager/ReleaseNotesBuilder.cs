@@ -8,7 +8,6 @@ namespace GitReleaseManager.Core
 {
     using System;
     using System.Collections.Generic;
-    using System.Collections.ObjectModel;
     using System.Globalization;
     using System.Linq;
     using System.Text;
@@ -21,19 +20,17 @@ namespace GitReleaseManager.Core
 
     public class ReleaseNotesBuilder
     {
-        private readonly IVcsService _vcsService;
         private readonly IVcsProvider _vcsProvider;
         private readonly ILogger _logger;
         private readonly string _user;
         private readonly string _repository;
         private readonly string _milestoneTitle;
         private readonly Config _configuration;
-        private ReadOnlyCollection<Milestone> _milestones;
+        private IEnumerable<Milestone> _milestones;
         private Milestone _targetMilestone;
 
-        public ReleaseNotesBuilder(IVcsService vcsService, IVcsProvider vcsProvider, ILogger logger, string user, string repository, string milestoneTitle, Config configuration)
+        public ReleaseNotesBuilder(IVcsProvider vcsProvider, ILogger logger, string user, string repository, string milestoneTitle, Config configuration)
         {
-            _vcsService = vcsService;
             _vcsProvider = vcsProvider;
             _logger = logger;
             _user = user;
@@ -51,7 +48,16 @@ namespace GitReleaseManager.Core
             var issues = await GetIssues(_targetMilestone).ConfigureAwait(false);
             var stringBuilder = new StringBuilder();
             var previousMilestone = GetPreviousMilestone();
-            var numberOfCommits = await _vcsService.GetNumberOfCommitsBetween(previousMilestone, _targetMilestone, _user, _repository).ConfigureAwait(false);
+
+            var @base = previousMilestone != null
+                ? previousMilestone.Title
+                : _configuration.DefaultBranch;
+
+            var head = _targetMilestone.Title;
+
+            _logger.Verbose("Getting commit count between base '{Base}' and head '{Head}'", @base, head);
+
+            var numberOfCommits = await _vcsProvider.GetCommitsCount(_user, _repository, @base, head).ConfigureAwait(false);
 
             if (issues.Count == 0)
             {
@@ -196,7 +202,7 @@ namespace GitReleaseManager.Core
 
         private async Task LoadMilestones()
         {
-            _milestones = await _vcsService.GetReadOnlyMilestonesAsync(_user, _repository).ConfigureAwait(false);
+            _milestones = await _vcsProvider.GetMilestonesAsync(_user, _repository).ConfigureAwait(false);
         }
 
         private async Task<List<Issue>> GetIssues(Milestone milestone)
