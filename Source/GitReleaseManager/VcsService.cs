@@ -22,7 +22,6 @@ namespace GitReleaseManager.Core
     using GitReleaseManager.Core.Provider;
     using Octokit;
     using Serilog;
-    using Issue = GitReleaseManager.Core.Model.Issue;
     using Milestone = GitReleaseManager.Core.Model.Milestone;
     using Release = GitReleaseManager.Core.Model.Release;
 
@@ -51,14 +50,6 @@ namespace GitReleaseManager.Core
             }
 
             return GetNumberOfCommitsBetweenInternal(previousMilestone, currentMilestone, user, repository);
-        }
-
-        public async Task<List<Issue>> GetIssuesAsync(Milestone targetMilestone)
-        {
-            var githubMilestone = _mapper.Map<Octokit.Milestone>(targetMilestone);
-            _logger.Verbose("Finding issues on milestone: {@Milestone}", githubMilestone);
-            var allIssues = await _gitHubClient.AllIssuesForMilestone(githubMilestone).ConfigureAwait(false);
-            return _mapper.Map<List<Issue>>(allIssues.Where(x => x.State == ItemState.Closed).ToList());
         }
 
         public async Task<List<Release>> GetReleasesAsync(string user, string repository)

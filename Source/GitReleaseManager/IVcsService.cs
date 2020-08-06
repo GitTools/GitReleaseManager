@@ -15,8 +15,6 @@ namespace GitReleaseManager.Core
     {
         Task<int> GetNumberOfCommitsBetween(Milestone previousMilestone, Milestone currentMilestone, string user, string repository);
 
-        Task<List<Issue>> GetIssuesAsync(Milestone targetMilestone);
-
         Task<List<Release>> GetReleasesAsync(string user, string repository);
 
         Task<Release> GetSpecificRelease(string tagName, string user, string repository);

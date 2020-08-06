@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------
-// <copyright file="FakeGitHubClient.cs" company="GitTools Contributors">
+// <copyright file="VcsServiceMock.cs" company="GitTools Contributors">
 //     Copyright (c) 2015 - Present - GitTools Contributors
 // </copyright>
 //-----------------------------------------------------------------------
@@ -13,9 +13,9 @@ namespace GitReleaseManager.Tests
     using GitReleaseManager.Core.Model;
     using IVcsService = GitReleaseManager.Core.IVcsService;
 
-    public class FakeGitHubClient : IVcsService
+    public class VcsServiceMock : IVcsService
     {
-        public FakeGitHubClient()
+        public VcsServiceMock()
         {
             Milestones = new List<Milestone>();
             Issues = new List<Issue>();
@@ -36,11 +36,6 @@ namespace GitReleaseManager.Tests
         public Task<int> GetNumberOfCommitsBetween(Milestone previousMilestone, Milestone currentMilestone, string user, string repository)
         {
             return Task.FromResult(NumberOfCommits);
-        }
-
-        public Task<List<Issue>> GetIssuesAsync(Milestone targetMilestone)
-        {
-            return Task.FromResult(Issues);
         }
 
         public Task<List<Release>> GetReleasesAsync(string user, string repository)

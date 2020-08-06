@@ -201,7 +201,7 @@ namespace GitReleaseManager.Core
 
         private async Task<List<Issue>> GetIssues(Milestone milestone)
         {
-            var issues = await _vcsService.GetIssuesAsync(milestone).ConfigureAwait(false);
+            var issues = await _vcsProvider.GetIssuesAsync(_user, _repository, milestone.Number, ItemStateFilter.Closed).ConfigureAwait(false);
 
             var hasIncludedIssues = false;
 
@@ -222,7 +222,7 @@ namespace GitReleaseManager.Core
                 return new List<Issue>();
             }
 
-            return issues;
+            return issues.ToList();
         }
 
         private void GetTargetMilestone()
