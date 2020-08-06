@@ -425,7 +425,7 @@ namespace GitReleaseManager.Core
         private void SleepWhenRateIsLimited()
         {
             var lastApi = _gitHubClient.GetLastApiInfo();
-            if (lastApi?.RateLimit.Remaining == 0)
+            if (lastApi?.RateLimit?.Remaining == 0)
             {
                 var sleepTime = lastApi.RateLimit.Reset - DateTimeOffset.Now;
                 _logger.Warning("Rate limit exceeded, sleeping for {$SleepTime}", sleepTime);
