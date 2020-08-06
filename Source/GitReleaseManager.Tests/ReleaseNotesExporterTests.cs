@@ -61,16 +61,9 @@ namespace GitReleaseManager.Tests
 
         private static void AcceptTest(Config configuration, params Release[] releases)
         {
-            var vcsService = new VcsServiceMock();
             var logger = Substitute.For<ILogger>();
-
-            foreach (var release in releases)
-            {
-                vcsService.Releases.Add(release);
-            }
-
-            var builder = new ReleaseNotesExporter(vcsService, logger, configuration, "bob", "repo");
-            var notes = builder.ExportReleaseNotes(null).Result;
+            var builder = new ReleaseNotesExporter(logger, configuration.Export);
+            var notes = builder.ExportReleaseNotes(releases);
 
             Approvals.Verify(notes);
         }
