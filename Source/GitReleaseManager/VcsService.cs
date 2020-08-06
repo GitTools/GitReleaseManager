@@ -19,6 +19,7 @@ namespace GitReleaseManager.Core
     using GitReleaseManager.Core.Exceptions;
     using GitReleaseManager.Core.Extensions;
     using GitReleaseManager.Core.Provider;
+    using GitReleaseManager.Core.ReleaseNotes;
     using Octokit;
     using Serilog;
     using NotFoundException = GitReleaseManager.Core.Exceptions.NotFoundException;
@@ -30,22 +31,25 @@ namespace GitReleaseManager.Core
         private readonly IGitHubClient _gitHubClient;
         private readonly ILogger _logger;
         private readonly IMapper _mapper;
+        private readonly IReleaseNotesBuilder _releaseNotesBuilder;
+        private readonly IReleaseNotesExporter _releaseNotesExporter;
         private readonly Config _configuration;
 
-        public VcsService(IVcsProvider vcsProvider, IGitHubClient gitHubClient, ILogger logger, IMapper mapper, Config configuration)
+        public VcsService(IVcsProvider vcsProvider, IGitHubClient gitHubClient, ILogger logger, IMapper mapper, IReleaseNotesBuilder releaseNotesBuilder, IReleaseNotesExporter releaseNotesExporter, Config configuration)
         {
             _vcsProvider = vcsProvider;
             _gitHubClient = gitHubClient;
             _logger = logger;
             _mapper = mapper;
+            _releaseNotesBuilder = releaseNotesBuilder;
+            _releaseNotesExporter = releaseNotesExporter;
             _configuration = configuration;
         }
 
         public async Task<Release> CreateReleaseFromMilestone(string owner, string repository, string milestone, string releaseName, string targetCommitish, IList<string> assets, bool prerelease)
         {
             var release = await GetReleaseFromTagNameAsync(owner, repository, milestone).ConfigureAwait(false);
-            var releaseNotesBuilder = new ReleaseNotesBuilder(_vcsProvider, _logger, owner, repository, milestone, _configuration);
-            var result = await releaseNotesBuilder.BuildReleaseNotes().ConfigureAwait(false);
+            var result = await _releaseNotesBuilder.BuildReleaseNotes(owner, repository, milestone).ConfigureAwait(false);
 
             if (release == null)
             {
@@ -184,7 +188,6 @@ namespace GitReleaseManager.Core
 
         public async Task<string> ExportReleases(string owner, string repository, string tagName)
         {
-            var releaseNotesExporter = new ReleaseNotesExporter(_logger, _configuration.Export);
             var releases = Enumerable.Empty<Release>();
 
             if (string.IsNullOrWhiteSpace(tagName))
@@ -207,7 +210,7 @@ namespace GitReleaseManager.Core
                 }
             }
 
-            return releaseNotesExporter.ExportReleaseNotes(releases);
+            return _releaseNotesExporter.ExportReleaseNotes(releases);
         }
 
         public async Task CloseMilestone(string owner, string repository, string milestoneTitle)

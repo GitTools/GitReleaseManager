@@ -6,6 +6,7 @@
 
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using GitReleaseManager.Core.ReleaseNotes;
 
 namespace GitReleaseManager.Tests
 {
@@ -184,8 +185,8 @@ namespace GitReleaseManager.Tests
             vcsProvider.GetMilestonesAsync(owner, repository, Arg.Any<ItemStateFilter>())
                 .Returns(Task.FromResult((IEnumerable<Milestone>)vcsService.Milestones));
 
-            var builder = new ReleaseNotesBuilder(vcsProvider, logger, owner, repository, milestoneTitle, configuration);
-            var notes = builder.BuildReleaseNotes().Result;
+            var builder = new ReleaseNotesBuilder(vcsProvider, logger, configuration);
+            var notes = builder.BuildReleaseNotes(owner, repository, milestoneTitle).Result;
 
             Approvals.Verify(notes);
         }

@@ -4,7 +4,7 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-namespace GitReleaseManager.Core
+namespace GitReleaseManager.Core.ReleaseNotes
 {
     using System;
     using System.Collections.Generic;
@@ -18,29 +18,30 @@ namespace GitReleaseManager.Core
     using GitReleaseManager.Core.Provider;
     using Serilog;
 
-    public class ReleaseNotesBuilder
+    public class ReleaseNotesBuilder : IReleaseNotesBuilder
     {
         private readonly IVcsProvider _vcsProvider;
         private readonly ILogger _logger;
-        private readonly string _user;
-        private readonly string _repository;
-        private readonly string _milestoneTitle;
         private readonly Config _configuration;
+        private string _user;
+        private string _repository;
+        private string _milestoneTitle;
         private IEnumerable<Milestone> _milestones;
         private Milestone _targetMilestone;
 
-        public ReleaseNotesBuilder(IVcsProvider vcsProvider, ILogger logger, string user, string repository, string milestoneTitle, Config configuration)
+        public ReleaseNotesBuilder(IVcsProvider vcsProvider, ILogger logger, Config configuration)
         {
             _vcsProvider = vcsProvider;
             _logger = logger;
-            _user = user;
-            _repository = repository;
-            _milestoneTitle = milestoneTitle;
             _configuration = configuration;
         }
 
-        public async Task<string> BuildReleaseNotes()
+        public async Task<string> BuildReleaseNotes(string user, string repository, string milestoneTitle)
         {
+            _user = user;
+            _repository = repository;
+            _milestoneTitle = milestoneTitle;
+
             _logger.Verbose("Building release notes...");
             await LoadMilestones().ConfigureAwait(false);
             GetTargetMilestone();

@@ -14,6 +14,7 @@ namespace GitReleaseManager.IntegrationTests
     using GitReleaseManager.Core.Configuration;
     using GitReleaseManager.Core.Helpers;
     using GitReleaseManager.Core.Provider;
+    using GitReleaseManager.Core.ReleaseNotes;
     using NUnit.Framework;
     using Octokit;
     using Serilog;
@@ -70,8 +71,8 @@ namespace GitReleaseManager.IntegrationTests
                 var configuration = ConfigurationProvider.Provide(currentDirectory, fileSystem);
 
                 var vcsProvider = new GitHubProvider(_gitHubClient, _mapper);
-                var releaseNotesBuilder = new ReleaseNotesBuilder(vcsProvider, _logger, "Chocolatey", "ChocolateyGUI", "0.12.4", configuration);
-                var result = await releaseNotesBuilder.BuildReleaseNotes().ConfigureAwait(false);
+                var releaseNotesBuilder = new ReleaseNotesBuilder(vcsProvider, _logger, configuration);
+                var result = await releaseNotesBuilder.BuildReleaseNotes("Chocolatey", "ChocolateyGUI", "0.12.4").ConfigureAwait(false);
                 Debug.WriteLine(result);
                 ClipBoardHelper.SetClipboard(result);
             }
@@ -92,8 +93,8 @@ namespace GitReleaseManager.IntegrationTests
                 var configuration = ConfigurationProvider.Provide(currentDirectory, fileSystem);
 
                 var vcsProvider = new GitHubProvider(_gitHubClient, _mapper);
-                var releaseNotesBuilder = new ReleaseNotesBuilder(vcsProvider, _logger, "Chocolatey", "ChocolateyGUI", "0.13.0", configuration);
-                var result = await releaseNotesBuilder.BuildReleaseNotes().ConfigureAwait(false);
+                var releaseNotesBuilder = new ReleaseNotesBuilder(vcsProvider, _logger, configuration);
+                var result = await releaseNotesBuilder.BuildReleaseNotes("Chocolatey", "ChocolateyGUI", "0.13.0").ConfigureAwait(false);
                 Debug.WriteLine(result);
                 ClipBoardHelper.SetClipboard(result);
             }

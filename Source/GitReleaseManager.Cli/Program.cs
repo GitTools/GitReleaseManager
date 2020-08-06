@@ -18,6 +18,7 @@ namespace GitReleaseManager.Cli
     using GitReleaseManager.Core.Configuration;
     using GitReleaseManager.Core.Helpers;
     using GitReleaseManager.Core.Provider;
+    using GitReleaseManager.Core.ReleaseNotes;
     using Microsoft.Extensions.DependencyInjection;
     using Octokit;
     using Serilog;
@@ -95,6 +96,9 @@ namespace GitReleaseManager.Cli
                 .AddSingleton(logger)
                 .AddSingleton(mapper)
                 .AddSingleton(configuration)
+                .AddSingleton(configuration.Export)
+                .AddSingleton<IReleaseNotesExporter, ReleaseNotesExporter>()
+                .AddSingleton<IReleaseNotesBuilder, ReleaseNotesBuilder>()
                 .AddSingleton<IGitHubClient>(gitHubClient)
                 .AddSingleton<IVcsProvider, GitHubProvider>()
                 .AddSingleton<IVcsService, VcsService>();

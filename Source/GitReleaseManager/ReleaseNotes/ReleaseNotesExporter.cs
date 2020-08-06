@@ -4,7 +4,7 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-namespace GitReleaseManager.Core
+namespace GitReleaseManager.Core.ReleaseNotes
 {
     using System;
     using System.Collections.Generic;
@@ -16,7 +16,7 @@ namespace GitReleaseManager.Core
     using GitReleaseManager.Core.Model;
     using Serilog;
 
-    public class ReleaseNotesExporter
+    public class ReleaseNotesExporter : IReleaseNotesExporter
     {
         private readonly ILogger _logger;
         private readonly ExportConfig _configuration;

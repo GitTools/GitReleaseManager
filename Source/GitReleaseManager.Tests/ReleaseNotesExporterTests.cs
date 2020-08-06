@@ -9,10 +9,10 @@ namespace GitReleaseManager.Tests
     using System;
     using System.Text;
     using ApprovalTests;
-    using GitReleaseManager.Core;
     using GitReleaseManager.Core.Configuration;
     using GitReleaseManager.Core.Helpers;
     using GitReleaseManager.Core.Model;
+    using GitReleaseManager.Core.ReleaseNotes;
     using NSubstitute;
     using NUnit.Framework;
     using Serilog;
