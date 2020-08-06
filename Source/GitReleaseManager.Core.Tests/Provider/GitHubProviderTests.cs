@@ -20,13 +20,14 @@ namespace GitReleaseManager.Core.Tests.Provider
     [TestFixture]
     public class GitHubProviderTests
     {
-        private readonly string _owner = "owner";
-        private readonly string _repository = "repository";
-        private readonly string _base = "0.1.0";
-        private readonly string _head = "0.5.0";
-        private readonly int _milestoneNumber = 1;
-        private readonly string _milestoneNumberString = "1";
-        private readonly string _tagName = "0.1.0";
+        private const string _owner = "owner";
+        private const string _repository = "repository";
+        private const string _base = "0.1.0";
+        private const string _head = "0.5.0";
+        private const int _milestoneNumber = 1;
+        private const string _milestoneNumberString = "1";
+        private const string _tagName = "0.1.0";
+
         private readonly Exception _exception = new Exception("API Error");
         private readonly Octokit.NotFoundException _notFoundException = new Octokit.NotFoundException("NotFound", HttpStatusCode.NotFound);
 
@@ -138,7 +139,7 @@ namespace GitReleaseManager.Core.Tests.Provider
         }
 
         [Test]
-        public async Task Should_Throw_An_Exception_On_Getting_Issues_For_Non_Existing_Milestone()
+        public async Task Should_Throw_An_Exception_On_Getting_Issues_For_Non_Existent_Milestone()
         {
             _gitHubClient.Issue.GetAllForRepository(_owner, _repository, Arg.Any<RepositoryIssueRequest>())
                 .Returns(Task.FromException<IReadOnlyList<Octokit.Issue>>(_exception));
@@ -202,7 +203,7 @@ namespace GitReleaseManager.Core.Tests.Provider
         }
 
         [Test]
-        public async Task Should_Throw_An_Exception_On_Getting_Release_For_Non_Existing_Tag()
+        public async Task Should_Throw_An_Exception_On_Getting_Release_For_Non_Existent_Tag()
         {
             _gitHubClient.Repository.Release.Get(_owner, _repository, _tagName)
                 .Returns(Task.FromException<Octokit.Release>(_notFoundException));
