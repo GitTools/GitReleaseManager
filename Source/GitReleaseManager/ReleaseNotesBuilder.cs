@@ -65,15 +65,15 @@ namespace GitReleaseManager.Core
                 throw new InvalidOperationException(logMessage);
             }
 
+            var commitsLink = _vcsProvider.GetCommitsUrl(_user, _repository, _targetMilestone?.Title, previousMilestone?.Title);
+            var commitsText = string.Format(numberOfCommits == 1 ? "{0} commit" : "{0} commits", numberOfCommits);
+
             if (issues.Count > 0)
             {
                 var issuesText = string.Format(issues.Count == 1 ? "{0} issue" : "{0} issues", issues.Count);
 
                 if (numberOfCommits > 0)
                 {
-                    var commitsLink = _vcsProvider.GetCommitsUrl(_user, _repository, _targetMilestone?.Title, previousMilestone?.Title);
-                    var commitsText = string.Format(numberOfCommits == 1 ? "{0} commit" : "{0} commits", numberOfCommits);
-
                     stringBuilder.AppendFormat(@"As part of this release we had [{0}]({1}) which resulted in [{2}]({3}) being closed.", commitsText, commitsLink, issuesText, _targetMilestone.HtmlUrl + "?closed=1");
                 }
                 else
@@ -83,8 +83,6 @@ namespace GitReleaseManager.Core
             }
             else if (numberOfCommits > 0)
             {
-                var commitsLink = _vcsProvider.GetCommitsUrl(_user, _repository, _targetMilestone?.Title, previousMilestone?.Title);
-                var commitsText = string.Format(numberOfCommits == 1 ? "{0} commit" : "{0} commits", numberOfCommits);
                 stringBuilder.AppendFormat(@"As part of this release we had [{0}]({1}).", commitsText, commitsLink);
             }
 
