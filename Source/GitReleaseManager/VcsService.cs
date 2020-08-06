@@ -21,6 +21,7 @@ namespace GitReleaseManager.Core
     using GitReleaseManager.Core.Provider;
     using Octokit;
     using Serilog;
+    using NotFoundException = GitReleaseManager.Core.Exceptions.NotFoundException;
     using Release = GitReleaseManager.Core.Model.Release;
 
     public class VcsService : IVcsService
@@ -38,18 +39,6 @@ namespace GitReleaseManager.Core
             _logger = logger;
             _mapper = mapper;
             _configuration = configuration;
-        }
-
-        public async Task<List<Release>> GetReleasesAsync(string user, string repository)
-        {
-            _logger.Verbose("Finding all releases on '{User}/{Repository}'", user, repository);
-            var allReleases = await _gitHubClient.Repository.Release.GetAll(user, repository).ConfigureAwait(false);
-            return _mapper.Map<List<Release>>(allReleases.OrderByDescending(r => r.CreatedAt).ToList());
-        }
-
-        public async Task<Release> GetSpecificRelease(string tagName, string user, string repository)
-        {
-            return _mapper.Map<Release>(await GetReleaseFromTagNameAsync(user, repository, tagName).ConfigureAwait(false));
         }
 
         public async Task<Release> CreateReleaseFromMilestone(string owner, string repository, string milestone, string releaseName, string targetCommitish, IList<string> assets, bool prerelease)
@@ -193,11 +182,32 @@ namespace GitReleaseManager.Core
             }
         }
 
-        public Task<string> ExportReleases(string owner, string repository, string tagName)
+        public async Task<string> ExportReleases(string owner, string repository, string tagName)
         {
-            var releaseNotesExporter = new ReleaseNotesExporter(this, _logger, _configuration, owner, repository);
+            var releaseNotesExporter = new ReleaseNotesExporter(_logger, _configuration.Export);
+            var releases = Enumerable.Empty<Release>();
 
-            return releaseNotesExporter.ExportReleaseNotes(tagName);
+            if (string.IsNullOrWhiteSpace(tagName))
+            {
+                _logger.Verbose("Finding all releases on '{Owner}/{Repository}'", owner, repository);
+                releases = await _vcsProvider.GetReleasesAsync(owner, repository).ConfigureAwait(false);
+            }
+            else
+            {
+                try
+                {
+                    _logger.Verbose("Finding release with tag '{TagName}' on '{Owner}/{Repository}'", owner, repository, tagName);
+                    var release = await _vcsProvider.GetReleaseAsync(owner, repository, tagName).ConfigureAwait(false);
+                    releases = new List<Release> { release };
+
+                }
+                catch (NotFoundException)
+                {
+                    _logger.Error("Unable to find any release with the tag '{TagName}' for specified repository.", tagName);
+                }
+            }
+
+            return releaseNotesExporter.ExportReleaseNotes(releases);
         }
 
         public async Task CloseMilestone(string owner, string repository, string milestoneTitle)
@@ -402,13 +412,11 @@ namespace GitReleaseManager.Core
             });
         }
 
-        private async Task<Octokit.Release> GetReleaseFromTagNameAsync(string owner, string repository, string tagName)
+        private Task<Octokit.Release> GetReleaseFromTagNameAsync(string owner, string repository, string tagName)
         {
             _logger.Verbose("Finding release with tag name: '{TagName}'", tagName);
-            var releases = await _gitHubClient.Repository.Release.GetAll(owner, repository).ConfigureAwait(false);
 
-            var release = releases.FirstOrDefault(r => r.TagName == tagName);
-            return release;
+            return _gitHubClient.Repository.Release.Get(owner, repository, tagName);
         }
 
         private void SleepWhenRateIsLimited()

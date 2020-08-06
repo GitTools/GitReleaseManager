@@ -31,16 +31,6 @@ namespace GitReleaseManager.Tests
 
         public int NumberOfCommits { get; set; }
 
-        public Task<List<Release>> GetReleasesAsync(string user, string repository)
-        {
-            return Task.FromResult(Releases);
-        }
-
-        public Task<Release> GetSpecificRelease(string tagName, string user, string repository)
-        {
-            return Task.FromResult(Release);
-        }
-
         public Task<Release> CreateReleaseFromMilestone(string owner, string repository, string milestone, string releaseName, string targetCommitish, IList<string> assets, bool prerelease)
         {
             throw new System.NotImplementedException();

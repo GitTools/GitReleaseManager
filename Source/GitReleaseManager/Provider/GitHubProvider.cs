@@ -1,12 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Octokit;
 using Issue = GitReleaseManager.Core.Model.Issue;
 using ItemStateFilter = GitReleaseManager.Core.Model.ItemStateFilter;
 using Milestone = GitReleaseManager.Core.Model.Milestone;
+using NotFoundException = GitReleaseManager.Core.Exceptions.NotFoundException;
+using Release = GitReleaseManager.Core.Model.Release;
 
 namespace GitReleaseManager.Core.Provider
 {
@@ -28,7 +31,7 @@ namespace GitReleaseManager.Core.Provider
                 var result = await _gitHubClient.Repository.Commit.Compare(owner, repository, @base, head).ConfigureAwait(false);
                 return result.AheadBy;
             }
-            catch (NotFoundException)
+            catch (Octokit.NotFoundException)
             {
                 // If there is no tag yet the Compare will return a NotFoundException
                 // we can safely ignore
@@ -88,6 +91,39 @@ namespace GitReleaseManager.Core.Provider
                 var milestones = await _gitHubClient.Issue.Milestone.GetAllForRepository(owner, repository, request).ConfigureAwait(false);
 
                 return _mapper.Map<IEnumerable<Milestone>>(milestones);
+            }
+            catch (Exception ex)
+            {
+                throw new ApiException(ex.Message, ex);
+            }
+        }
+
+        public async Task<Release> GetReleaseAsync(string owner, string repository, string tagName)
+        {
+            try
+            {
+                var release = await _gitHubClient.Repository.Release.Get(owner, repository, tagName).ConfigureAwait(false);
+
+                return _mapper.Map<Release>(release);
+            }
+            catch (Octokit.NotFoundException ex)
+            {
+                throw new NotFoundException(ex.Message, ex);
+            }
+            catch (Exception ex)
+            {
+                throw new ApiException(ex.Message, ex);
+            }
+        }
+
+        public async Task<IEnumerable<Release>> GetReleasesAsync(string owner, string repository)
+        {
+            try
+            {
+                var releases = await _gitHubClient.Repository.Release.GetAll(owner, repository).ConfigureAwait(false);
+                releases = releases.OrderByDescending(r => r.CreatedAt).ToList();
+
+                return _mapper.Map<IEnumerable<Release>>(releases);
             }
             catch (Exception ex)
             {

@@ -7,70 +7,53 @@
 namespace GitReleaseManager.Core
 {
     using System;
+    using System.Collections.Generic;
     using System.Globalization;
+    using System.Linq;
     using System.Text;
     using System.Text.RegularExpressions;
-    using System.Threading.Tasks;
     using GitReleaseManager.Core.Configuration;
     using GitReleaseManager.Core.Model;
     using Serilog;
 
     public class ReleaseNotesExporter
     {
-        private readonly IVcsService _vcsService;
         private readonly ILogger _logger;
-        private readonly Config _configuration;
-        private readonly string _user;
-        private readonly string _repository;
+        private readonly ExportConfig _configuration;
 
-        public ReleaseNotesExporter(IVcsService vcsService, ILogger logger, Config configuration, string user, string repository)
+        public ReleaseNotesExporter(ILogger logger, ExportConfig configuration)
         {
-            _vcsService = vcsService;
             _logger = logger;
             _configuration = configuration;
-            _user = user;
-            _repository = repository;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Not appropriate.")]
-        public async Task<string> ExportReleaseNotes(string tagName)
+        public string ExportReleaseNotes(IEnumerable<Release> releases)
         {
             _logger.Verbose("Exporting release notes");
             var stringBuilder = new StringBuilder();
 
-            if (string.IsNullOrEmpty(tagName))
+            if (releases.Any())
             {
-                var releases = await _vcsService.GetReleasesAsync(_user, _repository).ConfigureAwait(false);
+                foreach (var release in releases)
+                {
+                    AppendVersionReleaseNotes(stringBuilder, release);
+                }
 
-                if (releases.Count > 0)
-                {
-                    foreach (var release in releases)
-                    {
-                        AppendVersionReleaseNotes(stringBuilder, release);
-                    }
-                }
-                else
-                {
-                    stringBuilder.Append("Unable to find any releases for specified repository.");
-                }
+                _logger.Verbose("Finished exporting release notes");
             }
             else
             {
-                var release = await _vcsService.GetSpecificRelease(tagName, _user, _repository).ConfigureAwait(false);
-
-                AppendVersionReleaseNotes(stringBuilder, release);
+                stringBuilder.Append("Unable to find any releases for specified repository.");
             }
-
-            _logger.Verbose("Finished exporting release notes");
 
             return stringBuilder.ToString();
         }
 
         private void AppendVersionReleaseNotes(StringBuilder stringBuilder, Release release)
         {
-            if (_configuration.Export.IncludeCreatedDateInTitle)
+            if (_configuration.IncludeCreatedDateInTitle)
             {
-                stringBuilder.AppendLine(string.Format(CultureInfo.InvariantCulture, "## {0} ({1})", release.TagName, release.CreatedAt.ToString(_configuration.Export.CreatedDateStringFormat, CultureInfo.InvariantCulture)));
+                stringBuilder.AppendLine(string.Format(CultureInfo.InvariantCulture, "## {0} ({1})", release.TagName, release.CreatedAt.ToString(_configuration.CreatedDateStringFormat, CultureInfo.InvariantCulture)));
             }
             else
             {
@@ -79,9 +62,9 @@ namespace GitReleaseManager.Core
 
             stringBuilder.AppendLine(Environment.NewLine);
 
-            if (_configuration.Export.PerformRegexRemoval)
+            if (_configuration.PerformRegexRemoval)
             {
-                var regexPattern = new Regex(_configuration.Export.RegexText, _configuration.Export.IsMultilineRegex ? RegexOptions.Multiline : RegexOptions.Singleline);
+                var regexPattern = new Regex(_configuration.RegexText, _configuration.IsMultilineRegex ? RegexOptions.Multiline : RegexOptions.Singleline);
                 var replacement = string.Empty;
                 var replacedBody = regexPattern.Replace(release.Body, replacement);
                 stringBuilder.AppendLine(replacedBody);

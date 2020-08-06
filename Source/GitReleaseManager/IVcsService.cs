@@ -12,10 +12,6 @@ namespace GitReleaseManager.Core
 
     public interface IVcsService
     {
-        Task<List<Release>> GetReleasesAsync(string user, string repository);
-
-        Task<Release> GetSpecificRelease(string tagName, string user, string repository);
-
         Task<Release> CreateReleaseFromMilestone(string owner, string repository, string milestone, string releaseName, string targetCommitish, IList<string> assets, bool prerelease);
 
         Task<Release> CreateReleaseFromInputFile(string owner, string repository, string name, string inputFilePath, string targetCommitish, IList<string> assets, bool prerelease);

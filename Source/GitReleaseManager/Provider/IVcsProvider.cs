@@ -13,5 +13,9 @@ namespace GitReleaseManager.Core.Provider
         Task<IEnumerable<Issue>> GetIssuesAsync(string owner, string repository, int milestoneNumber, ItemStateFilter itemStateFilter = ItemStateFilter.All);
 
         Task<IEnumerable<Milestone>> GetMilestonesAsync(string owner, string repository, ItemStateFilter itemStateFilter = ItemStateFilter.All);
+
+        Task<Release> GetReleaseAsync(string owner, string repository, string tagName);
+
+        Task<IEnumerable<Release>> GetReleasesAsync(string owner, string repository);
     }
 }
