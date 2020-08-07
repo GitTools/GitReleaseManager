@@ -10,9 +10,19 @@ namespace GitReleaseManager.Core.Provider
 
         string GetCommitsUrl(string owner, string repository, string head, string @base = null);
 
+        Task CreateIssueCommentAsync(string owner, string repository, int issueNumber, string comment);
+
         Task<IEnumerable<Issue>> GetIssuesAsync(string owner, string repository, int milestoneNumber, ItemStateFilter itemStateFilter = ItemStateFilter.All);
 
+        Task<IEnumerable<IssueComment>> GetIssueCommentsAsync(string owner, string repository, int issueNumber);
+
+        Task<Milestone> GetMilestoneAsync(string owner, string repository, string milestoneTitle, ItemStateFilter itemStateFilter = ItemStateFilter.All);
+
         Task<IEnumerable<Milestone>> GetMilestonesAsync(string owner, string repository, ItemStateFilter itemStateFilter = ItemStateFilter.All);
+
+        Task SetMilestoneStateAsync(string owner, string repository, int milestoneNumber, ItemState itemState);
+
+        Task DeleteReleaseAsync(string owner, string repository, int id);
 
         Task<Release> GetReleaseAsync(string owner, string repository, string tagName);
 

@@ -10,6 +10,8 @@ namespace GitReleaseManager.Core.Model
 
     public sealed class Release
     {
+        public int Id { get; set; }
+
         public string Body { get; set; }
 
         public string TagName { get; set; }
@@ -17,5 +19,7 @@ namespace GitReleaseManager.Core.Model
         public DateTimeOffset CreatedAt { get; set; }
 
         public string HtmlUrl { get; set; }
+
+        public bool Draft { get; set; }
     }
 }

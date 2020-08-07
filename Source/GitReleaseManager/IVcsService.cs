@@ -16,7 +16,7 @@ namespace GitReleaseManager.Core
 
         Task<Release> CreateReleaseFromInputFile(string owner, string repository, string name, string inputFilePath, string targetCommitish, IList<string> assets, bool prerelease);
 
-        Task DiscardRelease(string owner, string repository, string name);
+        Task DiscardRelease(string owner, string repository, string tagName);
 
         Task AddAssets(string owner, string repository, string tagName, IList<string> assets);
 

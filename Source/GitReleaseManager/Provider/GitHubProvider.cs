@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Octokit;
 using Issue = GitReleaseManager.Core.Model.Issue;
+using IssueComment = GitReleaseManager.Core.Model.IssueComment;
+using ItemState = GitReleaseManager.Core.Model.ItemState;
 using ItemStateFilter = GitReleaseManager.Core.Model.ItemStateFilter;
 using Milestone = GitReleaseManager.Core.Model.Milestone;
 using NotFoundException = GitReleaseManager.Core.Exceptions.NotFoundException;
@@ -15,6 +17,8 @@ namespace GitReleaseManager.Core.Provider
 {
     public class GitHubProvider : IVcsProvider
     {
+        private const string _notFoundMessgae = "NotFound";
+
         private readonly IGitHubClient _gitHubClient;
         private readonly IMapper _mapper;
 
@@ -63,6 +67,22 @@ namespace GitReleaseManager.Core.Provider
             return url;
         }
 
+        public async Task CreateIssueCommentAsync(string owner, string repository, int issueNumber, string comment)
+        {
+            try
+            {
+                await _gitHubClient.Issue.Comment.Create(owner, repository, issueNumber, comment).ConfigureAwait(false);
+            }
+            catch (Octokit.NotFoundException ex)
+            {
+                throw new NotFoundException(ex.Message, ex);
+            }
+            catch (Exception ex)
+            {
+                throw new ApiException(ex.Message, ex);
+            }
+        }
+
         public async Task<IEnumerable<Issue>> GetIssuesAsync(string owner, string repository, int milestoneNumber, ItemStateFilter itemStateFilter = ItemStateFilter.All)
         {
             try
@@ -83,6 +103,44 @@ namespace GitReleaseManager.Core.Provider
             }
         }
 
+        public async Task<IEnumerable<IssueComment>> GetIssueCommentsAsync(string owner, string repository, int issueNumber)
+        {
+            try
+            {
+                var comments = await _gitHubClient.Issue.Comment.GetAllForIssue(owner, repository, issueNumber).ConfigureAwait(false);
+
+                return _mapper.Map<IEnumerable<IssueComment>>(comments);
+            }
+            catch (Octokit.NotFoundException ex)
+            {
+                throw new NotFoundException(ex.Message, ex);
+            }
+            catch (Exception ex)
+            {
+                throw new ApiException(ex.Message, ex);
+            }
+        }
+
+        public async Task<Milestone> GetMilestoneAsync(string owner, string repository, string milestoneTitle, ItemStateFilter itemStateFilter = ItemStateFilter.All)
+        {
+            try
+            {
+                var milestones = await GetMilestonesAsync(owner, repository, itemStateFilter).ConfigureAwait(false);
+                var milestone = milestones.FirstOrDefault(m => m.Title == milestoneTitle);
+
+                if (milestone is null)
+                {
+                    throw new NotFoundException(_notFoundMessgae);
+                }
+
+                return milestone;
+            }
+            catch (Exception ex) when (!(ex is NotFoundException))
+            {
+                throw new ApiException(ex.Message, ex);
+            }
+        }
+
         public async Task<IEnumerable<Milestone>> GetMilestonesAsync(string owner, string repository, ItemStateFilter itemStateFilter = ItemStateFilter.All)
         {
             try
@@ -91,6 +149,39 @@ namespace GitReleaseManager.Core.Provider
                 var milestones = await _gitHubClient.Issue.Milestone.GetAllForRepository(owner, repository, request).ConfigureAwait(false);
 
                 return _mapper.Map<IEnumerable<Milestone>>(milestones);
+            }
+            catch (Exception ex)
+            {
+                throw new ApiException(ex.Message, ex);
+            }
+        }
+
+        public async Task SetMilestoneStateAsync(string owner, string repository, int milestoneNumber, ItemState itemState)
+        {
+            try
+            {
+                var update = new MilestoneUpdate { State = (Octokit.ItemState)itemState };
+                await _gitHubClient.Issue.Milestone.Update(owner, repository, milestoneNumber, update).ConfigureAwait(false);
+            }
+            catch (Octokit.NotFoundException ex)
+            {
+                throw new NotFoundException(ex.Message, ex);
+            }
+            catch (Exception ex)
+            {
+                throw new ApiException(ex.Message, ex);
+            }
+        }
+
+        public async Task DeleteReleaseAsync(string owner, string repository, int id)
+        {
+            try
+            {
+                await _gitHubClient.Repository.Release.Delete(owner, repository, id).ConfigureAwait(false);
+            }
+            catch (Octokit.NotFoundException ex)
+            {
+                throw new NotFoundException(ex.Message, ex);
             }
             catch (Exception ex)
             {

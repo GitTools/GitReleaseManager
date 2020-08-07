@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 
 namespace GitReleaseManager.Core
 {
@@ -24,9 +25,25 @@ namespace GitReleaseManager.Core
             {
                 throw new ArgumentNullException(paramName);
             }
-            else if (string.IsNullOrWhiteSpace(str))
+
+            if (string.IsNullOrWhiteSpace(str))
             {
                 throw new ArgumentException("Value cannot be empty or white-space.", paramName);
+            }
+        }
+
+        /// <summary>
+        /// Checks if a file exists.
+        /// </summary>
+        /// <param name="path">The path to test.</param>
+        /// <param name="message">A message that describes the error.</param>
+        /// <exception cref="FileNotFoundException">File does not exist.</exception>
+        public static void FileExists(string path, string message)
+        {
+            if (!File.Exists(path))
+            {
+                var fileName = Path.GetFileName(path);
+                throw new FileNotFoundException(message, fileName);
             }
         }
     }
