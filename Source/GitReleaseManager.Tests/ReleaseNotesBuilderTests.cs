@@ -13,7 +13,6 @@ namespace GitReleaseManager.Tests
     using System;
     using System.Linq;
     using ApprovalTests;
-    using GitReleaseManager.Core;
     using GitReleaseManager.Core.Configuration;
     using GitReleaseManager.Core.Helpers;
     using GitReleaseManager.Core.Model;
@@ -206,7 +205,7 @@ namespace GitReleaseManager.Tests
         {
             return new Issue
             {
-                Number = number.ToString(),
+                Number = number,
                 Labels = labels.Select(l => new Label { Name = l }).ToList(),
                 HtmlUrl = "http://example.com/" + number,
                 Title = "Issue " + number,

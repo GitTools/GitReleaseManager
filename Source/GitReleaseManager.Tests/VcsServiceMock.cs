@@ -41,7 +41,7 @@ namespace GitReleaseManager.Tests
             throw new System.NotImplementedException();
         }
 
-        public Task DiscardRelease(string owner, string repository, string name)
+        public Task DiscardRelease(string owner, string repository, string tagName)
         {
             throw new System.NotImplementedException();
         }
