@@ -198,12 +198,12 @@ namespace GitReleaseManager.Cli
                     releaseName = subOptions.Milestone;
                 }
 
-                release = await _vcsService.CreateReleaseFromMilestone(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone, releaseName, subOptions.TargetCommitish, subOptions.AssetPaths, subOptions.Prerelease).ConfigureAwait(false);
+                release = await _vcsService.CreateReleaseFromMilestoneAsync(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone, releaseName, subOptions.TargetCommitish, subOptions.AssetPaths, subOptions.Prerelease).ConfigureAwait(false);
             }
             else
             {
                 Log.Verbose("No milestone was specified, switching to release creating from input file");
-                release = await _vcsService.CreateReleaseFromInputFile(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Name, subOptions.InputFilePath, subOptions.TargetCommitish, subOptions.AssetPaths, subOptions.Prerelease).ConfigureAwait(false);
+                release = await _vcsService.CreateReleaseFromInputFileAsync(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Name, subOptions.InputFilePath, subOptions.TargetCommitish, subOptions.AssetPaths, subOptions.Prerelease).ConfigureAwait(false);
             }
 
             Log.Information("Drafted release is available at:\n{HtmlUrl}", release.HtmlUrl);
@@ -216,7 +216,7 @@ namespace GitReleaseManager.Cli
             Log.Information("Discarding release {Milestone}", subOptions.Milestone);
             _vcsService = GetVcsService();
 
-            await _vcsService.DiscardRelease(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone).ConfigureAwait(false);
+            await _vcsService.DiscardReleaseAsync(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone).ConfigureAwait(false);
 
             return 0;
         }
@@ -226,7 +226,7 @@ namespace GitReleaseManager.Cli
             Log.Information("Uploading assets");
             _vcsService = GetVcsService();
 
-            await _vcsService.AddAssets(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.TagName, subOptions.AssetPaths).ConfigureAwait(false);
+            await _vcsService.AddAssetsAsync(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.TagName, subOptions.AssetPaths).ConfigureAwait(false);
 
             return 0;
         }
@@ -236,7 +236,7 @@ namespace GitReleaseManager.Cli
             Log.Information("Closing milestone {Milestone}", subOptions.Milestone);
             _vcsService = GetVcsService();
 
-            await _vcsService.CloseMilestone(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone).ConfigureAwait(false);
+            await _vcsService.CloseMilestoneAsync(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone).ConfigureAwait(false);
 
             return 0;
         }
@@ -246,7 +246,7 @@ namespace GitReleaseManager.Cli
             Log.Information("Opening milestone {Milestone}", subOptions.Milestone);
             _vcsService = GetVcsService();
 
-            await _vcsService.OpenMilestone(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone).ConfigureAwait(false);
+            await _vcsService.OpenMilestoneAsync(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone).ConfigureAwait(false);
 
             return 0;
         }
@@ -255,7 +255,7 @@ namespace GitReleaseManager.Cli
         {
             _vcsService = GetVcsService();
 
-            await _vcsService.PublishRelease(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.TagName).ConfigureAwait(false);
+            await _vcsService.PublishReleaseAsync(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.TagName).ConfigureAwait(false);
             return 0;
         }
 
@@ -264,7 +264,7 @@ namespace GitReleaseManager.Cli
             Log.Information("Exporting release {TagName}", subOptions.TagName);
             _vcsService = GetVcsService();
 
-            var releasesMarkdown = await _vcsService.ExportReleases(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.TagName).ConfigureAwait(false);
+            var releasesMarkdown = await _vcsService.ExportReleasesAsync(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.TagName).ConfigureAwait(false);
 
             using (var sw = new StreamWriter(File.Open(subOptions.FileOutputPath, System.IO.FileMode.OpenOrCreate)))
             {
@@ -295,7 +295,7 @@ namespace GitReleaseManager.Cli
             Log.Information("Creating standard labels");
             _vcsService = GetVcsService();
 
-            await _vcsService.CreateLabels(subOptions.RepositoryOwner, subOptions.RepositoryName).ConfigureAwait(false);
+            await _vcsService.CreateLabelsAsync(subOptions.RepositoryOwner, subOptions.RepositoryName).ConfigureAwait(false);
             return 0;
         }
 

@@ -14,91 +14,91 @@ namespace GitReleaseManager.Core
     using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
-    using AutoMapper;
     using GitReleaseManager.Core.Configuration;
+    using GitReleaseManager.Core.Exceptions;
     using GitReleaseManager.Core.Extensions;
+    using GitReleaseManager.Core.Model;
     using GitReleaseManager.Core.Provider;
     using GitReleaseManager.Core.ReleaseNotes;
-    using Octokit;
     using Serilog;
-    using Milestone = GitReleaseManager.Core.Model.Milestone;
-    using NotFoundException = GitReleaseManager.Core.Exceptions.NotFoundException;
-    using Release = GitReleaseManager.Core.Model.Release;
 
     public class VcsService : IVcsService
     {
+        private const string _unableToFoundMilestoneMessage = "Unable to find a {State} milestone with title '{Title}' on '{Owner}/{Repository}'";
+        private const string _unableToFoundReleaseMessage = "Unable to find a release with tag '{TagName}' on '{Owner}/{Repository}'";
+
         private readonly IVcsProvider _vcsProvider;
-        private readonly IGitHubClient _gitHubClient;
         private readonly ILogger _logger;
-        private readonly IMapper _mapper;
         private readonly IReleaseNotesBuilder _releaseNotesBuilder;
         private readonly IReleaseNotesExporter _releaseNotesExporter;
         private readonly Config _configuration;
 
-        public VcsService(IVcsProvider vcsProvider, IGitHubClient gitHubClient, ILogger logger, IMapper mapper, IReleaseNotesBuilder releaseNotesBuilder, IReleaseNotesExporter releaseNotesExporter, Config configuration)
+        public VcsService(IVcsProvider vcsProvider, ILogger logger, IReleaseNotesBuilder releaseNotesBuilder, IReleaseNotesExporter releaseNotesExporter, Config configuration)
         {
             _vcsProvider = vcsProvider;
-            _gitHubClient = gitHubClient;
             _logger = logger;
-            _mapper = mapper;
             _releaseNotesBuilder = releaseNotesBuilder;
             _releaseNotesExporter = releaseNotesExporter;
             _configuration = configuration;
         }
 
-        public async Task<Release> CreateReleaseFromMilestone(string owner, string repository, string milestone, string releaseName, string targetCommitish, IList<string> assets, bool prerelease)
+        public async Task<Release> CreateReleaseFromMilestoneAsync(string owner, string repository, string milestone, string releaseName, string targetCommitish, IList<string> assets, bool prerelease)
         {
-            var release = await GetReleaseFromTagNameAsync(owner, repository, milestone).ConfigureAwait(false);
-            var result = await _releaseNotesBuilder.BuildReleaseNotes(owner, repository, milestone).ConfigureAwait(false);
+            var releaseNotes = await _releaseNotesBuilder.BuildReleaseNotes(owner, repository, milestone).ConfigureAwait(false);
+            var release = await CreateRelease(owner, repository, releaseName, milestone, releaseNotes, prerelease, targetCommitish, assets).ConfigureAwait(false);
 
-            if (release == null)
-            {
-                var releaseUpdate = CreateNewRelease(releaseName, milestone, result, prerelease, targetCommitish);
-                _logger.Verbose("Creating new release on '{Owner}/{Repository}'", owner, repository);
-                _logger.Debug("{@ReleaseUpdate}", releaseUpdate);
-                release = await _gitHubClient.Repository.Release.Create(owner, repository, releaseUpdate).ConfigureAwait(false);
-            }
-            else
-            {
-                _logger.Warning("A release for milestone {Milestone} already exists, and will be updated", milestone);
-
-                if (!release.Draft && !_configuration.Create.AllowUpdateToPublishedRelease)
-                {
-                    throw new InvalidOperationException("Release is not in draft state, so not updating.");
-                }
-
-                var releaseUpdate = release.ToUpdate();
-                releaseUpdate.Body = result;
-                _logger.Verbose("Updating release {Milestone} on '{Owner}/{Repository}'", milestone, owner, repository);
-                _logger.Debug("{@ReleaseUpdate}", releaseUpdate);
-                await _gitHubClient.Repository.Release.Edit(owner, repository, release.Id, releaseUpdate).ConfigureAwait(false);
-            }
-
-            await AddAssets(owner, repository, milestone, assets).ConfigureAwait(false);
-            return _mapper.Map<Octokit.Release, Release>(release);
+            return release;
         }
 
-        public async Task<Release> CreateReleaseFromInputFile(string owner, string repository, string name, string inputFilePath, string targetCommitish, IList<string> assets, bool prerelease)
+        public async Task<Release> CreateReleaseFromInputFileAsync(string owner, string repository, string name, string inputFilePath, string targetCommitish, IList<string> assets, bool prerelease)
         {
             Ensure.FileExists(inputFilePath, "Unable to locate input file.");
 
             _logger.Verbose("Reading release notes from: '{FilePath}'", inputFilePath);
 
-            var inputFileContents = File.ReadAllText(inputFilePath);
+            var releaseNotes = File.ReadAllText(inputFilePath);
+            var release = await CreateRelease(owner, repository, name, name, releaseNotes, prerelease, targetCommitish, assets).ConfigureAwait(false);
 
-            var releaseUpdate = CreateNewRelease(name, name, inputFileContents, prerelease, targetCommitish);
-
-            _logger.Verbose("Creating new release on '{Owner}/{Repository}'", owner, repository);
-            _logger.Debug("{@ReleaseUpdate}", releaseUpdate);
-
-            var release = await _gitHubClient.Repository.Release.Create(owner, repository, releaseUpdate).ConfigureAwait(false);
-
-            await AddAssets(owner, repository, name, assets).ConfigureAwait(false);
-
-            return _mapper.Map<Octokit.Release, Release>(release);
+            return release;
         }
 
-        public async Task DiscardRelease(string owner, string repository, string tagName)
+        private async Task<Release> CreateRelease(string owner, string repository, string name, string tagName, string body, bool prerelease, string targetCommitish, IList<string> assets)
+        {
+            Release release;
+
+            try
+            {
+                release = await _vcsProvider.GetReleaseAsync(owner, repository, tagName).ConfigureAwait(false);
+
+                if (!release.Draft && !_configuration.Create.AllowUpdateToPublishedRelease)
+                {
+                    throw new InvalidOperationException($"Release with tag '{tagName}' not in draft state, so not updating");
+                }
+
+                release.Body = body;
+
+                _logger.Warning("A release for milestone '{Milestone}' already exists, and will be updated", tagName);
+                _logger.Verbose("Updating release with tag '{TagName}' on '{Owner}/{Repository}'", tagName, owner, repository);
+                _logger.Debug("{@Release}", release);
+
+                await _vcsProvider.UpdateReleaseAsync(owner, repository, release).ConfigureAwait(false);
+            }
+            catch (NotFoundException)
+            {
+                release = CreateReleaseModel(name, tagName, body, prerelease, targetCommitish);
+
+                _logger.Verbose("Creating new release with tag '{TagName}' on '{Owner}/{Repository}'", tagName, owner, repository);
+                _logger.Debug("{@Release}", release);
+
+                release = await _vcsProvider.CreateReleaseAsync(owner, repository, release).ConfigureAwait(false);
+            }
+
+            await AddAssetsAsync(owner, repository, tagName, assets).ConfigureAwait(false);
+
+            return release;
+        }
+
+        public async Task DiscardReleaseAsync(string owner, string repository, string tagName)
         {
             try
             {
@@ -115,93 +115,95 @@ namespace GitReleaseManager.Core
             }
             catch (NotFoundException)
             {
-                _logger.Error("Unable to find a release with tag '{TagName}'", tagName);
+                _logger.Warning(_unableToFoundReleaseMessage, tagName, owner, repository);
             }
 
         }
 
-        public async Task AddAssets(string owner, string repository, string tagName, IList<string> assets)
+        public async Task AddAssetsAsync(string owner, string repository, string tagName, IList<string> assets)
         {
-            var release = await GetReleaseFromTagNameAsync(owner, repository, tagName).ConfigureAwait(false);
-
-            if (release is null)
+            if (assets?.Any() == true)
             {
-                _logger.Error("Unable to find Release with specified tagName");
-                return;
-            }
-
-            if (!(assets is null))
-            {
-                foreach (var asset in assets)
+                try
                 {
-                    if (!File.Exists(asset))
-                    {
-                        var logMessage = string.Format("Requested asset to be uploaded doesn't exist: {0}", asset);
-                        throw new FileNotFoundException(logMessage);
-                    }
-
-                    var assetFileName = Path.GetFileName(asset);
-
-                    var existingAsset = release.Assets.FirstOrDefault(a => a.Name == assetFileName);
-                    if (existingAsset != null)
-                    {
-                        _logger.Warning("Requested asset to be uploaded already exists on draft release, replacing with new file: {AssetPath}", asset);
-                        await _gitHubClient.Repository.Release.DeleteAsset(owner, repository, existingAsset.Id).ConfigureAwait(false);
-                    }
-
-                    var upload = new ReleaseAssetUpload
-                    {
-                        FileName = assetFileName,
-                        ContentType = "application/octet-stream",
-                        RawData = File.Open(asset, System.IO.FileMode.Open, FileAccess.Read, FileShare.ReadWrite),
-                    };
-
-                    _logger.Verbose("Uploading asset '{FileName}' to release '{TagName}' on '{Owner}/{Repository}'", assetFileName, tagName, owner, repository);
-                    _logger.Debug("{@Upload}", upload);
-
-                    await _gitHubClient.Repository.Release.UploadAsset(release, upload).ConfigureAwait(false);
-
-                    // Make sure to tidy up the stream that was created above
-                    upload.RawData.Dispose();
-                }
-
-                if (assets.Any() && _configuration.Create.IncludeShaSection)
-                {
-                    var stringBuilder = new StringBuilder(release.Body);
-
-                    if (!release.Body.Contains(_configuration.Create.ShaSectionHeading))
-                    {
-                        _logger.Debug("Creating SHA section header");
-                        stringBuilder.AppendLine(string.Format("### {0}", _configuration.Create.ShaSectionHeading));
-                    }
+                    var release = await _vcsProvider.GetReleaseAsync(owner, repository, tagName).ConfigureAwait(false);
 
                     foreach (var asset in assets)
                     {
-                        var file = new FileInfo(asset);
-
-                        if (!file.Exists)
+                        if (!File.Exists(asset))
                         {
-                            continue;
+                            var message = string.Format("Requested asset to be uploaded doesn't exist: {0}", asset);
+                            throw new FileNotFoundException(message);
                         }
 
-                        _logger.Debug("Creating SHA checksum for {Name}.", file.Name);
+                        var assetFileName = Path.GetFileName(asset);
+                        var existingAsset = release.Assets.FirstOrDefault(a => a.Name == assetFileName);
 
-                        stringBuilder.AppendFormat(_configuration.Create.ShaSectionLineFormat, file.Name, ComputeSha256Hash(asset));
-                        stringBuilder.AppendLine();
+                        if (existingAsset != null)
+                        {
+                            _logger.Warning("Requested asset to be uploaded already exists on draft release, replacing with new file: {AssetPath}", asset);
+                            await _vcsProvider.DeleteAssetAsync(owner, repository, existingAsset.Id).ConfigureAwait(false);
+                        }
+
+                        var upload = new ReleaseAssetUpload
+                        {
+                            FileName = assetFileName,
+                            ContentType = "application/octet-stream",
+                            RawData = File.Open(asset, System.IO.FileMode.Open, FileAccess.Read, FileShare.ReadWrite),
+                        };
+
+                        _logger.Verbose("Uploading asset '{FileName}' to release '{TagName}' on '{Owner}/{Repository}'", assetFileName, tagName, owner, repository);
+                        _logger.Debug("{@Upload}", upload);
+
+                        await _vcsProvider.UploadAssetAsync(release, upload).ConfigureAwait(false);
+
+                        // Make sure to tidy up the stream that was created above
+                        upload.RawData.Dispose();
                     }
 
-                    stringBuilder.AppendLine();
+                    if (_configuration.Create.IncludeShaSection)
+                    {
+                        var stringBuilder = new StringBuilder(release.Body);
 
-                    var releaseUpdate = release.ToUpdate();
-                    releaseUpdate.Body = stringBuilder.ToString();
-                    _logger.Verbose("Updating release notes with sha checksum");
-                    _logger.Debug("{@ReleaseUpdate}", releaseUpdate);
-                    await _gitHubClient.Repository.Release.Edit(owner, repository, release.Id, releaseUpdate).ConfigureAwait(false);
+                        if (!release.Body.Contains(_configuration.Create.ShaSectionHeading))
+                        {
+                            _logger.Debug("Creating SHA section header");
+                            stringBuilder.AppendLine(string.Format("### {0}", _configuration.Create.ShaSectionHeading));
+                        }
+
+                        foreach (var asset in assets)
+                        {
+                            var file = new FileInfo(asset);
+
+                            if (!file.Exists)
+                            {
+                                continue;
+                            }
+
+                            _logger.Debug("Creating SHA checksum for {Name}.", file.Name);
+
+                            stringBuilder.AppendFormat(_configuration.Create.ShaSectionLineFormat, file.Name, ComputeSha256Hash(asset));
+                            stringBuilder.AppendLine();
+                        }
+
+                        stringBuilder.AppendLine();
+
+                        release.Body = stringBuilder.ToString();
+
+                        _logger.Verbose("Updating release notes with SHA checksum");
+                        _logger.Debug("{@Release}", release);
+
+                        await _vcsProvider.UpdateReleaseAsync(owner, repository, release).ConfigureAwait(false);
+                    }
+                }
+                catch (NotFoundException)
+                {
+                    _logger.Warning(_unableToFoundReleaseMessage, tagName, owner, repository);
                 }
             }
         }
 
-        public async Task<string> ExportReleases(string owner, string repository, string tagName)
+        public async Task<string> ExportReleasesAsync(string owner, string repository, string tagName)
         {
             var releases = Enumerable.Empty<Release>();
 
@@ -221,14 +223,14 @@ namespace GitReleaseManager.Core
                 }
                 catch (NotFoundException)
                 {
-                    _logger.Error("Unable to find any release with the tag '{TagName}' for specified repository.", tagName);
+                    _logger.Warning(_unableToFoundReleaseMessage, tagName, owner, repository);
                 }
             }
 
             return _releaseNotesExporter.ExportReleaseNotes(releases);
         }
 
-        public async Task CloseMilestone(string owner, string repository, string milestoneTitle)
+        public async Task CloseMilestoneAsync(string owner, string repository, string milestoneTitle)
         {
             try
             {
@@ -245,11 +247,11 @@ namespace GitReleaseManager.Core
             }
             catch (NotFoundException)
             {
-                _logger.Error("No existing open milestone with title '{Title}' was found", milestoneTitle);
+                _logger.Warning(_unableToFoundMilestoneMessage, "open", milestoneTitle, owner, repository);
             }
         }
 
-        public async Task OpenMilestone(string owner, string repository, string milestoneTitle)
+        public async Task OpenMilestoneAsync(string owner, string repository, string milestoneTitle)
         {
             try
             {
@@ -261,52 +263,54 @@ namespace GitReleaseManager.Core
             }
             catch (NotFoundException)
             {
-                _logger.Error("No existing closed milestone with title '{Title}' was found", milestoneTitle);
+                _logger.Warning(_unableToFoundMilestoneMessage, "closed", milestoneTitle, owner, repository);
             }
         }
 
-        public async Task PublishRelease(string owner, string repository, string tagName)
+        public async Task PublishReleaseAsync(string owner, string repository, string tagName)
         {
-            var release = await GetReleaseFromTagNameAsync(owner, repository, tagName).ConfigureAwait(false);
-
-            if (release is null)
+            try
             {
-                _logger.Verbose("No release with tag '{TagName}' was found on '{Owner}/{Repository}'", tagName, owner, repository);
-                return;
+                var release = await _vcsProvider.GetReleaseAsync(owner, repository, tagName).ConfigureAwait(false);
+
+                _logger.Verbose("Publishing release '{TagName}' on '{Owner}/{Repository}'", tagName, owner, repository);
+                _logger.Debug("{@Release}", release);
+
+                await _vcsProvider.PublishReleaseAsync(owner, repository, tagName, release.Id).ConfigureAwait(false);
             }
-
-            var releaseUpdate = new ReleaseUpdate { TagName = tagName, Draft = false };
-
-            _logger.Verbose("Publishing release '{TagName}' on '{Owner}/{Repository}'", tagName, owner, repository);
-            _logger.Debug("{@ReleaseUpdate}", releaseUpdate);
-            await _gitHubClient.Repository.Release.Edit(owner, repository, release.Id, releaseUpdate).ConfigureAwait(false);
+            catch (NotFoundException)
+            {
+                _logger.Warning(_unableToFoundReleaseMessage, tagName, owner, repository);
+            }
         }
 
-        public async Task CreateLabels(string owner, string repository)
+        public async Task CreateLabelsAsync(string owner, string repository)
         {
             if (_configuration.Labels.Any())
             {
-                var newLabels = new List<NewLabel>();
+                var newLabels = new List<Label>();
 
                 foreach (var label in _configuration.Labels)
                 {
-                    newLabels.Add(new NewLabel(label.Name, label.Color)
+                    newLabels.Add(new Label
                     {
+                        Name = label.Name,
+                        Color = label.Color,
                         Description = label.Description,
                     });
                 }
 
                 _logger.Verbose("Grabbing all existing labels on '{Owner}/{Repository}'", owner, repository);
-                var labels = await _gitHubClient.Issue.Labels.GetAllForRepository(owner, repository).ConfigureAwait(false);
+                var labels = await _vcsProvider.GetLabelsAsync(owner, repository).ConfigureAwait(false);
 
                 _logger.Verbose("Removing existing labels");
                 _logger.Debug("{@Labels}", labels);
-                var deleteLabelsTasks = labels.Select(label => _gitHubClient.Issue.Labels.Delete(owner, repository, label.Name));
+                var deleteLabelsTasks = labels.Select(label => _vcsProvider.DeleteLabelAsync(owner, repository, label.Name));
                 await Task.WhenAll(deleteLabelsTasks).ConfigureAwait(false);
 
                 _logger.Verbose("Creating new standard labels");
                 _logger.Debug("{@Labels}", newLabels);
-                var createLabelsTasks = newLabels.Select(label => _gitHubClient.Issue.Labels.Create(owner, repository, label));
+                var createLabelsTasks = newLabels.Select(label => _vcsProvider.CreateLabelAsync(owner, repository, label));
                 await Task.WhenAll(createLabelsTasks).ConfigureAwait(false);
             }
             else
@@ -315,22 +319,23 @@ namespace GitReleaseManager.Core
             }
         }
 
-        private static NewRelease CreateNewRelease(string name, string tagName, string body, bool prerelease, string targetCommitish)
+        private static Release CreateReleaseModel(string name, string tagName, string body, bool prerelease, string targetCommitish)
         {
-            var newRelease = new NewRelease(tagName)
+            var release = new Release
             {
                 Draft = true,
                 Body = body,
                 Name = name,
+                TagName = tagName,
                 Prerelease = prerelease,
             };
 
             if (!string.IsNullOrEmpty(targetCommitish))
             {
-                newRelease.TargetCommitish = targetCommitish;
+                release.TargetCommitish = targetCommitish;
             }
 
-            return newRelease;
+            return release;
         }
 
         private static string ComputeSha256Hash(string asset)
@@ -396,19 +401,13 @@ namespace GitReleaseManager.Core
             return issueComments.Any(c => c.Body.Contains(comment));
         }
 
-        private Task<Octokit.Release> GetReleaseFromTagNameAsync(string owner, string repository, string tagName)
-        {
-            _logger.Verbose("Finding release with tag name: '{TagName}'", tagName);
-
-            return _gitHubClient.Repository.Release.Get(owner, repository, tagName);
-        }
-
         private void SleepWhenRateIsLimited()
         {
-            var lastApi = _gitHubClient.GetLastApiInfo();
-            if (lastApi?.RateLimit?.Remaining == 0)
+            var rateLimit = _vcsProvider.GetRateLimit();
+
+            if (rateLimit?.Remaining == 0)
             {
-                var sleepTime = lastApi.RateLimit.Reset - DateTimeOffset.Now;
+                var sleepTime = rateLimit.Reset - DateTimeOffset.Now;
                 _logger.Warning("Rate limit exceeded, sleeping for {$SleepTime}", sleepTime);
                 Thread.Sleep(sleepTime);
             }

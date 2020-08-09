@@ -12,22 +12,22 @@ namespace GitReleaseManager.Core
 
     public interface IVcsService
     {
-        Task<Release> CreateReleaseFromMilestone(string owner, string repository, string milestone, string releaseName, string targetCommitish, IList<string> assets, bool prerelease);
+        Task<Release> CreateReleaseFromMilestoneAsync(string owner, string repository, string milestone, string releaseName, string targetCommitish, IList<string> assets, bool prerelease);
 
-        Task<Release> CreateReleaseFromInputFile(string owner, string repository, string name, string inputFilePath, string targetCommitish, IList<string> assets, bool prerelease);
+        Task<Release> CreateReleaseFromInputFileAsync(string owner, string repository, string name, string inputFilePath, string targetCommitish, IList<string> assets, bool prerelease);
 
-        Task DiscardRelease(string owner, string repository, string tagName);
+        Task DiscardReleaseAsync(string owner, string repository, string tagName);
 
-        Task AddAssets(string owner, string repository, string tagName, IList<string> assets);
+        Task AddAssetsAsync(string owner, string repository, string tagName, IList<string> assets);
 
-        Task<string> ExportReleases(string owner, string repository, string tagName);
+        Task<string> ExportReleasesAsync(string owner, string repository, string tagName);
 
-        Task CloseMilestone(string owner, string repository, string milestoneTitle);
+        Task CloseMilestoneAsync(string owner, string repository, string milestoneTitle);
 
-        Task OpenMilestone(string owner, string repository, string milestoneTitle);
+        Task OpenMilestoneAsync(string owner, string repository, string milestoneTitle);
 
-        Task PublishRelease(string owner, string repository, string tagName);
+        Task PublishReleaseAsync(string owner, string repository, string tagName);
 
-        Task CreateLabels(string owner, string repository);
+        Task CreateLabelsAsync(string owner, string repository);
     }
 }

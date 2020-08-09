@@ -9,9 +9,12 @@ using Issue = GitReleaseManager.Core.Model.Issue;
 using IssueComment = GitReleaseManager.Core.Model.IssueComment;
 using ItemState = GitReleaseManager.Core.Model.ItemState;
 using ItemStateFilter = GitReleaseManager.Core.Model.ItemStateFilter;
+using Label = GitReleaseManager.Core.Model.Label;
 using Milestone = GitReleaseManager.Core.Model.Milestone;
 using NotFoundException = GitReleaseManager.Core.Exceptions.NotFoundException;
+using RateLimit = GitReleaseManager.Core.Model.RateLimit;
 using Release = GitReleaseManager.Core.Model.Release;
+using ReleaseAssetUpload = GitReleaseManager.Core.Model.ReleaseAssetUpload;
 
 namespace GitReleaseManager.Core.Provider
 {
@@ -26,6 +29,41 @@ namespace GitReleaseManager.Core.Provider
         {
             _gitHubClient = gitHubClient;
             _mapper = mapper;
+        }
+
+        public async Task DeleteAssetAsync(string owner, string repository, int id)
+        {
+            try
+            {
+                await _gitHubClient.Repository.Release.DeleteAsset(owner, repository, id).ConfigureAwait(false);
+            }
+            catch (Octokit.NotFoundException ex)
+            {
+                throw new NotFoundException(ex.Message, ex);
+            }
+            catch (Exception ex)
+            {
+                throw new ApiException(ex.Message, ex);
+            }
+        }
+
+        public async Task UploadAssetAsync(Release release, ReleaseAssetUpload releaseAssetUpload)
+        {
+            try
+            {
+                var octokitRelease = _mapper.Map<Octokit.Release>(release);
+                var octokitReleaseAssetUpload = _mapper.Map<Octokit.ReleaseAssetUpload>(releaseAssetUpload);
+
+                await _gitHubClient.Repository.Release.UploadAsset(octokitRelease, octokitReleaseAssetUpload).ConfigureAwait(false);
+            }
+            catch (Octokit.NotFoundException ex)
+            {
+                throw new NotFoundException(ex.Message, ex);
+            }
+            catch (Exception ex)
+            {
+                throw new ApiException(ex.Message, ex);
+            }
         }
 
         public async Task<int> GetCommitsCount(string owner, string repository, string @base, string head)
@@ -53,16 +91,9 @@ namespace GitReleaseManager.Core.Provider
             Ensure.IsNotNullOrWhiteSpace(repository, nameof(repository));
             Ensure.IsNotNullOrWhiteSpace(head, nameof(head));
 
-            string url;
-
-            if (string.IsNullOrWhiteSpace(@base))
-            {
-                url = string.Format(CultureInfo.InvariantCulture, "https://github.com/{0}/{1}/commits/{2}", owner, repository, head);
-            }
-            else
-            {
-                url = string.Format(CultureInfo.InvariantCulture, "https://github.com/{0}/{1}/compare/{2}...{3}", owner, repository, @base, head);
-            }
+            string url = string.IsNullOrWhiteSpace(@base)
+                ? string.Format(CultureInfo.InvariantCulture, "https://github.com/{0}/{1}/commits/{2}", owner, repository, head)
+                : string.Format(CultureInfo.InvariantCulture, "https://github.com/{0}/{1}/compare/{2}...{3}", owner, repository, @base, head);
 
             return url;
         }
@@ -114,6 +145,50 @@ namespace GitReleaseManager.Core.Provider
             catch (Octokit.NotFoundException ex)
             {
                 throw new NotFoundException(ex.Message, ex);
+            }
+            catch (Exception ex)
+            {
+                throw new ApiException(ex.Message, ex);
+            }
+        }
+
+        public async Task CreateLabelAsync(string owner, string repository, Label label)
+        {
+            try
+            {
+                var newLabel = _mapper.Map<NewLabel>(label);
+
+                await _gitHubClient.Issue.Labels.Create(owner, repository, newLabel).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                throw new ApiException(ex.Message, ex);
+            }
+        }
+
+        public async Task DeleteLabelAsync(string owner, string repository, string labelName)
+        {
+            try
+            {
+                await _gitHubClient.Issue.Labels.Delete(owner, repository, labelName).ConfigureAwait(false);
+            }
+            catch (Octokit.NotFoundException ex)
+            {
+                throw new NotFoundException(ex.Message, ex);
+            }
+            catch (Exception ex)
+            {
+                throw new ApiException(ex.Message, ex);
+            }
+        }
+
+        public async Task<IEnumerable<Label>> GetLabelsAsync(string owner, string repository)
+        {
+            try
+            {
+                var labels = await _gitHubClient.Issue.Labels.GetAllForRepository(owner, repository).ConfigureAwait(false);
+
+                return _mapper.Map<IEnumerable<Label>>(labels);
             }
             catch (Exception ex)
             {
@@ -173,6 +248,22 @@ namespace GitReleaseManager.Core.Provider
             }
         }
 
+        public async Task<Release> CreateReleaseAsync(string owner, string repository, Release release)
+        {
+            try
+            {
+                var newRelease = _mapper.Map<NewRelease>(release);
+
+                var octokitRelease = await _gitHubClient.Repository.Release.Create(owner, repository, newRelease).ConfigureAwait(false);
+
+                return _mapper.Map<Release>(octokitRelease);
+            }
+            catch (Exception ex)
+            {
+                throw new ApiException(ex.Message, ex);
+            }
+        }
+
         public async Task DeleteReleaseAsync(string owner, string repository, int id)
         {
             try
@@ -215,6 +306,63 @@ namespace GitReleaseManager.Core.Provider
                 releases = releases.OrderByDescending(r => r.CreatedAt).ToList();
 
                 return _mapper.Map<IEnumerable<Release>>(releases);
+            }
+            catch (Exception ex)
+            {
+                throw new ApiException(ex.Message, ex);
+            }
+        }
+
+        public async Task PublishReleaseAsync(string owner, string repository, string tagName, int releaseId)
+        {
+            try
+            {
+                var update = new ReleaseUpdate { Draft = false, TagName = tagName };
+                await _gitHubClient.Repository.Release.Edit(owner, repository, releaseId, update).ConfigureAwait(false);
+            }
+            catch (Octokit.NotFoundException ex)
+            {
+                throw new NotFoundException(ex.Message, ex);
+            }
+            catch (Exception ex)
+            {
+                throw new ApiException(ex.Message, ex);
+            }
+        }
+
+        public async Task UpdateReleaseAsync(string owner, string repository, Release release)
+        {
+            try
+            {
+                var update = new ReleaseUpdate
+                {
+                    Body = release.Body,
+                    Draft = release.Draft,
+                    Name = release.Name,
+                    Prerelease = release.Prerelease,
+                    TagName = release.TagName,
+                    TargetCommitish = release.TargetCommitish,
+                };
+
+                await _gitHubClient.Repository.Release.Edit(owner, repository, release.Id, update).ConfigureAwait(false);
+            }
+            catch (Octokit.NotFoundException ex)
+            {
+                throw new NotFoundException(ex.Message, ex);
+            }
+            catch (Exception ex)
+            {
+                throw new ApiException(ex.Message, ex);
+            }
+        }
+
+        public RateLimit GetRateLimit()
+        {
+            try
+            {
+                var rateLimit = _gitHubClient.GetLastApiInfo().RateLimit;
+
+                return _mapper.Map<RateLimit>(rateLimit);
             }
             catch (Exception ex)
             {
