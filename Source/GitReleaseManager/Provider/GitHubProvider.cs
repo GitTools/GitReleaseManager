@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Octokit;
+using ForbiddenException = GitReleaseManager.Core.Exceptions.ForbiddenException;
 using Issue = GitReleaseManager.Core.Model.Issue;
 using IssueComment = GitReleaseManager.Core.Model.IssueComment;
 using ItemState = GitReleaseManager.Core.Model.ItemState;
@@ -31,58 +32,41 @@ namespace GitReleaseManager.Core.Provider
             _mapper = mapper;
         }
 
-        public async Task DeleteAssetAsync(string owner, string repository, int id)
+        public Task DeleteAssetAsync(string owner, string repository, int id)
         {
-            try
+            return Execute(async () =>
             {
                 await _gitHubClient.Repository.Release.DeleteAsset(owner, repository, id).ConfigureAwait(false);
-            }
-            catch (Octokit.NotFoundException ex)
-            {
-                throw new NotFoundException(ex.Message, ex);
-            }
-            catch (Exception ex)
-            {
-                throw new ApiException(ex.Message, ex);
-            }
+            });
         }
 
-        public async Task UploadAssetAsync(Release release, ReleaseAssetUpload releaseAssetUpload)
+        public Task UploadAssetAsync(Release release, ReleaseAssetUpload releaseAssetUpload)
         {
-            try
+            return Execute(async () =>
             {
                 var octokitRelease = _mapper.Map<Octokit.Release>(release);
                 var octokitReleaseAssetUpload = _mapper.Map<Octokit.ReleaseAssetUpload>(releaseAssetUpload);
 
                 await _gitHubClient.Repository.Release.UploadAsset(octokitRelease, octokitReleaseAssetUpload).ConfigureAwait(false);
-            }
-            catch (Octokit.NotFoundException ex)
-            {
-                throw new NotFoundException(ex.Message, ex);
-            }
-            catch (Exception ex)
-            {
-                throw new ApiException(ex.Message, ex);
-            }
+            });
         }
 
-        public async Task<int> GetCommitsCount(string owner, string repository, string @base, string head)
+        public Task<int> GetCommitsCount(string owner, string repository, string @base, string head)
         {
-            try
+            return Execute(async () =>
             {
-                var result = await _gitHubClient.Repository.Commit.Compare(owner, repository, @base, head).ConfigureAwait(false);
-                return result.AheadBy;
-            }
-            catch (Octokit.NotFoundException)
-            {
-                // If there is no tag yet the Compare will return a NotFoundException
-                // we can safely ignore
-                return 0;
-            }
-            catch (Exception ex)
-            {
-                throw new ApiException(ex.Message, ex);
-            }
+                try
+                {
+                    var result = await _gitHubClient.Repository.Commit.Compare(owner, repository, @base, head).ConfigureAwait(false);
+                    return result.AheadBy;
+                }
+                catch (Octokit.NotFoundException)
+                {
+                    // If there is no tag yet the Compare will return a NotFoundException
+                    // we can safely ignore
+                    return 0;
+                }
+            });
         }
 
         public string GetCommitsUrl(string owner, string repository, string head, string @base = null)
@@ -98,25 +82,17 @@ namespace GitReleaseManager.Core.Provider
             return url;
         }
 
-        public async Task CreateIssueCommentAsync(string owner, string repository, int issueNumber, string comment)
+        public Task CreateIssueCommentAsync(string owner, string repository, int issueNumber, string comment)
         {
-            try
+            return Execute(async () =>
             {
                 await _gitHubClient.Issue.Comment.Create(owner, repository, issueNumber, comment).ConfigureAwait(false);
-            }
-            catch (Octokit.NotFoundException ex)
-            {
-                throw new NotFoundException(ex.Message, ex);
-            }
-            catch (Exception ex)
-            {
-                throw new ApiException(ex.Message, ex);
-            }
+            });
         }
 
-        public async Task<IEnumerable<Issue>> GetIssuesAsync(string owner, string repository, int milestoneNumber, ItemStateFilter itemStateFilter = ItemStateFilter.All)
+        public Task<IEnumerable<Issue>> GetIssuesAsync(string owner, string repository, int milestoneNumber, ItemStateFilter itemStateFilter = ItemStateFilter.All)
         {
-            try
+            return Execute(async () =>
             {
                 var openIssueRequest = new RepositoryIssueRequest
                 {
@@ -127,78 +103,50 @@ namespace GitReleaseManager.Core.Provider
                 var issues = await _gitHubClient.Issue.GetAllForRepository(owner, repository, openIssueRequest).ConfigureAwait(false);
 
                 return _mapper.Map<IEnumerable<Issue>>(issues);
-            }
-            catch (Exception ex)
-            {
-                throw new ApiException(ex.Message, ex);
-            }
+            });
         }
 
-        public async Task<IEnumerable<IssueComment>> GetIssueCommentsAsync(string owner, string repository, int issueNumber)
+        public Task<IEnumerable<IssueComment>> GetIssueCommentsAsync(string owner, string repository, int issueNumber)
         {
-            try
+            return Execute(async () =>
             {
                 var comments = await _gitHubClient.Issue.Comment.GetAllForIssue(owner, repository, issueNumber).ConfigureAwait(false);
 
                 return _mapper.Map<IEnumerable<IssueComment>>(comments);
-            }
-            catch (Octokit.NotFoundException ex)
-            {
-                throw new NotFoundException(ex.Message, ex);
-            }
-            catch (Exception ex)
-            {
-                throw new ApiException(ex.Message, ex);
-            }
+            });
         }
 
-        public async Task CreateLabelAsync(string owner, string repository, Label label)
+        public Task CreateLabelAsync(string owner, string repository, Label label)
         {
-            try
+            return Execute(async () =>
             {
                 var newLabel = _mapper.Map<NewLabel>(label);
 
                 await _gitHubClient.Issue.Labels.Create(owner, repository, newLabel).ConfigureAwait(false);
-            }
-            catch (Exception ex)
-            {
-                throw new ApiException(ex.Message, ex);
-            }
+            });
         }
 
-        public async Task DeleteLabelAsync(string owner, string repository, string labelName)
+        public Task DeleteLabelAsync(string owner, string repository, string labelName)
         {
-            try
+            return Execute(async () =>
             {
                 await _gitHubClient.Issue.Labels.Delete(owner, repository, labelName).ConfigureAwait(false);
-            }
-            catch (Octokit.NotFoundException ex)
-            {
-                throw new NotFoundException(ex.Message, ex);
-            }
-            catch (Exception ex)
-            {
-                throw new ApiException(ex.Message, ex);
-            }
+            });
         }
 
-        public async Task<IEnumerable<Label>> GetLabelsAsync(string owner, string repository)
+        public Task<IEnumerable<Label>> GetLabelsAsync(string owner, string repository)
         {
-            try
+            return Execute(async () =>
             {
                 var labels = await _gitHubClient.Issue.Labels.GetAllForRepository(owner, repository).ConfigureAwait(false);
 
                 return _mapper.Map<IEnumerable<Label>>(labels);
-            }
-            catch (Exception ex)
-            {
-                throw new ApiException(ex.Message, ex);
-            }
+            });
         }
 
-        public async Task<Milestone> GetMilestoneAsync(string owner, string repository, string milestoneTitle, ItemStateFilter itemStateFilter = ItemStateFilter.All)
+        public Task<Milestone> GetMilestoneAsync(string owner, string repository, string milestoneTitle, ItemStateFilter itemStateFilter = ItemStateFilter.All)
         {
-            try
+            return Execute(async () =>
             {
                 var milestones = await GetMilestonesAsync(owner, repository, itemStateFilter).ConfigureAwait(false);
                 var milestone = milestones.FirstOrDefault(m => m.Title == milestoneTitle);
@@ -209,130 +157,86 @@ namespace GitReleaseManager.Core.Provider
                 }
 
                 return milestone;
-            }
-            catch (Exception ex) when (!(ex is NotFoundException))
-            {
-                throw new ApiException(ex.Message, ex);
-            }
+            });
         }
 
-        public async Task<IEnumerable<Milestone>> GetMilestonesAsync(string owner, string repository, ItemStateFilter itemStateFilter = ItemStateFilter.All)
+        public Task<IEnumerable<Milestone>> GetMilestonesAsync(string owner, string repository, ItemStateFilter itemStateFilter = ItemStateFilter.All)
         {
-            try
+            return Execute(async () =>
             {
                 var request = new MilestoneRequest { State = (Octokit.ItemStateFilter)itemStateFilter };
                 var milestones = await _gitHubClient.Issue.Milestone.GetAllForRepository(owner, repository, request).ConfigureAwait(false);
 
                 return _mapper.Map<IEnumerable<Milestone>>(milestones);
-            }
-            catch (Exception ex)
-            {
-                throw new ApiException(ex.Message, ex);
-            }
+            });
         }
 
-        public async Task SetMilestoneStateAsync(string owner, string repository, int milestoneNumber, ItemState itemState)
+        public Task SetMilestoneStateAsync(string owner, string repository, int milestoneNumber, ItemState itemState)
         {
-            try
+            return Execute(async () =>
             {
                 var update = new MilestoneUpdate { State = (Octokit.ItemState)itemState };
                 await _gitHubClient.Issue.Milestone.Update(owner, repository, milestoneNumber, update).ConfigureAwait(false);
-            }
-            catch (Octokit.NotFoundException ex)
-            {
-                throw new NotFoundException(ex.Message, ex);
-            }
-            catch (Exception ex)
-            {
-                throw new ApiException(ex.Message, ex);
-            }
+            });
         }
 
-        public async Task<Release> CreateReleaseAsync(string owner, string repository, Release release)
+        public Task<Release> CreateReleaseAsync(string owner, string repository, Release release)
         {
-            try
+            return Execute(async () =>
             {
                 var newRelease = _mapper.Map<NewRelease>(release);
-
                 var octokitRelease = await _gitHubClient.Repository.Release.Create(owner, repository, newRelease).ConfigureAwait(false);
 
                 return _mapper.Map<Release>(octokitRelease);
-            }
-            catch (Exception ex)
-            {
-                throw new ApiException(ex.Message, ex);
-            }
+            });
         }
 
-        public async Task DeleteReleaseAsync(string owner, string repository, int id)
+        public Task DeleteReleaseAsync(string owner, string repository, int id)
         {
-            try
+            return Execute(async () =>
             {
                 await _gitHubClient.Repository.Release.Delete(owner, repository, id).ConfigureAwait(false);
-            }
-            catch (Octokit.NotFoundException ex)
-            {
-                throw new NotFoundException(ex.Message, ex);
-            }
-            catch (Exception ex)
-            {
-                throw new ApiException(ex.Message, ex);
-            }
+            });
         }
 
-        public async Task<Release> GetReleaseAsync(string owner, string repository, string tagName)
+        public Task<Release> GetReleaseAsync(string owner, string repository, string tagName)
         {
-            try
+            return Execute(async () =>
             {
                 var release = await _gitHubClient.Repository.Release.Get(owner, repository, tagName).ConfigureAwait(false);
 
                 return _mapper.Map<Release>(release);
-            }
-            catch (Octokit.NotFoundException ex)
-            {
-                throw new NotFoundException(ex.Message, ex);
-            }
-            catch (Exception ex)
-            {
-                throw new ApiException(ex.Message, ex);
-            }
+            });
         }
 
-        public async Task<IEnumerable<Release>> GetReleasesAsync(string owner, string repository)
+        public Task<IEnumerable<Release>> GetReleasesAsync(string owner, string repository)
         {
-            try
+            return Execute(async () =>
             {
                 var releases = await _gitHubClient.Repository.Release.GetAll(owner, repository).ConfigureAwait(false);
                 releases = releases.OrderByDescending(r => r.CreatedAt).ToList();
 
                 return _mapper.Map<IEnumerable<Release>>(releases);
-            }
-            catch (Exception ex)
-            {
-                throw new ApiException(ex.Message, ex);
-            }
+            });
         }
 
-        public async Task PublishReleaseAsync(string owner, string repository, string tagName, int releaseId)
+        public Task PublishReleaseAsync(string owner, string repository, string tagName, int releaseId)
         {
-            try
+            return Execute(async () =>
             {
-                var update = new ReleaseUpdate { Draft = false, TagName = tagName };
+                var update = new ReleaseUpdate
+                {
+                    Draft = false,
+                    TagName = tagName,
+                };
+
                 await _gitHubClient.Repository.Release.Edit(owner, repository, releaseId, update).ConfigureAwait(false);
-            }
-            catch (Octokit.NotFoundException ex)
-            {
-                throw new NotFoundException(ex.Message, ex);
-            }
-            catch (Exception ex)
-            {
-                throw new ApiException(ex.Message, ex);
-            }
+            });
         }
 
-        public async Task UpdateReleaseAsync(string owner, string repository, Release release)
+        public Task UpdateReleaseAsync(string owner, string repository, Release release)
         {
-            try
+            return Execute(async () =>
             {
                 var update = new ReleaseUpdate
                 {
@@ -345,15 +249,7 @@ namespace GitReleaseManager.Core.Provider
                 };
 
                 await _gitHubClient.Repository.Release.Edit(owner, repository, release.Id, update).ConfigureAwait(false);
-            }
-            catch (Octokit.NotFoundException ex)
-            {
-                throw new NotFoundException(ex.Message, ex);
-            }
-            catch (Exception ex)
-            {
-                throw new ApiException(ex.Message, ex);
-            }
+            });
         }
 
         public RateLimit GetRateLimit()
@@ -365,6 +261,46 @@ namespace GitReleaseManager.Core.Provider
                 return _mapper.Map<RateLimit>(rateLimit);
             }
             catch (Exception ex)
+            {
+                throw new ApiException(ex.Message, ex);
+            }
+        }
+
+        private async Task Execute(Func<Task> action)
+        {
+            try
+            {
+                await action().ConfigureAwait(false);
+            }
+            catch (Octokit.ForbiddenException ex)
+            {
+                throw new ForbiddenException(ex.Message, ex);
+            }
+            catch (Octokit.NotFoundException ex)
+            {
+                throw new NotFoundException(ex.Message, ex);
+            }
+            catch (Exception ex) when (!(ex is NotFoundException))
+            {
+                throw new ApiException(ex.Message, ex);
+            }
+        }
+
+        private async Task<T> Execute<T>(Func<Task<T>> action)
+        {
+            try
+            {
+                return await action().ConfigureAwait(false);
+            }
+            catch (Octokit.ForbiddenException ex)
+            {
+                throw new ForbiddenException(ex.Message, ex);
+            }
+            catch (Octokit.NotFoundException ex)
+            {
+                throw new NotFoundException(ex.Message, ex);
+            }
+            catch (Exception ex) when (!(ex is NotFoundException))
             {
                 throw new ApiException(ex.Message, ex);
             }
