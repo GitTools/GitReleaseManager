@@ -1,15 +1,15 @@
 //-----------------------------------------------------------------------
-// <copyright file="ShowConfigSubOptions.cs" company="GitTools Contributors">
+// <copyright file="InitSubOptions.cs" company="GitTools Contributors">
 //     Copyright (c) 2015 - Present - GitTools Contributors
 // </copyright>
 //-----------------------------------------------------------------------
 
-namespace GitReleaseManager.Cli.Options
+namespace GitReleaseManager.Core.Options
 {
     using CommandLine;
 
-    [Verb("showconfig", HelpText = "Shows the current configuration")]
-    public class ShowConfigSubOptions : BaseSubOptions
+    [Verb("init", HelpText = "Creates a sample Yaml Configuration file in root directory")]
+    public class InitSubOptions : BaseSubOptions
     {
     }
 }

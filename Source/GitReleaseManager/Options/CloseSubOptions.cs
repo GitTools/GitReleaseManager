@@ -1,15 +1,15 @@
 //-----------------------------------------------------------------------
-// <copyright file="DiscardOptions.cs" company="GitTools Contributors">
+// <copyright file="CloseSubOptions.cs" company="GitTools Contributors">
 //     Copyright (c) 2015 - Present - GitTools Contributors
 // </copyright>
 //-----------------------------------------------------------------------
 
-namespace GitReleaseManager.Cli.Options
+namespace GitReleaseManager.Core.Options
 {
     using CommandLine;
 
-    [Verb("discard", HelpText = "Discards a draft release.")]
-    public class DiscardSubOptions : BaseVcsOptions
+    [Verb("close", HelpText = "Closes the milestone.")]
+    public class CloseSubOptions : BaseVcsOptions
     {
         [Option('m', "milestone", HelpText = "The milestone to use.", Required = true)]
         public string Milestone { get; set; }

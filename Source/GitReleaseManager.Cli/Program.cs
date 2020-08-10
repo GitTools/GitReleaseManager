@@ -13,10 +13,10 @@ namespace GitReleaseManager.Cli
     using System.Threading.Tasks;
     using CommandLine;
     using GitReleaseManager.Cli.Logging;
-    using GitReleaseManager.Cli.Options;
     using GitReleaseManager.Core;
     using GitReleaseManager.Core.Configuration;
     using GitReleaseManager.Core.Helpers;
+    using GitReleaseManager.Core.Options;
     using GitReleaseManager.Core.Provider;
     using GitReleaseManager.Core.ReleaseNotes;
     using Microsoft.Extensions.DependencyInjection;

@@ -4,7 +4,7 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-namespace GitReleaseManager.Cli.Options
+namespace GitReleaseManager.Core.Options
 {
     public class MainOptions
     {
