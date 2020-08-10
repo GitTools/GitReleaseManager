@@ -149,7 +149,7 @@ namespace GitReleaseManager.Core
                         {
                             FileName = assetFileName,
                             ContentType = "application/octet-stream",
-                            RawData = File.Open(asset, System.IO.FileMode.Open, FileAccess.Read, FileShare.ReadWrite),
+                            RawData = File.Open(asset, FileMode.Open, FileAccess.Read, FileShare.ReadWrite),
                         };
 
                         _logger.Verbose("Uploading asset '{FileName}' to release '{TagName}' on '{Owner}/{Repository}'", assetFileName, tagName, owner, repository);

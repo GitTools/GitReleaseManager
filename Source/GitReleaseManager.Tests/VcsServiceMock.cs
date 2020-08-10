@@ -31,47 +31,47 @@ namespace GitReleaseManager.Tests
 
         public int NumberOfCommits { get; set; }
 
-        public Task<Release> CreateReleaseFromMilestone(string owner, string repository, string milestone, string releaseName, string targetCommitish, IList<string> assets, bool prerelease)
+        public Task<Release> CreateReleaseFromMilestoneAsync(string owner, string repository, string milestone, string releaseName, string targetCommitish, IList<string> assets, bool prerelease)
         {
             throw new System.NotImplementedException();
         }
 
-        public Task<Release> CreateReleaseFromInputFile(string owner, string repository, string name, string inputFilePath, string targetCommitish, IList<string> assets, bool prerelease)
+        public Task<Release> CreateReleaseFromInputFileAsync(string owner, string repository, string name, string inputFilePath, string targetCommitish, IList<string> assets, bool prerelease)
         {
             throw new System.NotImplementedException();
         }
 
-        public Task DiscardRelease(string owner, string repository, string tagName)
+        public Task DiscardReleaseAsync(string owner, string repository, string tagName)
         {
             throw new System.NotImplementedException();
         }
 
-        public Task AddAssets(string owner, string repository, string tagName, IList<string> assets)
+        public Task AddAssetsAsync(string owner, string repository, string tagName, IList<string> assets)
         {
             throw new System.NotImplementedException();
         }
 
-        public Task<string> ExportReleases(string owner, string repository, string tagName)
+        public Task<string> ExportReleasesAsync(string owner, string repository, string tagName)
         {
             throw new System.NotImplementedException();
         }
 
-        public Task CloseMilestone(string owner, string repository, string milestoneTitle)
+        public Task CloseMilestoneAsync(string owner, string repository, string milestoneTitle)
         {
             throw new System.NotImplementedException();
         }
 
-        public Task OpenMilestone(string owner, string repository, string milestoneTitle)
+        public Task OpenMilestoneAsync(string owner, string repository, string milestoneTitle)
         {
             throw new System.NotImplementedException();
         }
 
-        public Task PublishRelease(string owner, string repository, string tagName)
+        public Task PublishReleaseAsync(string owner, string repository, string tagName)
         {
             throw new System.NotImplementedException();
         }
 
-        public Task CreateLabels(string owner, string repository)
+        public Task CreateLabelsAsync(string owner, string repository)
         {
             throw new System.NotImplementedException();
         }

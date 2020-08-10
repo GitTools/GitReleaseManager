@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using GitReleaseManager.Core.Provider;
 using NSubstitute;
+using NSubstitute.ExceptionExtensions;
 using NUnit.Framework;
 using Octokit;
 using Shouldly;
@@ -13,9 +14,12 @@ using Issue = GitReleaseManager.Core.Model.Issue;
 using IssueComment = GitReleaseManager.Core.Model.IssueComment;
 using ItemState = GitReleaseManager.Core.Model.ItemState;
 using ItemStateFilter = GitReleaseManager.Core.Model.ItemStateFilter;
+using Label = GitReleaseManager.Core.Model.Label;
 using Milestone = GitReleaseManager.Core.Model.Milestone;
 using NotFoundException = GitReleaseManager.Core.Exceptions.NotFoundException;
+using RateLimit = GitReleaseManager.Core.Model.RateLimit;
 using Release = GitReleaseManager.Core.Model.Release;
+using ReleaseAssetUpload = GitReleaseManager.Core.Model.ReleaseAssetUpload;
 
 namespace GitReleaseManager.Core.Tests.Provider
 {
@@ -31,9 +35,16 @@ namespace GitReleaseManager.Core.Tests.Provider
         private const string _milestoneTitle = "0.1.0";
         private const int _issueNumber = 1;
         private const string _issueComment = "Issue Comment";
+        private const string _labelName = "Label";
         private const string _tagName = "0.1.0";
+        private const int _releaseId = 1;
+        private const int _assetId = 1;
         private const string _notFoundMessage = "NotFound";
 
+        private readonly Release _release = new Release();
+        private readonly ReleaseAssetUpload _releaseAssetUpload = new ReleaseAssetUpload();
+        private readonly Octokit.NewLabel _newLabel = new Octokit.NewLabel(_labelName, "ffffff");
+        private readonly Octokit.NewRelease _newRelease = new Octokit.NewRelease(_tagName);
         private readonly Exception _exception = new Exception("API Error");
         private readonly Octokit.NotFoundException _notFoundException = new Octokit.NotFoundException(_notFoundMessage, HttpStatusCode.NotFound);
 
@@ -47,6 +58,96 @@ namespace GitReleaseManager.Core.Tests.Provider
             _mapper = Substitute.For<IMapper>();
             _gitHubClient = Substitute.For<IGitHubClient>();
             _gitHubProvider = new GitHubProvider(_gitHubClient, _mapper);
+        }
+
+        // Assets
+        [Test]
+        public async Task Should_Delete_Asset()
+        {
+            _gitHubClient.Repository.Release.DeleteAsset(_owner, _repository, _assetId)
+                .Returns(Task.FromResult);
+
+            await _gitHubProvider.DeleteAssetAsync(_owner, _repository, _assetId).ConfigureAwait(false);
+
+            await _gitHubClient.Repository.Release.Received(1).DeleteAsset(_owner, _repository, _assetId).ConfigureAwait(false);
+        }
+
+        [Test]
+        public async Task Should_Throw_An_Exception_On_Deleting_Asset_For_Non_Existing_Id()
+        {
+            _gitHubClient.Repository.Release.DeleteAsset(_owner, _repository, _assetId)
+                .Returns(Task.FromException(_notFoundException));
+
+            var ex = await Should.ThrowAsync<NotFoundException>(() => _gitHubProvider.DeleteAssetAsync(_owner, _repository, _assetId)).ConfigureAwait(false);
+            ex.Message.ShouldBe(_notFoundException.Message);
+            ex.InnerException.ShouldBe(_notFoundException);
+        }
+
+        [Test]
+        public async Task Should_Throw_An_Exception_On_Deleting_Asset()
+        {
+            _gitHubClient.Repository.Release.DeleteAsset(_owner, _repository, _assetId)
+                .Returns(Task.FromException(_exception));
+
+            var ex = await Should.ThrowAsync<ApiException>(() => _gitHubProvider.DeleteAssetAsync(_owner, _repository, _assetId)).ConfigureAwait(false);
+            ex.Message.ShouldBe(_exception.Message);
+            ex.InnerException.ShouldBe(_exception);
+        }
+
+        [Test]
+        public async Task Should_Upload_Asset()
+        {
+            var octokitRelease = new Octokit.Release();
+            var octokitReleaseAssetUpload = new Octokit.ReleaseAssetUpload();
+
+            _mapper.Map<Octokit.Release>(_release)
+                .Returns(octokitRelease);
+
+            _mapper.Map<Octokit.ReleaseAssetUpload>(_releaseAssetUpload)
+                .Returns(octokitReleaseAssetUpload);
+
+            _gitHubClient.Repository.Release.UploadAsset(octokitRelease, octokitReleaseAssetUpload)
+                .Returns(Task.FromResult(new Octokit.ReleaseAsset()));
+
+            await _gitHubProvider.UploadAssetAsync(_release, _releaseAssetUpload).ConfigureAwait(false);
+
+            _mapper.Received(1).Map<Octokit.Release>(_release);
+            _mapper.Received(1).Map<Octokit.ReleaseAssetUpload>(_releaseAssetUpload);
+            await _gitHubClient.Repository.Release.Received(1).UploadAsset(octokitRelease, octokitReleaseAssetUpload).ConfigureAwait(false);
+        }
+
+        [Test]
+        public async Task Should_Throw_An_Exception_On_Uploading_Asset_For_Non_Existing_Release()
+        {
+            _mapper.Map<Octokit.Release>(_release)
+                .Returns(new Octokit.Release());
+
+            _mapper.Map<Octokit.ReleaseAssetUpload>(_releaseAssetUpload)
+                .Returns(new Octokit.ReleaseAssetUpload());
+
+            _gitHubClient.Repository.Release.UploadAsset(Arg.Any<Octokit.Release>(), Arg.Any<Octokit.ReleaseAssetUpload>())
+                .Returns(Task.FromException<Octokit.ReleaseAsset>(_notFoundException));
+
+            var ex = await Should.ThrowAsync<NotFoundException>(() => _gitHubProvider.UploadAssetAsync(_release, _releaseAssetUpload)).ConfigureAwait(false);
+            ex.Message.ShouldBe(_notFoundException.Message);
+            ex.InnerException.ShouldBe(_notFoundException);
+        }
+
+        [Test]
+        public async Task Should_Throw_An_Exception_On_Uploading_Asset()
+        {
+            _mapper.Map<Octokit.Release>(_release)
+                .Returns(new Octokit.Release());
+
+            _mapper.Map<Octokit.ReleaseAssetUpload>(_releaseAssetUpload)
+                .Returns(new Octokit.ReleaseAssetUpload());
+
+            _gitHubClient.Repository.Release.UploadAsset(Arg.Any<Octokit.Release>(), Arg.Any<Octokit.ReleaseAssetUpload>())
+                .Returns(Task.FromException<Octokit.ReleaseAsset>(_exception));
+
+            var ex = await Should.ThrowAsync<ApiException>(() => _gitHubProvider.UploadAssetAsync(_release, _releaseAssetUpload)).ConfigureAwait(false);
+            ex.Message.ShouldBe(_exception.Message);
+            ex.InnerException.ShouldBe(_exception);
         }
 
         // Commits
@@ -89,7 +190,7 @@ namespace GitReleaseManager.Core.Tests.Provider
 
         [TestCase("0.1.0", null, "https://github.com/owner/repository/commits/0.1.0")]
         [TestCase("0.5.0", "0.1.0", "https://github.com/owner/repository/compare/0.1.0...0.5.0")]
-        public void Should_Get_A_Commits_Url(string head, string @base, string expectedResult)
+        public void Should_Get_Commits_Url(string head, string @base, string expectedResult)
         {
             var result = _gitHubProvider.GetCommitsUrl(_owner, _repository, head, @base);
             result.ShouldBe(expectedResult);
@@ -122,7 +223,7 @@ namespace GitReleaseManager.Core.Tests.Provider
 
         // Issues
         [Test]
-        public async Task Should_Create_A_Issue_Comment()
+        public async Task Should_Create_Issue_Comment()
         {
             _gitHubClient.Issue.Comment.Create(_owner, _repository, _issueNumber, _issueComment)
                 .Returns(Task.FromResult(new Octokit.IssueComment()));
@@ -133,7 +234,7 @@ namespace GitReleaseManager.Core.Tests.Provider
         }
 
         [Test]
-        public async Task Should_Throw_An_Exception_On_Creating_A_Issue_Comment_For_Non_Existing_Issue_Number()
+        public async Task Should_Throw_An_Exception_On_Creating_Issue_Comment_For_Non_Existing_Issue_Number()
         {
             _gitHubClient.Issue.Comment.Create(_owner, _repository, _issueNumber, _issueComment)
                 .Returns(Task.FromException<Octokit.IssueComment>(_notFoundException));
@@ -144,7 +245,7 @@ namespace GitReleaseManager.Core.Tests.Provider
         }
 
         [Test]
-        public async Task Should_Throw_An_Exception_On_Creating_A_Issue_Comment()
+        public async Task Should_Throw_An_Exception_On_Creating_Issue_Comment()
         {
             _gitHubClient.Issue.Comment.Create(_owner, _repository, _issueNumber, _issueComment)
                 .Returns(Task.FromException<Octokit.IssueComment>(_exception));
@@ -157,7 +258,7 @@ namespace GitReleaseManager.Core.Tests.Provider
         [TestCase(ItemStateFilter.Open)]
         [TestCase(ItemStateFilter.Closed)]
         [TestCase(ItemStateFilter.All)]
-        public async Task Should_Get_Issues_For_A_Milestone(ItemStateFilter itemStateFilter)
+        public async Task Should_Get_Issues_For_Milestone(ItemStateFilter itemStateFilter)
         {
             var issues = new List<Issue>();
 
@@ -224,6 +325,100 @@ namespace GitReleaseManager.Core.Tests.Provider
                 .Returns(Task.FromException<IReadOnlyList<Octokit.IssueComment>>(_exception));
 
             var ex = await Should.ThrowAsync<ApiException>(() => _gitHubProvider.GetIssueCommentsAsync(_owner, _repository, _issueNumber)).ConfigureAwait(false);
+            ex.Message.ShouldBe(_exception.Message);
+            ex.InnerException.ShouldBe(_exception);
+        }
+
+        // Labels
+        [Test]
+        public async Task Should_Create_Label()
+        {
+            _mapper.Map<Octokit.NewLabel>(Arg.Any<Label>())
+                .Returns(_newLabel);
+
+            _gitHubClient.Issue.Labels.Create(_owner, _repository, _newLabel)
+                .Returns(Task.FromResult(new Octokit.Label()));
+
+            await _gitHubProvider.CreateLabelAsync(_owner, _repository, new Label()).ConfigureAwait(false);
+
+            await _gitHubClient.Issue.Labels.Received(1).Create(_owner, _repository, _newLabel).ConfigureAwait(false);
+            _mapper.Received(1).Map<Octokit.NewLabel>(Arg.Any<Label>());
+        }
+
+        [Test]
+        public async Task Should_Throw_An_Exception_On_Creating_Label()
+        {
+            var label = new Label();
+
+            _mapper.Map<Octokit.NewLabel>(label)
+                .Returns(_newLabel);
+
+            _gitHubClient.Issue.Labels.Create(_owner, _repository, _newLabel)
+                .Returns(Task.FromException<Octokit.Label>(_exception));
+
+            var ex = await Should.ThrowAsync<ApiException>(() => _gitHubProvider.CreateLabelAsync(_owner, _repository, label)).ConfigureAwait(false);
+            ex.Message.ShouldBe(_exception.Message);
+            ex.InnerException.ShouldBe(_exception);
+        }
+
+        [Test]
+        public async Task Should_Delete_Label()
+        {
+            _gitHubClient.Issue.Labels.Delete(_owner, _repository, _labelName)
+                .Returns(Task.FromResult);
+
+            await _gitHubProvider.DeleteLabelAsync(_owner, _repository, _labelName).ConfigureAwait(false);
+
+            await _gitHubClient.Issue.Labels.Received(1).Delete(_owner, _repository, _labelName).ConfigureAwait(false);
+        }
+
+        [Test]
+        public async Task Should_Throw_An_Exception_On_Deleting_Label_For_Non_Existing_Label()
+        {
+            _gitHubClient.Issue.Labels.Delete(_owner, _repository, _labelName)
+                .Returns(Task.FromException<IReadOnlyList<Octokit.Label>>(_notFoundException));
+
+            var ex = await Should.ThrowAsync<NotFoundException>(() => _gitHubProvider.DeleteLabelAsync(_owner, _repository, _labelName)).ConfigureAwait(false);
+            ex.Message.ShouldBe(_notFoundException.Message);
+            ex.InnerException.ShouldBe(_notFoundException);
+        }
+
+        [Test]
+        public async Task Should_Throw_An_Exception_On_Deleting_Label()
+        {
+            _gitHubClient.Issue.Labels.Delete(_owner, _repository, _labelName)
+                .Returns(Task.FromException<IReadOnlyList<Octokit.Label>>(_exception));
+
+            var ex = await Should.ThrowAsync<ApiException>(() => _gitHubProvider.DeleteLabelAsync(_owner, _repository, _labelName)).ConfigureAwait(false);
+            ex.Message.ShouldBe(_exception.Message);
+            ex.InnerException.ShouldBe(_exception);
+        }
+
+        [Test]
+        public async Task Should_Get_Labels()
+        {
+            var labels = new List<Label>();
+
+            _gitHubClient.Issue.Labels.GetAllForRepository(_owner, _repository)
+                .Returns(Task.FromResult((IReadOnlyList<Octokit.Label>)new List<Octokit.Label>()));
+
+            _mapper.Map<IEnumerable<Label>>(Arg.Any<object>())
+                .Returns(labels);
+
+            var result = await _gitHubProvider.GetLabelsAsync(_owner, _repository).ConfigureAwait(false);
+            result.ShouldBeSameAs(labels);
+
+            await _gitHubClient.Issue.Labels.Received(1).GetAllForRepository(_owner, _repository).ConfigureAwait(false);
+            _mapper.ReceivedWithAnyArgs(1).Map<IEnumerable<Label>>(default);
+        }
+
+        [Test]
+        public async Task Should_Throw_An_Exception_On_Getting_Labels()
+        {
+            _gitHubClient.Issue.Labels.GetAllForRepository(_owner, _repository)
+                .Returns(Task.FromException<IReadOnlyList<Octokit.Label>>(_exception));
+
+            var ex = await Should.ThrowAsync<ApiException>(() => _gitHubProvider.GetLabelsAsync(_owner, _repository)).ConfigureAwait(false);
             ex.Message.ShouldBe(_exception.Message);
             ex.InnerException.ShouldBe(_exception);
         }
@@ -301,7 +496,7 @@ namespace GitReleaseManager.Core.Tests.Provider
 
         [TestCase(ItemState.Closed)]
         [TestCase(ItemState.Open)]
-        public async Task Should_Set_A_Milestone_State(ItemState itemState)
+        public async Task Should_Set_Milestone_State(ItemState itemState)
         {
             _gitHubClient.Issue.Milestone.Update(_owner, _repository, _milestoneNumber, Arg.Any<MilestoneUpdate>())
                 .Returns(Task.FromResult(new Octokit.Milestone()));
@@ -335,7 +530,46 @@ namespace GitReleaseManager.Core.Tests.Provider
 
         // Releases
         [Test]
-        public async Task Should_Delete_A_Release()
+        public async Task Should_Create_Release()
+        {
+            var createRelease = new Release();
+            var resultRelease = new Release();
+
+            _mapper.Map<Octokit.NewRelease>(createRelease)
+                .Returns(_newRelease);
+
+            _gitHubClient.Repository.Release.Create(_owner, _repository, _newRelease)
+                .Returns(Task.FromResult(new Octokit.Release()));
+
+            _mapper.Map<Release>(Arg.Any<Octokit.Release>())
+                .Returns(resultRelease);
+
+            var result = await _gitHubProvider.CreateReleaseAsync(_owner, _repository, createRelease).ConfigureAwait(false);
+            result.ShouldBeSameAs(resultRelease);
+
+            await _gitHubClient.Repository.Release.Received(1).Create(_owner, _repository, _newRelease).ConfigureAwait(false);
+            _mapper.Received(1).Map<Octokit.NewRelease>(Arg.Any<Release>());
+            _mapper.Received(1).Map<Release>(Arg.Any<Octokit.Release>());
+        }
+
+        [Test]
+        public async Task Should_Throw_An_Exception_On_Creating_Release()
+        {
+            var label = new Release();
+
+            _mapper.Map<Octokit.NewRelease>(label)
+                .Returns(_newRelease);
+
+            _gitHubClient.Repository.Release.Create(_owner, _repository, _newRelease)
+                .Returns(Task.FromException<Octokit.Release>(_exception));
+
+            var ex = await Should.ThrowAsync<ApiException>(() => _gitHubProvider.CreateReleaseAsync(_owner, _repository, label)).ConfigureAwait(false);
+            ex.Message.ShouldBe(_exception.Message);
+            ex.InnerException.ShouldBe(_exception);
+        }
+
+        [Test]
+        public async Task Should_Delete_Release()
         {
             var id = 1;
 
@@ -374,7 +608,7 @@ namespace GitReleaseManager.Core.Tests.Provider
         }
 
         [Test]
-        public async Task Should_Get_A_Release()
+        public async Task Should_Get_Release()
         {
             var release = new Release();
 
@@ -438,6 +672,125 @@ namespace GitReleaseManager.Core.Tests.Provider
                 .Returns(Task.FromException<IReadOnlyList<Octokit.Release>>(_exception));
 
             var ex = await Should.ThrowAsync<ApiException>(() => _gitHubProvider.GetReleasesAsync(_owner, _repository)).ConfigureAwait(false);
+            ex.Message.ShouldBe(_exception.Message);
+            ex.InnerException.ShouldBe(_exception);
+        }
+
+        [Test]
+        public async Task Should_Publish_Release()
+        {
+            _gitHubClient.Repository.Release.Edit(_owner, _repository, _releaseId, Arg.Any<ReleaseUpdate>())
+                .Returns(Task.FromResult(new Octokit.Release()));
+
+            await _gitHubProvider.PublishReleaseAsync(_owner, _repository, _tagName, _releaseId).ConfigureAwait(false);
+
+            await _gitHubClient.Repository.Release.Received(1).Edit(_owner, _repository, _releaseId, Arg.Is<ReleaseUpdate>(o =>
+                o.Draft == false &&
+                o.TagName == _tagName)).ConfigureAwait(false);
+        }
+
+        [Test]
+        public async Task Should_Throw_An_Exception_On_Publishing_Release_For_Non_Existent_Id()
+        {
+            _gitHubClient.Repository.Release.Edit(_owner, _repository, _releaseId, Arg.Any<ReleaseUpdate>())
+                .Returns(Task.FromException<Octokit.Release>(_notFoundException));
+
+            var ex = await Should.ThrowAsync<NotFoundException>(() => _gitHubProvider.PublishReleaseAsync(_owner, _repository, _tagName, _releaseId)).ConfigureAwait(false);
+            ex.Message.ShouldBe(_notFoundException.Message);
+            ex.InnerException.ShouldBe(_notFoundException);
+        }
+
+        [Test]
+        public async Task Should_Throw_An_Exception_On_Publishing_Release()
+        {
+            _gitHubClient.Repository.Release.Edit(_owner, _repository, _releaseId, Arg.Any<ReleaseUpdate>())
+                .Returns(Task.FromException<Octokit.Release>(_exception));
+
+            var ex = await Should.ThrowAsync<ApiException>(() => _gitHubProvider.PublishReleaseAsync(_owner, _repository, _tagName, _releaseId)).ConfigureAwait(false);
+            ex.Message.ShouldBe(_exception.Message);
+            ex.InnerException.ShouldBe(_exception);
+        }
+
+        [Test]
+        public async Task Should_Update_Release()
+        {
+            var release = new Release
+            {
+                Id = _releaseId,
+                Body = "Body",
+                Draft = true,
+                Name = "Name",
+                Prerelease = true,
+                TagName = "TagName",
+                TargetCommitish = "TargetCommitish",
+            };
+
+            _gitHubClient.Repository.Release.Edit(_owner, _repository, release.Id, Arg.Any<ReleaseUpdate>())
+                .Returns(Task.FromResult(new Octokit.Release()));
+
+            await _gitHubProvider.UpdateReleaseAsync(_owner, _repository, release).ConfigureAwait(false);
+
+            await _gitHubClient.Repository.Release.Received(1).Edit(_owner, _repository, release.Id, Arg.Is<ReleaseUpdate>(o =>
+                o.Body == release.Body &&
+                o.Draft == release.Draft &&
+                o.Name == release.Name &&
+                o.Prerelease == release.Prerelease &&
+                o.TagName == release.TagName &&
+                o.TargetCommitish == release.TargetCommitish)).ConfigureAwait(false);
+        }
+
+        [Test]
+        public async Task Should_Throw_An_Exception_On_Updating_Release_For_Non_Existent_Id()
+        {
+            var release = new Release { Id = _releaseId };
+
+            _gitHubClient.Repository.Release.Edit(_owner, _repository, release.Id, Arg.Any<ReleaseUpdate>())
+                .Returns(Task.FromException<Octokit.Release>(_notFoundException));
+
+            var ex = await Should.ThrowAsync<NotFoundException>(() => _gitHubProvider.UpdateReleaseAsync(_owner, _repository, release)).ConfigureAwait(false);
+            ex.Message.ShouldBe(_notFoundException.Message);
+            ex.InnerException.ShouldBe(_notFoundException);
+        }
+
+        [Test]
+        public async Task Should_Throw_An_Exception_On_Updating_Release()
+        {
+            var release = new Release { Id = _releaseId };
+
+            _gitHubClient.Repository.Release.Edit(_owner, _repository, release.Id, Arg.Any<ReleaseUpdate>())
+                .Returns(Task.FromException<Octokit.Release>(_exception));
+
+            var ex = await Should.ThrowAsync<ApiException>(() => _gitHubProvider.UpdateReleaseAsync(_owner, _repository, release)).ConfigureAwait(false);
+            ex.Message.ShouldBe(_exception.Message);
+            ex.InnerException.ShouldBe(_exception);
+        }
+
+        [Test]
+        public void Should_Get_Rate_Limit()
+        {
+            var rateLimit = new RateLimit();
+            var apiInfo = new Octokit.ApiInfo(new Dictionary<string, Uri>(), new List<string>(), new List<string>(), string.Empty, new Octokit.RateLimit());
+
+            _gitHubClient.GetLastApiInfo()
+                .Returns(apiInfo);
+
+            _mapper.Map<RateLimit>(apiInfo.RateLimit)
+                .Returns(rateLimit);
+
+            var result = _gitHubProvider.GetRateLimit();
+            result.ShouldBeSameAs(rateLimit);
+
+            _gitHubClient.Received(1).GetLastApiInfo();
+            _mapper.Received(1).Map<RateLimit>(apiInfo.RateLimit);
+        }
+
+        [Test]
+        public void Should_Throw_An_Exception_On_Getting_Rate_Limit()
+        {
+            _gitHubClient.GetLastApiInfo()
+                .Throws(_exception);
+
+            var ex = Should.Throw<ApiException>(() => _gitHubProvider.GetRateLimit());
             ex.Message.ShouldBe(_exception.Message);
             ex.InnerException.ShouldBe(_exception);
         }
