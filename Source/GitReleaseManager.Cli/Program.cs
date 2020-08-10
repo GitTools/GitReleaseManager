@@ -97,6 +97,7 @@ namespace GitReleaseManager.Cli
                 .AddSingleton(mapper)
                 .AddSingleton(configuration)
                 .AddSingleton(configuration.Export)
+                .AddSingleton<IFileSystem, FileSystem>()
                 .AddSingleton<IReleaseNotesExporter, ReleaseNotesExporter>()
                 .AddSingleton<IReleaseNotesBuilder, ReleaseNotesBuilder>()
                 .AddSingleton<IGitHubClient>(gitHubClient)
