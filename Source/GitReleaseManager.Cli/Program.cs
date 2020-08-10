@@ -7,13 +7,13 @@
 namespace GitReleaseManager.Cli
 {
     using System;
-    using System.IO;
     using System.Net;
     using System.Reflection;
     using System.Threading.Tasks;
     using CommandLine;
     using GitReleaseManager.Cli.Logging;
     using GitReleaseManager.Core;
+    using GitReleaseManager.Core.Commands;
     using GitReleaseManager.Core.Configuration;
     using GitReleaseManager.Core.Helpers;
     using GitReleaseManager.Core.Options;
@@ -25,8 +25,6 @@ namespace GitReleaseManager.Cli
 
     public static class Program
     {
-        private static FileSystem _fileSystem;
-        private static IVcsService _vcsService;
         private static IServiceProvider _serviceProvider;
 
         private static async Task<int> Main(string[] args)
@@ -34,8 +32,6 @@ namespace GitReleaseManager.Cli
             // Just add the TLS 1.2 protocol to the Service Point manager until
             // we've upgraded to latest Octokit.
             ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
-
-            _fileSystem = new FileSystem();
 
             try
             {
@@ -46,16 +42,16 @@ namespace GitReleaseManager.Cli
                     .WithParsed<BaseVcsOptions>(ReportUsernamePasswordDeprecation)
                     .WithParsed<BaseVcsOptions>(RegisterServices)
                     .MapResult(
-                    (CreateSubOptions opts) => CreateReleaseAsync(opts),
-                    (DiscardSubOptions opts) => DiscardReleaseAsync(opts),
-                    (AddAssetSubOptions opts) => AddAssetsAsync(opts),
-                    (CloseSubOptions opts) => CloseMilestoneAsync(opts),
-                    (OpenSubOptions opts) => OpenMilestoneAsync(opts),
-                    (PublishSubOptions opts) => PublishReleaseAsync(opts),
-                    (ExportSubOptions opts) => ExportReleasesAsync(opts),
-                    (InitSubOptions opts) => CreateSampleConfigFileAsync(opts),
-                    (ShowConfigSubOptions opts) => ShowConfigAsync(opts),
-                    (LabelSubOptions opts) => CreateLabelsAsync(opts),
+                    (CreateSubOptions opts) => ExecuteCommand(opts),
+                    (DiscardSubOptions opts) => ExecuteCommand(opts),
+                    (AddAssetSubOptions opts) => ExecuteCommand(opts),
+                    (CloseSubOptions opts) => ExecuteCommand(opts),
+                    (OpenSubOptions opts) => ExecuteCommand(opts),
+                    (PublishSubOptions opts) => ExecuteCommand(opts),
+                    (ExportSubOptions opts) => ExecuteCommand(opts),
+                    (InitSubOptions opts) => ExecuteCommand(opts),
+                    (ShowConfigSubOptions opts) => ExecuteCommand(opts),
+                    (LabelSubOptions opts) => ExecuteCommand(opts),
                     errs => Task.FromResult(1)).ConfigureAwait(false);
             }
             catch (AggregateException ex)
@@ -82,9 +78,10 @@ namespace GitReleaseManager.Cli
 
         private static void RegisterServices(BaseVcsOptions options)
         {
+            var fileSystem = new FileSystem();
             var logger = Log.ForContext<VcsService>();
             var mapper = AutoMapperConfiguration.Configure();
-            var configuration = ConfigurationProvider.Provide(options.TargetDirectory ?? Environment.CurrentDirectory, _fileSystem);
+            var configuration = ConfigurationProvider.Provide(options.TargetDirectory ?? Environment.CurrentDirectory, fileSystem);
 
             var credentials = string.IsNullOrWhiteSpace(options.Token)
                 ? new Credentials(options.UserName, options.Password)
@@ -97,6 +94,16 @@ namespace GitReleaseManager.Cli
                 .AddSingleton(mapper)
                 .AddSingleton(configuration)
                 .AddSingleton(configuration.Export)
+                .AddSingleton<ICommand<AddAssetSubOptions>, AddAssetsCommand>()
+                .AddSingleton<ICommand<CloseSubOptions>, CloseCommand>()
+                .AddSingleton<ICommand<CreateSubOptions>, CreateCommand>()
+                .AddSingleton<ICommand<DiscardSubOptions>, DiscardCommand>()
+                .AddSingleton<ICommand<ExportSubOptions>, ExportCommand>()
+                .AddSingleton<ICommand<InitSubOptions>, InitCommand>()
+                .AddSingleton<ICommand<LabelSubOptions>, LabelCommand>()
+                .AddSingleton<ICommand<OpenSubOptions>, OpenCommand>()
+                .AddSingleton<ICommand<PublishSubOptions>, PublishCommand>()
+                .AddSingleton<ICommand<ShowConfigSubOptions>, ShowConfigCommand>()
                 .AddSingleton<IFileSystem, FileSystem>()
                 .AddSingleton<IReleaseNotesExporter, ReleaseNotesExporter>()
                 .AddSingleton<IReleaseNotesBuilder, ReleaseNotesBuilder>()
@@ -183,126 +190,11 @@ namespace GitReleaseManager.Cli
             }
         }
 
-        private static async Task<int> CreateReleaseAsync(CreateSubOptions subOptions)
+        private static Task<int> ExecuteCommand<TOptions>(TOptions options)
+            where TOptions : BaseSubOptions
         {
-            Log.Information("Creating release...");
-            _vcsService = GetVcsService();
-
-            Core.Model.Release release;
-            if (!string.IsNullOrEmpty(subOptions.Milestone))
-            {
-                Log.Verbose("Milestone {Milestone} was specified", subOptions.Milestone);
-                var releaseName = subOptions.Name;
-                if (string.IsNullOrWhiteSpace(releaseName))
-                {
-                    Log.Verbose("No Release Name was specified, using {Milestone}.", subOptions.Milestone);
-                    releaseName = subOptions.Milestone;
-                }
-
-                release = await _vcsService.CreateReleaseFromMilestoneAsync(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone, releaseName, subOptions.TargetCommitish, subOptions.AssetPaths, subOptions.Prerelease).ConfigureAwait(false);
-            }
-            else
-            {
-                Log.Verbose("No milestone was specified, switching to release creating from input file");
-                release = await _vcsService.CreateReleaseFromInputFileAsync(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Name, subOptions.InputFilePath, subOptions.TargetCommitish, subOptions.AssetPaths, subOptions.Prerelease).ConfigureAwait(false);
-            }
-
-            Log.Information("Drafted release is available at:\n{HtmlUrl}", release.HtmlUrl);
-            Log.Verbose("Body:\n{Body}", release.Body);
-            return 0;
-        }
-
-        private static async Task<int> DiscardReleaseAsync(DiscardSubOptions subOptions)
-        {
-            Log.Information("Discarding release {Milestone}", subOptions.Milestone);
-            _vcsService = GetVcsService();
-
-            await _vcsService.DiscardReleaseAsync(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone).ConfigureAwait(false);
-
-            return 0;
-        }
-
-        private static async Task<int> AddAssetsAsync(AddAssetSubOptions subOptions)
-        {
-            Log.Information("Uploading assets");
-            _vcsService = GetVcsService();
-
-            await _vcsService.AddAssetsAsync(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.TagName, subOptions.AssetPaths).ConfigureAwait(false);
-
-            return 0;
-        }
-
-        private static async Task<int> CloseMilestoneAsync(CloseSubOptions subOptions)
-        {
-            Log.Information("Closing milestone {Milestone}", subOptions.Milestone);
-            _vcsService = GetVcsService();
-
-            await _vcsService.CloseMilestoneAsync(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone).ConfigureAwait(false);
-
-            return 0;
-        }
-
-        private static async Task<int> OpenMilestoneAsync(OpenSubOptions subOptions)
-        {
-            Log.Information("Opening milestone {Milestone}", subOptions.Milestone);
-            _vcsService = GetVcsService();
-
-            await _vcsService.OpenMilestoneAsync(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.Milestone).ConfigureAwait(false);
-
-            return 0;
-        }
-
-        private static async Task<int> PublishReleaseAsync(PublishSubOptions subOptions)
-        {
-            _vcsService = GetVcsService();
-
-            await _vcsService.PublishReleaseAsync(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.TagName).ConfigureAwait(false);
-            return 0;
-        }
-
-        private static async Task<int> ExportReleasesAsync(ExportSubOptions subOptions)
-        {
-            Log.Information("Exporting release {TagName}", subOptions.TagName);
-            _vcsService = GetVcsService();
-
-            var releasesMarkdown = await _vcsService.ExportReleasesAsync(subOptions.RepositoryOwner, subOptions.RepositoryName, subOptions.TagName).ConfigureAwait(false);
-
-            using (var sw = new StreamWriter(File.Open(subOptions.FileOutputPath, System.IO.FileMode.OpenOrCreate)))
-            {
-                sw.Write(releasesMarkdown);
-            }
-
-            return 0;
-        }
-
-        private static Task<int> CreateSampleConfigFileAsync(InitSubOptions subOptions)
-        {
-            Log.Information("Creating sample configuration file");
-            var directory = subOptions.TargetDirectory ?? Environment.CurrentDirectory;
-            ConfigurationProvider.WriteSample(directory, _fileSystem);
-            return Task.FromResult(0);
-        }
-
-        private static Task<int> ShowConfigAsync(ShowConfigSubOptions subOptions)
-        {
-            var configuration = ConfigurationProvider.GetEffectiveConfigAsString(subOptions.TargetDirectory ?? Environment.CurrentDirectory, _fileSystem);
-
-            Log.Information("{Configuration}", configuration);
-            return Task.FromResult(0);
-        }
-
-        private static async Task<int> CreateLabelsAsync(LabelSubOptions subOptions)
-        {
-            Log.Information("Creating standard labels");
-            _vcsService = GetVcsService();
-
-            await _vcsService.CreateLabelsAsync(subOptions.RepositoryOwner, subOptions.RepositoryName).ConfigureAwait(false);
-            return 0;
-        }
-
-        private static IVcsService GetVcsService()
-        {
-            return _serviceProvider.GetService<IVcsService>();
+            var command = _serviceProvider.GetRequiredService<ICommand<TOptions>>();
+            return command.Execute(options);
         }
 
         private static void LogOptions(BaseSubOptions options)
