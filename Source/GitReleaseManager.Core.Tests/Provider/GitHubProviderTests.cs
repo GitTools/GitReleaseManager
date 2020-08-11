@@ -10,6 +10,7 @@ using NSubstitute.ExceptionExtensions;
 using NUnit.Framework;
 using Octokit;
 using Shouldly;
+using ApiException = GitReleaseManager.Core.Exceptions.ApiException;
 using Issue = GitReleaseManager.Core.Model.Issue;
 using IssueComment = GitReleaseManager.Core.Model.IssueComment;
 using ItemState = GitReleaseManager.Core.Model.ItemState;
