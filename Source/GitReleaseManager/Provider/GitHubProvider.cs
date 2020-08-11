@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Octokit;
+using ApiException = GitReleaseManager.Core.Exceptions.ApiException;
 using ForbiddenException = GitReleaseManager.Core.Exceptions.ForbiddenException;
 using Issue = GitReleaseManager.Core.Model.Issue;
 using IssueComment = GitReleaseManager.Core.Model.IssueComment;
