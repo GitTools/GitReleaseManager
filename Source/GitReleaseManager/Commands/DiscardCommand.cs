@@ -18,7 +18,6 @@ namespace GitReleaseManager.Core.Commands
         public async Task<int> Execute(DiscardSubOptions options)
         {
             _logger.Information("Discarding release {Milestone}", options.Milestone);
-
             await _vcsService.DiscardReleaseAsync(options.RepositoryOwner, options.RepositoryName, options.Milestone).ConfigureAwait(false);
 
             return 0;

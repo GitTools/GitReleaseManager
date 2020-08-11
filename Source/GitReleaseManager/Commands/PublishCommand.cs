@@ -17,7 +17,9 @@ namespace GitReleaseManager.Core.Commands
 
         public async Task<int> Execute(PublishSubOptions options)
         {
+            _logger.Information("Publish release {TagName}", options.TagName);
             await _vcsService.PublishReleaseAsync(options.RepositoryOwner, options.RepositoryName, options.TagName).ConfigureAwait(false);
+
             return 0;
         }
     }

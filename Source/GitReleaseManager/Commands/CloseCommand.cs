@@ -18,7 +18,6 @@ namespace GitReleaseManager.Core.Commands
         public async Task<int> Execute(CloseSubOptions options)
         {
             _logger.Information("Closing milestone {Milestone}", options.Milestone);
-
             await _vcsService.CloseMilestoneAsync(options.RepositoryOwner, options.RepositoryName, options.Milestone).ConfigureAwait(false);
 
             return 0;

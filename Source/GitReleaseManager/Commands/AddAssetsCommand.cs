@@ -18,7 +18,6 @@ namespace GitReleaseManager.Core.Commands
         public async Task<int> Execute(AddAssetSubOptions options)
         {
             _logger.Information("Uploading assets");
-
             await _vcsService.AddAssetsAsync(options.RepositoryOwner, options.RepositoryName, options.TagName, options.AssetPaths).ConfigureAwait(false);
 
             return 0;
