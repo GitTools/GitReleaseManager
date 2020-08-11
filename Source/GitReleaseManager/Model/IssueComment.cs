@@ -11,6 +11,5 @@ namespace GitReleaseManager.Core.Model
         /// Details about the issue comment.
         /// </summary>
         public string Body { get; set; }
-
     }
 }

@@ -117,7 +117,6 @@ namespace GitReleaseManager.Core
             {
                 _logger.Warning(_unableToFoundReleaseMessage, tagName, owner, repository);
             }
-
         }
 
         public async Task AddAssetsAsync(string owner, string repository, string tagName, IList<string> assets)
@@ -219,7 +218,6 @@ namespace GitReleaseManager.Core
                     _logger.Verbose("Finding release with tag '{TagName}' on '{Owner}/{Repository}'", owner, repository, tagName);
                     var release = await _vcsProvider.GetReleaseAsync(owner, repository, tagName).ConfigureAwait(false);
                     releases = new List<Release> { release };
-
                 }
                 catch (NotFoundException)
                 {
@@ -235,10 +233,10 @@ namespace GitReleaseManager.Core
             try
             {
                 _logger.Verbose("Finding open milestone with title '{Title}' on '{Owner}/{Repository}'", milestoneTitle, owner, repository);
-                var milestone = await _vcsProvider.GetMilestoneAsync(owner, repository, milestoneTitle, Model.ItemStateFilter.Open).ConfigureAwait(false);
+                var milestone = await _vcsProvider.GetMilestoneAsync(owner, repository, milestoneTitle, ItemStateFilter.Open).ConfigureAwait(false);
 
                 _logger.Verbose("Closing milestone '{Title}' on '{Owner}/{Repository}'", milestoneTitle, owner, repository);
-                await _vcsProvider.SetMilestoneStateAsync(owner, repository, milestone.Number, Model.ItemState.Closed).ConfigureAwait(false);
+                await _vcsProvider.SetMilestoneStateAsync(owner, repository, milestone.Number, ItemState.Closed).ConfigureAwait(false);
 
                 if (_configuration.Close.IssueComments)
                 {
@@ -256,10 +254,10 @@ namespace GitReleaseManager.Core
             try
             {
                 _logger.Verbose("Finding closed milestone with title '{Title}' on '{Owner}/{Repository}'", milestoneTitle, owner, repository);
-                var milestone = await _vcsProvider.GetMilestoneAsync(owner, repository, milestoneTitle, Model.ItemStateFilter.Closed).ConfigureAwait(false);
+                var milestone = await _vcsProvider.GetMilestoneAsync(owner, repository, milestoneTitle, ItemStateFilter.Closed).ConfigureAwait(false);
 
                 _logger.Verbose("Opening milestone '{Title}' on '{Owner}/{Repository}'", milestoneTitle, owner, repository);
-                await _vcsProvider.SetMilestoneStateAsync(owner, repository, milestone.Number, Model.ItemState.Open).ConfigureAwait(false);
+                await _vcsProvider.SetMilestoneStateAsync(owner, repository, milestone.Number, ItemState.Open).ConfigureAwait(false);
             }
             catch (NotFoundException)
             {
@@ -343,7 +341,7 @@ namespace GitReleaseManager.Core
             // Create a SHA256
             using (var sha256Hash = SHA256.Create())
             {
-                using (var fileStream = File.Open(asset, System.IO.FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                using (var fileStream = File.Open(asset, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                 {
                     // ComputeHash - returns byte array
                     var bytes = sha256Hash.ComputeHash(fileStream);
@@ -367,7 +365,7 @@ namespace GitReleaseManager.Core
             var issueComment = detectionComment + "\n" + _configuration.Close.IssueCommentFormat.ReplaceTemplate(new { owner, repository, Milestone = milestone.Title });
 
             _logger.Verbose("Finding issues with milestone: '{Milestone}", milestone.Number);
-            var issues = await _vcsProvider.GetIssuesAsync(owner, repository, milestone.Number, Model.ItemStateFilter.Closed).ConfigureAwait(false);
+            var issues = await _vcsProvider.GetIssuesAsync(owner, repository, milestone.Number, ItemStateFilter.Closed).ConfigureAwait(false);
 
             foreach (var issue in issues)
             {
