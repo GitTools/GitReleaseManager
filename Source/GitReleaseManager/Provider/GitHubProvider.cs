@@ -22,6 +22,7 @@ namespace GitReleaseManager.Core.Provider
 {
     public class GitHubProvider : IVcsProvider
     {
+        private const int _pageSize = 100;
         private const string _notFoundMessgae = "NotFound";
 
         private readonly IGitHubClient _gitHubClient;
@@ -101,7 +102,19 @@ namespace GitReleaseManager.Core.Provider
                     State = (Octokit.ItemStateFilter)itemStateFilter,
                 };
 
-                var issues = await _gitHubClient.Issue.GetAllForRepository(owner, repository, openIssueRequest).ConfigureAwait(false);
+                var startPage = 1;
+                var issues = new List<Octokit.Issue>();
+                IReadOnlyList<Octokit.Issue> results;
+
+                do
+                {
+                    var options = GetApiOptions(startPage);
+                    results = await _gitHubClient.Issue.GetAllForRepository(owner, repository, openIssueRequest, options).ConfigureAwait(false);
+
+                    issues.AddRange(results);
+                    startPage++;
+                }
+                while (results.Count == _pageSize);
 
                 return _mapper.Map<IEnumerable<Issue>>(issues);
             });
@@ -111,7 +124,19 @@ namespace GitReleaseManager.Core.Provider
         {
             return Execute(async () =>
             {
-                var comments = await _gitHubClient.Issue.Comment.GetAllForIssue(owner, repository, issueNumber).ConfigureAwait(false);
+                var startPage = 1;
+                var comments = new List<Octokit.IssueComment>();
+                IReadOnlyList<Octokit.IssueComment> results;
+
+                do
+                {
+                    var options = GetApiOptions(startPage);
+                    results = await _gitHubClient.Issue.Comment.GetAllForIssue(owner, repository, issueNumber, options).ConfigureAwait(false);
+
+                    comments.AddRange(results);
+                    startPage++;
+                }
+                while (results.Count == _pageSize);
 
                 return _mapper.Map<IEnumerable<IssueComment>>(comments);
             });
@@ -139,7 +164,19 @@ namespace GitReleaseManager.Core.Provider
         {
             return Execute(async () =>
             {
-                var labels = await _gitHubClient.Issue.Labels.GetAllForRepository(owner, repository).ConfigureAwait(false);
+                var startPage = 1;
+                var labels = new List<Octokit.Label>();
+                IReadOnlyList<Octokit.Label> results;
+
+                do
+                {
+                    var options = GetApiOptions(startPage);
+                    results = await _gitHubClient.Issue.Labels.GetAllForRepository(owner, repository, options).ConfigureAwait(false);
+
+                    labels.AddRange(results);
+                    startPage++;
+                }
+                while (results.Count == _pageSize);
 
                 return _mapper.Map<IEnumerable<Label>>(labels);
             });
@@ -166,7 +203,20 @@ namespace GitReleaseManager.Core.Provider
             return Execute(async () =>
             {
                 var request = new MilestoneRequest { State = (Octokit.ItemStateFilter)itemStateFilter };
-                var milestones = await _gitHubClient.Issue.Milestone.GetAllForRepository(owner, repository, request).ConfigureAwait(false);
+
+                var startPage = 1;
+                var milestones = new List<Octokit.Milestone>();
+                IReadOnlyList<Octokit.Milestone> results;
+
+                do
+                {
+                    var options = GetApiOptions(startPage);
+                    results = await _gitHubClient.Issue.Milestone.GetAllForRepository(owner, repository, request, options).ConfigureAwait(false);
+
+                    milestones.AddRange(results);
+                    startPage++;
+                }
+                while (results.Count == _pageSize);
 
                 return _mapper.Map<IEnumerable<Milestone>>(milestones);
             });
@@ -214,7 +264,20 @@ namespace GitReleaseManager.Core.Provider
         {
             return Execute(async () =>
             {
-                var releases = await _gitHubClient.Repository.Release.GetAll(owner, repository).ConfigureAwait(false);
+                var startPage = 1;
+                var releases = new List<Octokit.Release>();
+                IReadOnlyList<Octokit.Release> results;
+
+                do
+                {
+                    var options = GetApiOptions(startPage);
+                    results = await _gitHubClient.Repository.Release.GetAll(owner, repository, options).ConfigureAwait(false);
+
+                    releases.AddRange(results);
+                    startPage++;
+                }
+                while (results.Count == _pageSize);
+
                 releases = releases.OrderByDescending(r => r.CreatedAt).ToList();
 
                 return _mapper.Map<IEnumerable<Release>>(releases);
@@ -305,6 +368,16 @@ namespace GitReleaseManager.Core.Provider
             {
                 throw new ApiException(ex.Message, ex);
             }
+        }
+
+        private ApiOptions GetApiOptions(int startPage = 1, int pageSize = 100, int pageCount = 1)
+        {
+            return new ApiOptions
+            {
+                StartPage = startPage,
+                PageSize = pageSize,
+                PageCount = pageCount,
+            };
         }
     }
 }
