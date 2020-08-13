@@ -263,7 +263,7 @@ namespace GitReleaseManager.Core.Tests.Provider
         {
             var issues = new List<Issue>();
 
-            _gitHubClient.Issue.GetAllForRepository(_owner, _repository, Arg.Any<RepositoryIssueRequest>())
+            _gitHubClient.Issue.GetAllForRepository(_owner, _repository, Arg.Any<RepositoryIssueRequest>(), Arg.Any<ApiOptions>())
                 .Returns(Task.FromResult((IReadOnlyList<Octokit.Issue>)new List<Octokit.Issue>()));
 
             _mapper.Map<IEnumerable<Issue>>(Arg.Any<object>())
@@ -272,9 +272,11 @@ namespace GitReleaseManager.Core.Tests.Provider
             var result = await _gitHubProvider.GetIssuesAsync(_owner, _repository, _milestoneNumber, itemStateFilter).ConfigureAwait(false);
             result.ShouldBeSameAs(issues);
 
-            await _gitHubClient.Issue.Received(1).GetAllForRepository(_owner, _repository, Arg.Is<RepositoryIssueRequest>(o =>
-                    o.Milestone == _milestoneNumberString &&
-                    o.State == (Octokit.ItemStateFilter)itemStateFilter)).ConfigureAwait(false);
+            await _gitHubClient.Issue.Received(1).GetAllForRepository(
+                _owner,
+                _repository,
+                Arg.Is<RepositoryIssueRequest>(o => o.Milestone == _milestoneNumberString && o.State == (Octokit.ItemStateFilter)itemStateFilter),
+                Arg.Any<ApiOptions>()).ConfigureAwait(false);
 
             _mapper.ReceivedWithAnyArgs(1).Map<IEnumerable<Issue>>(default);
         }
@@ -282,7 +284,7 @@ namespace GitReleaseManager.Core.Tests.Provider
         [Test]
         public async Task Should_Throw_An_Exception_On_Getting_Issues_For_Non_Existent_Milestone()
         {
-            _gitHubClient.Issue.GetAllForRepository(_owner, _repository, Arg.Any<RepositoryIssueRequest>())
+            _gitHubClient.Issue.GetAllForRepository(_owner, _repository, Arg.Any<RepositoryIssueRequest>(), Arg.Any<ApiOptions>())
                 .Returns(Task.FromException<IReadOnlyList<Octokit.Issue>>(_exception));
 
             var ex = await Should.ThrowAsync<ApiException>(() => _gitHubProvider.GetIssuesAsync(_owner, _repository, 1)).ConfigureAwait(false);
@@ -295,7 +297,7 @@ namespace GitReleaseManager.Core.Tests.Provider
         {
             var comments = new List<IssueComment>();
 
-            _gitHubClient.Issue.Comment.GetAllForIssue(_owner, _repository, _issueNumber)
+            _gitHubClient.Issue.Comment.GetAllForIssue(_owner, _repository, _issueNumber, Arg.Any<ApiOptions>())
                 .Returns(Task.FromResult((IReadOnlyList<Octokit.IssueComment>)new List<Octokit.IssueComment>()));
 
             _mapper.Map<IEnumerable<IssueComment>>(Arg.Any<object>())
@@ -304,14 +306,14 @@ namespace GitReleaseManager.Core.Tests.Provider
             var result = await _gitHubProvider.GetIssueCommentsAsync(_owner, _repository, _issueNumber).ConfigureAwait(false);
             result.ShouldBeSameAs(comments);
 
-            await _gitHubClient.Issue.Comment.Received(1).GetAllForIssue(_owner, _repository, _issueNumber).ConfigureAwait(false);
+            await _gitHubClient.Issue.Comment.Received(1).GetAllForIssue(_owner, _repository, _issueNumber, Arg.Any<ApiOptions>()).ConfigureAwait(false);
             _mapper.Received(1).Map<IEnumerable<IssueComment>>(Arg.Any<object>());
         }
 
         [Test]
         public async Task Should_Throw_An_Exception_On_Getting_Issue_Comments_For_Non_Existing_Issue_Number()
         {
-            _gitHubClient.Issue.Comment.GetAllForIssue(_owner, _repository, _issueNumber)
+            _gitHubClient.Issue.Comment.GetAllForIssue(_owner, _repository, _issueNumber, Arg.Any<ApiOptions>())
                 .Returns(Task.FromException<IReadOnlyList<Octokit.IssueComment>>(_notFoundException));
 
             var ex = await Should.ThrowAsync<NotFoundException>(() => _gitHubProvider.GetIssueCommentsAsync(_owner, _repository, _issueNumber)).ConfigureAwait(false);
@@ -322,7 +324,7 @@ namespace GitReleaseManager.Core.Tests.Provider
         [Test]
         public async Task Should_Throw_An_Exception_On_Getting_Issue_Comments()
         {
-            _gitHubClient.Issue.Comment.GetAllForIssue(_owner, _repository, _issueNumber)
+            _gitHubClient.Issue.Comment.GetAllForIssue(_owner, _repository, _issueNumber, Arg.Any<ApiOptions>())
                 .Returns(Task.FromException<IReadOnlyList<Octokit.IssueComment>>(_exception));
 
             var ex = await Should.ThrowAsync<ApiException>(() => _gitHubProvider.GetIssueCommentsAsync(_owner, _repository, _issueNumber)).ConfigureAwait(false);
@@ -400,7 +402,7 @@ namespace GitReleaseManager.Core.Tests.Provider
         {
             var labels = new List<Label>();
 
-            _gitHubClient.Issue.Labels.GetAllForRepository(_owner, _repository)
+            _gitHubClient.Issue.Labels.GetAllForRepository(_owner, _repository, Arg.Any<ApiOptions>())
                 .Returns(Task.FromResult((IReadOnlyList<Octokit.Label>)new List<Octokit.Label>()));
 
             _mapper.Map<IEnumerable<Label>>(Arg.Any<object>())
@@ -409,14 +411,14 @@ namespace GitReleaseManager.Core.Tests.Provider
             var result = await _gitHubProvider.GetLabelsAsync(_owner, _repository).ConfigureAwait(false);
             result.ShouldBeSameAs(labels);
 
-            await _gitHubClient.Issue.Labels.Received(1).GetAllForRepository(_owner, _repository).ConfigureAwait(false);
+            await _gitHubClient.Issue.Labels.Received(1).GetAllForRepository(_owner, _repository, Arg.Any<ApiOptions>()).ConfigureAwait(false);
             _mapper.ReceivedWithAnyArgs(1).Map<IEnumerable<Label>>(default);
         }
 
         [Test]
         public async Task Should_Throw_An_Exception_On_Getting_Labels()
         {
-            _gitHubClient.Issue.Labels.GetAllForRepository(_owner, _repository)
+            _gitHubClient.Issue.Labels.GetAllForRepository(_owner, _repository, Arg.Any<ApiOptions>())
                 .Returns(Task.FromException<IReadOnlyList<Octokit.Label>>(_exception));
 
             var ex = await Should.ThrowAsync<ApiException>(() => _gitHubProvider.GetLabelsAsync(_owner, _repository)).ConfigureAwait(false);
@@ -433,7 +435,7 @@ namespace GitReleaseManager.Core.Tests.Provider
             var milestone = new Milestone { Title = _milestoneTitle };
             var milestones = new List<Milestone> { milestone };
 
-            _gitHubClient.Issue.Milestone.GetAllForRepository(_owner, _repository, Arg.Any<MilestoneRequest>())
+            _gitHubClient.Issue.Milestone.GetAllForRepository(_owner, _repository, Arg.Any<MilestoneRequest>(), Arg.Any<ApiOptions>())
                 .Returns(Task.FromResult((IReadOnlyList<Octokit.Milestone>)new List<Octokit.Milestone>()));
 
             _mapper.Map<IEnumerable<Milestone>>(Arg.Any<object>())
@@ -442,8 +444,11 @@ namespace GitReleaseManager.Core.Tests.Provider
             var result = await _gitHubProvider.GetMilestoneAsync(_owner, _repository, _milestoneTitle, itemStateFilter).ConfigureAwait(false);
             result.ShouldBeSameAs(milestone);
 
-            await _gitHubClient.Issue.Milestone.Received(1).GetAllForRepository(_owner, _repository, Arg.Is<MilestoneRequest>(o =>
-                o.State == (Octokit.ItemStateFilter)itemStateFilter)).ConfigureAwait(false);
+            await _gitHubClient.Issue.Milestone.Received(1).GetAllForRepository(
+                _owner,
+                _repository,
+                Arg.Is<MilestoneRequest>(o => o.State == (Octokit.ItemStateFilter)itemStateFilter),
+                Arg.Any<ApiOptions>()).ConfigureAwait(false);
 
             _mapper.ReceivedWithAnyArgs(1).Map<IEnumerable<Milestone>>(default);
         }
@@ -469,7 +474,7 @@ namespace GitReleaseManager.Core.Tests.Provider
         {
             var milestones = new List<Milestone>();
 
-            _gitHubClient.Issue.Milestone.GetAllForRepository(_owner, _repository, Arg.Any<MilestoneRequest>())
+            _gitHubClient.Issue.Milestone.GetAllForRepository(_owner, _repository, Arg.Any<MilestoneRequest>(), Arg.Any<ApiOptions>())
                 .Returns(Task.FromResult((IReadOnlyList<Octokit.Milestone>)new List<Octokit.Milestone>()));
 
             _mapper.Map<IEnumerable<Milestone>>(Arg.Any<object>())
@@ -478,8 +483,11 @@ namespace GitReleaseManager.Core.Tests.Provider
             var result = await _gitHubProvider.GetMilestonesAsync(_owner, _repository, itemStateFilter).ConfigureAwait(false);
             result.ShouldBeSameAs(milestones);
 
-            await _gitHubClient.Issue.Milestone.Received(1).GetAllForRepository(_owner, _repository, Arg.Is<MilestoneRequest>(o =>
-                o.State == (Octokit.ItemStateFilter)itemStateFilter)).ConfigureAwait(false);
+            await _gitHubClient.Issue.Milestone.Received(1).GetAllForRepository(
+                _owner,
+                _repository,
+                Arg.Is<MilestoneRequest>(o => o.State == (Octokit.ItemStateFilter)itemStateFilter),
+                Arg.Any<ApiOptions>()).ConfigureAwait(false);
 
             _mapper.ReceivedWithAnyArgs(1).Map<IEnumerable<Milestone>>(default);
         }
@@ -487,7 +495,7 @@ namespace GitReleaseManager.Core.Tests.Provider
         [Test]
         public async Task Should_Throw_An_Exception_On_Getting_Milestones()
         {
-            _gitHubClient.Issue.Milestone.GetAllForRepository(_owner, _repository, Arg.Any<MilestoneRequest>())
+            _gitHubClient.Issue.Milestone.GetAllForRepository(_owner, _repository, Arg.Any<MilestoneRequest>(), Arg.Any<ApiOptions>())
                 .Returns(Task.FromException<IReadOnlyList<Octokit.Milestone>>(_exception));
 
             var ex = await Should.ThrowAsync<ApiException>(() => _gitHubProvider.GetMilestonesAsync(_owner, _repository)).ConfigureAwait(false);
@@ -653,7 +661,7 @@ namespace GitReleaseManager.Core.Tests.Provider
         {
             var releases = new List<Release>();
 
-            _gitHubClient.Repository.Release.GetAll(_owner, _repository)
+            _gitHubClient.Repository.Release.GetAll(_owner, _repository, Arg.Any<ApiOptions>())
                 .Returns(Task.FromResult((IReadOnlyList<Octokit.Release>)new List<Octokit.Release>()));
 
             _mapper.Map<IEnumerable<Release>>(Arg.Any<object>())
@@ -662,14 +670,14 @@ namespace GitReleaseManager.Core.Tests.Provider
             var result = await _gitHubProvider.GetReleasesAsync(_owner, _repository).ConfigureAwait(false);
             result.ShouldBeSameAs(releases);
 
-            await _gitHubClient.Repository.Release.Received(1).GetAll(_owner, _repository).ConfigureAwait(false);
+            await _gitHubClient.Repository.Release.Received(1).GetAll(_owner, _repository, Arg.Any<ApiOptions>()).ConfigureAwait(false);
             _mapper.Received(1).Map<IEnumerable<Release>>(Arg.Any<object>());
         }
 
         [Test]
         public async Task Should_Throw_An_Exception_On_Getting_Releases()
         {
-            _gitHubClient.Repository.Release.GetAll(_owner, _repository)
+            _gitHubClient.Repository.Release.GetAll(_owner, _repository, Arg.Any<ApiOptions>())
                 .Returns(Task.FromException<IReadOnlyList<Octokit.Release>>(_exception));
 
             var ex = await Should.ThrowAsync<ApiException>(() => _gitHubProvider.GetReleasesAsync(_owner, _repository)).ConfigureAwait(false);
