@@ -4,7 +4,7 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-namespace GitReleaseManager.Core
+namespace GitReleaseManager.Core.Extensions
 {
     using System;
     using Octokit;
