@@ -7,6 +7,7 @@
 namespace GitReleaseManager.Core.MappingProfiles
 {
     using AutoMapper;
+    using GitReleaseManager.Core.Extensions;
 
     public class GitHubProfile : Profile
     {
