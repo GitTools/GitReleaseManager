@@ -1,3 +1,9 @@
+// -----------------------------------------------------------------------
+// <copyright file="RateLimit.cs" company="GitTools Contributors">
+// Copyright (c) 2015 - Present - GitTools Contributors
+// </copyright>
+// -----------------------------------------------------------------------
+
 using System;
 
 namespace GitReleaseManager.Core.Model

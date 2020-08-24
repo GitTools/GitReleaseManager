@@ -1,3 +1,9 @@
+// -----------------------------------------------------------------------
+// <copyright file="EnsureTests.cs" company="GitTools Contributors">
+// Copyright (c) 2015 - Present - GitTools Contributors
+// </copyright>
+// -----------------------------------------------------------------------
+
 using System;
 using System.IO;
 using NUnit.Framework;

@@ -1,3 +1,9 @@
+// -----------------------------------------------------------------------
+// <copyright file="ReleaseAssetUpload.cs" company="GitTools Contributors">
+// Copyright (c) 2015 - Present - GitTools Contributors
+// </copyright>
+// -----------------------------------------------------------------------
+
 using System.IO;
 
 namespace GitReleaseManager.Core.Model

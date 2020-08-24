@@ -1,3 +1,9 @@
+// -----------------------------------------------------------------------
+// <copyright file="CreateCommand.cs" company="GitTools Contributors">
+// Copyright (c) 2015 - Present - GitTools Contributors
+// </copyright>
+// -----------------------------------------------------------------------
+
 using System.Threading.Tasks;
 using GitReleaseManager.Core.Model;
 using GitReleaseManager.Core.Options;

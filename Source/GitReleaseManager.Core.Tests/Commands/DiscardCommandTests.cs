@@ -1,3 +1,9 @@
+// -----------------------------------------------------------------------
+// <copyright file="DiscardCommandTests.cs" company="GitTools Contributors">
+// Copyright (c) 2015 - Present - GitTools Contributors
+// </copyright>
+// -----------------------------------------------------------------------
+
 using System.Threading.Tasks;
 using GitReleaseManager.Core.Commands;
 using GitReleaseManager.Core.Options;

@@ -1,3 +1,9 @@
+// -----------------------------------------------------------------------
+// <copyright file="AddAssetsCommandTests.cs" company="GitTools Contributors">
+// Copyright (c) 2015 - Present - GitTools Contributors
+// </copyright>
+// -----------------------------------------------------------------------
+
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using GitReleaseManager.Core.Commands;

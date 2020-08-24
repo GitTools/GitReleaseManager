@@ -1,3 +1,9 @@
+// -----------------------------------------------------------------------
+// <copyright file="GitHubProvider.cs" company="GitTools Contributors">
+// Copyright (c) 2015 - Present - GitTools Contributors
+// </copyright>
+// -----------------------------------------------------------------------
+
 using System;
 using System.Collections.Generic;
 using System.Globalization;

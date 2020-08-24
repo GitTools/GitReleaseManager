@@ -1,3 +1,9 @@
+//-----------------------------------------------------------------------
+// <copyright file="IReleaseNotesExporter.cs" company="GitTools Contributors">
+//     Copyright (c) 2015 - Present - GitTools Contributors
+// </copyright>
+//-----------------------------------------------------------------------
+
 using System.Collections.Generic;
 using GitReleaseManager.Core.Model;
 

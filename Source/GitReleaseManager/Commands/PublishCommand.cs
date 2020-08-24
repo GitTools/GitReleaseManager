@@ -1,3 +1,9 @@
+// -----------------------------------------------------------------------
+// <copyright file="PublishCommand.cs" company="GitTools Contributors">
+// Copyright (c) 2015 - Present - GitTools Contributors
+// </copyright>
+// -----------------------------------------------------------------------
+
 using System.Threading.Tasks;
 using GitReleaseManager.Core.Options;
 using Serilog;
