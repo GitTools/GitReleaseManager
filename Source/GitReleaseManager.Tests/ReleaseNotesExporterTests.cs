@@ -9,11 +9,13 @@ namespace GitReleaseManager.Tests
     using System;
     using System.Text;
     using ApprovalTests;
-    using GitReleaseManager.Core;
     using GitReleaseManager.Core.Configuration;
     using GitReleaseManager.Core.Helpers;
     using GitReleaseManager.Core.Model;
+    using GitReleaseManager.Core.ReleaseNotes;
+    using NSubstitute;
     using NUnit.Framework;
+    using Serilog;
 
     [TestFixture]
     public class ReleaseNotesExporterTests
@@ -59,15 +61,9 @@ namespace GitReleaseManager.Tests
 
         private static void AcceptTest(Config configuration, params Release[] releases)
         {
-            var fakeClient = new FakeGitHubClient();
-
-            foreach (var release in releases)
-            {
-                fakeClient.Releases.Add(release);
-            }
-
-            var builder = new ReleaseNotesExporter(fakeClient, configuration, "bob", "repo");
-            var notes = builder.ExportReleaseNotes(null).Result;
+            var logger = Substitute.For<ILogger>();
+            var builder = new ReleaseNotesExporter(logger, configuration.Export);
+            var notes = builder.ExportReleaseNotes(releases);
 
             Approvals.Verify(notes);
         }

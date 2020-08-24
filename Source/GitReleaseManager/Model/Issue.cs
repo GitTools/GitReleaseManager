@@ -12,7 +12,7 @@ namespace GitReleaseManager.Core.Model
     {
         public string Title { get; set; }
 
-        public string Number { get; set; }
+        public int Number { get; set; }
 
         public string HtmlUrl { get; set; }
 

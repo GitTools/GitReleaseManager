@@ -32,13 +32,14 @@
     <ItemGroup>
         <PackageReference Include="CommandLineParser" Version="2.8.0" />
         <PackageReference Include="Destructurama.Attributed" Version="2.0.0" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.6" />
         <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0">
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         <PrivateAssets>all</PrivateAssets>
         </PackageReference>
         <PackageReference Include="Octokit" Version="0.48.0" />
         <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
-        <PackageReference Include="Serilog.Sinks.Debug" Version="1.0.1" PrivateAssets="All"/>
+        <PackageReference Include="Serilog.Sinks.Debug" Version="1.0.1" PrivateAssets="All" />
         <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
         <PackageReference Include="seriloganalyzer" Version="0.15.0" />
     </ItemGroup>

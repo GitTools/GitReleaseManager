@@ -28,7 +28,7 @@ namespace GitReleaseManager.Core
             return !(issue.PullRequest is null);
         }
 
-        public static Task<IEnumerable<Issue>> AllIssuesForMilestone(this GitHubClient gitHubClient, Milestone milestone)
+        public static Task<IEnumerable<Issue>> AllIssuesForMilestone(this IGitHubClient gitHubClient, Milestone milestone)
         {
             if (gitHubClient is null)
             {
@@ -57,7 +57,7 @@ namespace GitReleaseManager.Core
             return new Uri(string.Format(CultureInfo.InvariantCulture, "https://github.com/{0}/{1}/issues?milestone={2}&state=closed", user, repository, milestone.Number));
         }
 
-        private static async Task<IEnumerable<Issue>> AllIssuesForMilestoneInternal(GitHubClient gitHubClient, Milestone milestone)
+        private static async Task<IEnumerable<Issue>> AllIssuesForMilestoneInternal(IGitHubClient gitHubClient, Milestone milestone)
         {
             var closedIssueRequest = new RepositoryIssueRequest
             {

@@ -29,7 +29,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Chocolatey", "Chocolatey", 
 		..\nuspec\chocolatey\VERIFICATION.TXT = ..\nuspec\chocolatey\VERIFICATION.TXT
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GitReleaseManager.Tool", "GitReleaseManager.Tool\GitReleaseManager.Tool.csproj", "{E60129C7-706A-4B24-9D8D-6D5F23543280}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GitReleaseManager.Tool", "GitReleaseManager.Tool\GitReleaseManager.Tool.csproj", "{E60129C7-706A-4B24-9D8D-6D5F23543280}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GitReleaseManager.Core.Tests", "GitReleaseManager.Core.Tests\GitReleaseManager.Core.Tests.csproj", "{DB77C071-63A0-4B48-863F-5F78485AA09A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,6 +59,10 @@ Global
 		{E60129C7-706A-4B24-9D8D-6D5F23543280}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E60129C7-706A-4B24-9D8D-6D5F23543280}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E60129C7-706A-4B24-9D8D-6D5F23543280}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB77C071-63A0-4B48-863F-5F78485AA09A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB77C071-63A0-4B48-863F-5F78485AA09A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB77C071-63A0-4B48-863F-5F78485AA09A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB77C071-63A0-4B48-863F-5F78485AA09A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

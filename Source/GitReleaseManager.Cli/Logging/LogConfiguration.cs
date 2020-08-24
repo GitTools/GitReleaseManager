@@ -9,7 +9,7 @@ namespace GitReleaseManager.Cli.Logging
     using System.Diagnostics;
     using System.Text;
     using Destructurama;
-    using GitReleaseManager.Cli.Options;
+    using GitReleaseManager.Core.Options;
     using Octokit;
     using Serilog;
     using Serilog.Events;

@@ -24,11 +24,12 @@ BuildParameters.PrintParameters(Context);
 
 ToolSettings.SetToolSettings(context: Context,
                             dupFinderExcludePattern: new string[] {
-                                BuildParameters.RootDirectoryPath + "/Source/GitReleaseManager.Tests/*.cs",
-                                BuildParameters.RootDirectoryPath + "/Source/GitReleaseManager.IntegrationTests/*.cs",
+                                BuildParameters.RootDirectoryPath + "/Source/GitReleaseManager.Core.Tests/**/*.cs",
+                                BuildParameters.RootDirectoryPath + "/Source/GitReleaseManager.Tests/**/*.cs",
+                                BuildParameters.RootDirectoryPath + "/Source/GitReleaseManager.IntegrationTests/**/*.cs",
                                 BuildParameters.RootDirectoryPath + "/Source/GitReleaseManager/AutoMapperConfiguration.cs",
                                 "**/*.AssemblyInfo.cs" },
-                            testCoverageFilter: "+[GitReleaseManager*]* -[GitReleaseManager.Tests*]*",
+                            testCoverageFilter: "+[GitReleaseManager*]* -[GitReleaseManager.Core.Tests*]* -[GitReleaseManager.Tests*]*",
                             testCoverageExcludeByAttribute: "*.ExcludeFromCodeCoverage*",
                             testCoverageExcludeByFile: "*/*Designer.cs;*/*.g.cs;*/*.g.i.cs");
 
