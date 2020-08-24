@@ -9,7 +9,7 @@
         <IsPackable>false</IsPackable>
     </PropertyGroup>
     <ItemGroup>
-        <ProjectReference Include="..\GitReleaseManager\GitReleaseManager.Core.csproj" />
+        <ProjectReference Include="..\GitReleaseManager.Core\GitReleaseManager.Core.csproj" />
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="CommandLineParser" Version="2.8.0" />

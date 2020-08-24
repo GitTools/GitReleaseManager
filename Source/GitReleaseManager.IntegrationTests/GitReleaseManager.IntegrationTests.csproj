@@ -7,7 +7,7 @@
         <NoWarn>$(NoWarn);CA1707</NoWarn>
     </PropertyGroup>
     <ItemGroup>
-        <ProjectReference Include="..\GitReleaseManager\GitReleaseManager.Core.csproj" />
+        <ProjectReference Include="..\GitReleaseManager.Core\GitReleaseManager.Core.csproj" />
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="coverlet.msbuild" Version="2.9.0">

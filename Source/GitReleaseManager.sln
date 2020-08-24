@@ -6,7 +6,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GitReleaseManager.Tests", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GitReleaseManager.Cli", "GitReleaseManager.Cli\GitReleaseManager.Cli.csproj", "{F1163F09-3D4E-4F95-AF46-24C15AB297FB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GitReleaseManager.Core", "GitReleaseManager\GitReleaseManager.Core.csproj", "{B02A026E-CA3A-48F4-BBA9-EB337B0A2035}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GitReleaseManager.Core", "GitReleaseManager.Core\GitReleaseManager.Core.csproj", "{B02A026E-CA3A-48F4-BBA9-EB337B0A2035}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C87778A7-B100-4D05-A050-BA37BD59058C}"
 	ProjectSection(SolutionItems) = preProject
