@@ -7,6 +7,7 @@ GitReleaseManager has been the thoughts and work of the following people:
 These are the committers to GitTools/GitReleaseManager repository:
 
 - [Gary Ewan Park](https://github.com/gep13) - Creater of GitReleaseManager, committer, vision, direction
+- [Kim Nordmo](https://github.com/AdmiringWorm) - Committer, vision direction
 
 ### Contributors
 
@@ -25,10 +26,9 @@ GitReleaseManager uses the following awesome frameworks (in no particular order)
 
 GitReleaseManager is built, with the following fantastic frameworks and services (in no particular order):
 
-- [psake](https://github.com/psake/psake)
+- [Cake](https://github.com/cake-build/cake)
 - [NuGet.exe](https://www.nuget.org/)
 - [AppVeyor](http://www.appveyor.com/)
-- [MyGet](http://www.myget.org/)
 
 GitReleaseManager is tested and analyzed with the following rockstar frameworks (in no particular order):
 
@@ -37,7 +37,6 @@ GitReleaseManager is tested and analyzed with the following rockstar frameworks 
 - [InspectCode](https://confluence.jetbrains.com/display/NETCOM/Introducing+InspectCode)
 - [DupFinder](https://confluence.jetbrains.com/display/NETCOM/Introducing+dupFinder)
 - [Coveralls](https://coveralls.io/)
-- [Coverity Scan](https://scan.coverity.com/)
 - [NUnit](http://www.nunit.org/)
 - [OpenCover](https://github.com/opencover/opencover)
 
@@ -45,5 +44,3 @@ We would like to credit other super sweet tools/frameworks that aid in the devel
 
 - [ReSharper](https://www.jetbrains.com/resharper/)
 - [NuGet Framework](https://www.nuget.org/)
-- [ReportGenerator](http://danielpalme.github.io/ReportGenerator/)
-- [PublishCoverity](http://www.nuget.org/packages/PublishCoverity/)

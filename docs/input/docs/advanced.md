@@ -7,8 +7,8 @@ In order to best understand the use case for GitReleaseManager let's take a look
 at an example workflow currently in use by the Chocolatey GUI project.
 
 :::{.alert .alert-info}
-Chocolatey GUI uses a number of concepts, for example, GitFlow, psake build
-script engine, AppVeyor Continuous Integration, as well as using
+Chocolatey GUI uses a number of concepts, for example, GitFlow, Cake Build
+Orchestration script engine, AppVeyor Continuous Integration, as well as using
 GitReleaseManager. In order to understand the usage of GitReleaseManager for
 this project, you sort of have to understand the entire process. As a result,
 this walk-through steps you through the entire end to end process, which as a
