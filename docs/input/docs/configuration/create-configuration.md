@@ -4,7 +4,7 @@ Title: Example of Create Configuration
 ---
 
 When creating a release, it is possible to control the look and feel of the
-release notes, using settings within the GitReleaseManager.yaml file.
+release notes, using settings within the GitReleaseManager configuration file.
 
 Out of the box, GitReleaseManager creates a simple list of Issues included
 within a milestone, split into the labels that have been configured. However,
@@ -12,7 +12,7 @@ it is possible to include additional information in the form of a footer, which
 provides additional information, for example, where an installation of the
 release can be located.
 
-Take for example the GitReleaseManager.yaml file which is used by the
+Take for example the GitReleaseManager configuration file which is used by the
 [Chocolatey GUI](https://github.com/chocolatey/ChocolateyGUI) project:
 
 ```yaml

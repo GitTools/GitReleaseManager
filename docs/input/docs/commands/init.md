@@ -3,8 +3,8 @@ Order: 80
 Title: Init
 ---
 
-The Init command is used to create GitReleaseManager.yaml which controls the
-configurable options of GitReleaseManager
+The Init command is used to create a GitReleaseManager configuration file which
+controls the configurable options of GitReleaseManager
 
 ## **Optional Parameters**
 
@@ -15,13 +15,13 @@ configurable options of GitReleaseManager
 
 ## **Examples**
 
-Create a new GitReleaseManager.yaml file in the current working directory:
+Create a new GitReleaseManager configuration file in the current working directory:
 
 ```bash
 gitreleasemanager.exe init
 ```
 
-Create a new GitReleaseManager.yaml file in a specific directory:
+Create a new GitReleaseManager configuration file in a specific directory:
 
 ```bash
 gitreleasemanager.exe init -d c:\temp

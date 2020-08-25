@@ -4,7 +4,7 @@ Title: Default Configuration
 RedirectFrom: docs/yaml/index.html
 ---
 
-GitReleaseManager configuration can be controlled using a GitReleaseManager.yaml
+GitReleaseManager configuration can be controlled using a configuration
 file, which is typically stored at the root of your project.
 
 GitReleaseManager ships with the following default set of configuration (i.e.
@@ -68,7 +68,7 @@ labels:
       color: cc317c
 issue-labels-include:
     - Breaking Change
-    - Bug    
+    - Bug
     - Documentation
     - Feature
     - Good First Issue
@@ -108,11 +108,11 @@ control the look and feel of the generated release notes.
         milestone, which should be replaced with the actual milestone value. As an
         example, let's say you want to provide a link to where you can download your
         release, and the URL could be something like
-        <http://mydomain.com/releases/0.1.0>. You don't want to have to hard code the
-        milestone number into your yaml configuration, so instead, you can use a
-        replacement string in your footer-content, which will then be replaced with
-        the actual milestone release number, when the release is created. Default is
-        false.
+        <http://mydomain.com/releases/0.1.0>. You don't want to have to hard code
+        the milestone number into your yaml configuration, so instead, you can use
+        a replacement string in your footer-content, which will then be replaced
+        with the actual milestone release number, when the release is created. Default
+        is false.
 - **milestone-replace-text**
   - A string value which contains the string which should be replaced in the
         footer-content with the actual milestone release number. Default is an empty
