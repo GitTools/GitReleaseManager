@@ -15,23 +15,14 @@ namespace GitReleaseManager.IntegrationTests
         // From https://github.com/octokit/octokit.net/blob/master/Octokit.Tests.Integration/Helper.cs
         private static readonly Lazy<Credentials> CredentialsThunk = new Lazy<Credentials>(() =>
         {
-            var githubUsername = Environment.GetEnvironmentVariable("GITTOOLS_GITHUB_USERNAME");
-
             var githubToken = Environment.GetEnvironmentVariable("GITTOOLS_GITHUB_TOKEN");
 
-            if (githubToken != null)
+            if (!string.IsNullOrWhiteSpace(githubToken))
             {
                 return new Credentials(githubToken);
             }
 
-            var githubPassword = Environment.GetEnvironmentVariable("GITTOOLS_GITHUB_PASSWORD");
-
-            if (githubUsername == null || githubPassword == null)
-            {
-                return Credentials.Anonymous;
-            }
-
-            return new Credentials(githubUsername, githubPassword);
+            return Credentials.Anonymous;
         });
 
         public static Credentials Credentials

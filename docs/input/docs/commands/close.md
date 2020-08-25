@@ -9,8 +9,7 @@ milestone.
 
 ## **Required Parameters**
 
-- `--token`: The access token to access GitHub with. This can't be used when
-    using the username and password parameters.
+- `--token`: The access token to access GitHub with.
 - `-o, --owner`: The owner of the repository.
 - `-r, --repository`: The name of the repository.
 - `-m, --milestone`: The milestone to use.
@@ -22,18 +21,10 @@ milestone.
 - `-l, --logFilePath`: Path to where log file should be created. Defaults to
     logging to console.
 
-<?! Include "_deprecated-args.md /?>
-
-## **Notes**
-
-<?! Include "_auth-notes.md" /?>
-
 ## **Examples**
 
 ```bash
 gitreleasemanager.exe close -m 0.1.0 --token fsdfsf67657sdf5s7d5f -o repoOwner -r repo
 
 gitreleasemanager.exe close --milestone 0.1.0 --token fsdfsf67657sdf5s7d5f --owner repoOwner --repository repo
-
-gitreleasemanager.exe close --milestone 0.1.0 --username bob --password password --owner repoOwner --repository repo
 ```
