@@ -13,10 +13,6 @@ configurable options of GitReleaseManager
 - `-l, --logFilePath`: Path to where log file should be created. Defaults to
     logging to console.
 
-## **Notes**
-
-For Authentication use either username and password, or token parameter
-
 ## **Examples**
 
 Create a new GitReleaseManager.yaml file in the current working directory:

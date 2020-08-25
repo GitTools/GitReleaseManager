@@ -20,8 +20,7 @@ later version.
 
 ## **Required Parameters**
 
-- `--token`: The access token to access GitHub with. This can't be used when
-    using the username and password parameters.
+- `--token`: The access token to access GitHub with.
 - `-o, --owner`: The owner of the repository.
 - `-r, --repository`: The name of the repository.
 
@@ -32,18 +31,10 @@ later version.
 - `-l, -logFilePath`: Path to where log file should be created. Defaults to
     logging to console.
 
-<?! Include "_deprecated-args.md /?>
-
-## **Notes**
-
-<?! Include "_auth-notes.md" /?>
-
 ## **Examples**
 
 ```bash
 gitreleasemanager.exe label --token fsdfsf67657sdf5s7d5f -o repoOwner -r repo
 
 gitreleasemanager.exe label --token fsdfsf67657sdf5s7d5f --owner repoOwner --repository repo
-
-gitreleasemanager.exe label --username bob --password password --owner repoOwner --repository repo
 ```

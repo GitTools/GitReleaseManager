@@ -13,8 +13,7 @@ to include in the Release.
 
 ## **Required Parameters**
 
-- `--token`: The access token to access GitHub with. This can't be used when
-    using the username and password parameters.
+- `--token`: The access token to access GitHub with.
 - `-o, --owner`: The owner of the repository.
 - `-r, --repository`: The name of the repository.
 
@@ -35,12 +34,6 @@ to include in the Release.
 - `-l, --logFilePath`: Path to where log file should be created. Defaults to
     logging to console.
 
-<?! Include "_deprecated-args.md /?>
-
-## **Notes**
-
-<?! Include "_auth-notes.md" /?>
-
 ## **Examples**
 
 Use GitReleaseManager to create a Release, generating the release notes based on
@@ -50,8 +43,6 @@ Milestone:
 gitreleasemanager.exe create -m 0.1.0 --token fsdfsf67657sdf5s7d5f -o repoOwner -r repo
 
 gitreleasemanager.exe create --milestone 0.1.0 --token fsdfsf67657sdf5s7d5f --owner repoOwner --repository repo
-
-gitreleasemanager.exe create --milestone 0.1.0 --username bob --password password --owner repoOwner --repository repo
 ```
 
 Use GitReleaseManager to create a Release, taking the release notes as an input parameter:
@@ -60,6 +51,4 @@ Use GitReleaseManager to create a Release, taking the release notes as an input 
 gitreleasemanager.exe create -i c:\temp\releasenotes.md -n 0.1.0 --token fsdfsf67657sdf5s7d5f -o repoOwner -r repo
 
 gitreleasemanager.exe create --inputFilePath c:\temp\releasenotes.md --name 0.1.0 --token fsdfsf67657sdf5s7d5f --owner repoOwner --repository repo
-
-gitreleasemanager.exe create --inputFilePath c:\temp\releasenotes.md --name 0.1.0 --username bob --password password --owner repoOwner --repository repo
 ```
