@@ -39,7 +39,6 @@ namespace GitReleaseManager.Cli
                     .WithParsed<BaseSubOptions>(LogConfiguration.ConfigureLogging)
                     .WithParsed<BaseSubOptions>(CreateFiglet)
                     .WithParsed<BaseSubOptions>(LogOptions)
-                    .WithParsed<BaseVcsOptions>(ReportUsernamePasswordDeprecation)
                     .WithParsed<BaseVcsOptions>(RegisterServices)
                     .MapResult(
                     (CreateSubOptions opts) => ExecuteCommand(opts),
@@ -83,11 +82,12 @@ namespace GitReleaseManager.Cli
             var mapper = AutoMapperConfiguration.Configure();
             var configuration = ConfigurationProvider.Provide(options.TargetDirectory ?? Environment.CurrentDirectory, fileSystem);
 
-            var credentials = string.IsNullOrWhiteSpace(options.Token)
-                ? new Credentials(options.UserName, options.Password)
-                : new Credentials(options.Token);
+            if (string.IsNullOrWhiteSpace(options.Token))
+            {
+                throw new Exception("The token option is not defined");
+            }
 
-            var gitHubClient = new GitHubClient(new ProductHeaderValue("GitReleaseManager")) { Credentials = credentials };
+            var gitHubClient = new GitHubClient(new ProductHeaderValue("GitReleaseManager")) { Credentials = new Credentials(options.Token) };
 
             var serviceCollection = new ServiceCollection()
                 .AddSingleton(logger)
@@ -122,14 +122,6 @@ namespace GitReleaseManager.Cli
             }
         }
 
-        private static void ReportUsernamePasswordDeprecation(BaseVcsOptions options)
-        {
-            if (!string.IsNullOrEmpty(options.UserName) || !string.IsNullOrEmpty(options.Password))
-            {
-                Log.Warning(BaseVcsOptions.OBSOLETE_MESSAGE);
-            }
-        }
-
         private static void CreateFiglet(BaseSubOptions options)
         {
             if (options.NoLogo)
@@ -142,6 +134,7 @@ namespace GitReleaseManager.Cli
             {
                 version = version.Substring(0, version.IndexOf('+'));
             }
+
             // The following ugly formats is to prevent incorrect indentation
             // detected by editorconfig formatters.
             const string shortFormat = "\n   ____ ____  __  __\n"

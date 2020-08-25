@@ -31,8 +31,6 @@ namespace GitReleaseManager.IntegrationTests
         private IMapper _mapper;
         private ILogger _logger;
 
-        private string _username;
-        private string _password;
         private string _token;
         private string _releaseBaseTag;
         private string _releaseHeadTag;
@@ -43,22 +41,16 @@ namespace GitReleaseManager.IntegrationTests
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
-            _username = Environment.GetEnvironmentVariable("GITTOOLS_GITHUB_USERNAME");
-            _password = Environment.GetEnvironmentVariable("GITTOOLS_GITHUB_PASSWORD");
             _token = Environment.GetEnvironmentVariable("GITTOOLS_GITHUB_TOKEN");
 
-            if ((string.IsNullOrWhiteSpace(_username) || string.IsNullOrWhiteSpace(_password)) && string.IsNullOrWhiteSpace(_token))
+            if (string.IsNullOrWhiteSpace(_token))
             {
                 Assert.Inconclusive("Unable to locate credentials for accessing GitHub API");
             }
 
-            var credentials = string.IsNullOrWhiteSpace(_token)
-                ? new Credentials(_username, _password)
-                : new Credentials(_token);
-
             _mapper = AutoMapperConfiguration.Configure();
             _logger = new LoggerConfiguration().WriteTo.Console().CreateLogger();
-            _gitHubClient = new GitHubClient(new ProductHeaderValue("GitReleaseManager")) { Credentials = credentials };
+            _gitHubClient = new GitHubClient(new ProductHeaderValue("GitReleaseManager")) { Credentials = new Credentials(_token) };
             _gitHubProvider = new GitHubProvider(_gitHubClient, _mapper);
         }
 

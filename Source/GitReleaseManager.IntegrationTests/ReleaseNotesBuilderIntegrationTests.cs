@@ -26,8 +26,6 @@ namespace GitReleaseManager.IntegrationTests
         private IGitHubClient _gitHubClient;
         private ILogger _logger;
         private IMapper _mapper;
-        private string _username;
-        private string _password;
         private string _token;
 
         public TestContext TestContext { get; set; }
@@ -39,15 +37,8 @@ namespace GitReleaseManager.IntegrationTests
             _logger = new LoggerConfiguration().WriteTo.Console().CreateLogger();
             Log.Logger = _logger;
 
-            _username = Environment.GetEnvironmentVariable("GITTOOLS_GITHUB_USERNAME");
-            _password = Environment.GetEnvironmentVariable("GITTOOLS_GITHUB_PASSWORD");
             _token = Environment.GetEnvironmentVariable("GITTOOLS_GITHUB_TOKEN");
-
-            var credentials = string.IsNullOrWhiteSpace(_token)
-                ? new Credentials(_username, _password)
-                : new Credentials(_token);
-
-            _gitHubClient = new GitHubClient(new ProductHeaderValue("GitReleaseManager")) { Credentials = credentials };
+            _gitHubClient = new GitHubClient(new ProductHeaderValue("GitReleaseManager")) { Credentials = new Credentials(_token) };
         }
 
         [OneTimeTearDown]
@@ -60,7 +51,7 @@ namespace GitReleaseManager.IntegrationTests
         [Explicit]
         public async Task SingleMilestone()
         {
-            if ((string.IsNullOrEmpty(_username) || string.IsNullOrEmpty(_password)) && string.IsNullOrEmpty(_token))
+            if (string.IsNullOrWhiteSpace(_token))
             {
                 Assert.Inconclusive("Unable to locate credentials for accessing GitHub API");
             }
@@ -82,7 +73,7 @@ namespace GitReleaseManager.IntegrationTests
         [Explicit]
         public async Task SingleMilestone3()
         {
-            if ((string.IsNullOrEmpty(_username) || string.IsNullOrEmpty(_password)) && string.IsNullOrEmpty(_token))
+            if (string.IsNullOrWhiteSpace(_token))
             {
                 Assert.Inconclusive("Unable to locate credentials for accessing GitHub API");
             }
