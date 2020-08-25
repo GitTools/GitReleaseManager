@@ -44,7 +44,7 @@
         <PackageReference Include="seriloganalyzer" Version="0.15.0" />
     </ItemGroup>
     <ItemGroup>
-        <None Include="../../Icons/package_icon.png">
+        <None Include="../../icons/package_icon.png">
             <Pack>True</Pack>
             <PackagePath></PackagePath>
         </None>

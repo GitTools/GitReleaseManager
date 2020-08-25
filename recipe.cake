@@ -4,7 +4,7 @@ Environment.SetVariableNames(githubTokenVariable: "GITTOOLS_GITHUB_TOKEN");
 
 BuildParameters.SetParameters(context: Context,
                             buildSystem: BuildSystem,
-                            sourceDirectoryPath: "./Source",
+                            sourceDirectoryPath: "./src",
                             title: "GitReleaseManager",
                             repositoryOwner: "GitTools",
                             repositoryName: "GitReleaseManager",
@@ -22,10 +22,10 @@ BuildParameters.PrintParameters(Context);
 
 ToolSettings.SetToolSettings(context: Context,
                             dupFinderExcludePattern: new string[] {
-                                BuildParameters.RootDirectoryPath + "/Source/GitReleaseManager.Core.Tests/**/*.cs",
-                                BuildParameters.RootDirectoryPath + "/Source/GitReleaseManager.Tests/**/*.cs",
-                                BuildParameters.RootDirectoryPath + "/Source/GitReleaseManager.IntegrationTests/**/*.cs",
-                                BuildParameters.RootDirectoryPath + "/Source/GitReleaseManager/AutoMapperConfiguration.cs",
+                                BuildParameters.RootDirectoryPath + "/src/GitReleaseManager.Core.Tests/**/*.cs",
+                                BuildParameters.RootDirectoryPath + "/src/GitReleaseManager.Tests/**/*.cs",
+                                BuildParameters.RootDirectoryPath + "/src/GitReleaseManager.IntegrationTests/**/*.cs",
+                                BuildParameters.RootDirectoryPath + "/src/GitReleaseManager/AutoMapperConfiguration.cs",
                                 "**/*.AssemblyInfo.cs" },
                             testCoverageFilter: "+[GitReleaseManager*]* -[GitReleaseManager.Core.Tests*]* -[GitReleaseManager.Tests*]*",
                             testCoverageExcludeByAttribute: "*.ExcludeFromCodeCoverage*",

@@ -1,6 +1,6 @@
 # GitReleaseManager
 
-![Icon](https://raw.github.com/GitTools/GitReleaseManager/develop/Icons/package_icon_no_credit.png)
+![Icon](https://raw.github.com/GitTools/GitReleaseManager/develop/icons/package_icon_no_credit.png)
 
 [![License](https://img.shields.io/:license-mit-blue.svg)](https://gep13.mit-license.org)
 [![Coverage Status](https://coveralls.io/repos/GitTools/GitReleaseManager/badge.svg?branch=develop)](https://coveralls.io/r/GitTools/GitReleaseManager?branch=develop)
