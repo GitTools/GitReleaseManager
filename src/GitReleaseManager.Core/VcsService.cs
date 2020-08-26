@@ -44,7 +44,7 @@ namespace GitReleaseManager.Core
 
         public async Task<Release> CreateReleaseFromMilestoneAsync(string owner, string repository, string milestone, string releaseName, string targetCommitish, IList<string> assets, bool prerelease)
         {
-            var releaseNotes = await _releaseNotesBuilder.BuildReleaseNotes(owner, repository, milestone).ConfigureAwait(false);
+            var releaseNotes = await _releaseNotesBuilder.BuildReleaseNotes(owner, repository, milestone, ReleaseNotesTemplate.Default).ConfigureAwait(false);
             var release = await CreateRelease(owner, repository, releaseName, milestone, releaseNotes, prerelease, targetCommitish, assets).ConfigureAwait(false);
 
             return release;
