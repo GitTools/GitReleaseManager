@@ -27,7 +27,7 @@ namespace GitReleaseManager.Core.Configuration
 
             var configFilePath = GetConfigFilePath(gitDirectory);
 
-            if (fileSystem.Exists(configFilePath))
+            if (configFilePath != null)
             {
                 _logger.Verbose("Loading configuration from file: {FilePath}", configFilePath);
 
@@ -68,18 +68,18 @@ namespace GitReleaseManager.Core.Configuration
                 throw new ArgumentNullException(nameof(fileSystem));
             }
 
-            var configFilePath = GetConfigFilePath(targetDirectory);
+            var defaultConfigFilePath = Path.Combine(targetDirectory, "GitReleaseManager.yml");
 
-            if (!fileSystem.Exists(configFilePath))
+            if (!fileSystem.Exists(defaultConfigFilePath))
             {
-                _logger.Information("Writing sample file to '{ConfigFilePath}'", configFilePath);
+                _logger.Information("Writing sample file to '{ConfigFilePath}'", defaultConfigFilePath);
 
                 // The following try/finally statements is to ensure that
                 // any stream is not disposed more than once.
                 Stream stream = null;
                 try
                 {
-                    stream = fileSystem.OpenWrite(configFilePath);
+                    stream = fileSystem.OpenWrite(defaultConfigFilePath);
                     using (var writer = new StreamWriter(stream))
                     {
                         stream = null;
@@ -93,13 +93,25 @@ namespace GitReleaseManager.Core.Configuration
             }
             else
             {
-                _logger.Error("Cannot write sample, '{File}' already exists", configFilePath);
+                _logger.Error("Cannot write sample, '{File}' already exists", defaultConfigFilePath);
             }
         }
 
         private static string GetConfigFilePath(string targetDirectory)
         {
-            return Path.Combine(targetDirectory, "GitReleaseManager.yaml");
+            var filePath = Path.Combine(targetDirectory, "GitReleaseManager.yaml");
+            if (File.Exists(filePath))
+            {
+                return filePath;
+            }
+
+            filePath = Path.Combine(targetDirectory, "GitReleaseManager.yml");
+            if (File.Exists(filePath))
+            {
+                return filePath;
+            }
+
+            return null;
         }
 
         private static void EnsureDefaultConfig(Config configuration)

@@ -41,7 +41,7 @@ namespace GitReleaseManager.Core.Tests.Commands
             var result = await _command.Execute(options).ConfigureAwait(false);
             result.ShouldBe(0);
 
-            var configFilePath = Path.Combine(_targetDirectory, "GitReleaseManager.yaml");
+            var configFilePath = Path.Combine(_targetDirectory, "GitReleaseManager.yml");
             var configFileExists = File.Exists(configFilePath);
             configFileExists.ShouldBeTrue();
 

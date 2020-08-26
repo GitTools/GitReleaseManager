@@ -25,6 +25,6 @@ will be included within the generated release notes.
 
 :::{.alert .alert-warning}
 All issues assigned to a milestone have to have a label which matches to one
-listed in the include to exclude sections of the GitReleaseManager.yaml file or
-the default configuration.
+listed in the include to exclude sections of the GitReleaseManager configuration
+file or the default configuration.
 :::
