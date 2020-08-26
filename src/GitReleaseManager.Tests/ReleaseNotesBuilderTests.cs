@@ -185,7 +185,7 @@ namespace GitReleaseManager.Tests
                 .Returns(Task.FromResult((IEnumerable<Milestone>)vcsService.Milestones));
 
             var builder = new ReleaseNotesBuilder(vcsProvider, logger, configuration);
-            var notes = builder.BuildReleaseNotes(owner, repository, milestoneTitle).Result;
+            var notes = builder.BuildReleaseNotes(owner, repository, milestoneTitle, ReleaseNotesTemplate.Default).Result;
 
             Approvals.Verify(notes);
         }

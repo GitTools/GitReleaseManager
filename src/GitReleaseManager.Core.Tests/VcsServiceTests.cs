@@ -283,7 +283,7 @@ namespace GitReleaseManager.Core.Tests
         {
             var release = new Release();
 
-            _releaseNotesBuilder.BuildReleaseNotes(_owner, _repository, _milestoneTitle)
+            _releaseNotesBuilder.BuildReleaseNotes(_owner, _repository, _milestoneTitle, ReleaseNotesTemplate.Default)
                 .Returns(Task.FromResult(_releaseNotes));
 
             _vcsProvider.GetReleaseAsync(_owner, _repository, _milestoneTitle)
@@ -295,7 +295,7 @@ namespace GitReleaseManager.Core.Tests
             var result = await _vcsService.CreateReleaseFromMilestoneAsync(_owner, _repository, _milestoneTitle, _milestoneTitle, null, null, false).ConfigureAwait(false);
             result.ShouldBeSameAs(release);
 
-            await _releaseNotesBuilder.Received(1).BuildReleaseNotes(_owner, _repository, _milestoneTitle).ConfigureAwait(false);
+            await _releaseNotesBuilder.Received(1).BuildReleaseNotes(_owner, _repository, _milestoneTitle, ReleaseNotesTemplate.Default).ConfigureAwait(false);
             await _vcsProvider.Received(1).GetReleaseAsync(_owner, _repository, _milestoneTitle).ConfigureAwait(false);
             await _vcsProvider.Received(1).CreateReleaseAsync(_owner, _repository, Arg.Is<Release>(o =>
                 o.Body == _releaseNotes &&
@@ -315,7 +315,7 @@ namespace GitReleaseManager.Core.Tests
 
             _configuration.Create.AllowUpdateToPublishedRelease = updatePublishedRelease;
 
-            _releaseNotesBuilder.BuildReleaseNotes(_owner, _repository, _milestoneTitle)
+            _releaseNotesBuilder.BuildReleaseNotes(_owner, _repository, _milestoneTitle, ReleaseNotesTemplate.Default)
                 .Returns(Task.FromResult(_releaseNotes));
 
             _vcsProvider.GetReleaseAsync(_owner, _repository, _milestoneTitle)
@@ -327,7 +327,7 @@ namespace GitReleaseManager.Core.Tests
             var result = await _vcsService.CreateReleaseFromMilestoneAsync(_owner, _repository, _milestoneTitle, _milestoneTitle, null, null, false).ConfigureAwait(false);
             result.ShouldBeSameAs(release);
 
-            await _releaseNotesBuilder.Received(1).BuildReleaseNotes(_owner, _repository, _milestoneTitle).ConfigureAwait(false);
+            await _releaseNotesBuilder.Received(1).BuildReleaseNotes(_owner, _repository, _milestoneTitle, ReleaseNotesTemplate.Default).ConfigureAwait(false);
             await _vcsProvider.Received(1).GetReleaseAsync(_owner, _repository, _milestoneTitle).ConfigureAwait(false);
             await _vcsProvider.Received(1).UpdateReleaseAsync(_owner, _repository, release).ConfigureAwait(false);
 
@@ -343,7 +343,7 @@ namespace GitReleaseManager.Core.Tests
 
             _configuration.Create.AllowUpdateToPublishedRelease = false;
 
-            _releaseNotesBuilder.BuildReleaseNotes(_owner, _repository, _milestoneTitle)
+            _releaseNotesBuilder.BuildReleaseNotes(_owner, _repository, _milestoneTitle, ReleaseNotesTemplate.Default)
                 .Returns(Task.FromResult(_releaseNotes));
 
             _vcsProvider.GetReleaseAsync(_owner, _repository, _milestoneTitle)
@@ -352,7 +352,7 @@ namespace GitReleaseManager.Core.Tests
             var ex = await Should.ThrowAsync<InvalidOperationException>(() => _vcsService.CreateReleaseFromMilestoneAsync(_owner, _repository, _milestoneTitle, _milestoneTitle, null, null, false)).ConfigureAwait(false);
             ex.Message.ShouldBe($"Release with tag '{_milestoneTitle}' not in draft state, so not updating");
 
-            await _releaseNotesBuilder.Received(1).BuildReleaseNotes(_owner, _repository, _milestoneTitle).ConfigureAwait(false);
+            await _releaseNotesBuilder.Received(1).BuildReleaseNotes(_owner, _repository, _milestoneTitle, ReleaseNotesTemplate.Default).ConfigureAwait(false);
             await _vcsProvider.Received(1).GetReleaseAsync(_owner, _repository, _milestoneTitle).ConfigureAwait(false);
         }
 
