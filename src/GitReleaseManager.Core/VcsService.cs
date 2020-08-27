@@ -42,9 +42,29 @@ namespace GitReleaseManager.Core
             _configuration = configuration;
         }
 
-        public async Task<Release> CreateReleaseFromMilestoneAsync(string owner, string repository, string milestone, string releaseName, string targetCommitish, IList<string> assets, bool prerelease)
+        public async Task<Release> CreateReleaseFromMilestoneAsync(string owner, string repository, string milestone, string releaseName, string targetCommitish, IList<string> assets, bool prerelease, string templateFilePath)
         {
-            var releaseNotes = await _releaseNotesBuilder.BuildReleaseNotes(owner, repository, milestone, ReleaseNotesTemplate.Default).ConfigureAwait(false);
+            var templateText = ReleaseNotesTemplate.Default;
+
+            if (!string.IsNullOrWhiteSpace(templateFilePath) && File.Exists(templateFilePath))
+            {
+                var templateFileContent = File.ReadAllText(templateFilePath);
+
+                if (string.IsNullOrWhiteSpace(templateFileContent))
+                {
+                    _logger.Warning("The release notes template cannot be empty. Proceed with the default template.");
+                }
+                else
+                {
+                    templateText = templateFileContent;
+                }
+            }
+            else
+            {
+                _logger.Warning("The release notes template file '{TemplateFilePath}' could not be found. Proceed with the default template.", templateFilePath);
+            }
+
+            var releaseNotes = await _releaseNotesBuilder.BuildReleaseNotes(owner, repository, milestone, templateText).ConfigureAwait(false);
             var release = await CreateRelease(owner, repository, releaseName, milestone, releaseNotes, prerelease, targetCommitish, assets).ConfigureAwait(false);
 
             return release;

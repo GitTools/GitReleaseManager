@@ -27,6 +27,9 @@ namespace GitReleaseManager.Core.Options
         [Option('i', "inputFilePath", HelpText = "The path to the file to be used as the content of the release notes.", Required = false)]
         public string InputFilePath { get; set; }
 
+        [Option('t', "template", HelpText = "The path to the file to be used as the template for the release notes.", Required = false)]
+        public string TemplateFilePath { get; set; }
+
         [Option('e', "pre", Required = false, HelpText = "Creates the release as a pre-release.")]
         public bool Prerelease { get; set; }
     }
