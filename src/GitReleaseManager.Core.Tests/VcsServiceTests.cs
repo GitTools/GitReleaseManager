@@ -74,9 +74,10 @@ namespace GitReleaseManager.Core.Tests
             for (int i = 0; i < 3; i++)
             {
                 var fileName = $"Asset{i + 1}.txt";
-                _assets.Add(Path.Combine(_tempPath, fileName));
+                var filePath = Path.Combine(_tempPath, fileName);
+                _assets.Add(filePath);
 
-                fileContent.Add(fileName, _assetContent);
+                fileContent.Add(filePath, _assetContent);
             }
 
             _files.Add(_releaseNotesFilePath);
