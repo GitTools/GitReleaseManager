@@ -27,6 +27,7 @@ namespace GitReleaseManager.Cli
     {
         private static IServiceProvider _serviceProvider;
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "The main entry point can not be named with an Async Suffix")]
         private static async Task<int> Main(string[] args)
         {
             // Just add the TLS 1.2 protocol to the Service Point manager until
@@ -134,7 +135,9 @@ namespace GitReleaseManager.Cli
             }
 
             var version = Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
-            if (version.Contains("+", StringComparison.Ordinal))
+#pragma warning disable CA1307 // Specify StringComparison ; Reason, we can't do this because of targeting .NET Framework
+            if (version.Contains("+"))
+#pragma warning restore CA1307 // Specify StringComparison
             {
                 version = version.Substring(0, version.IndexOf("+", StringComparison.Ordinal));
             }

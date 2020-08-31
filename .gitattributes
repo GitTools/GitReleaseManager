@@ -25,3 +25,5 @@
 *.RTF	 diff=astextplain
 
 *.png   binary
+
+.editorconfig text whitespace=-blank-at-eol
