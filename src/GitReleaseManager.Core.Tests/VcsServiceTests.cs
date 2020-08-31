@@ -4,29 +4,29 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using GitReleaseManager.Core.Configuration;
-using GitReleaseManager.Core.Model;
-using GitReleaseManager.Core.Provider;
-using GitReleaseManager.Core.ReleaseNotes;
-using NSubstitute;
-using NUnit.Framework;
-using Serilog;
-using Shouldly;
-using ItemState = GitReleaseManager.Core.Model.ItemState;
-using ItemStateFilter = GitReleaseManager.Core.Model.ItemStateFilter;
-using Label = GitReleaseManager.Core.Model.Label;
-using Milestone = GitReleaseManager.Core.Model.Milestone;
-using NotFoundException = GitReleaseManager.Core.Exceptions.NotFoundException;
-using Release = GitReleaseManager.Core.Model.Release;
-
 namespace GitReleaseManager.Core.Tests
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using GitReleaseManager.Core.Configuration;
+    using GitReleaseManager.Core.Model;
+    using GitReleaseManager.Core.Provider;
+    using GitReleaseManager.Core.ReleaseNotes;
+    using NSubstitute;
+    using NUnit.Framework;
+    using Serilog;
+    using Shouldly;
+    using ItemState = GitReleaseManager.Core.Model.ItemState;
+    using ItemStateFilter = GitReleaseManager.Core.Model.ItemStateFilter;
+    using Label = GitReleaseManager.Core.Model.Label;
+    using Milestone = GitReleaseManager.Core.Model.Milestone;
+    using NotFoundException = GitReleaseManager.Core.Exceptions.NotFoundException;
+    using Release = GitReleaseManager.Core.Model.Release;
+
     public class VcsServiceTests
     {
         private const string _owner = "owner";

@@ -134,9 +134,9 @@ namespace GitReleaseManager.Cli
             }
 
             var version = Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
-            if (version.IndexOf('+') >= 0)
+            if (version.Contains("+", StringComparison.Ordinal))
             {
-                version = version.Substring(0, version.IndexOf('+'));
+                version = version.Substring(0, version.IndexOf("+", StringComparison.Ordinal));
             }
 
             // The following ugly formats is to prevent incorrect indentation

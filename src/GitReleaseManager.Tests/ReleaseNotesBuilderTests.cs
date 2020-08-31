@@ -4,19 +4,18 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using GitReleaseManager.Core.ReleaseNotes;
-
 namespace GitReleaseManager.Tests
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
     using ApprovalTests;
     using GitReleaseManager.Core.Configuration;
     using GitReleaseManager.Core.Helpers;
     using GitReleaseManager.Core.Model;
     using GitReleaseManager.Core.Provider;
+    using GitReleaseManager.Core.ReleaseNotes;
     using NSubstitute;
     using NUnit.Framework;
     using Serilog;

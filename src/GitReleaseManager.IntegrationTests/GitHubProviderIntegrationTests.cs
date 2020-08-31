@@ -4,21 +4,21 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using System;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
-using GitReleaseManager.Core;
-using GitReleaseManager.Core.Provider;
-using NUnit.Framework;
-using Octokit;
-using Serilog;
-using Shouldly;
-using Issue = GitReleaseManager.Core.Model.Issue;
-using Milestone = GitReleaseManager.Core.Model.Milestone;
-
 namespace GitReleaseManager.IntegrationTests
 {
+    using System;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using AutoMapper;
+    using GitReleaseManager.Core;
+    using GitReleaseManager.Core.Provider;
+    using NUnit.Framework;
+    using Octokit;
+    using Serilog;
+    using Shouldly;
+    using Issue = GitReleaseManager.Core.Model.Issue;
+    using Milestone = GitReleaseManager.Core.Model.Milestone;
+
     [TestFixture]
     [Explicit]
     public class GitHubProviderIntegrationTests
@@ -36,7 +36,6 @@ namespace GitReleaseManager.IntegrationTests
         private string _releaseHeadTag;
         private Issue _issue;
         private Milestone _milestone;
-
 
         [OneTimeSetUp]
         public void OneTimeSetUp()

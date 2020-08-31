@@ -21,6 +21,6 @@ namespace GitReleaseManager.Core.Model
         /// <summary>
         /// All the items.
         /// </summary>
-        All = 2
+        All = 2,
     }
 }

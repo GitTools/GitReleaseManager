@@ -1,13 +1,17 @@
 {
     "editor.rulers": [80],
     "cSpell.words": [
+        "Usings",
         "addasset",
         "buildartifacts",
         "choco",
         "gitreleasemanager",
         "nupkg",
         "psake",
+        "readonly",
         "releasenotes",
         "showconfig"
-    ]
+    ],
+    "omnisharp.enableEditorConfigSupport": true,
+    "omnisharp.enableRoslynAnalyzers": true
 }

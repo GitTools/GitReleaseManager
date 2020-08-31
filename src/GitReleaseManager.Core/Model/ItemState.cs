@@ -16,6 +16,6 @@ namespace GitReleaseManager.Core.Model
         /// <summary>
         /// Items that are closed
         /// </summary>
-        Closed = 1
+        Closed = 1,
     }
 }

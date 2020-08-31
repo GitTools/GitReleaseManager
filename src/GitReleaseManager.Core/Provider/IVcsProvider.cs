@@ -4,12 +4,12 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using GitReleaseManager.Core.Model;
-
 namespace GitReleaseManager.Core.Provider
 {
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+    using GitReleaseManager.Core.Model;
+
     public interface IVcsProvider
     {
         Task DeleteAssetAsync(string owner, string repository, int id);

@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------
-// <copyright file="DiscardOptions.cs" company="GitTools Contributors">
+// <copyright file="DiscardSubOptions.cs" company="GitTools Contributors">
 //     Copyright (c) 2015 - Present - GitTools Contributors
 // </copyright>
 //-----------------------------------------------------------------------

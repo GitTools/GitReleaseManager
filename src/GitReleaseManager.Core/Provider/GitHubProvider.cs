@@ -4,28 +4,28 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
-using Octokit;
-using ApiException = GitReleaseManager.Core.Exceptions.ApiException;
-using ForbiddenException = GitReleaseManager.Core.Exceptions.ForbiddenException;
-using Issue = GitReleaseManager.Core.Model.Issue;
-using IssueComment = GitReleaseManager.Core.Model.IssueComment;
-using ItemState = GitReleaseManager.Core.Model.ItemState;
-using ItemStateFilter = GitReleaseManager.Core.Model.ItemStateFilter;
-using Label = GitReleaseManager.Core.Model.Label;
-using Milestone = GitReleaseManager.Core.Model.Milestone;
-using NotFoundException = GitReleaseManager.Core.Exceptions.NotFoundException;
-using RateLimit = GitReleaseManager.Core.Model.RateLimit;
-using Release = GitReleaseManager.Core.Model.Release;
-using ReleaseAssetUpload = GitReleaseManager.Core.Model.ReleaseAssetUpload;
-
 namespace GitReleaseManager.Core.Provider
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using AutoMapper;
+    using Octokit;
+    using ApiException = GitReleaseManager.Core.Exceptions.ApiException;
+    using ForbiddenException = GitReleaseManager.Core.Exceptions.ForbiddenException;
+    using Issue = GitReleaseManager.Core.Model.Issue;
+    using IssueComment = GitReleaseManager.Core.Model.IssueComment;
+    using ItemState = GitReleaseManager.Core.Model.ItemState;
+    using ItemStateFilter = GitReleaseManager.Core.Model.ItemStateFilter;
+    using Label = GitReleaseManager.Core.Model.Label;
+    using Milestone = GitReleaseManager.Core.Model.Milestone;
+    using NotFoundException = GitReleaseManager.Core.Exceptions.NotFoundException;
+    using RateLimit = GitReleaseManager.Core.Model.RateLimit;
+    using Release = GitReleaseManager.Core.Model.Release;
+    using ReleaseAssetUpload = GitReleaseManager.Core.Model.ReleaseAssetUpload;
+
     public class GitHubProvider : IVcsProvider
     {
         private const int _pageSize = 100;
