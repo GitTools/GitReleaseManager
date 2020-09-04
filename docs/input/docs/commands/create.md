@@ -33,6 +33,15 @@ to include in the Release.
     executed. Defaults to current directory.
 - `-l, --logFilePath`: Path to where log file should be created. Defaults to
     logging to console.
+- `-t, --template`: The path to the file to be used as the template for the
+    release notes.
+
+## **Template**
+
+GitReleaseManager uses the [Scriban](https://github.com/lunet-io/scriban)
+library to parse and render release notes. For more information on how you can
+create your own template, please check the Scriban
+[documentation](https://github.com/lunet-io/scriban/tree/master/doc).
 
 ## **Examples**
 

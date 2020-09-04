@@ -46,22 +46,26 @@ namespace GitReleaseManager.Core
         {
             var templateText = ReleaseNotesTemplate.Default;
 
-            if (!string.IsNullOrWhiteSpace(templateFilePath) && File.Exists(templateFilePath))
+            if (!string.IsNullOrWhiteSpace(templateFilePath))
             {
-                var templateFileContent = File.ReadAllText(templateFilePath);
-
-                if (string.IsNullOrWhiteSpace(templateFileContent))
+                if (File.Exists(templateFilePath))
                 {
-                    _logger.Warning("The release notes template cannot be empty. Proceed with the default template.");
+                    var templateFileContent = File.ReadAllText(templateFilePath);
+
+                    if (string.IsNullOrWhiteSpace(templateFileContent))
+                    {
+                        throw new ArgumentException("The release notes template cannot be empty.");
+                    }
+
+                    templateText = templateFileContent;
                 }
                 else
                 {
-                    templateText = templateFileContent;
+                    var fileName = Path.GetFileName(templateFilePath);
+                    var message = $"The release notes template file '{templateFilePath}' could not be found.";
+
+                    throw new FileNotFoundException(message, fileName);
                 }
-            }
-            else
-            {
-                _logger.Warning("The release notes template file '{TemplateFilePath}' could not be found. Proceed with the default template.", templateFilePath);
             }
 
             var releaseNotes = await _releaseNotesBuilder.BuildReleaseNotes(owner, repository, milestone, templateText).ConfigureAwait(false);

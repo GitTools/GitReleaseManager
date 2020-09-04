@@ -354,29 +354,30 @@ namespace GitReleaseManager.Core.Tests
         }
 
         [Test]
-        public async Task Should_Log_Warning_On_Creating_Release_With_Empty_Template()
+        public async Task Should_Throw_Exception_On_Creating_Release_With_Empty_Template()
         {
             _vcsProvider.GetReleaseAsync(_owner, _repository, _tagName)
                 .Returns(Task.FromException<Release>(_notFoundException));
 
-            await _vcsService.CreateReleaseFromMilestoneAsync(_owner, _repository, _milestoneTitle, _milestoneTitle, null, null, false, _releaseNotesEmptyTemplateFilePath).ConfigureAwait(false);
+            await Should.ThrowAsync<ArgumentException>(() => _vcsService.CreateReleaseFromMilestoneAsync(_owner, _repository, _milestoneTitle, _milestoneTitle, null, null, false, _releaseNotesEmptyTemplateFilePath)).ConfigureAwait(false);
 
-            await _releaseNotesBuilder.Received(1).BuildReleaseNotes(_owner, _repository, _milestoneTitle, ReleaseNotesTemplate.Default).ConfigureAwait(false);
-            _logger.Received(1).Warning(Arg.Any<string>());
+            await _releaseNotesBuilder.DidNotReceive().BuildReleaseNotes(_owner, _repository, _milestoneTitle, Arg.Any<string>()).ConfigureAwait(false);
         }
 
         [Test]
-        public async Task Should_Log_Warning_On_Creating_Release_With_Invalid_Template_File_Path()
+        public async Task Should_Throw_Exception_On_Creating_Release_With_Invalid_Template_File_Path()
         {
             _vcsProvider.GetReleaseAsync(_owner, _repository, _tagName)
                 .Returns(Task.FromException<Release>(_notFoundException));
 
-            var invalidReleaseNotesTemplateFilePath = Path.Combine(_tempPath, "InvalidReleaseNotesTemplate.txt");
+            var fileName = "InvalidReleaseNotesTemplate.txt";
+            var invalidReleaseNotesTemplateFilePath = Path.Combine(_tempPath, fileName);
 
-            await _vcsService.CreateReleaseFromMilestoneAsync(_owner, _repository, _milestoneTitle, _milestoneTitle, null, null, false, invalidReleaseNotesTemplateFilePath).ConfigureAwait(false);
+            var ex = await Should.ThrowAsync<FileNotFoundException>(() => _vcsService.CreateReleaseFromMilestoneAsync(_owner, _repository, _milestoneTitle, _milestoneTitle, null, null, false, invalidReleaseNotesTemplateFilePath)).ConfigureAwait(false);
+            ex.Message.ShouldContain(invalidReleaseNotesTemplateFilePath);
+            ex.FileName.ShouldBe(fileName);
 
-            await _releaseNotesBuilder.Received(1).BuildReleaseNotes(_owner, _repository, _milestoneTitle, ReleaseNotesTemplate.Default).ConfigureAwait(false);
-            _logger.Received(1).Warning(Arg.Any<string>(), invalidReleaseNotesTemplateFilePath);
+            await _releaseNotesBuilder.DidNotReceive().BuildReleaseNotes(_owner, _repository, _milestoneTitle, Arg.Any<string>()).ConfigureAwait(false);
         }
 
         [TestCase(true, false)]
