@@ -35,6 +35,8 @@ namespace GitReleaseManager.Core.Tests
         private const string _milestoneTitle = "0.1.0";
         private const string _tagName = "0.1.0";
         private const string _releaseNotes = "Release Notes";
+        private const string _releaseNotesTemplate = "Release Notes Template";
+        private const string _assetContent = "Asset Content";
 
         private const string _unableToFoundMilestoneMessage = "Unable to find a {State} milestone with title '{Title}' on '{Owner}/{Repository}'";
         private const string _unableToFoundReleaseMessage = "Unable to find a release with tag '{TagName}' on '{Owner}/{Repository}'";
@@ -52,25 +54,42 @@ namespace GitReleaseManager.Core.Tests
         private VcsService _vcsService;
 
         private string _releaseNotesFilePath;
+        private string _releaseNotesTemplateFilePath;
+        private string _releaseNotesEmptyTemplateFilePath;
 
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
             _releaseNotesFilePath = Path.Combine(_tempPath, "ReleaseNotes.txt");
+            _releaseNotesTemplateFilePath = Path.Combine(_tempPath, "ReleaseNotesTemplate.txt");
+            _releaseNotesEmptyTemplateFilePath = Path.Combine(_tempPath, "ReleaseNotesEmptyTemplate.txt");
+
+            var fileContent = new Dictionary<string, string>
+            {
+                { _releaseNotesFilePath, _releaseNotes },
+                { _releaseNotesTemplateFilePath, _releaseNotesTemplate },
+                { _releaseNotesEmptyTemplateFilePath, string.Empty },
+            };
 
             for (int i = 0; i < 3; i++)
             {
-                _assets.Add(Path.Combine(_tempPath, $"Asset{i + 1}.txt"));
+                var fileName = $"Asset{i + 1}.txt";
+                var filePath = Path.Combine(_tempPath, fileName);
+                _assets.Add(filePath);
+
+                fileContent.Add(filePath, _assetContent);
             }
 
             _files.Add(_releaseNotesFilePath);
+            _files.Add(_releaseNotesTemplateFilePath);
+            _files.Add(_releaseNotesEmptyTemplateFilePath);
             _files.AddRange(_assets);
 
             foreach (var file in _files)
             {
                 if (!File.Exists(file))
                 {
-                    File.WriteAllText(file, _releaseNotes);
+                    File.WriteAllText(file, fileContent[file]);
                 }
             }
         }
@@ -283,7 +302,7 @@ namespace GitReleaseManager.Core.Tests
         {
             var release = new Release();
 
-            _releaseNotesBuilder.BuildReleaseNotes(_owner, _repository, _milestoneTitle)
+            _releaseNotesBuilder.BuildReleaseNotes(_owner, _repository, _milestoneTitle, ReleaseNotesTemplate.Default)
                 .Returns(Task.FromResult(_releaseNotes));
 
             _vcsProvider.GetReleaseAsync(_owner, _repository, _milestoneTitle)
@@ -292,10 +311,10 @@ namespace GitReleaseManager.Core.Tests
             _vcsProvider.CreateReleaseAsync(_owner, _repository, Arg.Any<Release>())
                 .Returns(Task.FromResult(release));
 
-            var result = await _vcsService.CreateReleaseFromMilestoneAsync(_owner, _repository, _milestoneTitle, _milestoneTitle, null, null, false).ConfigureAwait(false);
+            var result = await _vcsService.CreateReleaseFromMilestoneAsync(_owner, _repository, _milestoneTitle, _milestoneTitle, null, null, false, null).ConfigureAwait(false);
             result.ShouldBeSameAs(release);
 
-            await _releaseNotesBuilder.Received(1).BuildReleaseNotes(_owner, _repository, _milestoneTitle).ConfigureAwait(false);
+            await _releaseNotesBuilder.Received(1).BuildReleaseNotes(_owner, _repository, _milestoneTitle, ReleaseNotesTemplate.Default).ConfigureAwait(false);
             await _vcsProvider.Received(1).GetReleaseAsync(_owner, _repository, _milestoneTitle).ConfigureAwait(false);
             await _vcsProvider.Received(1).CreateReleaseAsync(_owner, _repository, Arg.Is<Release>(o =>
                 o.Body == _releaseNotes &&
@@ -304,6 +323,61 @@ namespace GitReleaseManager.Core.Tests
 
             _logger.Received(1).Verbose(Arg.Any<string>(), _milestoneTitle, _owner, _repository);
             _logger.Received(1).Debug(Arg.Any<string>(), Arg.Any<Release>());
+        }
+
+        [Test]
+        public async Task Should_Create_Release_From_Milestone_Using_Template_File()
+        {
+            var release = new Release();
+
+            _releaseNotesBuilder.BuildReleaseNotes(_owner, _repository, _milestoneTitle, _releaseNotesTemplate)
+                .Returns(Task.FromResult(_releaseNotes));
+
+            _vcsProvider.GetReleaseAsync(_owner, _repository, _milestoneTitle)
+                .Returns(Task.FromException<Release>(_notFoundException));
+
+            _vcsProvider.CreateReleaseAsync(_owner, _repository, Arg.Any<Release>())
+                .Returns(Task.FromResult(release));
+
+            var result = await _vcsService.CreateReleaseFromMilestoneAsync(_owner, _repository, _milestoneTitle, _milestoneTitle, null, null, false, _releaseNotesTemplateFilePath).ConfigureAwait(false);
+            result.ShouldBeSameAs(release);
+
+            await _releaseNotesBuilder.Received(1).BuildReleaseNotes(_owner, _repository, _milestoneTitle, _releaseNotesTemplate).ConfigureAwait(false);
+            await _vcsProvider.Received(1).GetReleaseAsync(_owner, _repository, _milestoneTitle).ConfigureAwait(false);
+            await _vcsProvider.Received(1).CreateReleaseAsync(_owner, _repository, Arg.Is<Release>(o =>
+                o.Body == _releaseNotes &&
+                o.Name == _milestoneTitle &&
+                o.TagName == _milestoneTitle)).ConfigureAwait(false);
+
+            _logger.Received(1).Verbose(Arg.Any<string>(), _milestoneTitle, _owner, _repository);
+            _logger.Received(1).Debug(Arg.Any<string>(), Arg.Any<Release>());
+        }
+
+        [Test]
+        public async Task Should_Throw_Exception_On_Creating_Release_With_Empty_Template()
+        {
+            _vcsProvider.GetReleaseAsync(_owner, _repository, _tagName)
+                .Returns(Task.FromException<Release>(_notFoundException));
+
+            await Should.ThrowAsync<ArgumentException>(() => _vcsService.CreateReleaseFromMilestoneAsync(_owner, _repository, _milestoneTitle, _milestoneTitle, null, null, false, _releaseNotesEmptyTemplateFilePath)).ConfigureAwait(false);
+
+            await _releaseNotesBuilder.DidNotReceive().BuildReleaseNotes(_owner, _repository, _milestoneTitle, Arg.Any<string>()).ConfigureAwait(false);
+        }
+
+        [Test]
+        public async Task Should_Throw_Exception_On_Creating_Release_With_Invalid_Template_File_Path()
+        {
+            _vcsProvider.GetReleaseAsync(_owner, _repository, _tagName)
+                .Returns(Task.FromException<Release>(_notFoundException));
+
+            var fileName = "InvalidReleaseNotesTemplate.txt";
+            var invalidReleaseNotesTemplateFilePath = Path.Combine(_tempPath, fileName);
+
+            var ex = await Should.ThrowAsync<FileNotFoundException>(() => _vcsService.CreateReleaseFromMilestoneAsync(_owner, _repository, _milestoneTitle, _milestoneTitle, null, null, false, invalidReleaseNotesTemplateFilePath)).ConfigureAwait(false);
+            ex.Message.ShouldContain(invalidReleaseNotesTemplateFilePath);
+            ex.FileName.ShouldBe(fileName);
+
+            await _releaseNotesBuilder.DidNotReceive().BuildReleaseNotes(_owner, _repository, _milestoneTitle, Arg.Any<string>()).ConfigureAwait(false);
         }
 
         [TestCase(true, false)]
@@ -315,7 +389,7 @@ namespace GitReleaseManager.Core.Tests
 
             _configuration.Create.AllowUpdateToPublishedRelease = updatePublishedRelease;
 
-            _releaseNotesBuilder.BuildReleaseNotes(_owner, _repository, _milestoneTitle)
+            _releaseNotesBuilder.BuildReleaseNotes(_owner, _repository, _milestoneTitle, ReleaseNotesTemplate.Default)
                 .Returns(Task.FromResult(_releaseNotes));
 
             _vcsProvider.GetReleaseAsync(_owner, _repository, _milestoneTitle)
@@ -324,10 +398,10 @@ namespace GitReleaseManager.Core.Tests
             _vcsProvider.UpdateReleaseAsync(_owner, _repository, release)
                 .Returns(Task.FromResult(new Release()));
 
-            var result = await _vcsService.CreateReleaseFromMilestoneAsync(_owner, _repository, _milestoneTitle, _milestoneTitle, null, null, false).ConfigureAwait(false);
+            var result = await _vcsService.CreateReleaseFromMilestoneAsync(_owner, _repository, _milestoneTitle, _milestoneTitle, null, null, false, null).ConfigureAwait(false);
             result.ShouldBeSameAs(release);
 
-            await _releaseNotesBuilder.Received(1).BuildReleaseNotes(_owner, _repository, _milestoneTitle).ConfigureAwait(false);
+            await _releaseNotesBuilder.Received(1).BuildReleaseNotes(_owner, _repository, _milestoneTitle, ReleaseNotesTemplate.Default).ConfigureAwait(false);
             await _vcsProvider.Received(1).GetReleaseAsync(_owner, _repository, _milestoneTitle).ConfigureAwait(false);
             await _vcsProvider.Received(1).UpdateReleaseAsync(_owner, _repository, release).ConfigureAwait(false);
 
@@ -343,16 +417,16 @@ namespace GitReleaseManager.Core.Tests
 
             _configuration.Create.AllowUpdateToPublishedRelease = false;
 
-            _releaseNotesBuilder.BuildReleaseNotes(_owner, _repository, _milestoneTitle)
+            _releaseNotesBuilder.BuildReleaseNotes(_owner, _repository, _milestoneTitle, ReleaseNotesTemplate.Default)
                 .Returns(Task.FromResult(_releaseNotes));
 
             _vcsProvider.GetReleaseAsync(_owner, _repository, _milestoneTitle)
                 .Returns(Task.FromResult(release));
 
-            var ex = await Should.ThrowAsync<InvalidOperationException>(() => _vcsService.CreateReleaseFromMilestoneAsync(_owner, _repository, _milestoneTitle, _milestoneTitle, null, null, false)).ConfigureAwait(false);
+            var ex = await Should.ThrowAsync<InvalidOperationException>(() => _vcsService.CreateReleaseFromMilestoneAsync(_owner, _repository, _milestoneTitle, _milestoneTitle, null, null, false, null)).ConfigureAwait(false);
             ex.Message.ShouldBe($"Release with tag '{_milestoneTitle}' not in draft state, so not updating");
 
-            await _releaseNotesBuilder.Received(1).BuildReleaseNotes(_owner, _repository, _milestoneTitle).ConfigureAwait(false);
+            await _releaseNotesBuilder.Received(1).BuildReleaseNotes(_owner, _repository, _milestoneTitle, ReleaseNotesTemplate.Default).ConfigureAwait(false);
             await _vcsProvider.Received(1).GetReleaseAsync(_owner, _repository, _milestoneTitle).ConfigureAwait(false);
         }
 

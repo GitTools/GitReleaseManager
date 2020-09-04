@@ -10,12 +10,12 @@ namespace GitReleaseManager.Core.ReleaseNotes
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
-    using System.Text;
     using System.Threading.Tasks;
     using GitReleaseManager.Core.Configuration;
     using GitReleaseManager.Core.Extensions;
     using GitReleaseManager.Core.Model;
     using GitReleaseManager.Core.Provider;
+    using Scriban;
     using Serilog;
 
     public class ReleaseNotesBuilder : IReleaseNotesBuilder
@@ -36,18 +36,17 @@ namespace GitReleaseManager.Core.ReleaseNotes
             _configuration = configuration;
         }
 
-        public async Task<string> BuildReleaseNotes(string user, string repository, string milestoneTitle)
+        public async Task<string> BuildReleaseNotes(string user, string repository, string milestoneTitle, string templateText)
         {
             _user = user;
             _repository = repository;
             _milestoneTitle = milestoneTitle;
 
             _logger.Verbose("Building release notes...");
-            await LoadMilestones().ConfigureAwait(false);
+            await LoadMilestonesAsync().ConfigureAwait(false);
             GetTargetMilestone();
 
-            var issues = await GetIssues(_targetMilestone).ConfigureAwait(false);
-            var stringBuilder = new StringBuilder();
+            var issues = await GetIssuesAsync(_targetMilestone).ConfigureAwait(false);
             var previousMilestone = GetPreviousMilestone();
 
             var @base = previousMilestone != null
@@ -68,65 +67,74 @@ namespace GitReleaseManager.Core.ReleaseNotes
 
             var commitsLink = _vcsProvider.GetCommitsUrl(_user, _repository, _targetMilestone?.Title, previousMilestone?.Title);
             var commitsText = string.Format(numberOfCommits == 1 ? "{0} commit" : "{0} commits", numberOfCommits);
+            var issuesText = string.Format(issues.Count == 1 ? "{0} issue" : "{0} issues", issues.Count);
 
-            if (issues.Count > 0)
+            var footerContent = _configuration.Create.FooterContent;
+
+            if (_configuration.Create.FooterIncludesMilestone &&
+                !string.IsNullOrEmpty(_configuration.Create.MilestoneReplaceText))
             {
-                var issuesText = string.Format(issues.Count == 1 ? "{0} issue" : "{0} issues", issues.Count);
-
-                if (numberOfCommits > 0)
+                var replaceValues = new Dictionary<string, object>
                 {
-                    stringBuilder.AppendFormat(@"As part of this release we had [{0}]({1}) which resulted in [{2}]({3}) being closed.", commitsText, commitsLink, issuesText, _targetMilestone.HtmlUrl + "?closed=1");
-                }
-                else
-                {
-                    stringBuilder.AppendFormat(@"As part of this release we had [{0}]({1}) closed.", issuesText, _targetMilestone.HtmlUrl + "?closed=1");
-                }
+                    { _configuration.Create.MilestoneReplaceText.Trim('{', '}'), _milestoneTitle },
+                };
+                footerContent = footerContent.ReplaceTemplate(replaceValues);
             }
-            else if (numberOfCommits > 0)
+
+            var issuesDict = GetIssuesDict(issues);
+
+            var templateContext = new
             {
-                stringBuilder.AppendFormat(@"As part of this release we had [{0}]({1}).", commitsText, commitsLink);
-            }
+                IssuesCount = issues.Count,
+                CommitsCount = numberOfCommits,
+                CommitsLink = commitsLink,
+                CommitsText = commitsText,
+                IssuesText = issuesText,
+                MilestoneDescription = _targetMilestone.Description,
+                MilestoneHtmlUrl = _targetMilestone.HtmlUrl,
+                IssueLabels = issuesDict.Keys.ToList(),
+                Issues = issuesDict,
+                IncludeFooter = _configuration.Create.IncludeFooter,
+                FooterHeading = _configuration.Create.FooterHeading,
+                FooterContent = footerContent,
+            };
 
-            stringBuilder.AppendLine();
-
-            stringBuilder.AppendLine(_targetMilestone.Description);
-            stringBuilder.AppendLine();
-
-            AddIssues(stringBuilder, issues);
-
-            if (_configuration.Create.IncludeFooter)
-            {
-                AddFooter(stringBuilder);
-            }
+            var template = Template.Parse(templateText);
+            var releaseNotes = template.Render(templateContext);
 
             _logger.Verbose("Finished building release notes");
 
-            return stringBuilder.ToString();
+            return releaseNotes;
         }
 
-        private void Append(IEnumerable<Issue> issues, string label, StringBuilder stringBuilder)
+        private Dictionary<string, List<Issue>> GetIssuesDict(List<Issue> issues)
         {
-            var features = issues.Where(x => x.Labels.Any(l => l.Name.ToUpperInvariant() == label.ToUpperInvariant())).ToList();
+            var issueLabels = _configuration.IssueLabelsInclude;
+            var issuesByLabel = issues
+                .SelectMany(o => o.Labels, (issue, label) => new { Label = label.Name, Issue = issue })
+                .Where(o => issueLabels.Contains(o.Label))
+                .GroupBy(o => o.Label, o => o.Issue)
+                .OrderBy(o => o.Key)
+                .ToDictionary(o => GetValidLabel(o.Key, o.Count()), o => o.OrderBy(issue => issue.Number).ToList());
 
-            if (features.Count > 0)
-            {
-                var singular = GetLabel(label, alias => alias.Header) ?? label;
-                var plural = GetLabel(label, alias => alias.Plural) ?? label + "s";
-                stringBuilder.AppendFormat("__{0}__\r\n\r\n", features.Count == 1 ? singular : plural);
-
-                foreach (var issue in features)
-                {
-                    stringBuilder.AppendFormat("- [__#{0}__]({1}) {2}\r\n", issue.Number, issue.HtmlUrl, issue.Title);
-                }
-
-                stringBuilder.AppendLine();
-            }
+            return issuesByLabel;
         }
 
-        private string GetLabel(string label, Func<LabelAlias, string> func)
+        private string GetValidLabel(string label, int issuesCount)
         {
             var alias = _configuration.LabelAliases.FirstOrDefault(x => x.Name.Equals(label, StringComparison.OrdinalIgnoreCase));
-            return alias != null ? func(alias) : null;
+            var newLabel = label;
+
+            if (alias != null)
+            {
+                newLabel = issuesCount == 1 ? alias.Header : alias.Plural;
+            }
+            else if (issuesCount > 1)
+            {
+                newLabel += "s";
+            }
+
+            return newLabel;
         }
 
         private bool CheckForValidLabels(Issue issue)
@@ -161,14 +169,6 @@ namespace GitReleaseManager.Core.ReleaseNotes
             return false;
         }
 
-        private void AddIssues(StringBuilder stringBuilder, List<Issue> issues)
-        {
-            foreach (var issueLabel in _configuration.IssueLabelsInclude)
-            {
-                Append(issues, issueLabel, stringBuilder);
-            }
-        }
-
         private Milestone GetPreviousMilestone()
         {
             var currentVersion = _targetMilestone.Version;
@@ -179,32 +179,12 @@ namespace GitReleaseManager.Core.ReleaseNotes
                 .FirstOrDefault();
         }
 
-        private void AddFooter(StringBuilder stringBuilder)
-        {
-            stringBuilder.AppendLine(string.Format(CultureInfo.InvariantCulture, "### {0}", _configuration.Create.FooterHeading));
-
-            var footerContent = _configuration.Create.FooterContent;
-
-            if (_configuration.Create.FooterIncludesMilestone
-                && !string.IsNullOrEmpty(_configuration.Create.MilestoneReplaceText))
-            {
-                var replaceValues = new Dictionary<string, object>
-                    {
-                        { _configuration.Create.MilestoneReplaceText.Trim('{', '}'), _milestoneTitle },
-                    };
-                footerContent = footerContent.ReplaceTemplate(replaceValues);
-            }
-
-            stringBuilder.Append(footerContent);
-            stringBuilder.AppendLine();
-        }
-
-        private async Task LoadMilestones()
+        private async Task LoadMilestonesAsync()
         {
             _milestones = await _vcsProvider.GetMilestonesAsync(_user, _repository).ConfigureAwait(false);
         }
 
-        private async Task<List<Issue>> GetIssues(Milestone milestone)
+        private async Task<List<Issue>> GetIssuesAsync(Milestone milestone)
         {
             var issues = await _vcsProvider.GetIssuesAsync(_user, _repository, milestone.Number, ItemStateFilter.Closed).ConfigureAwait(false);
 

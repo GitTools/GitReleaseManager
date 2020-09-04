@@ -50,13 +50,13 @@ namespace GitReleaseManager.Core.Tests.Commands
 
             var releaseName = options.Name ?? options.Milestone;
 
-            _vcsService.CreateReleaseFromMilestoneAsync(options.RepositoryOwner, options.RepositoryName, options.Milestone, releaseName, options.TargetCommitish, options.AssetPaths, options.Prerelease)
+            _vcsService.CreateReleaseFromMilestoneAsync(options.RepositoryOwner, options.RepositoryName, options.Milestone, releaseName, options.TargetCommitish, options.AssetPaths, options.Prerelease, options.TemplateFilePath)
                 .Returns(_release);
 
             var result = await _command.Execute(options).ConfigureAwait(false);
             result.ShouldBe(0);
 
-            await _vcsService.Received(1).CreateReleaseFromMilestoneAsync(options.RepositoryOwner, options.RepositoryName, options.Milestone, releaseName, options.TargetCommitish, options.AssetPaths, options.Prerelease).ConfigureAwait(false);
+            await _vcsService.Received(1).CreateReleaseFromMilestoneAsync(options.RepositoryOwner, options.RepositoryName, options.Milestone, releaseName, options.TargetCommitish, options.AssetPaths, options.Prerelease, options.TemplateFilePath).ConfigureAwait(false);
             _logger.Received(1).Information(Arg.Any<string>());
             _logger.Received(logVerboseCount).Verbose(Arg.Any<string>(), options.Milestone);
             _logger.Received(1).Information(Arg.Any<string>(), _release.HtmlUrl);
