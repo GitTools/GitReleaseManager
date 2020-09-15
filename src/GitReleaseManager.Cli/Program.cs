@@ -39,7 +39,7 @@ namespace GitReleaseManager.Cli
                     .WithParsed<BaseSubOptions>(LogConfiguration.ConfigureLogging)
                     .WithParsed<BaseSubOptions>(CreateFiglet)
                     .WithParsed<BaseSubOptions>(LogOptions)
-                    .WithParsed<BaseVcsOptions>(RegisterServices)
+                    .WithParsed<BaseSubOptions>(RegisterServices)
                     .MapResult(
                     (CreateSubOptions opts) => ExecuteCommand(opts),
                     (DiscardSubOptions opts) => ExecuteCommand(opts),
@@ -75,19 +75,12 @@ namespace GitReleaseManager.Cli
             }
         }
 
-        private static void RegisterServices(BaseVcsOptions options)
+        private static void RegisterServices(BaseSubOptions options)
         {
             var fileSystem = new FileSystem();
             var logger = Log.ForContext<VcsService>();
             var mapper = AutoMapperConfiguration.Configure();
             var configuration = ConfigurationProvider.Provide(options.TargetDirectory ?? Environment.CurrentDirectory, fileSystem);
-
-            if (string.IsNullOrWhiteSpace(options.Token))
-            {
-                throw new Exception("The token option is not defined");
-            }
-
-            var gitHubClient = new GitHubClient(new ProductHeaderValue("GitReleaseManager")) { Credentials = new Credentials(options.Token) };
 
             var serviceCollection = new ServiceCollection()
                 .AddSingleton(logger)
@@ -104,12 +97,23 @@ namespace GitReleaseManager.Cli
                 .AddSingleton<ICommand<OpenSubOptions>, OpenCommand>()
                 .AddSingleton<ICommand<PublishSubOptions>, PublishCommand>()
                 .AddSingleton<ICommand<ShowConfigSubOptions>, ShowConfigCommand>()
-                .AddSingleton<IFileSystem, FileSystem>()
+                .AddSingleton<IFileSystem>(fileSystem)
                 .AddSingleton<IReleaseNotesExporter, ReleaseNotesExporter>()
                 .AddSingleton<IReleaseNotesBuilder, ReleaseNotesBuilder>()
-                .AddSingleton<IGitHubClient>(gitHubClient)
                 .AddSingleton<IVcsProvider, GitHubProvider>()
                 .AddSingleton<IVcsService, VcsService>();
+
+            if (options is BaseVcsOptions vcsOptions)
+            {
+                if (string.IsNullOrWhiteSpace(vcsOptions.Token))
+                {
+                    throw new Exception("The token option is not defined");
+                }
+
+                var gitHubClient = new GitHubClient(new ProductHeaderValue("GitReleaseManager")) { Credentials = new Credentials(vcsOptions.Token) };
+                serviceCollection = serviceCollection
+                    .AddSingleton<IGitHubClient>(gitHubClient);
+            }
 
             _serviceProvider = serviceCollection.BuildServiceProvider();
         }
