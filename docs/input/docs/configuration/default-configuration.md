@@ -12,11 +12,10 @@ when no yaml file is placed in the root directory):
 
 ```yaml
 create:
+    # Please see
+    # https://gittools.github.io/GitReleaseManager/docs/configuration/template-configuration#editing-the-templates
+    # configuration for configuring footers
     include-footer: false
-    footer-heading: ''
-    footer-content: ''
-    footer-includes-milestone: false
-    milestone-replace-text: ''
     include-sha-section: false
     sha-section-heading: "SHA256 Hashes of the release artifacts"
     sha-section-line-format: "- `{1}\t{0}`"
