@@ -1,4 +1,5 @@
 #load nuget:?package=Cake.Recipe&version=2.1.0
+#tool dotnet:?package=dotnet-t4&version=2.0.5
 
 Environment.SetVariableNames(githubTokenVariable: "GITTOOLS_GITHUB_TOKEN");
 
@@ -42,6 +43,18 @@ BuildParameters.Tasks.DotNetCoreBuildTask.Does((context) =>
 
 BuildParameters.Tasks.CreateReleaseNotesTask
     .IsDependentOn(BuildParameters.Tasks.DotNetCoreBuildTask); // We need to be sure that the executable exist, and have been registered before using it
+
+Task("Transform-TextTemplates")
+    .IsDependeeOf(BuildParameters.Tasks.DotNetCoreBuildTask.Task.Name)
+    .Does(() =>
+{
+    var templates = GetFiles("src/**/*.tt");
+
+    foreach (var template in templates)
+    {
+        TransformTemplate(template);
+    }
+});
 
 ((CakeTask)BuildParameters.Tasks.ExportReleaseNotesTask.Task).ErrorHandler = null;
 ((CakeTask)BuildParameters.Tasks.PublishGitHubReleaseTask.Task).ErrorHandler = null;

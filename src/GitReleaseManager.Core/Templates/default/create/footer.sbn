@@ -1,0 +1,4 @@
+{{~ if include_footer ~}}
+### {{ footer_heading }}
+{{ footer_content }}
+{{~ end ~}}
