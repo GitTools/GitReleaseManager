@@ -17,7 +17,7 @@ Take for example the GitReleaseManager configuration file which is used by the
 
 :::{.alert .alert-warning}
 Configuring the footer is no longer recommended. Going forward the recommendation
-is to configure the footer using seperate template files.
+is to configure the footer using separate template files.
 Please see [Template Configuration](template-configuration#editing-the-templates)
 for more information.
 :::

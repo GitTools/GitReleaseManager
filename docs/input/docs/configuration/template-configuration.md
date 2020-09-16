@@ -6,7 +6,7 @@ Title: Template Configuration
 Welcome to the documentation on how to configure each available step
 of release notes generation by using Scriban templates.
 While you can still use the old way of configuring templates (footer only) in
-the yaml file, going forward it is recommended to use the new aproach by
+the yaml file, going forward it is recommended to use the new approach by
 extracting and editing the template files you wish to change instead.
 
 ## How are templates resolved
@@ -26,13 +26,13 @@ paths (and for template names).
 
 The templates are resolved in the following order (`<base>` is the value
 specified in the `templates-dir` directory, and `<name>` is the name passed
-to GitReleaseManage. _defaults to `default`_).
+to GitReleaseManager. _defaults to `default`_).
 
 We will be using the [create](../commands/create) as an example in these paths.
 Additional commands are planned to be supported, but for now these templates
 can only be used when calling `GitReleaseManager create`.
 
-**For abbreviation, file extensions are omitted from the pats.
+**For abbreviation, file extensions are omitted from the paths.
 File extension are expected to be either `.sbn` or `.scriban` unless otherwise
 specified when passing in the template name when calling `GitReleaseManager`.**
 
@@ -61,13 +61,13 @@ In these paths the following substitution values are being used.
 
 - `<base>` == The base directory as specified by the `templates-dir` property.
 - `<template>` == The name of the template being used without a file extension
-  (_may nat be available in all scenarios_)
+  (_may not be available in all scenarios_)
 - `<relative-path>` == The directory that the previous template file was
   located in.
 - `<name>` == The name of the file (excluding any directories)
 - `<name-dir>` == The parent directory of the file specified in the `<name>` argument.
 
-Resolution is done in two seperate ways, depending on where the previous template
+Resolution is done in two separate ways, depending on where the previous template
 file was located.
 
 Let us start with the simplest form, when the previous file was located on the
@@ -227,11 +227,11 @@ there is no description).
 This file can be used if you want to provide additional details regarding the
 milestone.
 
-### Editing the issuse
+### Editing the issues
 
 Now we are getting into the meat of the templates.
 The generation of the issues (actual Release Notes) are made possible in three
-seperate files.
+separate files.
 Each with their own purpose.
 
 - We have the template `issues.sbn` which only have the purpose of iterating through
@@ -246,7 +246,7 @@ Each with their own purpose.
 - Finally we have the `issue-note.sbn` template which renders the actual line of
   the issue, including its issue number, issue url and issue title.
   This issue template have even one more global variable called `issue` being
-  made available thank to its parent.
+  made available thanks to its parent.
   This issue variable is a single item located in the `issues.items` json object.
 
 ### Editing the footer
