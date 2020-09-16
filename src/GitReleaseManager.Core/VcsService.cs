@@ -20,6 +20,7 @@ namespace GitReleaseManager.Core
     using GitReleaseManager.Core.Model;
     using GitReleaseManager.Core.Provider;
     using GitReleaseManager.Core.ReleaseNotes;
+    using GitReleaseManager.Core.Templates;
     using Serilog;
 
     public class VcsService : IVcsService
@@ -44,31 +45,14 @@ namespace GitReleaseManager.Core
 
         public async Task<Release> CreateReleaseFromMilestoneAsync(string owner, string repository, string milestone, string releaseName, string targetCommitish, IList<string> assets, bool prerelease, string templateFilePath)
         {
-            var templateText = ReleaseNotesTemplate.Default;
+            var templatePath = ReleaseTemplates.DEFAULT_NAME;
 
             if (!string.IsNullOrWhiteSpace(templateFilePath))
             {
-                if (File.Exists(templateFilePath))
-                {
-                    var templateFileContent = File.ReadAllText(templateFilePath);
-
-                    if (string.IsNullOrWhiteSpace(templateFileContent))
-                    {
-                        throw new ArgumentException("The release notes template cannot be empty.");
-                    }
-
-                    templateText = templateFileContent;
-                }
-                else
-                {
-                    var fileName = Path.GetFileName(templateFilePath);
-                    var message = $"The release notes template file '{templateFilePath}' could not be found.";
-
-                    throw new FileNotFoundException(message, fileName);
-                }
+                templatePath = templateFilePath;
             }
 
-            var releaseNotes = await _releaseNotesBuilder.BuildReleaseNotes(owner, repository, milestone, templateText).ConfigureAwait(false);
+            var releaseNotes = await _releaseNotesBuilder.BuildReleaseNotes(owner, repository, milestone, templatePath).ConfigureAwait(false);
             var release = await CreateRelease(owner, repository, releaseName, milestone, releaseNotes, prerelease, targetCommitish, assets).ConfigureAwait(false);
 
             return release;

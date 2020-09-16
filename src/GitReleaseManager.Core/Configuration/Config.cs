@@ -6,8 +6,10 @@
 
 namespace GitReleaseManager.Core.Configuration
 {
+    using System;
     using System.Collections.Generic;
     using System.ComponentModel;
+    using System.IO;
     using YamlDotNet.Serialization;
 
     public class Config
@@ -136,7 +138,20 @@ Your **[GitReleaseManager](https://github.com/GitTools/GitReleaseManager)** bot 
             };
 
             LabelAliases = new List<LabelAlias>();
+
+            TemplatesDirectory = ".templates";
         }
+
+        [Description("The directory where templates are located")]
+        [YamlMember(Alias = "templates-dir")]
+        public string TemplatesDirectory
+        {
+            get => TemplatesDirectoryInfo.FullName.Replace(Environment.CurrentDirectory, string.Empty).TrimStart('\\', '/');
+            set => TemplatesDirectoryInfo = new DirectoryInfo(Path.Combine(Environment.CurrentDirectory, value));
+        }
+
+        [YamlIgnore]
+        public DirectoryInfo TemplatesDirectoryInfo { get; private set; }
 
         [Description("Configuration values used when creating new releases")]
         [YamlMember(Alias = "create")]

@@ -16,6 +16,7 @@ namespace GitReleaseManager.Tests
     using GitReleaseManager.Core.Model;
     using GitReleaseManager.Core.Provider;
     using GitReleaseManager.Core.ReleaseNotes;
+    using GitReleaseManager.Core.Templates;
     using NSubstitute;
     using NUnit.Framework;
     using Serilog;
@@ -183,8 +184,8 @@ namespace GitReleaseManager.Tests
             vcsProvider.GetMilestonesAsync(owner, repository, Arg.Any<ItemStateFilter>())
                 .Returns(Task.FromResult((IEnumerable<Milestone>)vcsService.Milestones));
 
-            var builder = new ReleaseNotesBuilder(vcsProvider, logger, configuration);
-            var notes = builder.BuildReleaseNotes(owner, repository, milestoneTitle, ReleaseNotesTemplate.Default).Result;
+            var builder = new ReleaseNotesBuilder(vcsProvider, logger, fileSystem, configuration, new TemplateFactory(fileSystem, configuration, TemplateKind.Create));
+            var notes = builder.BuildReleaseNotes(owner, repository, milestoneTitle, ReleaseTemplates.DEFAULT_NAME).Result;
 
             Approvals.Verify(notes);
         }

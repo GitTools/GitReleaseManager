@@ -87,7 +87,7 @@ namespace GitReleaseManager.Core.Configuration
                 var sampleAttribute = property.GetCustomAttribute<SampleAttribute>();
                 var propertyType = property.PropertyType;
 
-                if (propertyType.IsClass && propertyType != typeof(string))
+                if (propertyType.IsClass && propertyType != typeof(string) && propertyType != typeof(DirectoryInfo))
                 {
                     var subConfig = property.GetValue(config);
                     SetConfigurationSamples(subConfig, propertyType, writer);

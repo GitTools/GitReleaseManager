@@ -15,6 +15,7 @@ namespace GitReleaseManager.IntegrationTests
     using GitReleaseManager.Core.Helpers;
     using GitReleaseManager.Core.Provider;
     using GitReleaseManager.Core.ReleaseNotes;
+    using GitReleaseManager.Core.Templates;
     using NUnit.Framework;
     using Octokit;
     using Serilog;
@@ -62,8 +63,8 @@ namespace GitReleaseManager.IntegrationTests
                 var configuration = ConfigurationProvider.Provide(currentDirectory, fileSystem);
 
                 var vcsProvider = new GitHubProvider(_gitHubClient, _mapper);
-                var releaseNotesBuilder = new ReleaseNotesBuilder(vcsProvider, _logger, configuration);
-                var result = await releaseNotesBuilder.BuildReleaseNotes("Chocolatey", "ChocolateyGUI", "0.12.4", ReleaseNotesTemplate.Default).ConfigureAwait(false);
+                var releaseNotesBuilder = new ReleaseNotesBuilder(vcsProvider, _logger, fileSystem, configuration, new TemplateFactory(fileSystem, configuration, TemplateKind.Create));
+                var result = await releaseNotesBuilder.BuildReleaseNotes("Chocolatey", "ChocolateyGUI", "0.12.4", ReleaseTemplates.DEFAULT_NAME).ConfigureAwait(false);
                 Debug.WriteLine(result);
                 ClipBoardHelper.SetClipboard(result);
             }
@@ -84,8 +85,8 @@ namespace GitReleaseManager.IntegrationTests
                 var configuration = ConfigurationProvider.Provide(currentDirectory, fileSystem);
 
                 var vcsProvider = new GitHubProvider(_gitHubClient, _mapper);
-                var releaseNotesBuilder = new ReleaseNotesBuilder(vcsProvider, _logger, configuration);
-                var result = await releaseNotesBuilder.BuildReleaseNotes("Chocolatey", "ChocolateyGUI", "0.13.0", ReleaseNotesTemplate.Default).ConfigureAwait(false);
+                var releaseNotesBuilder = new ReleaseNotesBuilder(vcsProvider, _logger, fileSystem, configuration, new TemplateFactory(fileSystem, configuration, TemplateKind.Create));
+                var result = await releaseNotesBuilder.BuildReleaseNotes("Chocolatey", "ChocolateyGUI", "0.13.0", ReleaseTemplates.DEFAULT_NAME).ConfigureAwait(false);
                 Debug.WriteLine(result);
                 ClipBoardHelper.SetClipboard(result);
             }

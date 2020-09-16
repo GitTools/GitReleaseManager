@@ -13,30 +13,37 @@ namespace GitReleaseManager.Core.ReleaseNotes
     using System.Threading.Tasks;
     using GitReleaseManager.Core.Configuration;
     using GitReleaseManager.Core.Extensions;
+    using GitReleaseManager.Core.Helpers;
     using GitReleaseManager.Core.Model;
     using GitReleaseManager.Core.Provider;
+    using GitReleaseManager.Core.Templates;
     using Scriban;
+    using Scriban.Runtime;
     using Serilog;
 
     public class ReleaseNotesBuilder : IReleaseNotesBuilder
     {
         private readonly IVcsProvider _vcsProvider;
         private readonly ILogger _logger;
+        private readonly IFileSystem _fileSystem;
         private readonly Config _configuration;
+        private readonly TemplateFactory _templateFactory;
         private string _user;
         private string _repository;
         private string _milestoneTitle;
         private IEnumerable<Milestone> _milestones;
         private Milestone _targetMilestone;
 
-        public ReleaseNotesBuilder(IVcsProvider vcsProvider, ILogger logger, Config configuration)
+        public ReleaseNotesBuilder(IVcsProvider vcsProvider, ILogger logger, IFileSystem fileSystem, Config configuration, TemplateFactory templateFactory)
         {
             _vcsProvider = vcsProvider;
             _logger = logger;
+            _fileSystem = fileSystem;
             _configuration = configuration;
+            _templateFactory = templateFactory;
         }
 
-        public async Task<string> BuildReleaseNotes(string user, string repository, string milestoneTitle, string templateText)
+        public async Task<string> BuildReleaseNotes(string user, string repository, string milestoneTitle, string template)
         {
             _user = user;
             _repository = repository;
@@ -83,7 +90,7 @@ namespace GitReleaseManager.Core.ReleaseNotes
 
             var issuesDict = GetIssuesDict(issues);
 
-            var templateContext = new
+            var templateModel = new
             {
                 IssuesCount = issues.Count,
                 CommitsCount = numberOfCommits,
@@ -99,8 +106,7 @@ namespace GitReleaseManager.Core.ReleaseNotes
                 FooterContent = footerContent,
             };
 
-            var template = Template.Parse(templateText);
-            var releaseNotes = template.Render(templateContext);
+            var releaseNotes = await _templateFactory.RenderTemplateAsync(template, templateModel).ConfigureAwait(false);
 
             _logger.Verbose("Finished building release notes");
 
