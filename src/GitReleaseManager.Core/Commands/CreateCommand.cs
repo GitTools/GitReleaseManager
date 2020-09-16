@@ -39,7 +39,7 @@ namespace GitReleaseManager.Core.Commands
                     releaseName = options.Milestone;
                 }
 
-                release = await _vcsService.CreateReleaseFromMilestoneAsync(options.RepositoryOwner, options.RepositoryName, options.Milestone, releaseName, options.TargetCommitish, options.AssetPaths, options.Prerelease, options.TemplateFilePath).ConfigureAwait(false);
+                release = await _vcsService.CreateReleaseFromMilestoneAsync(options.RepositoryOwner, options.RepositoryName, options.Milestone, releaseName, options.TargetCommitish, options.AssetPaths, options.Prerelease, options.Template).ConfigureAwait(false);
             }
             else
             {
