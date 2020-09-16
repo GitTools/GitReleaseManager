@@ -1,0 +1,9 @@
+As part of this release we had [4 commits](https://github.com/TestUser/FakeRepository/commits/1.2.3) which resulted in [1 issue](https://github.com/gep13/FakeRepository/issues?q=milestone%3A1.2.3?closed=1) being closed.
+
+__Feature__
+
+- [__#78__](http://example.com/78) Issue 78
+
+### I am a header
+
+I am a content with milestone 1.2.3!

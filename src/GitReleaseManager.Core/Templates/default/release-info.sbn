@@ -1,11 +1,10 @@
 {{
-    if issues_count > 0
-        if commits_count > 0
-            "As part of this release we had [" + commits_text + "](" + commits_link + ") which resulted in [" + issues_text + "](" + milestone_html_url + "?closed=1) being closed."
-        else
-            "As part of this release we had [" + issues_text + "](" + milestone_html_url + "?closed=1) closed."
-        end
-    else if commits_count > 0
-        "As part of this release we had [" + commits_text + "](" + commits_link + ")."
-    end
-}}
+    if issues.count > 0
+        if commits.count > 0
+}}As part of this release we had [{{ commits.count }} {{ commits.count | string.pluralize "commit" "commits" }}]({{ commits.html_url }}) which resulted in [{{ issues.count }} {{ issues.count | string.pluralize "issue" "issues" }}]({{ milestone.target.html_url }}?closed=1) being closed.
+{{      else
+}}As part of this release we had [{{ issues.count }} {{ issues.count | string.pluralize "issue" "issues" }}]({{ milestone.target.html_url }}?closed=1) closed.
+{{      end
+    else if commits.count > 0
+}}As part of this release we had [{{ commits.count }} {{ commits.count | string.pluralize "commit" "commits" }}]({{ commits.html_url }}).
+{{  end -}}

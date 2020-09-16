@@ -1,3 +1,4 @@
-{{ for issue_label in issue_labels ~}}
-    {{~ include 'issue-details' ~}}
-{{~ end ~}}
+
+{{ for issue_label in issue_labels
+    include 'issue-details'
+end }}

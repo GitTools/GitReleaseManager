@@ -102,6 +102,13 @@ namespace GitReleaseManager.Tests
         }
 
         [Test]
+        public void SingularCommitsWithMilestoneDescription()
+        {
+            AcceptTest(1, CreateMilestone("2.4.2", "I am some awesome milestone description."), CreateIssue(5, "Feature"));
+            Assert.True(true); // Just to make sonarlint happy
+        }
+
+        [Test]
         public void SomeCommitsWithPluralizedLabelAlias()
         {
             var config = new Config();
@@ -120,6 +127,29 @@ namespace GitReleaseManager.Tests
         {
             AcceptTest(5, CreateIssue(1, "Help Wanted"), CreateIssue(2, "Help Wanted"));
             Assert.True(true); // Just to make sonarlint happy
+        }
+
+        [Test]
+        public void CorrectlyUseFooterWhenEnabled()
+        {
+            var config = new Config();
+            config.Create.IncludeFooter = true;
+            config.Create.FooterHeading = "I am a header";
+            config.Create.FooterContent = "I am content";
+
+            AcceptTest(2, config, CreateIssue(6, "Bug"));
+        }
+
+        [Test]
+        public void CorrectlyUseFooterWithMilestoneWhenEnabled()
+        {
+            var config = new Config();
+            config.Create.IncludeFooter = true;
+            config.Create.FooterHeading = "I am a header";
+            config.Create.FooterContent = "I am a content with milestone {milestone}!";
+            config.Create.MilestoneReplaceText = "{milestone}";
+
+            AcceptTest(4, config, CreateIssue(78, "Feature"));
         }
 
         [Test]
@@ -145,16 +175,28 @@ namespace GitReleaseManager.Tests
 
         private static void AcceptTest(int commits, params Issue[] issues)
         {
-            AcceptTest(commits, null, issues);
+            AcceptTest(commits, null, null, issues);
+            Assert.True(true); // Just to make sonarlint happy
+        }
+
+        private static void AcceptTest(int commits, Milestone milestone, params Issue[] issues)
+        {
+            AcceptTest(commits, null, milestone, issues);
             Assert.True(true); // Just to make sonarlint happy
         }
 
         private static void AcceptTest(int commits, Config config, params Issue[] issues)
         {
+            AcceptTest(commits, config, null, issues);
+            Assert.True(true); // Just to make sonarlint happy
+        }
+
+        private static void AcceptTest(int commits, Config config, Milestone milestone, params Issue[] issues)
+        {
             var owner = "TestUser";
             var repository = "FakeRepository";
             var milestoneNumber = 1;
-            var milestoneTitle = "1.2.3";
+            milestone ??= CreateMilestone("1.2.3");
 
             var vcsService = new VcsServiceMock();
             var logger = Substitute.For<ILogger>();
@@ -162,7 +204,7 @@ namespace GitReleaseManager.Tests
             var currentDirectory = Environment.CurrentDirectory;
             var configuration = config ?? ConfigurationProvider.Provide(currentDirectory, fileSystem);
 
-            vcsService.Milestones.Add(CreateMilestone(milestoneTitle));
+            vcsService.Milestones.Add(milestone);
 
             vcsService.NumberOfCommits = commits;
 
@@ -185,16 +227,17 @@ namespace GitReleaseManager.Tests
                 .Returns(Task.FromResult((IEnumerable<Milestone>)vcsService.Milestones));
 
             var builder = new ReleaseNotesBuilder(vcsProvider, logger, fileSystem, configuration, new TemplateFactory(fileSystem, configuration, TemplateKind.Create));
-            var notes = builder.BuildReleaseNotes(owner, repository, milestoneTitle, ReleaseTemplates.DEFAULT_NAME).Result;
+            var notes = builder.BuildReleaseNotes(owner, repository, milestone.Title, ReleaseTemplates.DEFAULT_NAME).Result;
 
             Approvals.Verify(notes);
         }
 
-        private static Milestone CreateMilestone(string version)
+        private static Milestone CreateMilestone(string version, string description = null)
         {
             return new Milestone
             {
                 Title = version,
+                Description = description,
                 Number = 1,
                 HtmlUrl = "https://github.com/gep13/FakeRepository/issues?q=milestone%3A" + version,
                 Version = new Version(version),

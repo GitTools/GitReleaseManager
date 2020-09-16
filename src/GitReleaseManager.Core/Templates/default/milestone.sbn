@@ -1,1 +1,2 @@
-{{ milestone_description }}
+
+{{ milestone.target.description }}

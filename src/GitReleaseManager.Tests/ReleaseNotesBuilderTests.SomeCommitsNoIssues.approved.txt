@@ -1,3 +1,1 @@
 As part of this release we had [5 commits](https://github.com/TestUser/FakeRepository/commits/1.2.3).
-
-

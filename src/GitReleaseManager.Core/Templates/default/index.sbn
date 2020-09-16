@@ -1,5 +1,10 @@
-{{ include 'release-info' ~}}
-{{ include 'milestone' ~}}
-
-{{ include 'issues' ~}}
-{{ include 'footer' ~}}
+{{-
+    include 'release-info'
+    if milestone.target.description
+        include 'milestone'
+    end
+    include 'issues' | string.rstrip
+    if template_kind == "CREATE"
+        include 'footer'
+    end
+~}}

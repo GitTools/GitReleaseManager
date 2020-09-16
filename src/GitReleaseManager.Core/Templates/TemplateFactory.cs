@@ -8,6 +8,7 @@ namespace GitReleaseManager.Core.Templates
 {
     using System.Threading.Tasks;
     using GitReleaseManager.Core.Configuration;
+    using GitReleaseManager.Core.Extensions;
     using GitReleaseManager.Core.Helpers;
     using Scriban;
     using Scriban.Runtime;
@@ -49,10 +50,13 @@ namespace GitReleaseManager.Core.Templates
             return await template.RenderAsync(context).ConfigureAwait(false);
         }
 
-        private static TemplateContext CreateTemplateContext(object model, TemplateLoader loader, string sourcePath)
+        private TemplateContext CreateTemplateContext(object model, TemplateLoader loader, string sourcePath)
         {
             var sc = new ScriptObject();
             sc.Import(model);
+            sc.Add("template_kind", templateKind.ToString().ToUpperInvariant());
+            sc.Add("config", config);
+            sc.ImportMember(typeof(StringExtensions), nameof(StringExtensions.ReplaceMilestoneTitle));
             var context = new TemplateContext
             {
                 TemplateLoader = loader,

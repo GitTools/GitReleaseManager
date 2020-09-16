@@ -73,37 +73,27 @@ namespace GitReleaseManager.Core.ReleaseNotes
             }
 
             var commitsLink = _vcsProvider.GetCommitsUrl(_user, _repository, _targetMilestone?.Title, previousMilestone?.Title);
-            var commitsText = string.Format(numberOfCommits == 1 ? "{0} commit" : "{0} commits", numberOfCommits);
-            var issuesText = string.Format(issues.Count == 1 ? "{0} issue" : "{0} issues", issues.Count);
-
-            var footerContent = _configuration.Create.FooterContent;
-
-            if (_configuration.Create.FooterIncludesMilestone &&
-                !string.IsNullOrEmpty(_configuration.Create.MilestoneReplaceText))
-            {
-                var replaceValues = new Dictionary<string, object>
-                {
-                    { _configuration.Create.MilestoneReplaceText.Trim('{', '}'), _milestoneTitle },
-                };
-                footerContent = footerContent.ReplaceTemplate(replaceValues);
-            }
 
             var issuesDict = GetIssuesDict(issues);
 
             var templateModel = new
             {
-                IssuesCount = issues.Count,
-                CommitsCount = numberOfCommits,
-                CommitsLink = commitsLink,
-                CommitsText = commitsText,
-                IssuesText = issuesText,
-                MilestoneDescription = _targetMilestone.Description,
-                MilestoneHtmlUrl = _targetMilestone.HtmlUrl,
+                Issues = new
+                {
+                    issues.Count,
+                    Items = issuesDict,
+                },
+                Commits = new
+                {
+                    Count = numberOfCommits,
+                    HtmlUrl = commitsLink,
+                },
+                Milestone = new
+                {
+                    Target = _targetMilestone,
+                    Previous = previousMilestone,
+                },
                 IssueLabels = issuesDict.Keys.ToList(),
-                Issues = issuesDict,
-                IncludeFooter = _configuration.Create.IncludeFooter,
-                FooterHeading = _configuration.Create.FooterHeading,
-                FooterContent = footerContent,
             };
 
             var releaseNotes = await _templateFactory.RenderTemplateAsync(template, templateModel).ConfigureAwait(false);

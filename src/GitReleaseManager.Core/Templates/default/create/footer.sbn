@@ -1,4 +1,10 @@
-{{~ if include_footer ~}}
-### {{ footer_heading }}
-{{ footer_content }}
-{{~ end ~}}
+{{ if config.create.include_footer }}
+
+### {{ config.create.footer_heading }}
+
+{{  if config.create.milestone_replace_text
+        replace_milestone_title config.create.footer_content config.create.milestone_replace_text milestone.target.title
+    else
+        config.create.footer_content
+    end
+end }}
