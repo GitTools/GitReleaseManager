@@ -79,7 +79,7 @@ namespace GitReleaseManager.Cli
 
         private static void RegisterServices(BaseSubOptions options)
         {
-            var fileSystem = new FileSystem();
+            var fileSystem = new FileSystem(options);
             var logger = Log.ForContext<VcsService>();
             var mapper = AutoMapperConfiguration.Configure();
             var configuration = ConfigurationProvider.Provide(options.TargetDirectory ?? Environment.CurrentDirectory, fileSystem);

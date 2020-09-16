@@ -7,14 +7,11 @@
 namespace GitReleaseManager.Core.Templates
 {
     using System;
-    using System.Collections;
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
-    using System.Runtime.CompilerServices;
     using System.Threading.Tasks;
-    using AutoMapper.Configuration.Annotations;
     using GitReleaseManager.Core.Configuration;
     using GitReleaseManager.Core.Helpers;
     using Scriban;
@@ -51,7 +48,7 @@ namespace GitReleaseManager.Core.Templates
             }
             else
             {
-                possiblePaths = GetFilePaths(context, _config, templateName, _templateKind);
+                possiblePaths = GetFilePaths(context, _fileSystem.ResolvePath(_config.TemplatesDirectory), templateName, _templateKind);
             }
 
             foreach (var path in possiblePaths)
@@ -87,7 +84,7 @@ namespace GitReleaseManager.Core.Templates
             return await Task.FromResult(result).ConfigureAwait(false);
         }
 
-        private static IEnumerable<string> GetFilePaths(TemplateContext context, Config config, string templateName, TemplateKind templateKind)
+        private static IEnumerable<string> GetFilePaths(TemplateContext context, string templatesDirectory, string templateName, TemplateKind templateKind)
         {
             var extension = Path.GetExtension(templateName);
             var fileName = Path.GetFileNameWithoutExtension(templateName);
@@ -116,7 +113,7 @@ namespace GitReleaseManager.Core.Templates
 
             if (context is null)
             {
-                testPaths = GetTestPaths(config.TemplatesDirectoryInfo?.FullName ?? string.Empty, configName, fileName);
+                testPaths = GetTestPaths(templatesDirectory, configName, fileName);
             }
             else if (context.CurrentSourceFile.StartsWith(ReleaseTemplates.RESOURCE_PREFIX, StringComparison.InvariantCultureIgnoreCase))
             {
@@ -125,7 +122,7 @@ namespace GitReleaseManager.Core.Templates
                 // This should always be 3 items. config, template and previous resource name
                 var splits = currentSourceSub.Split('/');
                 Debug.Assert(splits.Length == 3, "Resource current source is not a 3-part length");
-                testPaths = GetTestPaths(config.TemplatesDirectoryInfo?.FullName, splits[1], splits[0], fileName);
+                testPaths = GetTestPaths(templatesDirectory, splits[1], splits[0], fileName);
             }
             else
             {
@@ -139,37 +136,6 @@ namespace GitReleaseManager.Core.Templates
             }
 
             return testPaths.Distinct().SelectMany(t => possibleExtensions.Select(p => t + p));
-        }
-
-        private static IEnumerable<string> GetTestPaths(string baseDirectory, string configType, string templateName, string fileName = null)
-        {
-            if (fileName is null)
-            {
-                yield return Path.Combine(baseDirectory, templateName, configType, "index");
-                yield return Path.Combine(baseDirectory, templateName, configType, templateName);
-                yield return Path.Combine(baseDirectory, configType, templateName, "index");
-                yield return Path.Combine(baseDirectory, configType, templateName, templateName);
-            }
-            else
-            {
-                yield return Path.Combine(baseDirectory, templateName, configType, fileName);
-            }
-
-            yield return Path.Combine(baseDirectory, configType, templateName, fileName ?? templateName);
-
-            if (fileName is null)
-            {
-                yield return Path.Combine(baseDirectory, templateName, "index");
-            }
-
-            yield return Path.Combine(baseDirectory, templateName, fileName ?? templateName);
-
-            if (fileName is null)
-            {
-                yield return Path.Combine(baseDirectory, configType, "index");
-            }
-            yield return Path.Combine(baseDirectory, configType, fileName ?? templateName);
-            yield return Path.Combine(baseDirectory, fileName ?? templateName);
         }
 
         private static string GetResourcePath(TemplateContext context, string templateName, TemplateKind templateKind)
@@ -202,6 +168,38 @@ namespace GitReleaseManager.Core.Templates
                     "/",
                     new[] { directoryName, configName, fileName });
             }
+        }
+
+        private static IEnumerable<string> GetTestPaths(string baseDirectory, string configType, string templateName, string fileName = null)
+        {
+            if (fileName is null)
+            {
+                yield return Path.Combine(baseDirectory, templateName, configType, "index");
+                yield return Path.Combine(baseDirectory, templateName, configType, templateName);
+                yield return Path.Combine(baseDirectory, configType, templateName, "index");
+                yield return Path.Combine(baseDirectory, configType, templateName, templateName);
+            }
+            else
+            {
+                yield return Path.Combine(baseDirectory, templateName, configType, fileName);
+            }
+
+            yield return Path.Combine(baseDirectory, configType, templateName, fileName ?? templateName);
+
+            if (fileName is null)
+            {
+                yield return Path.Combine(baseDirectory, templateName, "index");
+            }
+
+            yield return Path.Combine(baseDirectory, templateName, fileName ?? templateName);
+
+            if (fileName is null)
+            {
+                yield return Path.Combine(baseDirectory, configType, "index");
+            }
+
+            yield return Path.Combine(baseDirectory, configType, fileName ?? templateName);
+            yield return Path.Combine(baseDirectory, fileName ?? templateName);
         }
     }
 }

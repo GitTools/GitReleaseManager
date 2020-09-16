@@ -6,11 +6,20 @@
 
 namespace GitReleaseManager.Core.Helpers
 {
+    using System;
     using System.Collections.Generic;
     using System.IO;
+    using GitReleaseManager.Core.Options;
 
     public class FileSystem : IFileSystem
     {
+        private readonly BaseSubOptions options;
+
+        public FileSystem(BaseSubOptions options)
+        {
+            this.options = options;
+        }
+
         public void Copy(string @source, string destination, bool overwrite)
         {
             File.Copy(@source, destination, overwrite);
@@ -29,6 +38,16 @@ namespace GitReleaseManager.Core.Helpers
         public void Delete(string path)
         {
             File.Delete(path);
+        }
+
+        public string ResolvePath(string path)
+        {
+            if (Path.IsPathRooted(path))
+            {
+                return path;
+            }
+
+            return Path.Combine(options.TargetDirectory ?? Environment.CurrentDirectory, path);
         }
 
         public string ReadAllText(string path)

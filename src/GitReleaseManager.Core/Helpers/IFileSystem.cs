@@ -21,6 +21,8 @@ namespace GitReleaseManager.Core.Helpers
 
         string ReadAllText(string path);
 
+        string ResolvePath(string path);
+
         void WriteAllText(string file, string fileContents);
 
         IEnumerable<string> DirectoryGetFiles(string directory, string searchPattern, SearchOption searchOption);

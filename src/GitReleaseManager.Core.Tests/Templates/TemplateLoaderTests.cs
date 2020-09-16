@@ -116,6 +116,7 @@ namespace GitReleaseManager.Core.Tests.Templates
         public void Should_GetDefaultResourcePath()
         {
             var fileSystem = Substitute.For<IFileSystem>();
+            fileSystem.ResolvePath(Arg.Any<string>()).Returns(s => Path.Combine(Environment.CurrentDirectory, s.Arg<string>()));
             fileSystem.Exists(Arg.Any<string>()).Returns(false);
             var config = new Config();
             var loader = new TemplateLoader(config, fileSystem, TemplateKind.Create);
@@ -129,6 +130,7 @@ namespace GitReleaseManager.Core.Tests.Templates
         public void Should_GetRelativeResourcePath()
         {
             var fileSystem = Substitute.For<IFileSystem>();
+            fileSystem.ResolvePath(Arg.Any<string>()).Returns(s => Path.Combine(Environment.CurrentDirectory, s.Arg<string>()));
             fileSystem.Exists(Arg.Any<string>()).Returns(false);
             var config = new Config();
             var loader = new TemplateLoader(config, fileSystem, TemplateKind.Create);
@@ -146,6 +148,7 @@ namespace GitReleaseManager.Core.Tests.Templates
         {
             var expectedFile = Path.Combine(Environment.CurrentDirectory, ".templates", "default", "create", expectedFileName);
             var fileSystem = Substitute.For<IFileSystem>();
+            fileSystem.ResolvePath(Arg.Any<string>()).Returns(s => Path.Combine(Environment.CurrentDirectory, s.Arg<string>()));
             fileSystem.Exists(Arg.Any<string>()).Returns(false);
             fileSystem.Exists(expectedFile).Returns(true);
 
@@ -161,6 +164,7 @@ namespace GitReleaseManager.Core.Tests.Templates
         {
             var expectedFile = Path.Combine(Environment.CurrentDirectory, ".templates", "default", "create", expectedFileName);
             var fileSystem = Substitute.For<IFileSystem>();
+            fileSystem.ResolvePath(Arg.Any<string>()).Returns(s => Path.Combine(Environment.CurrentDirectory, s.Arg<string>()));
             fileSystem.Exists(Arg.Any<string>()).Returns(false);
             fileSystem.Exists(expectedFile).Returns(true);
             var context = new TemplateContext();
@@ -179,6 +183,7 @@ namespace GitReleaseManager.Core.Tests.Templates
         {
             var expectedFile = Path.Combine(Environment.CurrentDirectory, ".templates", "default", "create", "index." + extension);
             var fileSystem = Substitute.For<IFileSystem>();
+            fileSystem.ResolvePath(Arg.Any<string>()).Returns(s => Path.Combine(Environment.CurrentDirectory, s.Arg<string>()));
             fileSystem.Exists(Arg.Any<string>()).Returns(false);
             fileSystem.Exists(expectedFile).Returns(true);
 
@@ -195,6 +200,7 @@ namespace GitReleaseManager.Core.Tests.Templates
         {
             var expectedFile = Path.Combine(Environment.CurrentDirectory, ".templates", "default", "create", "test-file." + extension);
             var fileSystem = Substitute.For<IFileSystem>();
+            fileSystem.ResolvePath(Arg.Any<string>()).Returns(s => Path.Combine(Environment.CurrentDirectory, s.Arg<string>()));
             fileSystem.Exists(Arg.Any<string>()).Returns(false);
             fileSystem.Exists(expectedFile).Returns(true);
             var context = new TemplateContext();
@@ -211,6 +217,7 @@ namespace GitReleaseManager.Core.Tests.Templates
         {
             var expectedFile = Path.Combine(Environment.CurrentDirectory, ".templates", "default", "create", "releases.sbn");
             var fileSystem = Substitute.For<IFileSystem>();
+            fileSystem.ResolvePath(Arg.Any<string>()).Returns(s => Path.Combine(Environment.CurrentDirectory, s.Arg<string>()));
             fileSystem.Exists(Arg.Any<string>()).Returns(false);
             fileSystem.Exists(expectedFile).Returns(true);
             var context = new TemplateContext();
@@ -227,6 +234,7 @@ namespace GitReleaseManager.Core.Tests.Templates
         {
             var expected = ReleaseTemplates.RESOURCE_PREFIX + "default/create/note";
             var fileSystem = Substitute.For<IFileSystem>();
+            fileSystem.ResolvePath(Arg.Any<string>()).Returns(s => Path.Combine(Environment.CurrentDirectory, s.Arg<string>()));
             fileSystem.Exists(Arg.Any<string>()).Returns(false);
             var context = new TemplateContext();
             context.PushSourceFile(sourcePath);
@@ -241,6 +249,7 @@ namespace GitReleaseManager.Core.Tests.Templates
         public void Should_ThrowFileNotFoundExceptionOnInvalidFilePathsForResourceFallback(string sourcePath)
         {
             var fileSystem = Substitute.For<IFileSystem>();
+            fileSystem.ResolvePath(Arg.Any<string>()).Returns(s => Path.Combine(Environment.CurrentDirectory, s.Arg<string>()));
             fileSystem.Exists(Arg.Any<string>()).Returns(false);
             var context = new TemplateContext();
             context.PushSourceFile(sourcePath);
@@ -255,6 +264,7 @@ namespace GitReleaseManager.Core.Tests.Templates
         {
             var expectedFile = Path.Combine(Environment.CurrentDirectory, ".templates", "xml", "create", "release.xml");
             var fileSystem = Substitute.For<IFileSystem>();
+            fileSystem.ResolvePath(Arg.Any<string>()).Returns(s => Path.Combine(Environment.CurrentDirectory, s.Arg<string>()));
             fileSystem.Exists(Arg.Any<string>()).Returns(false);
             fileSystem.Exists(expectedFile).Returns(true);
             var context = new TemplateContext();
@@ -270,6 +280,7 @@ namespace GitReleaseManager.Core.Tests.Templates
         public void Should_GetExpectedSourcePaths(string expectedFile)
         {
             var fileSystem = Substitute.For<IFileSystem>();
+            fileSystem.ResolvePath(Arg.Any<string>()).Returns(s => Path.Combine(Environment.CurrentDirectory, s.Arg<string>()));
             fileSystem.Exists(Arg.Any<string>()).Returns(false);
             fileSystem.Exists(expectedFile).Returns(true);
 
@@ -283,6 +294,7 @@ namespace GitReleaseManager.Core.Tests.Templates
         public void Should_GetExpectedRelativePathsWhenPreviousIsResource(string expectedFile)
         {
             var fileSystem = Substitute.For<IFileSystem>();
+            fileSystem.ResolvePath(Arg.Any<string>()).Returns(s => Path.Combine(Environment.CurrentDirectory, s.Arg<string>()));
             fileSystem.Exists(Arg.Any<string>()).Returns(false);
             fileSystem.Exists(expectedFile).Returns(true);
             var context = new TemplateContext();
@@ -299,6 +311,7 @@ namespace GitReleaseManager.Core.Tests.Templates
         {
             var expectedFile = Path.Combine(Environment.CurrentDirectory, "test-file.md");
             var fileSystem = Substitute.For<IFileSystem>();
+            fileSystem.ResolvePath(Arg.Any<string>()).Returns(s => Path.Combine(Environment.CurrentDirectory, s.Arg<string>()));
             fileSystem.Exists(Arg.Any<string>()).Returns(false);
             fileSystem.Exists(expectedFile).Returns(true);
 
@@ -314,6 +327,7 @@ namespace GitReleaseManager.Core.Tests.Templates
         {
             var expectedFile = Path.Combine(Environment.CurrentDirectory, "test-file." + extension);
             var fileSystem = Substitute.For<IFileSystem>();
+            fileSystem.ResolvePath(Arg.Any<string>()).Returns(s => Path.Combine(Environment.CurrentDirectory, s.Arg<string>()));
             fileSystem.Exists(Arg.Any<string>()).Returns(false);
             fileSystem.Exists(expectedFile).Returns(true);
 
@@ -327,6 +341,7 @@ namespace GitReleaseManager.Core.Tests.Templates
         public void Should_LoadReleaseTemplateFromResource(string key, string expected)
         {
             var fileSystem = Substitute.For<IFileSystem>();
+            fileSystem.ResolvePath(Arg.Any<string>()).Returns(s => Path.Combine(Environment.CurrentDirectory, s.Arg<string>()));
 
             var loader = new TemplateLoader(new Config(), fileSystem, TemplateKind.Create);
             var result = loader.Load(null, default, ReleaseTemplates.RESOURCE_PREFIX + key);
@@ -338,6 +353,7 @@ namespace GitReleaseManager.Core.Tests.Templates
         public void Should_ThrowExceptionOnInvalidResource()
         {
             var fileSystem = Substitute.For<IFileSystem>();
+            fileSystem.ResolvePath(Arg.Any<string>()).Returns(s => Path.Combine(Environment.CurrentDirectory, s.Arg<string>()));
 
             var loader = new TemplateLoader(new Config(), fileSystem, TemplateKind.Create);
 
@@ -350,6 +366,7 @@ namespace GitReleaseManager.Core.Tests.Templates
         public void Should_ReturnEmptyTextWhenPathIsEmpty(string path)
         {
             var fileSystem = Substitute.For<IFileSystem>();
+            fileSystem.ResolvePath(Arg.Any<string>()).Returns(s => Path.Combine(Environment.CurrentDirectory, s.Arg<string>()));
 
             var loader = new TemplateLoader(new Config(), fileSystem, TemplateKind.Create);
             var result = loader.Load(null, default, path);
@@ -363,6 +380,7 @@ namespace GitReleaseManager.Core.Tests.Templates
             var expected = "I WAS Loaded!!!";
             var testPath = Path.Combine(Environment.CurrentDirectory, "test.sbn");
             var fileSystem = Substitute.For<IFileSystem>();
+            fileSystem.ResolvePath(Arg.Any<string>()).Returns(s => Path.Combine(Environment.CurrentDirectory, s.Arg<string>()));
             fileSystem.ReadAllText(testPath).Returns(expected);
 
             var loader = new TemplateLoader(new Config(), fileSystem, TemplateKind.Create);

@@ -144,14 +144,7 @@ Your **[GitReleaseManager](https://github.com/GitTools/GitReleaseManager)** bot 
 
         [Description("The directory where templates are located")]
         [YamlMember(Alias = "templates-dir")]
-        public string TemplatesDirectory
-        {
-            get => TemplatesDirectoryInfo.FullName.Replace(Environment.CurrentDirectory, string.Empty).TrimStart('\\', '/');
-            set => TemplatesDirectoryInfo = new DirectoryInfo(Path.Combine(Environment.CurrentDirectory, value));
-        }
-
-        [YamlIgnore]
-        public DirectoryInfo TemplatesDirectoryInfo { get; private set; }
+        public string TemplatesDirectory { get; set; }
 
         [Description("Configuration values used when creating new releases")]
         [YamlMember(Alias = "create")]

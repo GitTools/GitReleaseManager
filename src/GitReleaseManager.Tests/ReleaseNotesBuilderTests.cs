@@ -158,7 +158,7 @@ namespace GitReleaseManager.Tests
 
             var vcsService = new VcsServiceMock();
             var logger = Substitute.For<ILogger>();
-            var fileSystem = new FileSystem();
+            var fileSystem = Substitute.For<IFileSystem>();
             var currentDirectory = Environment.CurrentDirectory;
             var configuration = config ?? ConfigurationProvider.Provide(currentDirectory, fileSystem);
 

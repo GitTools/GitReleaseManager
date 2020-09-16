@@ -27,7 +27,7 @@ namespace GitReleaseManager.Core.Tests.Commands
         [SetUp]
         public void Setup()
         {
-            _fileSystem = new FileSystem();
+            _fileSystem = new FileSystem(Substitute.For<BaseSubOptions>());
             _logger = Substitute.For<ILogger>();
             _command = new InitCommand(_fileSystem, _logger);
             _targetDirectory = Path.GetTempPath();

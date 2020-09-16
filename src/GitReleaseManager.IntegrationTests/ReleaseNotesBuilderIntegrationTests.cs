@@ -13,6 +13,7 @@ namespace GitReleaseManager.IntegrationTests
     using GitReleaseManager.Core;
     using GitReleaseManager.Core.Configuration;
     using GitReleaseManager.Core.Helpers;
+    using GitReleaseManager.Core.Options;
     using GitReleaseManager.Core.Provider;
     using GitReleaseManager.Core.ReleaseNotes;
     using GitReleaseManager.Core.Templates;
@@ -58,7 +59,7 @@ namespace GitReleaseManager.IntegrationTests
             }
             else
             {
-                var fileSystem = new FileSystem();
+                var fileSystem = new FileSystem(new CreateSubOptions());
                 var currentDirectory = Environment.CurrentDirectory;
                 var configuration = ConfigurationProvider.Provide(currentDirectory, fileSystem);
 
@@ -80,7 +81,7 @@ namespace GitReleaseManager.IntegrationTests
             }
             else
             {
-                var fileSystem = new FileSystem();
+                var fileSystem = new FileSystem(new CreateSubOptions());
                 var currentDirectory = Environment.CurrentDirectory;
                 var configuration = ConfigurationProvider.Provide(currentDirectory, fileSystem);
 
