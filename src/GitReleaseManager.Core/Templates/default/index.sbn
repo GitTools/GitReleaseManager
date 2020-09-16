@@ -5,6 +5,6 @@
     end
     include 'issues' | string.rstrip
     if template_kind == "CREATE"
-        include 'footer'
+        include 'create/footer'
     end
 ~}}
