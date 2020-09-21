@@ -15,7 +15,7 @@
           <PrivateAssets>all</PrivateAssets>
         </PackageReference>
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.6.1" />
-        <PackageReference Include="ApprovalTests" Version="5.4.1" />
+        <PackageReference Include="ApprovalTests" Version="5.4.2" />
         <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0">
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
           <PrivateAssets>all</PrivateAssets>
