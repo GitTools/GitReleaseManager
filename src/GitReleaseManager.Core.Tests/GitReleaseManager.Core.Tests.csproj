@@ -24,6 +24,6 @@
         <PackageReference Include="NUnit" Version="3.12.0" />
         <PackageReference Include="NUnit3TestAdapter" Version="3.17.0" />
         <PackageReference Include="Octokit" Version="0.48.0" />
-        <PackageReference Include="Shouldly" Version="3.0.2" />
+        <PackageReference Include="Shouldly" Version="4.0.0" />
     </ItemGroup>
 </Project>
