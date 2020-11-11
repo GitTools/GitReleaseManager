@@ -21,18 +21,34 @@ GitReleaseManager allows you to:
 
 ## Installation
 
+### .NET Global Tool
+
+To install GitReleaseManager as a .NET Global tool, execute:
+
+```sh
+dotnet tool install --global GitReleaseManager.Tool
+```
+
+### Chocolatey
+
 You can install GitReleaseManager via Chocolatey by executing:
 
-`choco install gitreleasemanager.portable`
+```sh
+choco install gitreleasemanager.portable
+```
 
 **NOTE:**
 Depending on which version of Chocolatey you are using, you may be required to confirm the installation of the application. You can avoid this prompt using the following command:
 
-`choco install gitreleasemanager.portable -y`
+```sh
+choco install gitreleasemanager.portable -y
+```
 
 If you are interested in trying out the latest pre-release version of GitReleaseManager then you can use the following installation command:
 
-`choco install gitreleasemanager.portable -source https://www.myget.org/F/grm_develop/ -pre`
+```sh
+choco install gitreleasemanager.portable -source https://www.myget.org/F/grm_develop/ -pre
+```
 
 This uses the public GitReleaseManager feed which is hosted on [MyGet.org](https://www.myget.org/)
 
