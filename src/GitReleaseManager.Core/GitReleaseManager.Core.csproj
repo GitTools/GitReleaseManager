@@ -14,7 +14,7 @@
           <PrivateAssets>all</PrivateAssets>
         </PackageReference>
         <PackageReference Include="Octokit" Version="0.48.0" />
-        <PackageReference Include="Scriban" Version="2.1.4" />
+        <PackageReference Include="Scriban" Version="3.0.2" />
         <PackageReference Include="seriloganalyzer" Version="0.15.0" />
         <PackageReference Include="YamlDotNet" Version="8.1.2" />
         <PackageReference Include="AutoMapper" Version="10.0.0" />
