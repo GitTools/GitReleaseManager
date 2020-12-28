@@ -1,4 +1,4 @@
-#load nuget:https://pkgs.dev.azure.com/cake-contrib/Home/_packaging/addins/nuget/v3/index.json?package=Cake.Recipe&version=2.0.0-alpha0338&prerelease
+#load nuget:?package=Cake.Recipe&version=2.1.0
 
 Environment.SetVariableNames(githubTokenVariable: "GITTOOLS_GITHUB_TOKEN");
 
@@ -9,7 +9,6 @@ BuildParameters.SetParameters(context: Context,
                             repositoryOwner: "GitTools",
                             repositoryName: "GitReleaseManager",
                             appVeyorAccountName: "GitTools",
-                            shouldRunGitVersion: true,
                             shouldRunDotNetCorePack: true,
                             shouldRunIntegrationTests: true,
                             integrationTestScriptPath: "./tests/integration/tests.cake",
