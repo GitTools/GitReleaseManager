@@ -4,17 +4,17 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using GitReleaseManager.Core.Commands;
-using GitReleaseManager.Core.Options;
-using NSubstitute;
-using NUnit.Framework;
-using Serilog;
-using Shouldly;
-
 namespace GitReleaseManager.Core.Tests.Commands
 {
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+    using GitReleaseManager.Core.Commands;
+    using GitReleaseManager.Core.Options;
+    using NSubstitute;
+    using NUnit.Framework;
+    using Serilog;
+    using Shouldly;
+
     [TestFixture]
     public class AddAssetsCommandTests
     {

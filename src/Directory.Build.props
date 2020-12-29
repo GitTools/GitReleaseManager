@@ -1,6 +1,5 @@
 <Project>
     <PropertyGroup>
-        <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)\GitReleaseManager.ruleset</CodeAnalysisRuleSet>
         <DebugType>pdbonly</DebugType>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <NoWarn>CS1591</NoWarn>
@@ -23,6 +22,9 @@
         <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="Roslynator.Analyzers" Version="2.3.0">
+            <PrivateAssets>All</PrivateAssets>
         </PackageReference>
     </ItemGroup>
 </Project>

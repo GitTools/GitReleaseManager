@@ -4,24 +4,24 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using System;
-
 namespace GitReleaseManager.Core.Model
 {
+    using System;
+
     public class RateLimit
     {
         /// <summary>
-        /// The maximum number of requests that the consumer is permitted to make per hour.
+        /// Gets or sets the maximum number of requests that the consumer is permitted to make per hour.
         /// </summary>
         public int Limit { get; set; }
 
         /// <summary>
-        /// The number of requests remaining in the current rate limit window.
+        /// Gets or sets the number of requests remaining in the current rate limit window.
         /// </summary>
         public int Remaining { get; set; }
 
         /// <summary>
-        /// The date and time at which the current rate limit window resets.
+        /// Gets or sets the date and time at which the current rate limit window resets.
         /// </summary>
         public DateTimeOffset Reset { get; set; }
     }

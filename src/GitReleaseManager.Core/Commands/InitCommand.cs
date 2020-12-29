@@ -4,15 +4,15 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using System;
-using System.Threading.Tasks;
-using GitReleaseManager.Core.Configuration;
-using GitReleaseManager.Core.Helpers;
-using GitReleaseManager.Core.Options;
-using Serilog;
-
 namespace GitReleaseManager.Core.Commands
 {
+    using System;
+    using System.Threading.Tasks;
+    using GitReleaseManager.Core.Configuration;
+    using GitReleaseManager.Core.Helpers;
+    using GitReleaseManager.Core.Options;
+    using Serilog;
+
     public class InitCommand : ICommand<InitSubOptions>
     {
         private readonly IFileSystem _fileSystem;

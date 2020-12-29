@@ -4,13 +4,13 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using System.IO;
-using System.Threading.Tasks;
-using GitReleaseManager.Core.Options;
-using Serilog;
-
 namespace GitReleaseManager.Core.Commands
 {
+    using System.IO;
+    using System.Threading.Tasks;
+    using GitReleaseManager.Core.Options;
+    using Serilog;
+
     public class ExportCommand : ICommand<ExportSubOptions>
     {
         private readonly IVcsService _vcsService;

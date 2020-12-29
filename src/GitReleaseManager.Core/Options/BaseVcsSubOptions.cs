@@ -1,4 +1,4 @@
-// <copyright file="BaseVcsOptions.cs" company="GitTools Contributors">
+// <copyright file="BaseVcsSubOptions.cs" company="GitTools Contributors">
 //     Copyright (c) 2015 - Present - GitTools Contributors
 // </copyright>
 //-----------------------------------------------------------------------

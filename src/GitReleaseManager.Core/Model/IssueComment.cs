@@ -9,12 +9,12 @@ namespace GitReleaseManager.Core.Model
     public class IssueComment
     {
         /// <summary>
-        /// The issue comment Id.
+        /// Gets or sets the issue comment Id.
         /// </summary>
         public int Id { get; set; }
 
         /// <summary>
-        /// Details about the issue comment.
+        /// Gets or sets details about the issue comment.
         /// </summary>
         public string Body { get; set; }
     }

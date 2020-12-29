@@ -22,6 +22,7 @@
         <PackageReleaseNotes>https://github.com/GitTools/GitReleaseManager/releases</PackageReleaseNotes>
         <RepositoryType>git</RepositoryType>
         <RepositoryUrl>https://github.com/GitTools/GitReleaseManager.git</RepositoryUrl>
+        <NoWarn>$(NoWarn);CA1707;</NoWarn>
     </PropertyGroup>
     <ItemGroup>
         <Compile Include="../GitReleaseManager.Cli/**/*.cs" Exclude="../GitReleaseManager.Cli/obj/**/*.*;../GitReleaseManager.Cli/bin/**/*.*" />

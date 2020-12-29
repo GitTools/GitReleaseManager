@@ -4,32 +4,32 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Net;
-using System.Threading.Tasks;
-using AutoMapper;
-using GitReleaseManager.Core.Provider;
-using NSubstitute;
-using NSubstitute.ExceptionExtensions;
-using NUnit.Framework;
-using Octokit;
-using Shouldly;
-using ApiException = GitReleaseManager.Core.Exceptions.ApiException;
-using Issue = GitReleaseManager.Core.Model.Issue;
-using IssueComment = GitReleaseManager.Core.Model.IssueComment;
-using ItemState = GitReleaseManager.Core.Model.ItemState;
-using ItemStateFilter = GitReleaseManager.Core.Model.ItemStateFilter;
-using Label = GitReleaseManager.Core.Model.Label;
-using Milestone = GitReleaseManager.Core.Model.Milestone;
-using NotFoundException = GitReleaseManager.Core.Exceptions.NotFoundException;
-using RateLimit = GitReleaseManager.Core.Model.RateLimit;
-using Release = GitReleaseManager.Core.Model.Release;
-using ReleaseAssetUpload = GitReleaseManager.Core.Model.ReleaseAssetUpload;
-
 namespace GitReleaseManager.Core.Tests.Provider
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Net;
+    using System.Threading.Tasks;
+    using AutoMapper;
+    using GitReleaseManager.Core.Provider;
+    using NSubstitute;
+    using NSubstitute.ExceptionExtensions;
+    using NUnit.Framework;
+    using Octokit;
+    using Shouldly;
+    using ApiException = GitReleaseManager.Core.Exceptions.ApiException;
+    using Issue = GitReleaseManager.Core.Model.Issue;
+    using IssueComment = GitReleaseManager.Core.Model.IssueComment;
+    using ItemState = GitReleaseManager.Core.Model.ItemState;
+    using ItemStateFilter = GitReleaseManager.Core.Model.ItemStateFilter;
+    using Label = GitReleaseManager.Core.Model.Label;
+    using Milestone = GitReleaseManager.Core.Model.Milestone;
+    using NotFoundException = GitReleaseManager.Core.Exceptions.NotFoundException;
+    using RateLimit = GitReleaseManager.Core.Model.RateLimit;
+    using Release = GitReleaseManager.Core.Model.Release;
+    using ReleaseAssetUpload = GitReleaseManager.Core.Model.ReleaseAssetUpload;
+
     [TestFixture]
     public class GitHubProviderTests
     {
@@ -216,15 +216,15 @@ namespace GitReleaseManager.Core.Tests.Provider
             var typeArgumentNullException = typeof(ArgumentNullException);
 
             yield return new TestCaseData(null, null, null, "owner", typeArgumentNullException);
-            yield return new TestCaseData("", null, null, "owner", typeArgumentException);
+            yield return new TestCaseData(string.Empty, null, null, "owner", typeArgumentException);
             yield return new TestCaseData(" ", null, null, "owner", typeArgumentException);
 
             yield return new TestCaseData("owner", null, null, "repository", typeArgumentNullException);
-            yield return new TestCaseData("owner", "", null, "repository", typeArgumentException);
+            yield return new TestCaseData("owner", string.Empty, null, "repository", typeArgumentException);
             yield return new TestCaseData("owner", " ", null, "repository", typeArgumentException);
 
             yield return new TestCaseData("owner", "repository", null, "head", typeArgumentNullException);
-            yield return new TestCaseData("owner", "repository", "", "head", typeArgumentException);
+            yield return new TestCaseData("owner", "repository", string.Empty, "head", typeArgumentException);
             yield return new TestCaseData("owner", "repository", " ", "head", typeArgumentException);
         }
 
