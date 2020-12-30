@@ -183,7 +183,8 @@
 		</div>
 
 	<h1 id="Syntax">Syntax</h1>
-	<pre><code>[Sample(true)]
+	<pre><code>[Description("Enable generation of footer content in the release notes. Extract the recommended templates by running 'init --templates' and edit the footer.sbn file to provide the wanted footer content.")]
+[Sample(true)]
 [YamlMember(Alias = "include-footer")]
 public bool IncludeFooter { get; set; }</code></pre>
 
@@ -200,6 +201,10 @@ public bool IncludeFooter { get; set; }</code></pre>
 					</tr>
 				</thead>
 					<tbody><tr>
+						<td>Description</td>
+						<td></td>
+					</tr>
+					<tr>
 						<td><a href="/GitReleaseManager/api/GitReleaseManager.Core.Attributes/SampleAttribute">SampleAttribute</a></td>
 						<td></td>
 					</tr>

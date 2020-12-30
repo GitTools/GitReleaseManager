@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="shortcut icon" href="/GitReleaseManager/assets/img/favicon.ico" type="image/x-icon">
         <link rel="icon" href="/GitReleaseManager/assets/img/favicon.ico" type="image/x-icon">
-        <title>GitReleaseManager - API - ReleaseNotesBuilder.ReleaseNotesBuilder(IVcsProvider, ILogger, Config) Constructor</title>
+        <title>GitReleaseManager - API - ReleaseNotesBuilder.ReleaseNotesBuilder(IVcsProvider, ILogger, IFileSystem, Config, TemplateFactory) Constructor</title>
         <link href="/GitReleaseManager/assets/css/highlight.css" rel="stylesheet">
         <link href="/GitReleaseManager/assets/css/bootstrap/bootstrap.css" rel="stylesheet">
         <link href="/GitReleaseManager/assets/css/adminlte/AdminLTE.css" rel="stylesheet">
@@ -138,7 +138,7 @@
 		<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.ReleaseNotes/ReleaseNotesBuilder">ReleaseNotesBuilder</a></li>
 		<li role="separator" class="divider"></li>
 			<li class="header">Constructors</li>
-				<li class="selected"><a href="/GitReleaseManager/api/GitReleaseManager.Core.ReleaseNotes/ReleaseNotesBuilder/3DA0742E">ReleaseNotesBuilder<wbr>(IVcsProvider, <wbr>ILogger, <wbr>Config)<wbr></a></li>
+				<li class="selected"><a href="/GitReleaseManager/api/GitReleaseManager.Core.ReleaseNotes/ReleaseNotesBuilder/B55EEFC7">ReleaseNotesBuilder<wbr>(IVcsProvider, <wbr>ILogger, <wbr>IFileSystem, <wbr>Config, <wbr>TemplateFactory)<wbr></a></li>
 			<li class="header">Method Members</li>
 				<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.ReleaseNotes/ReleaseNotesBuilder/D4592B52">BuildReleaseNotes<wbr>(string, <wbr>string, <wbr>string, <wbr>string)<wbr></a></li>
 
@@ -156,7 +156,7 @@
 
 <section class="content-header">
 			<h3><a href="/GitReleaseManager/api/GitReleaseManager.Core.ReleaseNotes/ReleaseNotesBuilder">ReleaseNotesBuilder</a>.</h3>
-	<h1>ReleaseNotesBuilder<wbr>(IVcsProvider, <wbr>ILogger, <wbr>Config)<wbr> <small>Constructor</small></h1>
+	<h1>ReleaseNotesBuilder<wbr>(IVcsProvider, <wbr>ILogger, <wbr>IFileSystem, <wbr>Config, <wbr>TemplateFactory)<wbr> <small>Constructor</small></h1>
 </section>
 <section class="content">
 	
@@ -177,7 +177,7 @@
 		</div>
 
 	<h1 id="Syntax">Syntax</h1>
-	<pre><code>public ReleaseNotesBuilder(IVcsProvider vcsProvider, ILogger logger, Config configuration)</code></pre>
+	<pre><code>public ReleaseNotesBuilder(IVcsProvider vcsProvider, ILogger logger, IFileSystem fileSystem, Config configuration, TemplateFactory templateFactory)</code></pre>
 
 
 
@@ -205,8 +205,18 @@
 						<td></td>
 					</tr>
 					<tr>
+						<td>fileSystem</td>
+						<td><a href="/GitReleaseManager/api/GitReleaseManager.Core.Helpers/IFileSystem">IFileSystem</a></td>
+						<td></td>
+					</tr>
+					<tr>
 						<td>configuration</td>
 						<td><a href="/GitReleaseManager/api/GitReleaseManager.Core.Configuration/Config">Config</a></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td>templateFactory</td>
+						<td><a href="/GitReleaseManager/api/GitReleaseManager.Core.Templates/TemplateFactory">TemplateFactory</a></td>
 						<td></td>
 					</tr>
 			</tbody></table>

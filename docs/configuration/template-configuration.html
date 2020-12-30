@@ -1,0 +1,477 @@
+﻿<!DOCTYPE html><html><head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+        <meta name="description">
+        <meta name="keywords" content="static content generator,static site generator,static site,HTML,web development,.NET,C#,Razor,Markdown,YAML">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="shortcut icon" href="/GitReleaseManager/assets/img/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="/GitReleaseManager/assets/img/favicon.ico" type="image/x-icon">
+        <title>GitReleaseManager - Template Configuration</title>
+        <link href="/GitReleaseManager/assets/css/highlight.css" rel="stylesheet">
+        <link href="/GitReleaseManager/assets/css/bootstrap/bootstrap.css" rel="stylesheet">
+        <link href="/GitReleaseManager/assets/css/adminlte/AdminLTE.css" rel="stylesheet">
+        <link href="/GitReleaseManager/assets/css/theme/theme.css" rel="stylesheet">
+        <link href="//fonts.googleapis.com/css?family=Roboto+Mono:400,700|Roboto:400,400i,700,700i" rel="stylesheet">
+        <link href="/GitReleaseManager/assets/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+        <link href="/GitReleaseManager/assets/css/override.css" rel="stylesheet">
+        <script src="/GitReleaseManager/assets/js/jquery-2.2.3.min.js"></script>
+        <script src="/GitReleaseManager/assets/js/bootstrap.min.js"></script>        
+        <script src="/GitReleaseManager/assets/js/app.min.js"></script>         
+        <script src="/GitReleaseManager/assets/js/highlight.pack.js"></script>   
+        <script src="/GitReleaseManager/assets/js/jquery.slimscroll.min.js"></script>
+        <script src="/GitReleaseManager/assets/js/jquery.sticky-kit.min.js"></script>
+        <script src="/GitReleaseManager/assets/js/mermaid.min.js"></script>
+        <script src="/GitReleaseManager/assets/js/svg-pan-zoom.min.js"></script>
+        <!--[if lt IE 9]>
+        <script src="/GitReleaseManager/assets/js/html5shiv.min.js"></script>
+        <script src="/GitReleaseManager/assets/js/respond.min.js"></script>
+        <![endif]-->  
+
+        
+    </head>
+    <body class="hold-transition wyam layout-boxed  ">    
+        <div class="top-banner"></div>
+        <div class="wrapper with-container">
+            <!-- Header -->
+            <header class="main-header">   
+                     
+                <a href="/GitReleaseManager/" class="logo">
+                            <span>GitReleaseManager</span>
+                </a>   
+                         
+                <nav class="navbar navbar-static-top" role="navigation">
+                    <!-- Sidebar toggle button-->
+                        <a href="#" class="sidebar-toggle visible-xs-block" data-toggle="offcanvas" role="button">
+                            <span class="sr-only">Toggle side menu</span>
+                            <i class="fa fa-chevron-circle-right"></i>
+                        </a>
+                                        
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
+                            <span class="sr-only">Toggle side menu</span>
+                            <i class="fa fa-chevron-circle-down"></i>
+                        </button>
+                    </div>
+            
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
+                        <ul class="nav navbar-nav">                            
+                                    <li class="active"><a href="/GitReleaseManager/docs">Docs</a></li>
+        <li><a href="/GitReleaseManager/api">API</a></li>
+ 
+                        </ul>       
+                    </div>
+                    <!-- /.navbar-collapse -->
+                
+                    <!-- Navbar Right Menu -->
+                </nav>
+            </header>
+            
+            <!-- Left side column. contains the logo and sidebar -->
+            <aside class="main-sidebar ">
+                <section class="infobar" data-spy="affix" data-offset-top="60" data-offset-bottom="200"> 
+                    	
+        <div><p><a href="https://github.com/GitTools/GitReleaseManager/tree/develop/docs/input/docs/configuration/template-configuration.md"><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit Content</a></p></div>
+    <div id="infobar-headings"><h6>On This Page</h6><p><a href="#how-are-templates-resolved">How are templates resolved</a></p>
+<p><a href="#extracting-embedded-templates">Extracting embedded templates</a></p>
+<p><a href="#editing-the-templates">Editing the templates</a></p>
+<hr class="infobar-hidden">
+</div>
+
+                </section>
+                <section class="sidebar">    
+                                     
+                    
+
+                    <ul class="sidebar-menu">
+                        
+
+                <li><a href="/GitReleaseManager/docs/why-grm">Why would I want to use GitReleaseManager</a></li>
+                <li><a href="/GitReleaseManager/docs/advanced">Advanced Workflow</a></li>
+                <li class="treeview">
+                    <a href="/GitReleaseManager/docs/installation">Installation</a> <a href="#" class="expand"></a>
+                    <ul class="treeview-menu">
+                        
+                <li><a href="/GitReleaseManager/docs/installation/chocolatey">Via Chocolatey</a></li>
+                <li><a href="/GitReleaseManager/docs/installation/nuget">Via NuGet</a></li>
+                <li><a href="/GitReleaseManager/docs/installation/dotnettool">Via .Net Global Tool</a></li>
+
+                    </ul>
+                </li>
+                <li class="treeview active">
+                    <a href="/GitReleaseManager/docs/configuration">Configuration</a> <a href="#" class="expand"></a>
+                    <ul class="treeview-menu">
+                        
+                <li><a href="/GitReleaseManager/docs/configuration/default-configuration">Default Configuration</a></li>
+                <li class="selected"><a href="/GitReleaseManager/docs/configuration/template-configuration">Template Configuration</a></li>
+                <li><a href="/GitReleaseManager/docs/configuration/create-configuration">Example of Create Configuration</a></li>
+                <li><a href="/GitReleaseManager/docs/configuration/export-configuration">Example of Export Configuration</a></li>
+                <li><a href="/GitReleaseManager/docs/configuration/include-issues">Issues to include</a></li>
+                <li><a href="/GitReleaseManager/docs/configuration/exclude-issues">Issues to exclude</a></li>
+                <li><a href="/GitReleaseManager/docs/configuration/label-aliases">Label Aliases</a></li>
+
+                    </ul>
+                </li>
+                <li class="treeview">
+                    <a href="/GitReleaseManager/docs/commands">Commands</a> <a href="#" class="expand"></a>
+                    <ul class="treeview-menu">
+                        
+                <li><a href="/GitReleaseManager/docs/commands/create">Create</a></li>
+                <li><a href="/GitReleaseManager/docs/commands/discard">Discard</a></li>
+                <li><a href="/GitReleaseManager/docs/commands/add-assets">Add Assets</a></li>
+                <li><a href="/GitReleaseManager/docs/commands/close">Close</a></li>
+                <li><a href="/GitReleaseManager/docs/commands/open">Open</a></li>
+                <li><a href="/GitReleaseManager/docs/commands/publish">Publish</a></li>
+                <li><a href="/GitReleaseManager/docs/commands/export">Export</a></li>
+                <li><a href="/GitReleaseManager/docs/commands/init">Init</a></li>
+                <li><a href="/GitReleaseManager/docs/commands/show-config">Show Config</a></li>
+                <li><a href="/GitReleaseManager/docs/commands/label">Label</a></li>
+
+                    </ul>
+                </li>
+                <li class="treeview">
+                    <a href="/GitReleaseManager/docs/logging">Logging</a> <a href="#" class="expand"></a>
+                    <ul class="treeview-menu">
+                        
+                <li><a href="/GitReleaseManager/docs/logging/logging">Configure Logging</a></li>
+
+                    </ul>
+                </li>
+                <li class="treeview">
+                    <a href="/GitReleaseManager/docs/credits">Credits</a> <a href="#" class="expand"></a>
+                    <ul class="treeview-menu">
+                        
+                <li><a href="/GitReleaseManager/docs/credits/particular">Particular Software</a></li>
+                <li><a href="/GitReleaseManager/docs/credits/icon">Icon</a></li>
+
+                    </ul>
+                </li>
+
+                    </ul>
+                            
+                </section>                
+            </aside>
+            
+            <!-- Content Wrapper. Contains page content -->
+            <div class="content-wrapper">
+                
+
+
+
+		<section class="content-header">
+			<h1>Template Configuration</h1>
+		</section>
+	<section class="content">
+		<p>Welcome to the documentation on how to configure each available step
+of release notes generation by using Scriban templates.
+While you can still use the old way of configuring templates (footer only) in
+the yaml file, going forward it is recommended to use the new approach by
+extracting and editing the template files you wish to change instead.</p>
+<h2 id="how-are-templates-resolved">How are templates resolved</h2>
+<div class="alert alert-info"><p>If you will be passing in a custom absolute path to a template,
+then you can skip this section entirely (assuming you won't be importing
+any files either).</p>
+</div>
+<p>Before we can go into how you can edit your templates, we first need to talk
+about how are the templates resolved.
+First of all, there is a new property that can be used to specify the base
+directory of the templates directory located in the yaml configuration file.
+This configuration is called <code>templates-dir</code> and will be used for all relative
+paths (and for template names).</p>
+<p>The templates are resolved in the following order (<code>&lt;base&gt;</code> is the value
+specified in the <code>templates-dir</code> directory, and <code>&lt;name&gt;</code> is the name passed
+to GitReleaseManager. <em>defaults to <code>default</code></em>).</p>
+<p>We will be using the <a href="../commands/create">create</a> as an example in these paths.
+Additional commands are planned to be supported, but for now these templates
+can only be used when calling <code>GitReleaseManager create</code>.</p>
+<p><strong>For abbreviation, file extensions are omitted from the paths.
+File extension are expected to be either <code>.sbn</code> or <code>.scriban</code> unless otherwise
+specified when passing in the template name when calling <code>GitReleaseManager</code>.</strong></p>
+<h3 id="resolving-the-initial-index-file">Resolving the initial index file</h3>
+<ol>
+<li><code>&lt;base&gt;/&lt;name&gt;/create/index</code></li>
+<li><code>&lt;base&gt;/&lt;name&gt;/create/&lt;name&gt;</code></li>
+<li><code>&lt;base&gt;/create/&lt;name&gt;/index</code></li>
+<li><code>&lt;base&gt;/create/&lt;name&gt;/&lt;name&gt;</code></li>
+<li><code>&lt;base&gt;/&lt;name&gt;/index</code></li>
+<li><code>&lt;base&gt;/&lt;name&gt;/&lt;name&gt;</code></li>
+<li><code>&lt;base&gt;/create/index</code> (<em>will disable fallback to embedded resource if found</em>)</li>
+<li><code>&lt;base&gt;/create/&lt;name&gt;</code> (<em>will disable fallback to embedded resource if found</em>)</li>
+<li><code>&lt;base&gt;/&lt;name&gt;</code> (<em>will disable fallback to embedded resource if found</em>)</li>
+</ol>
+<p>In the above resolution, if there is no file that can be found, GitReleaseManager
+will try to fall back into the resources that are embedded within.</p>
+<h3 id="resolving-child-files">Resolving child files</h3>
+<p>Each index file (and subsequent children) can include additional files that
+needs to be imported (Please see the <a href="https://github.com/scriban/scriban/blob/master/doc/language.md#99-include-name-arg1argn">Scriban documentation</a> for this).</p>
+<p>When this is being used, some paths are removed and others may be added.
+In these paths the following substitution values are being used.</p>
+<ul>
+<li><code>&lt;base&gt;</code> == The base directory as specified by the <code>templates-dir</code> property.</li>
+<li><code>&lt;template&gt;</code> == The name of the template being used without a file extension
+(<em>may not be available in all scenarios</em>)</li>
+<li><code>&lt;relative-path&gt;</code> == The directory that the previous template file was
+located in.</li>
+<li><code>&lt;name&gt;</code> == The name of the file (excluding any directories)</li>
+<li><code>&lt;name-dir&gt;</code> == The parent directory of the file specified in the <code>&lt;name&gt;</code> argument.</li>
+</ul>
+<p>Resolution is done in two separate ways, depending on where the previous template
+file was located.</p>
+<p>Let us start with the simplest form, when the previous file was located on the
+file system.
+In this case, the resolution will only probe two distinct paths with the folliwng:</p>
+<ol>
+<li><code>&lt;relative-path&gt;/&lt;name&gt;</code></li>
+<li><code>&lt;relative-path&gt;/&lt;name-dir&gt;/&lt;name&gt;</code></li>
+<li>Fallback to embedded resource when possible.</li>
+</ol>
+<p>When the previous template file was an embedded resource file, then the resolution
+follows a similar procedure as the initial resolution of the main/index template.</p>
+<ol>
+<li><code>&lt;base&gt;/&lt;template&gt;/create/&lt;name&gt;</code></li>
+<li><code>&lt;base&gt;/create/&lt;template&gt;/&lt;name&gt;</code></li>
+<li><code>&lt;base&gt;/&lt;template&gt;/&lt;name&gt;</code></li>
+<li><code>&lt;base&gt;/create/&lt;name&gt;</code> (<em>will disable fallback to embedded resource if found</em>)</li>
+<li><code>&lt;base&gt;/&lt;name&gt;</code> (<em>will disable fallback to embedded resource if found</em>)</li>
+<li>Fallback to embedded resource when possible</li>
+</ol>
+<h2 id="extracting-embedded-templates">Extracting embedded templates</h2>
+<p>Now on to the more fun parts, we will start exploring how you can make changes to
+the template.
+But first, we need some templates to work on.
+While you could manually create and edit them by hand, the easier solution would
+be to extract the existing templates that GitReleaseManager already makes use of.</p>
+<p>This is very simple to do.
+First ensure that you have set the <code>template-dir</code> property in the yaml configuration
+file to the directory you want to use as the base of the templates (<em>this defaults
+to <code>.target</code></em>).
+Then just run the following command:</p>
+<pre><code class="language-console">GitReleaseManager init --templates
+</code></pre>
+<p>or</p>
+<pre><code class="language-console">dotnet gitreleasemanager init --templates
+</code></pre>
+<p>The above commands will extract all embedded templates that GitReleaseManager
+are aware of to you local file system (<em>you can delete the template files
+you are not interested in</em>).</p>
+<h2 id="editing-the-templates">Editing the templates</h2>
+<p>The following json object is made available on the global state in each template.
+Some template files may have additional objects available (<em>assuming parent template
+have not been modified</em>).</p>
+<pre><code class="language-json">{
+  "commits": {
+    "count": 5, // The amount of commits since the last tag
+    "html_url": "&lt;compare_commits&gt;" // The URL to show/compare commits since last tag
+  },
+  "issue_labels": [
+    // This list contains all of the labels associated with a closed issue/pr
+    // for the current release
+    "Bug",
+    "Feature",
+  ],
+  "issues": {
+    "count": 2, // The amount of issues/prs being closed since last tag
+    "items": {
+      // Key is the substitution of the issue label found for these issues,
+      "&lt;key&gt;": [
+        {
+          "title": "First Issues", // The title of the issue
+          "number": 54, // The issue number as shown on the VCS Provider
+          "html_url": "&lt;issue_link&gt;", // The link to the issue
+          "labels": [ // All of the labels associated with this issue
+            {
+              "name": "Bug", // The name of the label
+              "color": "#456789", // The color of the label
+              "description": "Important, must fix" // The description of the label
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "milestone": {
+    // The previous milestone, if one was found; otherwise it will be null
+    "previous": {
+      "title": "Version 5.2.3", // The title of the previous milestone
+      "description": "Some description", // The description of the previous milestone
+      "number": 3243, // The number/identifier of the previous milestone
+      "html_url": "&lt;url&gt;", // The url to issues associated with the previous milestone
+      "url": "&lt;url&gt;",
+      "version": {
+        "major": 5, // The major version of the previous milestone
+        "minor": 2, // The minor version of the previous milestone
+        "build": 3, // The patch/build version of the previous milestone
+        "revision": 0 // The revision of the previous milestone (typically 0)
+      }
+    },
+    // The current milestone for this release
+    "target": {
+      "title": "Version 5.3.0", // The title of the current/next milestone
+      "description": "I am up", // The description of the current/next milestone
+      "number": 3265, // The number/identifier of the current/next milestone
+      "html_url": "&lt;url&gt;", // The url to issues associated with the current/next milestone
+      "url": "&lt;url&gt;",
+      "version": {
+        "major": 5, // The major version of the current/next milestone
+        "minor": 3, // The minor version of the current/next milestone
+        "build": 0, // The patch/build version of the current/next milestone
+        "revision": 0 // The revision of the current/next milestone (typically 0)
+      }
+    }
+  }
+}
+</code></pre>
+<h3 id="using-a-single-file">Using a single file</h3>
+<p>While GitReleaseManager makes use of multiple template files to achieve what
+a single template file could do, there is nothing that stops you to make the
+necessary changes to make this happen.
+Just add a single file in one of the mentioned
+<a href="#resolving-the-initial-index-file">index resolution paths</a> above,
+and delete all of the other files (remember to not make use of the <code>include</code>
+function in the template as well).</p>
+<h3 id="editing-the-index-template">Editing the index template</h3>
+<p>In most cases, there is no need to edit the index file, other than if you want to
+include/remove other templates or merge all templates into one.
+The name of the embedded/extracted index file is called <code>index.sbn</code> as its only
+purpose is to bind together all the children together.</p>
+<h3 id="editing-the-commitsissues-intro">Editing the commits/issues intro</h3>
+<p>The commits/issues intro template (called <code>release-info.sbn</code>) purpose is to
+give a small intro on how many commits was included in the release, and
+how many issues/prs was closed.</p>
+<p>While the file can look a bit intimitading at first, it is actually quite simple.
+The default template checks if there are any issues or commits and makes decisions
+based on the if there were any.
+It additionally pluralizes (simplified) when the issue/commit count is
+more than 1.</p>
+<p>This file can be used if you wish to change how the text should be displayed.</p>
+<h3 id="editing-the-milestone">Editing the milestone</h3>
+<p>By default, this template is very simple (called <code>milestone.sbn</code>).
+It outputs only the description of the current/next milestone (or empty when
+there is no description).</p>
+<p>This file can be used if you want to provide additional details regarding the
+milestone.</p>
+<h3 id="editing-the-issues">Editing the issues</h3>
+<p>Now we are getting into the meat of the templates.
+The generation of the issues (actual Release Notes) are made possible in three
+separate files.
+Each with their own purpose.</p>
+<ul>
+<li>We have the template <code>issues.sbn</code> which only have the purpose of iterating through
+each issue label for grouping purposes, then calling a child template to do the
+actual rendering.</li>
+<li>Next up is the <code>issue-details.sbn</code> template, which have the purpose of rendering
+the issue label (or category if you want), then calling another child template
+for rendering the actual issues (passing in a single issue to the child at a time).
+Additionally thanks to the parent, this template also have another global variable
+added to the global namespace called <code>issue_label</code>. The variable is the current
+label/category for the issues that should be used.</li>
+<li>Finally we have the <code>issue-note.sbn</code> template which renders the actual line of
+the issue, including its issue number, issue url and issue title.
+This issue template have even one more global variable called <code>issue</code> being
+made available thanks to its parent.
+This issue variable is a single item located in the <code>issues.items</code> json object.</li>
+</ul>
+<h3 id="editing-the-footer">Editing the footer</h3>
+<p>Finally for the last embedded template available, we have the footer template.
+This template is responsible for generating the footer of the Release Notes.
+By default it makes use of the old properties specified in the yaml configuration
+file, but going forward it is recommended to edit this file manually instead of
+using the yaml configuration properties.
+This file is called simply <code>footer.sbn</code> and is located in the <code>create</code> directory.</p>
+
+	</section>
+                
+            </div>           
+            
+            <!-- Footer -->
+            <footer class="main-footer">
+            </footer>
+            
+        </div>
+        <div class="wrapper bottom-wrapper">
+            <footer class="bottom-footer">
+                Generated by <a href="https://wyam.io">Wyam</a>
+            </footer>
+        </div>
+        <a href="javascript:" id="return-to-top"><i class="fa fa-chevron-up"></i></a>
+        <div class="github-button">
+    <a href="https://github.com/GitTools/GitReleaseManager"><i class="fa fa-github"></i> GitHub</a>
+</div>
+<script>
+    ((window.gitter = {}).chat = {}).options = {
+        room: 'GitTools/GitReleaseManager'
+    };
+</script>
+<script src="https://sidecar.gitter.im/dist/sidecar.v1.js" async="" defer=""></script>
+
+        <script>           
+            // Close the sidebar if we select an anchor link
+            $(".main-sidebar a[href^='#']:not('.expand')").click(function(){
+                $(document.body).removeClass('sidebar-open');
+            });
+            
+            $(document).ready(function() {
+                mermaid.initialize(
+                {
+                    flowchart:
+                    {
+                        useMaxWidth: false
+                    },
+					startOnLoad: false,
+					cloneCssStyles: false
+                });     
+                mermaid.init(undefined, ".mermaid");
+
+                // Remove the max-width setting that Mermaid sets
+                var mermaidSvg = $('.mermaid svg');
+                mermaidSvg.addClass('img-responsive');
+                mermaidSvg.css('max-width', '');
+
+                // Make it scrollable
+				var target = document.querySelector(".mermaid svg");
+				if(target !== null)
+				{
+					var panZoom = window.panZoom = svgPanZoom(target, {
+						zoomEnabled: true,
+						controlIconsEnabled: true,
+						fit: true,
+						center: true,
+                        maxZoom: 20,
+                        zoomScaleSensitivity: 0.6
+					});			                          
+
+                    // Do the reset once right away to fit the diagram
+                    panZoom.resize();
+                    panZoom.fit();
+                    panZoom.center();
+                    
+                    $(window).resize(function(){
+                        panZoom.resize();
+                        panZoom.fit();
+                        panZoom.center();
+                    });
+				}
+                
+                $('pre code').each(function(i, block) {
+                    hljs.highlightBlock(block);
+                });  
+            });
+
+            hljs.initHighlightingOnLoad();
+
+            // Back to top
+            $(window).scroll(function() {
+                if ($(this).scrollTop() >= 200) {        // If page is scrolled more than 50px
+                    $('#return-to-top').fadeIn(1000);    // Fade in the arrow
+                } else {
+                    $('#return-to-top').fadeOut(1000);   // Else fade out the arrow
+                }
+            });
+            $('#return-to-top').click(function() {      // When arrow is clicked
+                $('body,html').animate({
+                    scrollTop : 0                       // Scroll to top of body
+                }, 500);
+            });
+        </script>
+    
+</body></html>

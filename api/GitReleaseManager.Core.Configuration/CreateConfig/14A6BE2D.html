@@ -183,8 +183,7 @@
 		</div>
 
 	<h1 id="Syntax">Syntax</h1>
-	<pre><code>[Sample("{milestone}")]
-[YamlMember(Alias = "milestone-replace-text")]
+	<pre><code>[YamlMember(Alias = "milestone-replace-text", DefaultValuesHandling = DefaultValuesHandling.OmitNull)]
 public string MilestoneReplaceText { get; set; }</code></pre>
 
 
@@ -200,10 +199,6 @@ public string MilestoneReplaceText { get; set; }</code></pre>
 					</tr>
 				</thead>
 					<tbody><tr>
-						<td><a href="/GitReleaseManager/api/GitReleaseManager.Core.Attributes/SampleAttribute">SampleAttribute</a></td>
-						<td></td>
-					</tr>
-					<tr>
 						<td>YamlMember</td>
 						<td></td>
 					</tr>

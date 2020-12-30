@@ -108,6 +108,7 @@
                     <ul class="treeview-menu">
                         
                 <li class="selected"><a href="/GitReleaseManager/docs/configuration/default-configuration">Default Configuration</a></li>
+                <li><a href="/GitReleaseManager/docs/configuration/template-configuration">Template Configuration</a></li>
                 <li><a href="/GitReleaseManager/docs/configuration/create-configuration">Example of Create Configuration</a></li>
                 <li><a href="/GitReleaseManager/docs/configuration/export-configuration">Example of Export Configuration</a></li>
                 <li><a href="/GitReleaseManager/docs/configuration/include-issues">Issues to include</a></li>
@@ -171,11 +172,10 @@ file, which is typically stored at the root of your project.</p>
 <p>GitReleaseManager ships with the following default set of configuration (i.e.
 when no yaml file is placed in the root directory):</p>
 <pre><code class="language-yaml">create:
+    # Please see
+    # https://gittools.github.io/GitReleaseManager/docs/configuration/template-configuration#editing-the-templates
+    # configuration for configuring footers
     include-footer: false
-    footer-heading: ''
-    footer-content: ''
-    footer-includes-milestone: false
-    milestone-replace-text: ''
     include-sha-section: false
     sha-section-heading: "SHA256 Hashes of the release artifacts"
     sha-section-line-format: "- `{1}\t{0}`"

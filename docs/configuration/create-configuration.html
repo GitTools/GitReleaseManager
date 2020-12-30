@@ -101,6 +101,7 @@
                     <ul class="treeview-menu">
                         
                 <li><a href="/GitReleaseManager/docs/configuration/default-configuration">Default Configuration</a></li>
+                <li><a href="/GitReleaseManager/docs/configuration/template-configuration">Template Configuration</a></li>
                 <li class="selected"><a href="/GitReleaseManager/docs/configuration/create-configuration">Example of Create Configuration</a></li>
                 <li><a href="/GitReleaseManager/docs/configuration/export-configuration">Example of Export Configuration</a></li>
                 <li><a href="/GitReleaseManager/docs/configuration/include-issues">Issues to include</a></li>
@@ -168,6 +169,11 @@ provides additional information, for example, where an installation of the
 release can be located.</p>
 <p>Take for example the GitReleaseManager configuration file which is used by the
 <a href="https://github.com/chocolatey/ChocolateyGUI">Chocolatey GUI</a> project:</p>
+<div class="alert alert-warning"><p>Configuring the footer is no longer recommended. Going forward the recommendation
+is to configure the footer using separate template files.
+Please see <a href="template-configuration#editing-the-templates">Template Configuration</a>
+for more information.</p>
+</div>
 <pre><code class="language-yaml">create:
     include-footer: true
     footer-heading: Where to get it
@@ -178,7 +184,7 @@ release can be located.</p>
 <p>This would result in the following
 <a href="https://github.com/chocolatey/ChocolateyGUI/releases/tag/0.13.1">release notes</a>
 being generated:</p>
-<p><img src="../images/example-release-notes.png" class="img-fluid" alt="Example Release Notes" /></p>
+<p><img src="../images/example-release-notes.png" class="img-responsive img-fluid" alt="Example Release Notes" /></p>
 <div class="alert alert-info"><p>The generated URL for the link to Chocolatey.org includes the milestone number.
 The complete URL is <a href="https://chocolatey.org/packages/chocolateyGUI/0.13.1">https://chocolatey.org/packages/chocolateyGUI/0.13.1</a>. This
 was achieved by using a regular expression replacement of the
