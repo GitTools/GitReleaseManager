@@ -54,7 +54,7 @@ will try to fall back into the resources that are embedded within.
 ### Resolving child files
 
 Each index file (and subsequent children) can include additional files that
-needs to be imported (Please see the [Scriban documentation]() for this).
+needs to be imported (Please see the [Scriban documentation](https://github.com/scriban/scriban/blob/master/doc/language.md#99-include-name-arg1argn) for this).
 
 When this is being used, some paths are removed and others may be added.
 In these paths the following substitution values are being used.
