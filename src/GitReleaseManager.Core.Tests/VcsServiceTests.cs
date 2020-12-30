@@ -16,7 +16,7 @@ namespace GitReleaseManager.Core.Tests
     using GitReleaseManager.Core.Model;
     using GitReleaseManager.Core.Provider;
     using GitReleaseManager.Core.ReleaseNotes;
-using GitReleaseManager.Core.Templates;
+    using GitReleaseManager.Core.Templates;
     using NSubstitute;
     using NUnit.Framework;
     using Serilog;
