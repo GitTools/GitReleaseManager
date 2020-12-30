@@ -13,30 +13,37 @@ namespace GitReleaseManager.Core.ReleaseNotes
     using System.Threading.Tasks;
     using GitReleaseManager.Core.Configuration;
     using GitReleaseManager.Core.Extensions;
+    using GitReleaseManager.Core.Helpers;
     using GitReleaseManager.Core.Model;
     using GitReleaseManager.Core.Provider;
+    using GitReleaseManager.Core.Templates;
     using Scriban;
+    using Scriban.Runtime;
     using Serilog;
 
     public class ReleaseNotesBuilder : IReleaseNotesBuilder
     {
         private readonly IVcsProvider _vcsProvider;
         private readonly ILogger _logger;
+        private readonly IFileSystem _fileSystem;
         private readonly Config _configuration;
+        private readonly TemplateFactory _templateFactory;
         private string _user;
         private string _repository;
         private string _milestoneTitle;
         private IEnumerable<Milestone> _milestones;
         private Milestone _targetMilestone;
 
-        public ReleaseNotesBuilder(IVcsProvider vcsProvider, ILogger logger, Config configuration)
+        public ReleaseNotesBuilder(IVcsProvider vcsProvider, ILogger logger, IFileSystem fileSystem, Config configuration, TemplateFactory templateFactory)
         {
             _vcsProvider = vcsProvider;
             _logger = logger;
+            _fileSystem = fileSystem;
             _configuration = configuration;
+            _templateFactory = templateFactory;
         }
 
-        public async Task<string> BuildReleaseNotes(string user, string repository, string milestoneTitle, string templateText)
+        public async Task<string> BuildReleaseNotes(string user, string repository, string milestoneTitle, string template)
         {
             _user = user;
             _repository = repository;
@@ -66,41 +73,30 @@ namespace GitReleaseManager.Core.ReleaseNotes
             }
 
             var commitsLink = _vcsProvider.GetCommitsUrl(_user, _repository, _targetMilestone?.Title, previousMilestone?.Title);
-            var commitsText = string.Format(numberOfCommits == 1 ? "{0} commit" : "{0} commits", numberOfCommits);
-            var issuesText = string.Format(issues.Count == 1 ? "{0} issue" : "{0} issues", issues.Count);
-
-            var footerContent = _configuration.Create.FooterContent;
-
-            if (_configuration.Create.FooterIncludesMilestone &&
-                !string.IsNullOrEmpty(_configuration.Create.MilestoneReplaceText))
-            {
-                var replaceValues = new Dictionary<string, object>
-                {
-                    { _configuration.Create.MilestoneReplaceText.Trim('{', '}'), _milestoneTitle },
-                };
-                footerContent = footerContent.ReplaceTemplate(replaceValues);
-            }
 
             var issuesDict = GetIssuesDict(issues);
 
-            var templateContext = new
+            var templateModel = new
             {
-                IssuesCount = issues.Count,
-                CommitsCount = numberOfCommits,
-                CommitsLink = commitsLink,
-                CommitsText = commitsText,
-                IssuesText = issuesText,
-                MilestoneDescription = _targetMilestone.Description,
-                MilestoneHtmlUrl = _targetMilestone.HtmlUrl,
+                Issues = new
+                {
+                    issues.Count,
+                    Items = issuesDict,
+                },
+                Commits = new
+                {
+                    Count = numberOfCommits,
+                    HtmlUrl = commitsLink,
+                },
+                Milestone = new
+                {
+                    Target = _targetMilestone,
+                    Previous = previousMilestone,
+                },
                 IssueLabels = issuesDict.Keys.ToList(),
-                Issues = issuesDict,
-                IncludeFooter = _configuration.Create.IncludeFooter,
-                FooterHeading = _configuration.Create.FooterHeading,
-                FooterContent = footerContent,
             };
 
-            var template = Template.Parse(templateText);
-            var releaseNotes = template.Render(templateContext);
+            var releaseNotes = await _templateFactory.RenderTemplateAsync(template, templateModel).ConfigureAwait(false);
 
             _logger.Verbose("Finished building release notes");
 

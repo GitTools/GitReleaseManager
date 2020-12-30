@@ -12,6 +12,8 @@ controls the configurable options of GitReleaseManager
     executed. Defaults to current directory.
 - `-l, --logFilePath`: Path to where log file should be created. Defaults to
     logging to console.
+- `--templates`: Extract all embedded resource templates to disk. Defaults to false.
+  (_Will not overwrite existing files_).
 
 ## **Examples**
 

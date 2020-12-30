@@ -85,9 +85,31 @@ namespace GitReleaseManager.Core.Configuration
             foreach (var property in configType.GetProperties(BindingFlags.Public | BindingFlags.Instance))
             {
                 var sampleAttribute = property.GetCustomAttribute<SampleAttribute>();
+                var yamlMemberAttribute = property.GetCustomAttribute<YamlMemberAttribute>();
                 var propertyType = property.PropertyType;
 
-                if (propertyType.IsClass && propertyType != typeof(string))
+                if (yamlMemberAttribute != null && sampleAttribute is null)
+                {
+                    if (yamlMemberAttribute.DefaultValuesHandling == DefaultValuesHandling.OmitDefaults)
+                    {
+                        if (propertyType.IsValueType)
+                        {
+                            property.SetValue(config, Activator.CreateInstance(propertyType));
+                        }
+                        else
+                        {
+                            property.SetValue(config, null);
+                        }
+                        continue;
+                    }
+                    else if (yamlMemberAttribute.DefaultValuesHandling == DefaultValuesHandling.OmitNull)
+                    {
+                        property.SetValue(config, null);
+                        continue;
+                    }
+                }
+
+                if (propertyType.IsClass && propertyType != typeof(string) && propertyType != typeof(DirectoryInfo))
                 {
                     var subConfig = property.GetValue(config);
                     SetConfigurationSamples(subConfig, propertyType, writer);

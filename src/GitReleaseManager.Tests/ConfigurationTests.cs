@@ -106,7 +106,7 @@ namespace GitReleaseManager.Tests
             var text = builder.ToString();
 
             // Then
-            Assert.That(text, Contains.Substring("#  footer-heading: Where to get it"));
+            Assert.That(text, Contains.Substring("#  sha-section-line-format: '- `{1}\t{0}`'"));
             Assert.That(text, Contains.Substring("#default-branch: master"));
         }
 
@@ -125,7 +125,12 @@ namespace GitReleaseManager.Tests
             var text = builder.ToString();
 
             // Then
-            var expectedText = string.Format("#  footer-content: >-{0}#    You can download this release from{0}#{0}#    [chocolatey](https://chocolatey.org/packages/chocolateyGUI/{{milestone}})", Environment.NewLine);
+            var expectedText = string.Format(
+                "#  issue-comment: |-{0}" +
+                "#    :tada: This issue has been resolved in version {{milestone}} :tada:{0}" +
+                "#{0}" +
+                "#    The release is available on:{0}",
+                Environment.NewLine);
             Assert.That(text, Contains.Substring(expectedText));
         }
     }

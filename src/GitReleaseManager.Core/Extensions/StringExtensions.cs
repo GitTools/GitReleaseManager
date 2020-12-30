@@ -15,6 +15,16 @@ namespace GitReleaseManager.Core.Extensions
 
     internal static class StringExtensions
     {
+        public static string ReplaceMilestoneTitle(this string source, string milestoneKey, string milestoneTitle)
+        {
+            var dict = new Dictionary<string, object>
+            {
+                { milestoneKey.Trim('{','}'), milestoneTitle },
+            };
+
+            return source.ReplaceTemplate(dict);
+        }
+
         public static string ReplaceTemplate(this string source, object values)
         {
             IDictionary<string, object> pairs;

@@ -19,6 +19,7 @@ namespace GitReleaseManager.Cli
     using GitReleaseManager.Core.Options;
     using GitReleaseManager.Core.Provider;
     using GitReleaseManager.Core.ReleaseNotes;
+    using GitReleaseManager.Core.Templates;
     using Microsoft.Extensions.DependencyInjection;
     using Octokit;
     using Serilog;
@@ -78,7 +79,7 @@ namespace GitReleaseManager.Cli
 
         private static void RegisterServices(BaseSubOptions options)
         {
-            var fileSystem = new FileSystem();
+            var fileSystem = new FileSystem(options);
             var logger = Log.ForContext<VcsService>();
             var mapper = AutoMapperConfiguration.Configure();
             var configuration = ConfigurationProvider.Provide(options.TargetDirectory ?? Environment.CurrentDirectory, fileSystem);
@@ -114,6 +115,12 @@ namespace GitReleaseManager.Cli
                 var gitHubClient = new GitHubClient(new ProductHeaderValue("GitReleaseManager")) { Credentials = new Credentials(vcsOptions.Token) };
                 serviceCollection = serviceCollection
                     .AddSingleton<IGitHubClient>(gitHubClient);
+            }
+
+            if (options is CreateSubOptions)
+            {
+                serviceCollection = serviceCollection
+                    .AddTransient((services) => new TemplateFactory(services.GetRequiredService<IFileSystem>(), services.GetRequiredService<Config>(), TemplateKind.Create));
             }
 
             _serviceProvider = serviceCollection.BuildServiceProvider();

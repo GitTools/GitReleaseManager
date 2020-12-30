@@ -327,3 +327,4 @@ config.wyam.packages.xml
 # Integration Tests
 tests/integration/tools
 tests/integration/output
+*.g.cs

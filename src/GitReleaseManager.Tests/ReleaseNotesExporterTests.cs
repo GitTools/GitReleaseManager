@@ -20,7 +20,7 @@ namespace GitReleaseManager.Tests
     [TestFixture]
     public class ReleaseNotesExporterTests
     {
-        private readonly FileSystem _fileSystem = new FileSystem();
+        private readonly IFileSystem _fileSystem = Substitute.For<IFileSystem>();
         private readonly string _currentDirectory = Environment.CurrentDirectory;
 
         [Test]
