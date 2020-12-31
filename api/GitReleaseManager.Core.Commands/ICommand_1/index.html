@@ -183,16 +183,16 @@
 								<dt>Implementing Types</dt>
 								<dd>
 									<ul class="list-unstyled">
-											<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.Commands/ExportCommand">ExportCommand</a></li>								
-											<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.Commands/InitCommand">InitCommand</a></li>								
-											<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.Commands/DiscardCommand">DiscardCommand</a></li>								
 											<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.Commands/LabelCommand">LabelCommand</a></li>								
-											<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.Commands/CloseCommand">CloseCommand</a></li>								
 											<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.Commands/OpenCommand">OpenCommand</a></li>								
-											<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.Commands/CreateCommand">CreateCommand</a></li>								
-											<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.Commands/AddAssetsCommand">AddAssetsCommand</a></li>								
-											<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.Commands/ShowConfigCommand">ShowConfigCommand</a></li>								
 											<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.Commands/PublishCommand">PublishCommand</a></li>								
+											<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.Commands/AddAssetsCommand">AddAssetsCommand</a></li>								
+											<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.Commands/CloseCommand">CloseCommand</a></li>								
+											<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.Commands/DiscardCommand">DiscardCommand</a></li>								
+											<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.Commands/ShowConfigCommand">ShowConfigCommand</a></li>								
+											<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.Commands/ExportCommand">ExportCommand</a></li>								
+											<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.Commands/CreateCommand">CreateCommand</a></li>								
+											<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.Commands/InitCommand">InitCommand</a></li>								
 									</ul>
 								</dd>				
 						</dl>
@@ -202,26 +202,26 @@
 							graph BT
 	Type["ICommand&lt;TOptions&gt;"]
 class Type type-node
-	Implementing0["ExportCommand"]-.-&gt;Type
-	click Implementing0 "/GitReleaseManager/api/GitReleaseManager.Core.Commands/ExportCommand"
-	Implementing1["InitCommand"]-.-&gt;Type
-	click Implementing1 "/GitReleaseManager/api/GitReleaseManager.Core.Commands/InitCommand"
-	Implementing2["DiscardCommand"]-.-&gt;Type
-	click Implementing2 "/GitReleaseManager/api/GitReleaseManager.Core.Commands/DiscardCommand"
-	Implementing3["LabelCommand"]-.-&gt;Type
-	click Implementing3 "/GitReleaseManager/api/GitReleaseManager.Core.Commands/LabelCommand"
+	Implementing0["LabelCommand"]-.-&gt;Type
+	click Implementing0 "/GitReleaseManager/api/GitReleaseManager.Core.Commands/LabelCommand"
+	Implementing1["OpenCommand"]-.-&gt;Type
+	click Implementing1 "/GitReleaseManager/api/GitReleaseManager.Core.Commands/OpenCommand"
+	Implementing2["PublishCommand"]-.-&gt;Type
+	click Implementing2 "/GitReleaseManager/api/GitReleaseManager.Core.Commands/PublishCommand"
+	Implementing3["AddAssetsCommand"]-.-&gt;Type
+	click Implementing3 "/GitReleaseManager/api/GitReleaseManager.Core.Commands/AddAssetsCommand"
 	Implementing4["CloseCommand"]-.-&gt;Type
 	click Implementing4 "/GitReleaseManager/api/GitReleaseManager.Core.Commands/CloseCommand"
-	Implementing5["OpenCommand"]-.-&gt;Type
-	click Implementing5 "/GitReleaseManager/api/GitReleaseManager.Core.Commands/OpenCommand"
-	Implementing6["CreateCommand"]-.-&gt;Type
-	click Implementing6 "/GitReleaseManager/api/GitReleaseManager.Core.Commands/CreateCommand"
-	Implementing7["AddAssetsCommand"]-.-&gt;Type
-	click Implementing7 "/GitReleaseManager/api/GitReleaseManager.Core.Commands/AddAssetsCommand"
-	Implementing8["ShowConfigCommand"]-.-&gt;Type
-	click Implementing8 "/GitReleaseManager/api/GitReleaseManager.Core.Commands/ShowConfigCommand"
-	Implementing9["PublishCommand"]-.-&gt;Type
-	click Implementing9 "/GitReleaseManager/api/GitReleaseManager.Core.Commands/PublishCommand"
+	Implementing5["DiscardCommand"]-.-&gt;Type
+	click Implementing5 "/GitReleaseManager/api/GitReleaseManager.Core.Commands/DiscardCommand"
+	Implementing6["ShowConfigCommand"]-.-&gt;Type
+	click Implementing6 "/GitReleaseManager/api/GitReleaseManager.Core.Commands/ShowConfigCommand"
+	Implementing7["ExportCommand"]-.-&gt;Type
+	click Implementing7 "/GitReleaseManager/api/GitReleaseManager.Core.Commands/ExportCommand"
+	Implementing8["CreateCommand"]-.-&gt;Type
+	click Implementing8 "/GitReleaseManager/api/GitReleaseManager.Core.Commands/CreateCommand"
+	Implementing9["InitCommand"]-.-&gt;Type
+	click Implementing9 "/GitReleaseManager/api/GitReleaseManager.Core.Commands/InitCommand"
 
 						</div>
 					</div>
