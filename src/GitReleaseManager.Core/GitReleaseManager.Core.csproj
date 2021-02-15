@@ -23,7 +23,7 @@
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
           <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="Octokit" Version="0.48.0" />
+        <PackageReference Include="Octokit" Version="0.49.0" />
         <PackageReference Include="Scriban" Version="3.3.2" />
         <PackageReference Include="seriloganalyzer" Version="0.15.0" />
         <PackageReference Include="YamlDotNet" Version="9.1.0" />

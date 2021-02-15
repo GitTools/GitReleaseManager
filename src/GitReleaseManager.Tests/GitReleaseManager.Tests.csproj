@@ -26,6 +26,6 @@
         <PackageReference Include="NSubstitute" Version="4.2.2" />
         <PackageReference Include="NUnit" Version="3.12.0" />
         <PackageReference Include="NUnit3TestAdapter" Version="3.17.0" />
-        <PackageReference Include="Octokit" Version="0.48.0" />
+        <PackageReference Include="Octokit" Version="0.49.0" />
     </ItemGroup>
 </Project>
