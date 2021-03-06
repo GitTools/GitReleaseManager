@@ -1,9 +1,3 @@
-//-----------------------------------------------------------------------
-// <copyright file="Helper.cs" company="GitTools Contributors">
-//     Copyright (c) 2015 - Present - GitTools Contributors
-// </copyright>
-//-----------------------------------------------------------------------
-
 namespace GitReleaseManager.Tests
 {
     using System;

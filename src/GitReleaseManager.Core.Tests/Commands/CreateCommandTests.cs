@@ -1,9 +1,3 @@
-// -----------------------------------------------------------------------
-// <copyright file="CreateCommandTests.cs" company="GitTools Contributors">
-// Copyright (c) 2015 - Present - GitTools Contributors
-// </copyright>
-// -----------------------------------------------------------------------
-
 namespace GitReleaseManager.Core.Tests.Commands
 {
     using System.Collections.Generic;

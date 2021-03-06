@@ -1,9 +1,3 @@
-// -----------------------------------------------------------------------
-// <copyright file="GitHubProfile.cs" company="GitTools Contributors">
-// Copyright (c) 2015 - Present - GitTools Contributors
-// </copyright>
-// -----------------------------------------------------------------------
-
 namespace GitReleaseManager.Core.MappingProfiles
 {
     using AutoMapper;

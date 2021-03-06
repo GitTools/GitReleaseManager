@@ -1,9 +1,3 @@
-//-----------------------------------------------------------------------
-// <copyright file="ExportConfig.cs" company="GitTools Contributors">
-//     Copyright (c) 2015 - Present - GitTools Contributors
-// </copyright>
-//-----------------------------------------------------------------------
-
 namespace GitReleaseManager.Core.Configuration
 {
     using GitReleaseManager.Core.Attributes;

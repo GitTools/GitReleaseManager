@@ -1,9 +1,3 @@
-// -----------------------------------------------------------------------
-// <copyright file="StringExtensions.cs" company="GitTools Contributors">
-// Copyright (c) 2015 - Present - GitTools Contributors
-// </copyright>
-// -----------------------------------------------------------------------
-
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("GitReleaseManager.Tests")]
 
 namespace GitReleaseManager.Core.Extensions
