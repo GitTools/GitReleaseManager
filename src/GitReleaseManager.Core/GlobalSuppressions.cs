@@ -1,9 +1,3 @@
-//-----------------------------------------------------------------------
-// <copyright file="GlobalSuppressions.cs" company="GitTools Contributors">
-//     Copyright (c) 2015 - Present - GitTools Contributors
-// </copyright>
-//-----------------------------------------------------------------------
-
 // This file is used by Code Analysis to maintain SuppressMessage
 // attributes that are applied to this project.
 // Project-level suppressions either have no target or are given

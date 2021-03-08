@@ -1,9 +1,3 @@
-// -----------------------------------------------------------------------
-// <copyright file="GitHubProviderIntegrationTests.cs" company="GitTools Contributors">
-// Copyright (c) 2015 - Present - GitTools Contributors
-// </copyright>
-// -----------------------------------------------------------------------
-
 namespace GitReleaseManager.IntegrationTests
 {
     using System;

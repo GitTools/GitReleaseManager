@@ -1,8 +1,3 @@
-// -----------------------------------------------------------------------
-// <copyright file="CommentGatheringTypeInspector.cs" company="GitTools Contributors">
-// Copyright (c) 2015 - Present - GitTools Contributors
-// </copyright>
-// -----------------------------------------------------------------------
 // All of the classes in this file have been aquired from
 // https://dotnetfiddle.net/8M6iIE which was mentioned
 // on the YamlDotNet repository here: https://github.com/aaubry/YamlDotNet/issues/444#issuecomment-546709672
