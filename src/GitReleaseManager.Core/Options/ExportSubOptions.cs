@@ -10,5 +10,8 @@ namespace GitReleaseManager.Core.Options
 
         [Option('t', "tagName", HelpText = "The name of the release (Typically this is the generated SemVer Version Number).", Required = false)]
         public string TagName { get; set; }
+
+        [Option("skipPrereleases", HelpText = "Should pre-release releases be ignored when generating release notes? Defaults to false.", Required = false)]
+        public bool SkipPrereleases { get; set; }
     }
 }

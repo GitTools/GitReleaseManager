@@ -14,7 +14,7 @@ namespace GitReleaseManager.Core
 
         Task AddAssetsAsync(string owner, string repository, string tagName, IList<string> assets);
 
-        Task<string> ExportReleasesAsync(string owner, string repository, string tagName);
+        Task<string> ExportReleasesAsync(string owner, string repository, string tagName, bool skipPrereleases);
 
         Task CloseMilestoneAsync(string owner, string repository, string milestoneTitle);
 

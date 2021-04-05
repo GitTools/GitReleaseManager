@@ -38,7 +38,7 @@ namespace GitReleaseManager.Core.Provider
 
         Task<Release> GetReleaseAsync(string owner, string repository, string tagName);
 
-        Task<IEnumerable<Release>> GetReleasesAsync(string owner, string repository);
+        Task<IEnumerable<Release>> GetReleasesAsync(string owner, string repository, bool skipPrereleases);
 
         Task PublishReleaseAsync(string owner, string repository, string tagName, int releaseId);
 
