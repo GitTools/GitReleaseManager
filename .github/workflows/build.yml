@@ -17,7 +17,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ windows-2019, ubuntu-18.04, macos-10.15 ]
+        os: [ windows-2019, macos-10.15 ]
 
     steps:
       - name: Checkout the repository
