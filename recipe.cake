@@ -1,4 +1,4 @@
-#load nuget:?package=Cake.Recipe&version=2.1.0
+#load nuget:?package=Cake.Recipe&version=2.2.1
 #tool dotnet:?package=dotnet-t4&version=2.0.5
 
 Environment.SetVariableNames(githubTokenVariable: "GITTOOLS_GITHUB_TOKEN");
