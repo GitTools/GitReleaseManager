@@ -4,7 +4,7 @@
     <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v15.0\TextTemplating\Microsoft.TextTemplating.targets" Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v15.0\TextTemplating\Microsoft.TextTemplating.targets')" />
     <PropertyGroup>
         <LangVersion>8.0</LangVersion>
-        <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
+        <TargetFrameworks>netstandard2.0</TargetFrameworks>
         <Title>GitReleaseManager.Core</Title>
         <Description>Create release notes in markdown given a milestone</Description>
         <IsPackable>false</IsPackable>
@@ -15,7 +15,7 @@
     <ItemGroup>
         <T4ReferencePath Include="$(VsIdePath)PublicAssemblies\" />
     </ItemGroup>
-    
+
     <ItemGroup>
         <PackageReference Include="CommandLineParser" Version="2.8.0" />
         <PackageReference Include="Destructurama.Attributed" Version="2.0.0" />
