@@ -1,14 +1,12 @@
+using System.Collections.Generic;
+using System.ComponentModel;
+using YamlDotNet.Serialization;
+
 namespace GitReleaseManager.Core.Configuration
 {
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.IO;
-    using YamlDotNet.Serialization;
-
     public class Config
     {
-        internal const string IssueCommentFormat = @":tada: This issue has been resolved in version {milestone} :tada:
+        internal const string ISSUE_COMMENT_FORMAT = @":tada: This issue has been resolved in version {milestone} :tada:
 
 The release is available on:
 
@@ -43,7 +41,7 @@ Your **[GitReleaseManager](https://github.com/GitTools/GitReleaseManager)** bot 
             Close = new CloseConfig
             {
                 IssueComments = false,
-                IssueCommentFormat = IssueCommentFormat,
+                IssueCommentFormat = ISSUE_COMMENT_FORMAT,
             };
 
             DefaultBranch = "master";

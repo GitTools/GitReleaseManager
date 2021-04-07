@@ -1,10 +1,10 @@
+using System;
+using System.IO;
+using NUnit.Framework;
+using Shouldly;
+
 namespace GitReleaseManager.Core.Tests
 {
-    using System;
-    using System.IO;
-    using NUnit.Framework;
-    using Shouldly;
-
     [TestFixture]
     public class EnsureTests
     {

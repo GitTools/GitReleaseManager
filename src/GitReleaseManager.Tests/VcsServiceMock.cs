@@ -1,10 +1,10 @@
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using GitReleaseManager.Core.Model;
+using IVcsService = GitReleaseManager.Core.IVcsService;
+
 namespace GitReleaseManager.Tests
 {
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
-    using GitReleaseManager.Core.Model;
-    using IVcsService = GitReleaseManager.Core.IVcsService;
-
     public class VcsServiceMock : IVcsService
     {
         public VcsServiceMock()

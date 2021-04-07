@@ -1,11 +1,11 @@
+using System;
+using System.IO;
+using System.Text;
+using GitReleaseManager.Core.Configuration;
+using NUnit.Framework;
+
 namespace GitReleaseManager.Tests
 {
-    using System;
-    using System.IO;
-    using System.Text;
-    using GitReleaseManager.Core.Configuration;
-    using NUnit.Framework;
-
     [TestFixture]
     public class ConfigurationTests
     {

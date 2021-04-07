@@ -1,17 +1,17 @@
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+using GitReleaseManager.Core.Configuration;
+using GitReleaseManager.Core.Helpers;
+using Scriban;
+using Scriban.Parsing;
+using Scriban.Runtime;
+
 namespace GitReleaseManager.Core.Templates
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.IO;
-    using System.Linq;
-    using System.Threading.Tasks;
-    using GitReleaseManager.Core.Configuration;
-    using GitReleaseManager.Core.Helpers;
-    using Scriban;
-    using Scriban.Parsing;
-    using Scriban.Runtime;
-
     public class TemplateLoader : ITemplateLoader
     {
         private static readonly string[] _templateExtensions = new[] { ".sbn", ".scriban" };

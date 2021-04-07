@@ -1,8 +1,8 @@
+using System.Collections.Generic;
+using System.IO;
+
 namespace GitReleaseManager.Core.Helpers
 {
-    using System.Collections.Generic;
-    using System.IO;
-
     public interface IFileSystem
     {
         void Copy(string source, string destination, bool overwrite);

@@ -1,9 +1,9 @@
+using System;
+using Octokit;
+using Serilog;
+
 namespace GitReleaseManager.Core.Extensions
 {
-    using System;
-    using Octokit;
-    using Serilog;
-
     public static class MilestoneExtensions
     {
         public static readonly ILogger _logger = Log.ForContext(typeof(MilestoneExtensions));

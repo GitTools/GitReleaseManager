@@ -1,7 +1,7 @@
+using CommandLine;
+
 namespace GitReleaseManager.Core.Options
 {
-    using CommandLine;
-
     [Verb("export", HelpText = "Exports all the Release Notes in markdown format.")]
     public class ExportSubOptions : BaseVcsOptions
     {

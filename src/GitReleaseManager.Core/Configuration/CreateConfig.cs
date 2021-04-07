@@ -1,9 +1,9 @@
+using System.ComponentModel;
+using GitReleaseManager.Core.Attributes;
+using YamlDotNet.Serialization;
+
 namespace GitReleaseManager.Core.Configuration
 {
-    using System.ComponentModel;
-    using GitReleaseManager.Core.Attributes;
-    using YamlDotNet.Serialization;
-
     public class CreateConfig
     {
         [Description("Enable generation of footer content in the release notes. Extract the recommended templates by running 'init --templates' and edit the footer.sbn file to provide the wanted footer content.")]

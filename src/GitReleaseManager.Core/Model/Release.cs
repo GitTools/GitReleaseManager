@@ -1,8 +1,8 @@
+using System;
+using System.Collections.Generic;
+
 namespace GitReleaseManager.Core.Model
 {
-    using System;
-    using System.Collections.Generic;
-
     public sealed class Release
     {
         public int Id { get; set; }

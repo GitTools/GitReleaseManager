@@ -1,8 +1,8 @@
+using GitReleaseManager.Core.Attributes;
+using YamlDotNet.Serialization;
+
 namespace GitReleaseManager.Core.Configuration
 {
-    using GitReleaseManager.Core.Attributes;
-    using YamlDotNet.Serialization;
-
     public class ExportConfig
     {
         [YamlMember(Alias = "include-created-date-in-title")]

@@ -1,7 +1,7 @@
+using System.IO;
+
 namespace GitReleaseManager.Core.Model
 {
-    using System.IO;
-
     public class ReleaseAssetUpload
     {
         /// <summary>

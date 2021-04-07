@@ -1,16 +1,16 @@
+using System;
+using System.Collections;
+using System.IO;
+using GitReleaseManager.Core.Configuration;
+using GitReleaseManager.Core.Helpers;
+using GitReleaseManager.Core.Templates;
+using NSubstitute;
+using NUnit.Framework;
+using Scriban;
+using Shouldly;
+
 namespace GitReleaseManager.Core.Tests.Templates
 {
-    using System;
-    using System.Collections;
-    using System.IO;
-    using GitReleaseManager.Core.Configuration;
-    using GitReleaseManager.Core.Helpers;
-    using GitReleaseManager.Core.Templates;
-    using NSubstitute;
-    using NUnit.Framework;
-    using Scriban;
-    using Shouldly;
-
     [TestFixture]
     public class TemplateLoaderTests
     {

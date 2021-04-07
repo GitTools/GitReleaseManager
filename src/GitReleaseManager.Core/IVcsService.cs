@@ -1,9 +1,9 @@
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using GitReleaseManager.Core.Model;
+
 namespace GitReleaseManager.Core
 {
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
-    using GitReleaseManager.Core.Model;
-
     public interface IVcsService
     {
         Task<Release> CreateReleaseFromMilestoneAsync(string owner, string repository, string milestone, string releaseName, string targetCommitish, IList<string> assets, bool prerelease, string templateFilePath);

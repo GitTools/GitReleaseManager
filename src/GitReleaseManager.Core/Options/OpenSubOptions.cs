@@ -1,7 +1,7 @@
+using CommandLine;
+
 namespace GitReleaseManager.Core.Options
 {
-    using CommandLine;
-
     [Verb("open", HelpText = "Opens the milestone.")]
     public class OpenSubOptions : BaseVcsOptions
     {

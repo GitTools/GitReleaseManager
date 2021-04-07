@@ -1,9 +1,9 @@
+using System;
+using System.Net;
+using Octokit;
+
 namespace GitReleaseManager.Tests
 {
-    using System;
-    using System.Net;
-    using Octokit;
-
     public static class Helper
     {
         // From https://github.com/octokit/octokit.net/blob/master/Octokit.Tests.Integration/Helper.cs

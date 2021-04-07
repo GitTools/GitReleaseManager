@@ -1,12 +1,11 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("GitReleaseManager.Tests")]
 
 namespace GitReleaseManager.Core.Extensions
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-
     internal static class StringExtensions
     {
         public static string ReplaceMilestoneTitle(this string source, string milestoneKey, string milestoneTitle)

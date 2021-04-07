@@ -2,13 +2,13 @@
 // https://dotnetfiddle.net/8M6iIE which was mentioned
 // on the YamlDotNet repository here: https://github.com/aaubry/YamlDotNet/issues/444#issuecomment-546709672
 
+using YamlDotNet.Core;
+using YamlDotNet.Core.Events;
+using YamlDotNet.Serialization;
+using YamlDotNet.Serialization.ObjectGraphVisitors;
+
 namespace GitReleaseManager.Core.Configuration.CommentSerialization
 {
-    using YamlDotNet.Core;
-    using YamlDotNet.Core.Events;
-    using YamlDotNet.Serialization;
-    using YamlDotNet.Serialization.ObjectGraphVisitors;
-
     public sealed class CommentsObjectGraphVisitor : ChainedObjectGraphVisitor
     {
         public CommentsObjectGraphVisitor(IObjectGraphVisitor<IEmitter> nextVisitor)

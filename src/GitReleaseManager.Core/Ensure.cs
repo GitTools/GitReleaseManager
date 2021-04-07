@@ -1,8 +1,8 @@
+using System;
+using System.IO;
+
 namespace GitReleaseManager.Core
 {
-    using System;
-    using System.IO;
-
     /// <summary>
     /// Provides static methods that help a constructor or method to verify correct arguments and
     /// state.

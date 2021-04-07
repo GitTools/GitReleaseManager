@@ -2,16 +2,16 @@
 // https://dotnetfiddle.net/8M6iIE which was mentioned
 // on the YamlDotNet repository here: https://github.com/aaubry/YamlDotNet/issues/444#issuecomment-546709672
 
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using YamlDotNet.Core;
+using YamlDotNet.Serialization;
+using YamlDotNet.Serialization.TypeInspectors;
+
 namespace GitReleaseManager.Core.Configuration.CommentSerialization
 {
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.Linq;
-    using YamlDotNet.Core;
-    using YamlDotNet.Serialization;
-    using YamlDotNet.Serialization.TypeInspectors;
-
     public sealed class CommentGatheringTypeInspector : TypeInspectorSkeleton
     {
         private readonly ITypeInspector _innerTypeDescriptor;

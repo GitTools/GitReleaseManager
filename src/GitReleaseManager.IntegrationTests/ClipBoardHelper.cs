@@ -1,8 +1,8 @@
+using System.Threading;
+using TextCopy;
+
 namespace GitReleaseManager.IntegrationTests
 {
-    using System.Threading;
-    using TextCopy;
-
     public static class ClipBoardHelper
     {
         public static void SetClipboard(string result)

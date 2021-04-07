@@ -1,15 +1,15 @@
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using GitReleaseManager.Core.Configuration;
+using GitReleaseManager.Core.Model;
+using Serilog;
+
 namespace GitReleaseManager.Core.ReleaseNotes
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Globalization;
-    using System.Linq;
-    using System.Text;
-    using System.Text.RegularExpressions;
-    using GitReleaseManager.Core.Configuration;
-    using GitReleaseManager.Core.Model;
-    using Serilog;
-
     public class ReleaseNotesExporter : IReleaseNotesExporter
     {
         private readonly ILogger _logger;

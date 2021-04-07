@@ -1,20 +1,20 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using ApprovalTests;
+using GitReleaseManager.Core.Configuration;
+using GitReleaseManager.Core.Helpers;
+using GitReleaseManager.Core.Model;
+using GitReleaseManager.Core.Provider;
+using GitReleaseManager.Core.ReleaseNotes;
+using GitReleaseManager.Core.Templates;
+using NSubstitute;
+using NUnit.Framework;
+using Serilog;
+
 namespace GitReleaseManager.Tests
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
-    using ApprovalTests;
-    using GitReleaseManager.Core.Configuration;
-    using GitReleaseManager.Core.Helpers;
-    using GitReleaseManager.Core.Model;
-    using GitReleaseManager.Core.Provider;
-    using GitReleaseManager.Core.ReleaseNotes;
-    using GitReleaseManager.Core.Templates;
-    using NSubstitute;
-    using NUnit.Framework;
-    using Serilog;
-
     [TestFixture]
     public class ReleaseNotesBuilderTests
     {

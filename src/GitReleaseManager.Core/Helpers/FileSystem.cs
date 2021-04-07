@@ -1,10 +1,10 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using GitReleaseManager.Core.Options;
+
 namespace GitReleaseManager.Core.Helpers
 {
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using GitReleaseManager.Core.Options;
-
     public class FileSystem : IFileSystem
     {
         private readonly BaseSubOptions options;

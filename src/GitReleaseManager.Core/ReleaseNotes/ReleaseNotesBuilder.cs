@@ -1,20 +1,17 @@
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Threading.Tasks;
+using GitReleaseManager.Core.Configuration;
+using GitReleaseManager.Core.Helpers;
+using GitReleaseManager.Core.Model;
+using GitReleaseManager.Core.Provider;
+using GitReleaseManager.Core.Templates;
+using Serilog;
+
 namespace GitReleaseManager.Core.ReleaseNotes
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Globalization;
-    using System.Linq;
-    using System.Threading.Tasks;
-    using GitReleaseManager.Core.Configuration;
-    using GitReleaseManager.Core.Extensions;
-    using GitReleaseManager.Core.Helpers;
-    using GitReleaseManager.Core.Model;
-    using GitReleaseManager.Core.Provider;
-    using GitReleaseManager.Core.Templates;
-    using Scriban;
-    using Scriban.Runtime;
-    using Serilog;
-
     public class ReleaseNotesBuilder : IReleaseNotesBuilder
     {
         private readonly IVcsProvider _vcsProvider;

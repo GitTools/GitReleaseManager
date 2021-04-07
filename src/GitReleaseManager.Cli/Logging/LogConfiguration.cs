@@ -1,14 +1,14 @@
+using System.Diagnostics;
+using System.Text;
+using Destructurama;
+using GitReleaseManager.Core.Options;
+using Octokit;
+using Serilog;
+using Serilog.Events;
+using Serilog.Sinks.SystemConsole.Themes;
+
 namespace GitReleaseManager.Cli.Logging
 {
-    using System.Diagnostics;
-    using System.Text;
-    using Destructurama;
-    using GitReleaseManager.Core.Options;
-    using Octokit;
-    using Serilog;
-    using Serilog.Events;
-    using Serilog.Sinks.SystemConsole.Themes;
-
     public static class LogConfiguration
     {
         private const string CONSOLE_FULL_TEMPLATE = "[{Level:u3}] " + CONSOLE_INFO_TEMPLATE;

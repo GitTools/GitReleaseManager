@@ -1,8 +1,8 @@
+using System.Collections.Generic;
+using CommandLine;
+
 namespace GitReleaseManager.Core.Options
 {
-    using System.Collections.Generic;
-    using CommandLine;
-
     [Verb("create", HelpText = "Creates a draft release notes from a milestone.")]
     public class CreateSubOptions : BaseVcsOptions
     {

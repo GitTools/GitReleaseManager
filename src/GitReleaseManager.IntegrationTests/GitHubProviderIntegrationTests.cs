@@ -1,24 +1,24 @@
+using System;
+using System.Linq;
+using System.Threading.Tasks;
+using AutoMapper;
+using GitReleaseManager.Core;
+using GitReleaseManager.Core.Provider;
+using NUnit.Framework;
+using Octokit;
+using Serilog;
+using Shouldly;
+using Issue = GitReleaseManager.Core.Model.Issue;
+using Milestone = GitReleaseManager.Core.Model.Milestone;
+
 namespace GitReleaseManager.IntegrationTests
 {
-    using System;
-    using System.Linq;
-    using System.Threading.Tasks;
-    using AutoMapper;
-    using GitReleaseManager.Core;
-    using GitReleaseManager.Core.Provider;
-    using NUnit.Framework;
-    using Octokit;
-    using Serilog;
-    using Shouldly;
-    using Issue = GitReleaseManager.Core.Model.Issue;
-    using Milestone = GitReleaseManager.Core.Model.Milestone;
-
     [TestFixture]
     [Explicit]
     public class GitHubProviderIntegrationTests
     {
-        private const string _owner = "GitTools";
-        private const string _repository = "GitReleaseManager";
+        private const string OWNER = "GitTools";
+        private const string REPOSITORY = "GitReleaseManager";
 
         private GitHubProvider _gitHubProvider;
         private IGitHubClient _gitHubClient;
@@ -51,7 +51,7 @@ namespace GitReleaseManager.IntegrationTests
         [Order(1)]
         public async Task Should_Get_Labels()
         {
-            var result = await _gitHubProvider.GetLabelsAsync(_owner, _repository).ConfigureAwait(false);
+            var result = await _gitHubProvider.GetLabelsAsync(OWNER, REPOSITORY).ConfigureAwait(false);
             result.Count().ShouldBeGreaterThan(0);
         }
 
@@ -59,7 +59,7 @@ namespace GitReleaseManager.IntegrationTests
         [Order(2)]
         public async Task Should_Get_Milestones()
         {
-            var result = await _gitHubProvider.GetMilestonesAsync(_owner, _repository).ConfigureAwait(false);
+            var result = await _gitHubProvider.GetMilestonesAsync(OWNER, REPOSITORY).ConfigureAwait(false);
             result.Count().ShouldBeGreaterThan(0);
 
             _milestone = result.OrderByDescending(m => m.Number).First();
@@ -69,7 +69,7 @@ namespace GitReleaseManager.IntegrationTests
         [Order(3)]
         public async Task Should_Get_Issues()
         {
-            var result = await _gitHubProvider.GetIssuesAsync(_owner, _repository, _milestone.Number).ConfigureAwait(false);
+            var result = await _gitHubProvider.GetIssuesAsync(OWNER, REPOSITORY, _milestone.Number).ConfigureAwait(false);
             result.Count().ShouldBeGreaterThan(0);
 
             _issue = result.First();
@@ -79,7 +79,7 @@ namespace GitReleaseManager.IntegrationTests
         [Order(4)]
         public async Task Should_Get_Issue_Comments()
         {
-            var result = await _gitHubProvider.GetIssueCommentsAsync(_owner, _repository, _issue.Number).ConfigureAwait(false);
+            var result = await _gitHubProvider.GetIssueCommentsAsync(OWNER, REPOSITORY, _issue.Number).ConfigureAwait(false);
             result.Count().ShouldBeGreaterThan(0);
         }
 
@@ -87,7 +87,7 @@ namespace GitReleaseManager.IntegrationTests
         [Order(5)]
         public async Task Should_Get_Releases()
         {
-            var result = await _gitHubProvider.GetReleasesAsync(_owner, _repository).ConfigureAwait(false);
+            var result = await _gitHubProvider.GetReleasesAsync(OWNER, REPOSITORY).ConfigureAwait(false);
             result.Count().ShouldBeGreaterThan(0);
 
             var orderedReleases = result.OrderByDescending(r => r.Id).ToList();
@@ -100,7 +100,7 @@ namespace GitReleaseManager.IntegrationTests
         [Order(6)]
         public async Task Should_Get_Commits_Count()
         {
-            var result = await _gitHubProvider.GetCommitsCount(_owner, _repository, _releaseBaseTag, _releaseHeadTag).ConfigureAwait(false);
+            var result = await _gitHubProvider.GetCommitsCount(OWNER, REPOSITORY, _releaseBaseTag, _releaseHeadTag).ConfigureAwait(false);
             result.ShouldBeGreaterThan(0);
         }
     }

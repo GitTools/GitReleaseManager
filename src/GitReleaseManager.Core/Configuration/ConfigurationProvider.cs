@@ -1,12 +1,12 @@
+using System;
+using System.Globalization;
+using System.IO;
+using System.Text;
+using GitReleaseManager.Core.Helpers;
+using Serilog;
+
 namespace GitReleaseManager.Core.Configuration
 {
-    using System;
-    using System.Globalization;
-    using System.IO;
-    using System.Text;
-    using GitReleaseManager.Core.Helpers;
-    using Serilog;
-
     public static class ConfigurationProvider
     {
         private static readonly ILogger _logger = Log.ForContext(typeof(ConfigurationProvider));
@@ -125,7 +125,7 @@ namespace GitReleaseManager.Core.Configuration
             if (configuration.Close.IssueCommentFormat == null)
             {
                 _logger.Debug("Setting default Close.IssueCommentFormat configuration value");
-                configuration.Close.IssueCommentFormat = Config.IssueCommentFormat;
+                configuration.Close.IssueCommentFormat = Config.ISSUE_COMMENT_FORMAT;
             }
         }
     }

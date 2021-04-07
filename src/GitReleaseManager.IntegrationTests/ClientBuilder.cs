@@ -1,8 +1,8 @@
+using Octokit;
+using Octokit.Internal;
+
 namespace GitReleaseManager.IntegrationTests
 {
-    using Octokit;
-    using Octokit.Internal;
-
     public static class ClientBuilder
     {
         private static HttpClientAdapter _httpClient;

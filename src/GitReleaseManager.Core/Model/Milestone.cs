@@ -1,7 +1,7 @@
+using System;
+
 namespace GitReleaseManager.Core.Model
 {
-    using System;
-
     public sealed class Milestone
     {
         public string Title { get; set; }

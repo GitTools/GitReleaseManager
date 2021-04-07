@@ -1,7 +1,7 @@
+using CommandLine;
+
 namespace GitReleaseManager.Core.Options
 {
-    using CommandLine;
-
     [Verb("publish", HelpText = "Publishes the Release.")]
     public class PublishSubOptions : BaseVcsOptions
     {

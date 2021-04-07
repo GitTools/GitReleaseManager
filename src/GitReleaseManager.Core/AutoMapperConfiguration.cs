@@ -1,8 +1,8 @@
+using AutoMapper;
+using Serilog;
+
 namespace GitReleaseManager.Core
 {
-    using AutoMapper;
-    using Serilog;
-
     public static class AutoMapperConfiguration
     {
         private static readonly ILogger _logger = Log.ForContext(typeof(AutoMapperConfiguration));

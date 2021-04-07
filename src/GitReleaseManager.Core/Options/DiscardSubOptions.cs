@@ -1,7 +1,7 @@
+using CommandLine;
+
 namespace GitReleaseManager.Core.Options
 {
-    using CommandLine;
-
     [Verb("discard", HelpText = "Discards a draft release.")]
     public class DiscardSubOptions : BaseVcsOptions
     {

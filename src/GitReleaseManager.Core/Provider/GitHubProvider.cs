@@ -1,29 +1,29 @@
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Threading.Tasks;
+using AutoMapper;
+using Octokit;
+using ApiException = GitReleaseManager.Core.Exceptions.ApiException;
+using ForbiddenException = GitReleaseManager.Core.Exceptions.ForbiddenException;
+using Issue = GitReleaseManager.Core.Model.Issue;
+using IssueComment = GitReleaseManager.Core.Model.IssueComment;
+using ItemState = GitReleaseManager.Core.Model.ItemState;
+using ItemStateFilter = GitReleaseManager.Core.Model.ItemStateFilter;
+using Label = GitReleaseManager.Core.Model.Label;
+using Milestone = GitReleaseManager.Core.Model.Milestone;
+using NotFoundException = GitReleaseManager.Core.Exceptions.NotFoundException;
+using RateLimit = GitReleaseManager.Core.Model.RateLimit;
+using Release = GitReleaseManager.Core.Model.Release;
+using ReleaseAssetUpload = GitReleaseManager.Core.Model.ReleaseAssetUpload;
+
 namespace GitReleaseManager.Core.Provider
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Globalization;
-    using System.Linq;
-    using System.Threading.Tasks;
-    using AutoMapper;
-    using Octokit;
-    using ApiException = GitReleaseManager.Core.Exceptions.ApiException;
-    using ForbiddenException = GitReleaseManager.Core.Exceptions.ForbiddenException;
-    using Issue = GitReleaseManager.Core.Model.Issue;
-    using IssueComment = GitReleaseManager.Core.Model.IssueComment;
-    using ItemState = GitReleaseManager.Core.Model.ItemState;
-    using ItemStateFilter = GitReleaseManager.Core.Model.ItemStateFilter;
-    using Label = GitReleaseManager.Core.Model.Label;
-    using Milestone = GitReleaseManager.Core.Model.Milestone;
-    using NotFoundException = GitReleaseManager.Core.Exceptions.NotFoundException;
-    using RateLimit = GitReleaseManager.Core.Model.RateLimit;
-    using Release = GitReleaseManager.Core.Model.Release;
-    using ReleaseAssetUpload = GitReleaseManager.Core.Model.ReleaseAssetUpload;
-
     public class GitHubProvider : IVcsProvider
     {
-        private const int _pageSize = 100;
-        private const string _notFoundMessgae = "NotFound";
+        private const int PAGE_SIZE = 100;
+        private const string NOT_FOUND_MESSGAE = "NotFound";
 
         private readonly IGitHubClient _gitHubClient;
         private readonly IMapper _mapper;
@@ -36,7 +36,7 @@ namespace GitReleaseManager.Core.Provider
 
         public Task DeleteAssetAsync(string owner, string repository, int id)
         {
-            return Execute(async () =>
+            return ExecuteAsync(async () =>
             {
                 await _gitHubClient.Repository.Release.DeleteAsset(owner, repository, id).ConfigureAwait(false);
             });
@@ -44,7 +44,7 @@ namespace GitReleaseManager.Core.Provider
 
         public Task UploadAssetAsync(Release release, ReleaseAssetUpload releaseAssetUpload)
         {
-            return Execute(async () =>
+            return ExecuteAsync(async () =>
             {
                 var octokitRelease = _mapper.Map<Octokit.Release>(release);
                 var octokitReleaseAssetUpload = _mapper.Map<Octokit.ReleaseAssetUpload>(releaseAssetUpload);
@@ -55,7 +55,7 @@ namespace GitReleaseManager.Core.Provider
 
         public Task<int> GetCommitsCount(string owner, string repository, string @base, string head)
         {
-            return Execute(async () =>
+            return ExecuteAsync(async () =>
             {
                 try
                 {
@@ -86,7 +86,7 @@ namespace GitReleaseManager.Core.Provider
 
         public Task CreateIssueCommentAsync(string owner, string repository, int issueNumber, string comment)
         {
-            return Execute(async () =>
+            return ExecuteAsync(async () =>
             {
                 await _gitHubClient.Issue.Comment.Create(owner, repository, issueNumber, comment).ConfigureAwait(false);
             });
@@ -94,7 +94,7 @@ namespace GitReleaseManager.Core.Provider
 
         public Task<IEnumerable<Issue>> GetIssuesAsync(string owner, string repository, int milestoneNumber, ItemStateFilter itemStateFilter = ItemStateFilter.All)
         {
-            return Execute(async () =>
+            return ExecuteAsync(async () =>
             {
                 var openIssueRequest = new RepositoryIssueRequest
                 {
@@ -114,7 +114,7 @@ namespace GitReleaseManager.Core.Provider
                     issues.AddRange(results);
                     startPage++;
                 }
-                while (results.Count == _pageSize);
+                while (results.Count == PAGE_SIZE);
 
                 return _mapper.Map<IEnumerable<Issue>>(issues);
             });
@@ -122,7 +122,7 @@ namespace GitReleaseManager.Core.Provider
 
         public Task<IEnumerable<IssueComment>> GetIssueCommentsAsync(string owner, string repository, int issueNumber)
         {
-            return Execute(async () =>
+            return ExecuteAsync(async () =>
             {
                 var startPage = 1;
                 var comments = new List<Octokit.IssueComment>();
@@ -136,7 +136,7 @@ namespace GitReleaseManager.Core.Provider
                     comments.AddRange(results);
                     startPage++;
                 }
-                while (results.Count == _pageSize);
+                while (results.Count == PAGE_SIZE);
 
                 return _mapper.Map<IEnumerable<IssueComment>>(comments);
             });
@@ -144,7 +144,7 @@ namespace GitReleaseManager.Core.Provider
 
         public Task CreateLabelAsync(string owner, string repository, Label label)
         {
-            return Execute(async () =>
+            return ExecuteAsync(async () =>
             {
                 var newLabel = _mapper.Map<NewLabel>(label);
 
@@ -154,7 +154,7 @@ namespace GitReleaseManager.Core.Provider
 
         public Task DeleteLabelAsync(string owner, string repository, string labelName)
         {
-            return Execute(async () =>
+            return ExecuteAsync(async () =>
             {
                 await _gitHubClient.Issue.Labels.Delete(owner, repository, labelName).ConfigureAwait(false);
             });
@@ -162,7 +162,7 @@ namespace GitReleaseManager.Core.Provider
 
         public Task<IEnumerable<Label>> GetLabelsAsync(string owner, string repository)
         {
-            return Execute(async () =>
+            return ExecuteAsync(async () =>
             {
                 var startPage = 1;
                 var labels = new List<Octokit.Label>();
@@ -176,7 +176,7 @@ namespace GitReleaseManager.Core.Provider
                     labels.AddRange(results);
                     startPage++;
                 }
-                while (results.Count == _pageSize);
+                while (results.Count == PAGE_SIZE);
 
                 return _mapper.Map<IEnumerable<Label>>(labels);
             });
@@ -184,14 +184,14 @@ namespace GitReleaseManager.Core.Provider
 
         public Task<Milestone> GetMilestoneAsync(string owner, string repository, string milestoneTitle, ItemStateFilter itemStateFilter = ItemStateFilter.All)
         {
-            return Execute(async () =>
+            return ExecuteAsync(async () =>
             {
                 var milestones = await GetMilestonesAsync(owner, repository, itemStateFilter).ConfigureAwait(false);
                 var milestone = milestones.FirstOrDefault(m => m.Title == milestoneTitle);
 
                 if (milestone is null)
                 {
-                    throw new NotFoundException(_notFoundMessgae);
+                    throw new NotFoundException(NOT_FOUND_MESSGAE);
                 }
 
                 return milestone;
@@ -200,7 +200,7 @@ namespace GitReleaseManager.Core.Provider
 
         public Task<IEnumerable<Milestone>> GetMilestonesAsync(string owner, string repository, ItemStateFilter itemStateFilter = ItemStateFilter.All)
         {
-            return Execute(async () =>
+            return ExecuteAsync(async () =>
             {
                 var request = new MilestoneRequest { State = (Octokit.ItemStateFilter)itemStateFilter };
 
@@ -216,7 +216,7 @@ namespace GitReleaseManager.Core.Provider
                     milestones.AddRange(results);
                     startPage++;
                 }
-                while (results.Count == _pageSize);
+                while (results.Count == PAGE_SIZE);
 
                 return _mapper.Map<IEnumerable<Milestone>>(milestones);
             });
@@ -224,7 +224,7 @@ namespace GitReleaseManager.Core.Provider
 
         public Task SetMilestoneStateAsync(string owner, string repository, int milestoneNumber, ItemState itemState)
         {
-            return Execute(async () =>
+            return ExecuteAsync(async () =>
             {
                 var update = new MilestoneUpdate { State = (Octokit.ItemState)itemState };
                 await _gitHubClient.Issue.Milestone.Update(owner, repository, milestoneNumber, update).ConfigureAwait(false);
@@ -233,7 +233,7 @@ namespace GitReleaseManager.Core.Provider
 
         public Task<Release> CreateReleaseAsync(string owner, string repository, Release release)
         {
-            return Execute(async () =>
+            return ExecuteAsync(async () =>
             {
                 var newRelease = _mapper.Map<NewRelease>(release);
                 var octokitRelease = await _gitHubClient.Repository.Release.Create(owner, repository, newRelease).ConfigureAwait(false);
@@ -244,7 +244,7 @@ namespace GitReleaseManager.Core.Provider
 
         public Task DeleteReleaseAsync(string owner, string repository, int id)
         {
-            return Execute(async () =>
+            return ExecuteAsync(async () =>
             {
                 await _gitHubClient.Repository.Release.Delete(owner, repository, id).ConfigureAwait(false);
             });
@@ -252,7 +252,7 @@ namespace GitReleaseManager.Core.Provider
 
         public Task<Release> GetReleaseAsync(string owner, string repository, string tagName)
         {
-            return Execute(async () =>
+            return ExecuteAsync(async () =>
             {
                 var release = await _gitHubClient.Repository.Release.Get(owner, repository, tagName).ConfigureAwait(false);
 
@@ -262,7 +262,7 @@ namespace GitReleaseManager.Core.Provider
 
         public Task<IEnumerable<Release>> GetReleasesAsync(string owner, string repository)
         {
-            return Execute(async () =>
+            return ExecuteAsync(async () =>
             {
                 var startPage = 1;
                 var releases = new List<Octokit.Release>();
@@ -276,7 +276,7 @@ namespace GitReleaseManager.Core.Provider
                     releases.AddRange(results);
                     startPage++;
                 }
-                while (results.Count == _pageSize);
+                while (results.Count == PAGE_SIZE);
 
                 releases = releases.OrderByDescending(r => r.CreatedAt).ToList();
 
@@ -286,7 +286,7 @@ namespace GitReleaseManager.Core.Provider
 
         public Task PublishReleaseAsync(string owner, string repository, string tagName, int releaseId)
         {
-            return Execute(async () =>
+            return ExecuteAsync(async () =>
             {
                 var update = new ReleaseUpdate
                 {
@@ -300,7 +300,7 @@ namespace GitReleaseManager.Core.Provider
 
         public Task UpdateReleaseAsync(string owner, string repository, Release release)
         {
-            return Execute(async () =>
+            return ExecuteAsync(async () =>
             {
                 var update = new ReleaseUpdate
                 {
@@ -330,7 +330,7 @@ namespace GitReleaseManager.Core.Provider
             }
         }
 
-        private async Task Execute(Func<Task> action)
+        private async Task ExecuteAsync(Func<Task> action)
         {
             try
             {
@@ -350,7 +350,7 @@ namespace GitReleaseManager.Core.Provider
             }
         }
 
-        private async Task<T> Execute<T>(Func<Task<T>> action)
+        private async Task<T> ExecuteAsync<T>(Func<Task<T>> action)
         {
             try
             {

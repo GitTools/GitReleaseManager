@@ -1,8 +1,8 @@
+using CommandLine;
+using Destructurama.Attributed;
+
 namespace GitReleaseManager.Core.Options
 {
-    using CommandLine;
-    using Destructurama.Attributed;
-
     public abstract class BaseVcsOptions : BaseSubOptions
     {
         [LogMasked(Text = "[REDACTED]")]

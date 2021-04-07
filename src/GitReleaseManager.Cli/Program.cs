@@ -1,23 +1,23 @@
+using System;
+using System.Net;
+using System.Reflection;
+using System.Threading.Tasks;
+using CommandLine;
+using GitReleaseManager.Cli.Logging;
+using GitReleaseManager.Core;
+using GitReleaseManager.Core.Commands;
+using GitReleaseManager.Core.Configuration;
+using GitReleaseManager.Core.Helpers;
+using GitReleaseManager.Core.Options;
+using GitReleaseManager.Core.Provider;
+using GitReleaseManager.Core.ReleaseNotes;
+using GitReleaseManager.Core.Templates;
+using Microsoft.Extensions.DependencyInjection;
+using Octokit;
+using Serilog;
+
 namespace GitReleaseManager.Cli
 {
-    using System;
-    using System.Net;
-    using System.Reflection;
-    using System.Threading.Tasks;
-    using CommandLine;
-    using GitReleaseManager.Cli.Logging;
-    using GitReleaseManager.Core;
-    using GitReleaseManager.Core.Commands;
-    using GitReleaseManager.Core.Configuration;
-    using GitReleaseManager.Core.Helpers;
-    using GitReleaseManager.Core.Options;
-    using GitReleaseManager.Core.Provider;
-    using GitReleaseManager.Core.ReleaseNotes;
-    using GitReleaseManager.Core.Templates;
-    using Microsoft.Extensions.DependencyInjection;
-    using Octokit;
-    using Serilog;
-
     public static class Program
     {
         private static IServiceProvider _serviceProvider;

@@ -1,9 +1,9 @@
+using System.Collections.Generic;
+using GitReleaseManager.Core.Extensions;
+using NUnit.Framework;
+
 namespace GitReleaseManager.Tests.Extensions
 {
-    using System.Collections.Generic;
-    using GitReleaseManager.Core.Extensions;
-    using NUnit.Framework;
-
     [TestFixture]
     public class StringExtensionsTests
     {

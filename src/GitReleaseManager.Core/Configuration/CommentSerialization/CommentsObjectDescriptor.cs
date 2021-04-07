@@ -2,12 +2,12 @@
 // https://dotnetfiddle.net/8M6iIE which was mentioned
 // on the YamlDotNet repository here: https://github.com/aaubry/YamlDotNet/issues/444#issuecomment-546709672
 
+using System;
+using YamlDotNet.Core;
+using YamlDotNet.Serialization;
+
 namespace GitReleaseManager.Core.Configuration.CommentSerialization
 {
-    using System;
-    using YamlDotNet.Core;
-    using YamlDotNet.Serialization;
-
     public sealed class CommentsObjectDescriptor : IObjectDescriptor
     {
         private readonly IObjectDescriptor _innerDescriptor;

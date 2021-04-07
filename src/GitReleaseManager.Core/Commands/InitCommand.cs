@@ -1,14 +1,14 @@
+using System;
+using System.IO;
+using System.Threading.Tasks;
+using GitReleaseManager.Core.Configuration;
+using GitReleaseManager.Core.Helpers;
+using GitReleaseManager.Core.Options;
+using GitReleaseManager.Core.Templates;
+using Serilog;
+
 namespace GitReleaseManager.Core.Commands
 {
-    using System;
-    using System.IO;
-    using System.Threading.Tasks;
-    using GitReleaseManager.Core.Configuration;
-    using GitReleaseManager.Core.Helpers;
-    using GitReleaseManager.Core.Options;
-    using GitReleaseManager.Core.Templates;
-    using Serilog;
-
     public class InitCommand : ICommand<InitSubOptions>
     {
         private readonly IFileSystem _fileSystem;

@@ -1,7 +1,7 @@
+using CommandLine;
+
 namespace GitReleaseManager.Core.Options
 {
-    using CommandLine;
-
     [Verb("close", HelpText = "Closes the milestone.")]
     public class CloseSubOptions : BaseVcsOptions
     {

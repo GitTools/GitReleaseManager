@@ -1,12 +1,12 @@
+using System.Threading.Tasks;
+using GitReleaseManager.Core.Configuration;
+using GitReleaseManager.Core.Extensions;
+using GitReleaseManager.Core.Helpers;
+using Scriban;
+using Scriban.Runtime;
+
 namespace GitReleaseManager.Core.Templates
 {
-    using System.Threading.Tasks;
-    using GitReleaseManager.Core.Configuration;
-    using GitReleaseManager.Core.Extensions;
-    using GitReleaseManager.Core.Helpers;
-    using Scriban;
-    using Scriban.Runtime;
-
     public class TemplateFactory
     {
         private readonly IFileSystem fileSystem;

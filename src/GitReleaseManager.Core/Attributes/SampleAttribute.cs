@@ -1,7 +1,7 @@
+using System;
+
 namespace GitReleaseManager.Core.Attributes
 {
-    using System;
-
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
     public sealed class SampleAttribute : Attribute
     {

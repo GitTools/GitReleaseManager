@@ -1,9 +1,9 @@
+using System.ComponentModel;
+using GitReleaseManager.Core.Attributes;
+using YamlDotNet.Serialization;
+
 namespace GitReleaseManager.Core.Configuration
 {
-    using System.ComponentModel;
-    using GitReleaseManager.Core.Attributes;
-    using YamlDotNet.Serialization;
-
     /// <summary>
     /// Class for holding configuration values used during milestone closing. This class cannot be inherited.
     /// </summary>

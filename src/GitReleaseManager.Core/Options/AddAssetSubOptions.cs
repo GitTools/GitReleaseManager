@@ -1,8 +1,8 @@
+using System.Collections.Generic;
+using CommandLine;
+
 namespace GitReleaseManager.Core.Options
 {
-    using System.Collections.Generic;
-    using CommandLine;
-
     [Verb("addasset", HelpText = "Adds an asset to an existing release.")]
     public class AddAssetSubOptions : BaseVcsOptions
     {

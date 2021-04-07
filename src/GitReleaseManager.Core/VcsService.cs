@@ -1,26 +1,26 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using GitReleaseManager.Core.Configuration;
+using GitReleaseManager.Core.Exceptions;
+using GitReleaseManager.Core.Extensions;
+using GitReleaseManager.Core.Model;
+using GitReleaseManager.Core.Provider;
+using GitReleaseManager.Core.ReleaseNotes;
+using GitReleaseManager.Core.Templates;
+using Serilog;
+
 namespace GitReleaseManager.Core
 {
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-    using System.Security.Cryptography;
-    using System.Text;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using GitReleaseManager.Core.Configuration;
-    using GitReleaseManager.Core.Exceptions;
-    using GitReleaseManager.Core.Extensions;
-    using GitReleaseManager.Core.Model;
-    using GitReleaseManager.Core.Provider;
-    using GitReleaseManager.Core.ReleaseNotes;
-    using GitReleaseManager.Core.Templates;
-    using Serilog;
-
     public class VcsService : IVcsService
     {
-        private const string _unableToFoundMilestoneMessage = "Unable to find a {State} milestone with title '{Title}' on '{Owner}/{Repository}'";
-        private const string _unableToFoundReleaseMessage = "Unable to find a release with tag '{TagName}' on '{Owner}/{Repository}'";
+        private const string UNABLE_TO_FOUND_MILESTONE_MESSAGE = "Unable to find a {State} milestone with title '{Title}' on '{Owner}/{Repository}'";
+        private const string UNABLE_TO_FOUND_RELEASE_MESSAGE = "Unable to find a release with tag '{TagName}' on '{Owner}/{Repository}'";
 
         private readonly IVcsProvider _vcsProvider;
         private readonly ILogger _logger;
@@ -47,7 +47,7 @@ namespace GitReleaseManager.Core
             }
 
             var releaseNotes = await _releaseNotesBuilder.BuildReleaseNotes(owner, repository, milestone, templatePath).ConfigureAwait(false);
-            var release = await CreateRelease(owner, repository, releaseName, milestone, releaseNotes, prerelease, targetCommitish, assets).ConfigureAwait(false);
+            var release = await CreateReleaseAsync(owner, repository, releaseName, milestone, releaseNotes, prerelease, targetCommitish, assets).ConfigureAwait(false);
 
             return release;
         }
@@ -59,12 +59,12 @@ namespace GitReleaseManager.Core
             _logger.Verbose("Reading release notes from: '{FilePath}'", inputFilePath);
 
             var releaseNotes = File.ReadAllText(inputFilePath);
-            var release = await CreateRelease(owner, repository, name, name, releaseNotes, prerelease, targetCommitish, assets).ConfigureAwait(false);
+            var release = await CreateReleaseAsync(owner, repository, name, name, releaseNotes, prerelease, targetCommitish, assets).ConfigureAwait(false);
 
             return release;
         }
 
-        private async Task<Release> CreateRelease(string owner, string repository, string name, string tagName, string body, bool prerelease, string targetCommitish, IList<string> assets)
+        private async Task<Release> CreateReleaseAsync(string owner, string repository, string name, string tagName, string body, bool prerelease, string targetCommitish, IList<string> assets)
         {
             Release release;
 
@@ -117,7 +117,7 @@ namespace GitReleaseManager.Core
             }
             catch (NotFoundException)
             {
-                _logger.Warning(_unableToFoundReleaseMessage, tagName, owner, repository);
+                _logger.Warning(UNABLE_TO_FOUND_RELEASE_MESSAGE, tagName, owner, repository);
             }
         }
 
@@ -199,7 +199,7 @@ namespace GitReleaseManager.Core
                 }
                 catch (NotFoundException)
                 {
-                    _logger.Warning(_unableToFoundReleaseMessage, tagName, owner, repository);
+                    _logger.Warning(UNABLE_TO_FOUND_RELEASE_MESSAGE, tagName, owner, repository);
                 }
             }
         }
@@ -223,7 +223,7 @@ namespace GitReleaseManager.Core
                 }
                 catch (NotFoundException)
                 {
-                    _logger.Warning(_unableToFoundReleaseMessage, tagName, owner, repository);
+                    _logger.Warning(UNABLE_TO_FOUND_RELEASE_MESSAGE, tagName, owner, repository);
                 }
             }
 
@@ -247,7 +247,7 @@ namespace GitReleaseManager.Core
             }
             catch (NotFoundException)
             {
-                _logger.Warning(_unableToFoundMilestoneMessage, "open", milestoneTitle, owner, repository);
+                _logger.Warning(UNABLE_TO_FOUND_MILESTONE_MESSAGE, "open", milestoneTitle, owner, repository);
             }
         }
 
@@ -263,7 +263,7 @@ namespace GitReleaseManager.Core
             }
             catch (NotFoundException)
             {
-                _logger.Warning(_unableToFoundMilestoneMessage, "closed", milestoneTitle, owner, repository);
+                _logger.Warning(UNABLE_TO_FOUND_MILESTONE_MESSAGE, "closed", milestoneTitle, owner, repository);
             }
         }
 
@@ -280,7 +280,7 @@ namespace GitReleaseManager.Core
             }
             catch (NotFoundException)
             {
-                _logger.Warning(_unableToFoundReleaseMessage, tagName, owner, repository);
+                _logger.Warning(UNABLE_TO_FOUND_RELEASE_MESSAGE, tagName, owner, repository);
             }
         }
 
@@ -375,7 +375,7 @@ namespace GitReleaseManager.Core
 
                 try
                 {
-                    if (!await CommentsIncludeString(owner, repository, issue.Number, detectionComment).ConfigureAwait(false))
+                    if (!await CommentsIncludeStringAsync(owner, repository, issue.Number, detectionComment).ConfigureAwait(false))
                     {
                         _logger.Information("Adding release comment for issue #{IssueNumber}", issue.Number);
                         await _vcsProvider.CreateIssueCommentAsync(owner, repository, issue.Number, issueComment).ConfigureAwait(false);
@@ -393,7 +393,7 @@ namespace GitReleaseManager.Core
             }
         }
 
-        private async Task<bool> CommentsIncludeString(string owner, string repository, int issueNumber, string comment)
+        private async Task<bool> CommentsIncludeStringAsync(string owner, string repository, int issueNumber, string comment)
         {
             _logger.Verbose("Finding issue comment created by GitReleaseManager for issue #{IssueNumber}", issueNumber);
             var issueComments = await _vcsProvider.GetIssueCommentsAsync(owner, repository, issueNumber).ConfigureAwait(false);

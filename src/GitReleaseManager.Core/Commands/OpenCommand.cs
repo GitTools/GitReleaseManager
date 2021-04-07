@@ -1,9 +1,9 @@
+using System.Threading.Tasks;
+using GitReleaseManager.Core.Options;
+using Serilog;
+
 namespace GitReleaseManager.Core.Commands
 {
-    using System.Threading.Tasks;
-    using GitReleaseManager.Core.Options;
-    using Serilog;
-
     public class OpenCommand : ICommand<OpenSubOptions>
     {
         private readonly IVcsService _vcsService;

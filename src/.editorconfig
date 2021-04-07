@@ -47,7 +47,7 @@ dotnet_diagnostic.CA2227.severity = warning
 dotnet_diagnostic.IDE0004.severity = warning
 
 # IDE0005: Using directive is unnecessary
-dotnet_diagnostic.IDE0005.severity = warning
+dotnet_diagnostic.IDE0005.severity = error
 
 # IDE0008: Use explicit type
 csharp_style_var_elsewhere = true:suggestion
@@ -91,7 +91,7 @@ dotnet_diagnostic.SA1117.severity = none
 dotnet_diagnostic.SA1122.severity = error
 
 # SA1200: Using directive should appear within a namespace declaration
-dotnet_diagnostic.SA1200.severity = error
+dotnet_diagnostic.SA1200.severity = none
 
 # SA1201: Elements should appear in the correct order
 dotnet_diagnostic.SA1201.severity = none

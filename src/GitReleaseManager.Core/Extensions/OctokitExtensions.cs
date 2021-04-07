@@ -1,13 +1,13 @@
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Threading.Tasks;
+using Octokit;
+using Serilog;
+
 namespace GitReleaseManager.Core.Extensions
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Globalization;
-    using System.Linq;
-    using System.Threading.Tasks;
-    using Octokit;
-    using Serilog;
-
     public static class OctokitExtensions
     {
         private static readonly ILogger _logger = Log.ForContext(typeof(OctokitExtensions));
@@ -34,7 +34,7 @@ namespace GitReleaseManager.Core.Extensions
                 throw new ArgumentNullException(nameof(milestone));
             }
 
-            return AllIssuesForMilestoneInternal(gitHubClient, milestone);
+            return AllIssuesForMilestoneInternalAsync(gitHubClient, milestone);
         }
 
         public static Uri HtmlUrl(this Milestone milestone)
@@ -51,7 +51,7 @@ namespace GitReleaseManager.Core.Extensions
             return new Uri(string.Format(CultureInfo.InvariantCulture, "https://github.com/{0}/{1}/issues?milestone={2}&state=closed", user, repository, milestone.Number));
         }
 
-        private static async Task<IEnumerable<Issue>> AllIssuesForMilestoneInternal(IGitHubClient gitHubClient, Milestone milestone)
+        private static async Task<IEnumerable<Issue>> AllIssuesForMilestoneInternalAsync(IGitHubClient gitHubClient, Milestone milestone)
         {
             var closedIssueRequest = new RepositoryIssueRequest
             {

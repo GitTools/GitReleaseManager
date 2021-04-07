@@ -1,8 +1,8 @@
+using System;
+using System.Runtime.Serialization;
+
 namespace GitReleaseManager.Core.Exceptions
 {
-    using System;
-    using System.Runtime.Serialization;
-
     [Serializable]
     public class ApiException : Exception
     {

@@ -1,7 +1,7 @@
+using System;
+
 namespace GitReleaseManager.Core.Model
 {
-    using System;
-
     public class RateLimit
     {
         /// <summary>

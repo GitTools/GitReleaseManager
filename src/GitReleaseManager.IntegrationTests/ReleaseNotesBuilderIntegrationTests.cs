@@ -1,20 +1,20 @@
+using System;
+using System.Diagnostics;
+using System.Threading.Tasks;
+using AutoMapper;
+using GitReleaseManager.Core;
+using GitReleaseManager.Core.Configuration;
+using GitReleaseManager.Core.Helpers;
+using GitReleaseManager.Core.Options;
+using GitReleaseManager.Core.Provider;
+using GitReleaseManager.Core.ReleaseNotes;
+using GitReleaseManager.Core.Templates;
+using NUnit.Framework;
+using Octokit;
+using Serilog;
+
 namespace GitReleaseManager.IntegrationTests
 {
-    using System;
-    using System.Diagnostics;
-    using System.Threading.Tasks;
-    using AutoMapper;
-    using GitReleaseManager.Core;
-    using GitReleaseManager.Core.Configuration;
-    using GitReleaseManager.Core.Helpers;
-    using GitReleaseManager.Core.Options;
-    using GitReleaseManager.Core.Provider;
-    using GitReleaseManager.Core.ReleaseNotes;
-    using GitReleaseManager.Core.Templates;
-    using NUnit.Framework;
-    using Octokit;
-    using Serilog;
-
     [TestFixture]
     [Explicit]
     public class ReleaseNotesBuilderIntegrationTests

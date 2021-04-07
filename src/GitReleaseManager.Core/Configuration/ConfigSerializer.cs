@@ -1,14 +1,14 @@
+using System;
+using System.IO;
+using System.Reflection;
+using GitReleaseManager.Core.Attributes;
+using GitReleaseManager.Core.Configuration.CommentSerialization;
+using Serilog;
+using YamlDotNet.Serialization;
+using YamlDotNet.Serialization.NamingConventions;
+
 namespace GitReleaseManager.Core.Configuration
 {
-    using System;
-    using System.IO;
-    using System.Reflection;
-    using GitReleaseManager.Core.Attributes;
-    using GitReleaseManager.Core.Configuration.CommentSerialization;
-    using Serilog;
-    using YamlDotNet.Serialization;
-    using YamlDotNet.Serialization.NamingConventions;
-
     public static class ConfigSerializer
     {
         private static readonly ILogger _logger = Log.ForContext(typeof(ConfigSerializer));

@@ -1,7 +1,7 @@
+using System.Collections.Generic;
+
 namespace GitReleaseManager.Core.Model
 {
-    using System.Collections.Generic;
-
     public sealed class Issue
     {
         public string Title { get; set; }

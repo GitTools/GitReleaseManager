@@ -1,7 +1,7 @@
+using CommandLine;
+
 namespace GitReleaseManager.Core.Options
 {
-    using CommandLine;
-
     public abstract class BaseSubOptions
     {
         [Option("debug", HelpText = "Enable debugging console output")]

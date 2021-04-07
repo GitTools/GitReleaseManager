@@ -1,7 +1,7 @@
+using YamlDotNet.Serialization;
+
 namespace GitReleaseManager.Core.Configuration
 {
-    using YamlDotNet.Serialization;
-
     public class LabelConfig
     {
         [YamlMember(Alias = "name")]
