@@ -204,14 +204,14 @@ namespace GitReleaseManager.Core
             }
         }
 
-        public async Task<string> ExportReleasesAsync(string owner, string repository, string tagName)
+        public async Task<string> ExportReleasesAsync(string owner, string repository, string tagName, bool skipPrereleases)
         {
             var releases = Enumerable.Empty<Release>();
 
             if (string.IsNullOrWhiteSpace(tagName))
             {
                 _logger.Verbose("Finding all releases on '{Owner}/{Repository}'", owner, repository);
-                releases = await _vcsProvider.GetReleasesAsync(owner, repository).ConfigureAwait(false);
+                releases = await _vcsProvider.GetReleasesAsync(owner, repository, skipPrereleases).ConfigureAwait(false);
             }
             else
             {

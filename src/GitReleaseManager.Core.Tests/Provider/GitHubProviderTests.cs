@@ -41,6 +41,7 @@ namespace GitReleaseManager.Core.Tests.Provider
         private const int RELEASE_ID = 1;
         private const int ASSET_ID = 1;
         private const string NOT_FOUND_MESSAGE = "NotFound";
+        private const bool SKIP_PRERELEASES = false;
 
         private readonly Release _release = new Release();
         private readonly ReleaseAssetUpload _releaseAssetUpload = new ReleaseAssetUpload();
@@ -667,7 +668,7 @@ namespace GitReleaseManager.Core.Tests.Provider
             _mapper.Map<IEnumerable<Release>>(Arg.Any<object>())
                 .Returns(releases);
 
-            var result = await _gitHubProvider.GetReleasesAsync(OWNER, REPOSITORY).ConfigureAwait(false);
+            var result = await _gitHubProvider.GetReleasesAsync(OWNER, REPOSITORY, SKIP_PRERELEASES).ConfigureAwait(false);
             result.ShouldBeSameAs(releases);
 
             await _gitHubClient.Repository.Release.Received(1).GetAll(OWNER, REPOSITORY, Arg.Any<ApiOptions>()).ConfigureAwait(false);
@@ -680,7 +681,7 @@ namespace GitReleaseManager.Core.Tests.Provider
             _gitHubClient.Repository.Release.GetAll(OWNER, REPOSITORY, Arg.Any<ApiOptions>())
                 .Returns(Task.FromException<IReadOnlyList<Octokit.Release>>(_exception));
 
-            var ex = await Should.ThrowAsync<ApiException>(() => _gitHubProvider.GetReleasesAsync(OWNER, REPOSITORY)).ConfigureAwait(false);
+            var ex = await Should.ThrowAsync<ApiException>(() => _gitHubProvider.GetReleasesAsync(OWNER, REPOSITORY, SKIP_PRERELEASES)).ConfigureAwait(false);
             ex.Message.ShouldBe(_exception.Message);
             ex.InnerException.ShouldBe(_exception);
         }

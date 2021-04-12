@@ -19,7 +19,7 @@ namespace GitReleaseManager.Core.Commands
         public async Task<int> Execute(ExportSubOptions options)
         {
             _logger.Information("Exporting release {TagName}", options.TagName);
-            var releasesContent = await _vcsService.ExportReleasesAsync(options.RepositoryOwner, options.RepositoryName, options.TagName).ConfigureAwait(false);
+            var releasesContent = await _vcsService.ExportReleasesAsync(options.RepositoryOwner, options.RepositoryName, options.TagName, options.SkipPrereleases).ConfigureAwait(false);
 
             using (var sw = new StreamWriter(File.Open(options.FileOutputPath, FileMode.OpenOrCreate)))
             {

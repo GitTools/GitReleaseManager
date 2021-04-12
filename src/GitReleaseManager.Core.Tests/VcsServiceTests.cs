@@ -31,6 +31,7 @@ namespace GitReleaseManager.Core.Tests
         private const string TAG_NAME = "0.1.0";
         private const string RELEASE_NOTES = "Release Notes";
         private const string ASSET_CONTENT = "Asset Content";
+        private const bool SKIP_PRERELEASES = false;
 
         private const string UNABLE_TO_FOUND_MILESTONE_MESSAGE = "Unable to find a {State} milestone with title '{Title}' on '{Owner}/{Repository}'";
         private const string UNABLE_TO_FOUND_RELEASE_MESSAGE = "Unable to find a release with tag '{TagName}' on '{Owner}/{Repository}'";
@@ -591,17 +592,17 @@ namespace GitReleaseManager.Core.Tests
             var releases = Enumerable.Empty<Release>();
             var releaseNotes = "Release Notes";
 
-            _vcsProvider.GetReleasesAsync(OWNER, REPOSITORY)
+            _vcsProvider.GetReleasesAsync(OWNER, REPOSITORY, SKIP_PRERELEASES)
                 .Returns(Task.FromResult(releases));
 
             _releaseNotesExporter.ExportReleaseNotes(Arg.Any<IEnumerable<Release>>())
                 .Returns(releaseNotes);
 
-            var result = await _vcsService.ExportReleasesAsync(OWNER, REPOSITORY, null).ConfigureAwait(false);
+            var result = await _vcsService.ExportReleasesAsync(OWNER, REPOSITORY, null, SKIP_PRERELEASES).ConfigureAwait(false);
             result.ShouldBeSameAs(releaseNotes);
 
             await _vcsProvider.DidNotReceive().GetReleaseAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>()).ConfigureAwait(false);
-            await _vcsProvider.Received(1).GetReleasesAsync(OWNER, REPOSITORY).ConfigureAwait(false);
+            await _vcsProvider.Received(1).GetReleasesAsync(OWNER, REPOSITORY, SKIP_PRERELEASES).ConfigureAwait(false);
             _logger.Received(1).Verbose(Arg.Any<string>(), OWNER, REPOSITORY);
             _releaseNotesExporter.Received(1).ExportReleaseNotes(Arg.Any<IEnumerable<Release>>());
         }
@@ -617,11 +618,11 @@ namespace GitReleaseManager.Core.Tests
             _releaseNotesExporter.ExportReleaseNotes(Arg.Any<IEnumerable<Release>>())
                 .Returns(RELEASE_NOTES);
 
-            var result = await _vcsService.ExportReleasesAsync(OWNER, REPOSITORY, TAG_NAME).ConfigureAwait(false);
+            var result = await _vcsService.ExportReleasesAsync(OWNER, REPOSITORY, TAG_NAME, SKIP_PRERELEASES).ConfigureAwait(false);
             result.ShouldBeSameAs(RELEASE_NOTES);
 
             await _vcsProvider.Received(1).GetReleaseAsync(OWNER, REPOSITORY, TAG_NAME).ConfigureAwait(false);
-            await _vcsProvider.DidNotReceive().GetReleasesAsync(Arg.Any<string>(), Arg.Any<string>()).ConfigureAwait(false);
+            await _vcsProvider.DidNotReceive().GetReleasesAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<bool>()).ConfigureAwait(false);
             _logger.Received(1).Verbose(Arg.Any<string>(), OWNER, REPOSITORY, TAG_NAME);
             _releaseNotesExporter.Received(1).ExportReleaseNotes(Arg.Any<IEnumerable<Release>>());
         }
@@ -635,7 +636,7 @@ namespace GitReleaseManager.Core.Tests
             _releaseNotesExporter.ExportReleaseNotes(Arg.Any<IEnumerable<Release>>())
                 .Returns(RELEASE_NOTES);
 
-            var result = await _vcsService.ExportReleasesAsync(OWNER, REPOSITORY, TAG_NAME).ConfigureAwait(false);
+            var result = await _vcsService.ExportReleasesAsync(OWNER, REPOSITORY, TAG_NAME, SKIP_PRERELEASES).ConfigureAwait(false);
             result.ShouldBeSameAs(RELEASE_NOTES);
 
             await _vcsProvider.Received(1).GetReleaseAsync(OWNER, REPOSITORY, TAG_NAME).ConfigureAwait(false);

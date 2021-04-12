@@ -45,7 +45,7 @@ namespace GitReleaseManager.Tests
             throw new System.NotImplementedException();
         }
 
-        public Task<string> ExportReleasesAsync(string owner, string repository, string tagName)
+        public Task<string> ExportReleasesAsync(string owner, string repository, string tagName, bool skipPrereleases)
         {
             throw new System.NotImplementedException();
         }

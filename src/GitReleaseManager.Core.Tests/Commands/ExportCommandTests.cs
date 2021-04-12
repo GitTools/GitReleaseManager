@@ -39,7 +39,7 @@ namespace GitReleaseManager.Core.Tests.Commands
 
             var releaseText = "releaseText";
 
-            _vcsService.ExportReleasesAsync(options.RepositoryOwner, options.RepositoryName, options.TagName)
+            _vcsService.ExportReleasesAsync(options.RepositoryOwner, options.RepositoryName, options.TagName, options.SkipPrereleases)
                 .Returns(releaseText);
 
             var result = await _command.Execute(options).ConfigureAwait(false);
@@ -51,7 +51,7 @@ namespace GitReleaseManager.Core.Tests.Commands
             var exportFileContent = File.ReadAllText(_fileOutputPath);
             exportFileContent.ShouldBe(releaseText);
 
-            await _vcsService.Received(1).ExportReleasesAsync(options.RepositoryOwner, options.RepositoryName, options.TagName).ConfigureAwait(false);
+            await _vcsService.Received(1).ExportReleasesAsync(options.RepositoryOwner, options.RepositoryName, options.TagName, options.SkipPrereleases).ConfigureAwait(false);
             _logger.Received(1).Information(Arg.Any<string>(), options.TagName);
 
             if (exportFileExists)

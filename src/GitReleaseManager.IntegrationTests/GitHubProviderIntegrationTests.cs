@@ -19,6 +19,7 @@ namespace GitReleaseManager.IntegrationTests
     {
         private const string OWNER = "GitTools";
         private const string REPOSITORY = "GitReleaseManager";
+        private const bool SKIP_PRERELEASES = false;
 
         private GitHubProvider _gitHubProvider;
         private IGitHubClient _gitHubClient;
@@ -87,7 +88,7 @@ namespace GitReleaseManager.IntegrationTests
         [Order(5)]
         public async Task Should_Get_Releases()
         {
-            var result = await _gitHubProvider.GetReleasesAsync(OWNER, REPOSITORY).ConfigureAwait(false);
+            var result = await _gitHubProvider.GetReleasesAsync(OWNER, REPOSITORY, SKIP_PRERELEASES).ConfigureAwait(false);
             result.Count().ShouldBeGreaterThan(0);
 
             var orderedReleases = result.OrderByDescending(r => r.Id).ToList();

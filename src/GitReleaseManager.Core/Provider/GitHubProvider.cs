@@ -260,7 +260,7 @@ namespace GitReleaseManager.Core.Provider
             });
         }
 
-        public Task<IEnumerable<Release>> GetReleasesAsync(string owner, string repository)
+        public Task<IEnumerable<Release>> GetReleasesAsync(string owner, string repository, bool skipPrereleases)
         {
             return ExecuteAsync(async () =>
             {
@@ -273,7 +273,15 @@ namespace GitReleaseManager.Core.Provider
                     var options = GetApiOptions(startPage);
                     results = await _gitHubClient.Repository.Release.GetAll(owner, repository, options).ConfigureAwait(false);
 
-                    releases.AddRange(results);
+                    if (skipPrereleases)
+                    {
+                        releases.AddRange(results.Where(r => !r.Prerelease));
+                    }
+                    else
+                    {
+                        releases.AddRange(results);
+                    }
+
                     startPage++;
                 }
                 while (results.Count == PAGE_SIZE);
