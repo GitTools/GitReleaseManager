@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using GitReleaseManager.Core.Configuration;
+using GitReleaseManager.Core.Exceptions;
 using GitReleaseManager.Core.Helpers;
 using GitReleaseManager.Core.Model;
 using GitReleaseManager.Core.Provider;
@@ -124,36 +125,43 @@ namespace GitReleaseManager.Core.ReleaseNotes
             return newLabel;
         }
 
-        private bool CheckForValidLabels(Issue issue)
+        private (List<Issue> IssuesWithValidLabel, List<string> Errors) CheckIssuesForValidLabels(IEnumerable<Issue> issues)
         {
-            var includedIssuesCount = 0;
-            var excludedIssuesCount = 0;
+            var validIssues = new List<Issue>();
+            var errors = new List<string>();
 
-            foreach (var issueLabel in issue.Labels)
+            foreach (var issue in issues)
             {
-                includedIssuesCount += _configuration.IssueLabelsInclude.Count(issueToInclude => issueLabel.Name.ToUpperInvariant() == issueToInclude.ToUpperInvariant());
+                var includedIssuesCount = 0;
+                var excludedIssuesCount = 0;
 
-                excludedIssuesCount += _configuration.IssueLabelsExclude.Count(issueToExclude => issueLabel.Name.ToUpperInvariant() == issueToExclude.ToUpperInvariant());
+                foreach (var issueLabel in issue.Labels)
+                {
+                    includedIssuesCount += _configuration.IssueLabelsInclude.Count(issueToInclude => issueLabel.Name.ToUpperInvariant() == issueToInclude.ToUpperInvariant());
+
+                    excludedIssuesCount += _configuration.IssueLabelsExclude.Count(issueToExclude => issueLabel.Name.ToUpperInvariant() == issueToExclude.ToUpperInvariant());
+                }
+
+                if (includedIssuesCount + excludedIssuesCount != 1)
+                {
+                    var allIssueLabels = _configuration.IssueLabelsInclude.Union(_configuration.IssueLabelsExclude).ToList();
+                    var allIssuesExceptLast = allIssueLabels.Take(allIssueLabels.Count - 1);
+                    var lastLabel = allIssueLabels.Last();
+
+                    var allIssuesExceptLastString = string.Join(", ", allIssuesExceptLast);
+
+                    var message = string.Format(CultureInfo.InvariantCulture, "Bad Issue {0} expected to find a single label with either {1} or {2}.", issue.HtmlUrl, allIssuesExceptLastString, lastLabel);
+                    errors.Add(message);
+                    continue;
+                }
+
+                if (includedIssuesCount > 0)
+                {
+                    validIssues.Add(issue);
+                }
             }
 
-            if (includedIssuesCount + excludedIssuesCount != 1)
-            {
-                var allIssueLabels = _configuration.IssueLabelsInclude.Union(_configuration.IssueLabelsExclude).ToList();
-                var allIssuesExceptLast = allIssueLabels.Take(allIssueLabels.Count - 1);
-                var lastLabel = allIssueLabels.Last();
-
-                var allIssuesExceptLastString = string.Join(", ", allIssuesExceptLast);
-
-                var message = string.Format(CultureInfo.InvariantCulture, "Bad Issue {0} expected to find a single label with either {1} or {2}.", issue.HtmlUrl, allIssuesExceptLastString, lastLabel);
-                throw new InvalidOperationException(message);
-            }
-
-            if (includedIssuesCount > 0)
-            {
-                return true;
-            }
-
-            return false;
+            return (validIssues, errors);
         }
 
         private Milestone GetPreviousMilestone()
@@ -173,28 +181,25 @@ namespace GitReleaseManager.Core.ReleaseNotes
 
         private async Task<List<Issue>> GetIssuesAsync(Milestone milestone)
         {
-            var issues = await _vcsProvider.GetIssuesAsync(_user, _repository, milestone.Number, ItemStateFilter.Closed).ConfigureAwait(false);
+            var allIssues = await _vcsProvider.GetIssuesAsync(_user, _repository, milestone.Number, ItemStateFilter.Closed).ConfigureAwait(false);
 
-            var hasIncludedIssues = false;
+            var result = CheckIssuesForValidLabels(allIssues);
 
-            foreach (var issue in issues)
+            if (result.Errors.Count > 0)
             {
-                if (CheckForValidLabels(issue))
-                {
-                    hasIncludedIssues = true;
-                }
+                throw new InvalidIssuesException(result.Errors);
             }
 
             // If there are no issues assigned to the milestone that have a label that is part
             // of the labels to include array, then that is essentially the same as having no
             // closed issues assigned to the milestone.  In this scenario, we want to raise an
             // error, so return an emtpy issues list.
-            if (!hasIncludedIssues)
+            if (!result.IssuesWithValidLabel.Any())
             {
                 return new List<Issue>();
             }
 
-            return issues.ToList();
+            return allIssues.ToList();
         }
 
         private void GetTargetMilestone()
