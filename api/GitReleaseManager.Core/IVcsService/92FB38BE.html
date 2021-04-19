@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="shortcut icon" href="/GitReleaseManager/assets/img/favicon.ico" type="image/x-icon">
         <link rel="icon" href="/GitReleaseManager/assets/img/favicon.ico" type="image/x-icon">
-        <title>GitReleaseManager - API - IVcsService.ExportReleasesAsync(string, string, string) Method</title>
+        <title>GitReleaseManager - API - IVcsService.CreateEmptyReleaseAsync(string, string, string, string, bool) Method</title>
         <link href="/GitReleaseManager/assets/css/highlight.css" rel="stylesheet">
         <link href="/GitReleaseManager/assets/css/bootstrap/bootstrap.css" rel="stylesheet">
         <link href="/GitReleaseManager/assets/css/adminlte/AdminLTE.css" rel="stylesheet">
@@ -140,11 +140,12 @@
 			<li class="header">Method Members</li>
 				<li><a href="/GitReleaseManager/api/GitReleaseManager.Core/IVcsService/39ACA022">AddAssetsAsync<wbr>(string, <wbr>string, <wbr>string, <wbr>IList<wbr>&lt;string&gt;<wbr>)<wbr></a></li>
 				<li><a href="/GitReleaseManager/api/GitReleaseManager.Core/IVcsService/A27200C0">CloseMilestoneAsync<wbr>(string, <wbr>string, <wbr>string)<wbr></a></li>
+				<li class="selected"><a href="/GitReleaseManager/api/GitReleaseManager.Core/IVcsService/92FB38BE">Create<wbr>Empty<wbr>Release<wbr>Async<wbr>(string, <wbr>string, <wbr>string, <wbr>string, <wbr>bool)<wbr></a></li>
 				<li><a href="/GitReleaseManager/api/GitReleaseManager.Core/IVcsService/A2565C5D">CreateLabelsAsync<wbr>(string, <wbr>string)<wbr></a></li>
 				<li><a href="/GitReleaseManager/api/GitReleaseManager.Core/IVcsService/1F99746F">Create<wbr>Release<wbr>From<wbr>Input<wbr>File<wbr>Async<wbr>(string, <wbr>string, <wbr>string, <wbr>string, <wbr>string, <wbr>IList<wbr>&lt;string&gt;<wbr>, <wbr>bool)<wbr></a></li>
 				<li><a href="/GitReleaseManager/api/GitReleaseManager.Core/IVcsService/8BE558B1">Create<wbr>Release<wbr>From<wbr>Milestone<wbr>Async<wbr>(string, <wbr>string, <wbr>string, <wbr>string, <wbr>string, <wbr>IList<wbr>&lt;string&gt;<wbr>, <wbr>bool, <wbr>string)<wbr></a></li>
 				<li><a href="/GitReleaseManager/api/GitReleaseManager.Core/IVcsService/8B381380">DiscardReleaseAsync<wbr>(string, <wbr>string, <wbr>string)<wbr></a></li>
-				<li class="selected"><a href="/GitReleaseManager/api/GitReleaseManager.Core/IVcsService/E88D36ED">ExportReleasesAsync<wbr>(string, <wbr>string, <wbr>string)<wbr></a></li>
+				<li><a href="/GitReleaseManager/api/GitReleaseManager.Core/IVcsService/5B2A94D0">ExportReleasesAsync<wbr>(string, <wbr>string, <wbr>string, <wbr>bool)<wbr></a></li>
 				<li><a href="/GitReleaseManager/api/GitReleaseManager.Core/IVcsService/652409E4">OpenMilestoneAsync<wbr>(string, <wbr>string, <wbr>string)<wbr></a></li>
 				<li><a href="/GitReleaseManager/api/GitReleaseManager.Core/IVcsService/871F481B">PublishReleaseAsync<wbr>(string, <wbr>string, <wbr>string)<wbr></a></li>
 
@@ -162,7 +163,7 @@
 
 <section class="content-header">
 			<h3><a href="/GitReleaseManager/api/GitReleaseManager.Core/IVcsService">IVcsService</a>.</h3>
-	<h1>ExportReleasesAsync<wbr>(string, <wbr>string, <wbr>string)<wbr> <small>Method</small></h1>
+	<h1>Create<wbr>Empty<wbr>Release<wbr>Async<wbr>(string, <wbr>string, <wbr>string, <wbr>string, <wbr>bool)<wbr> <small>Method</small></h1>
 </section>
 <section class="content">
 	
@@ -183,7 +184,7 @@
 		</div>
 
 	<h1 id="Syntax">Syntax</h1>
-	<pre><code>Task&lt;string&gt; ExportReleasesAsync(string owner, string repository, string tagName)</code></pre>
+	<pre><code>Task&lt;Release&gt; CreateEmptyReleaseAsync(string owner, string repository, string name, string targetCommitish, bool prerelease)</code></pre>
 
 
 
@@ -211,8 +212,18 @@
 						<td></td>
 					</tr>
 					<tr>
-						<td>tagName</td>
+						<td>name</td>
 						<td>string</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td>targetCommitish</td>
+						<td>string</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td>prerelease</td>
+						<td>bool</td>
 						<td></td>
 					</tr>
 			</tbody></table>
@@ -230,7 +241,7 @@
 					</tr>
 				</thead>
 				<tbody><tr>
-					<td>Task<wbr>&lt;string&gt;<wbr></td>
+					<td>Task<wbr>&lt;<a href="/GitReleaseManager/api/GitReleaseManager.Core.Model/Release">Release</a>&gt;<wbr></td>
 					<td></td>
 				</tr>
 			</tbody></table>

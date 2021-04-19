@@ -165,10 +165,11 @@
 	<section class="content">
 		<p>This is the main command of GitReleaseManager and it is used to create a draft
 set of release notes based on a milestone, which has been set up in GitHub.</p>
-<p>There are two modes of operation when creating a Release. GitReleaseManager can
+<p>There are three modes of operation when creating a Release. GitReleaseManager can
 take as an input the name of the milestone to generate the release notes from.
 Or, it can take as an input the name of a file which contains the release notes
-to include in the Release.</p>
+to include in the Release.
+Or, it can create a release that doesn't contain any release notes, i.e. it is empty.</p>
 <h2 id="required-parameters"><strong>Required Parameters</strong></h2>
 <ul>
 <li><code>--token</code>: The access token to access GitHub with.</li>
@@ -193,6 +194,8 @@ executed. Defaults to current directory.</li>
 logging to console.</li>
 <li><code>-t, --template</code>: The path to the file to be used as the template for the
 release notes.</li>
+<li><code>--allowEmpty</code>: Allow the creation of an empty set of release notes. In this
+mode, milestone and input file path will be ignored.</li>
 </ul>
 <h2 id="template"><strong>Template</strong></h2>
 <p>GitReleaseManager uses the <a href="https://github.com/lunet-io/scriban">Scriban</a>
@@ -210,6 +213,9 @@ gitreleasemanager.exe create --milestone 0.1.0 --token fsdfsf67657sdf5s7d5f --ow
 <pre><code class="language-bash">gitreleasemanager.exe create -i c:\temp\releasenotes.md -n 0.1.0 --token fsdfsf67657sdf5s7d5f -o repoOwner -r repo
 
 gitreleasemanager.exe create --inputFilePath c:\temp\releasenotes.md --name 0.1.0 --token fsdfsf67657sdf5s7d5f --owner repoOwner --repository repo
+</code></pre>
+<p>Use GitReleaseManager to create an empty release:</p>
+<pre><code class="language-bash">gitreleasemanager.exe create -n 0.1.0 --token fsdfsf67657sdf5s7d5f -o repoOwner -r repo --allowEmpty
 </code></pre>
 
 	</section>
