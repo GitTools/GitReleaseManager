@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ApprovalTests;
 using GitReleaseManager.Core.Configuration;
+using GitReleaseManager.Core.Exceptions;
 using GitReleaseManager.Core.Helpers;
 using GitReleaseManager.Core.Model;
 using GitReleaseManager.Core.Provider;
@@ -150,14 +151,30 @@ namespace GitReleaseManager.Tests
         public void NoCommitsWrongIssueLabel()
         {
             var exception = Assert.Throws<AggregateException>(() => AcceptTest(0, CreateIssue(1, "Test")));
-            Assert.That(exception.InnerException, Is.Not.Null.And.TypeOf<InvalidOperationException>());
+            Assert.That(exception.InnerException, Is.Not.Null.And.TypeOf<InvalidIssuesException>());
         }
 
         [Test]
         public void SomeCommitsWrongIssueLabel()
         {
             var exception = Assert.Throws<AggregateException>(() => AcceptTest(5, CreateIssue(1, "Test")));
-            Assert.That(exception.InnerException, Is.Not.Null.And.TypeOf<InvalidOperationException>());
+            Assert.That(exception.InnerException, Is.Not.Null.And.TypeOf<InvalidIssuesException>());
+        }
+
+        [Test]
+        public void NoCommitsMultipleWrongIssueLabel()
+        {
+            var exception = Assert.Throws<AggregateException>(() => AcceptTest(0, CreateIssue(1, "Test"), CreateIssue(2, "Test")));
+            Assert.That(exception.InnerException, Is.Not.Null.And.TypeOf<InvalidIssuesException>());
+            Assert.That((exception.InnerException as InvalidIssuesException).Errors.Count, Is.EqualTo(2));
+        }
+
+        [Test]
+        public void SomeCommitsMultipleWrongIssueLabel()
+        {
+            var exception = Assert.Throws<AggregateException>(() => AcceptTest(5, CreateIssue(1, "Test"), CreateIssue(2, "Test"), CreateIssue(3, "Bob")));
+            Assert.That(exception.InnerException, Is.Not.Null.And.TypeOf<InvalidIssuesException>());
+            Assert.That((exception.InnerException as InvalidIssuesException).Errors.Count, Is.EqualTo(3));
         }
 
         [Test]
