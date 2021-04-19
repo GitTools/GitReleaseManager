@@ -6,10 +6,11 @@ Title: Create
 This is the main command of GitReleaseManager and it is used to create a draft
 set of release notes based on a milestone, which has been set up in GitHub.
 
-There are two modes of operation when creating a Release. GitReleaseManager can
+There are three modes of operation when creating a Release. GitReleaseManager can
 take as an input the name of the milestone to generate the release notes from.
 Or, it can take as an input the name of a file which contains the release notes
 to include in the Release.
+Or, it can create a release that doesn't contain any release notes, i.e. it is empty.
 
 ## **Required Parameters**
 
@@ -35,6 +36,8 @@ to include in the Release.
     logging to console.
 - `-t, --template`: The path to the file to be used as the template for the
     release notes.
+- `--allowEmpty`: Allow the creation of an empty set of release notes. In this
+mode, milestone and input file path will be ignored.
 
 ## **Template**
 
@@ -60,4 +63,10 @@ Use GitReleaseManager to create a Release, taking the release notes as an input 
 gitreleasemanager.exe create -i c:\temp\releasenotes.md -n 0.1.0 --token fsdfsf67657sdf5s7d5f -o repoOwner -r repo
 
 gitreleasemanager.exe create --inputFilePath c:\temp\releasenotes.md --name 0.1.0 --token fsdfsf67657sdf5s7d5f --owner repoOwner --repository repo
+```
+
+Use GitReleaseManager to create an empty release:
+
+```bash
+gitreleasemanager.exe create -n 0.1.0 --token fsdfsf67657sdf5s7d5f -o repoOwner -r repo --allowEmpty
 ```
