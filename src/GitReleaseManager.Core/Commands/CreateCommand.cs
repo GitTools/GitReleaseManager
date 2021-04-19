@@ -22,7 +22,12 @@ namespace GitReleaseManager.Core.Commands
 
             Release release;
 
-            if (!string.IsNullOrEmpty(options.Milestone))
+            if (options.AllowEmpty)
+            {
+                _logger.Verbose("The AllowEmpty option has been passed, so an empty release will now be created");
+                release = await _vcsService.CreateEmptyReleaseAsync(options.RepositoryOwner, options.RepositoryName, options.Name, options.TargetCommitish, options.Prerelease).ConfigureAwait(false);
+            }
+            else if (!string.IsNullOrEmpty(options.Milestone))
             {
                 _logger.Verbose("Milestone {Milestone} was specified", options.Milestone);
                 var releaseName = options.Name;

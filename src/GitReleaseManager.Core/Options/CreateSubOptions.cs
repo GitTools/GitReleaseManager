@@ -26,5 +26,8 @@ namespace GitReleaseManager.Core.Options
 
         [Option('e', "pre", Required = false, HelpText = "Creates the release as a pre-release.")]
         public bool Prerelease { get; set; }
+
+        [Option("allowEmpty", Required = false, HelpText = "Allow the creation of an empty set of release notes. In this mode, milestone and input file path will be ignored.")]
+        public bool AllowEmpty { get; set; }
     }
 }

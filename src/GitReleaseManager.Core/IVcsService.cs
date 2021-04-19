@@ -6,6 +6,8 @@ namespace GitReleaseManager.Core
 {
     public interface IVcsService
     {
+        Task<Release> CreateEmptyReleaseAsync(string owner, string repository, string name, string targetCommitish, bool prerelease);
+
         Task<Release> CreateReleaseFromMilestoneAsync(string owner, string repository, string milestone, string releaseName, string targetCommitish, IList<string> assets, bool prerelease, string templateFilePath);
 
         Task<Release> CreateReleaseFromInputFileAsync(string owner, string repository, string name, string inputFilePath, string targetCommitish, IList<string> assets, bool prerelease);
