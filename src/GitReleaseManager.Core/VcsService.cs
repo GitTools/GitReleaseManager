@@ -68,10 +68,19 @@ namespace GitReleaseManager.Core
         {
             Release release;
 
-            try
-            {
-                release = await _vcsProvider.GetReleaseAsync(owner, repository, tagName).ConfigureAwait(false);
+            release = await _vcsProvider.GetReleaseAsync(owner, repository, tagName).ConfigureAwait(false);
 
+            if (release == null)
+            {
+                release = CreateReleaseModel(name, tagName, body, prerelease, targetCommitish);
+
+                _logger.Verbose("Creating new release with tag '{TagName}' on '{Owner}/{Repository}'", tagName, owner, repository);
+                _logger.Debug("{@Release}", release);
+
+                release = await _vcsProvider.CreateReleaseAsync(owner, repository, release).ConfigureAwait(false);
+            }
+            else
+            {
                 if (!release.Draft && !_configuration.Create.AllowUpdateToPublishedRelease)
                 {
                     throw new InvalidOperationException($"Release with tag '{tagName}' not in draft state, so not updating");
@@ -84,15 +93,6 @@ namespace GitReleaseManager.Core
                 _logger.Debug("{@Release}", release);
 
                 await _vcsProvider.UpdateReleaseAsync(owner, repository, release).ConfigureAwait(false);
-            }
-            catch (NotFoundException)
-            {
-                release = CreateReleaseModel(name, tagName, body, prerelease, targetCommitish);
-
-                _logger.Verbose("Creating new release with tag '{TagName}' on '{Owner}/{Repository}'", tagName, owner, repository);
-                _logger.Debug("{@Release}", release);
-
-                release = await _vcsProvider.CreateReleaseAsync(owner, repository, release).ConfigureAwait(false);
             }
 
             await AddAssetsAsync(owner, repository, tagName, assets).ConfigureAwait(false);
