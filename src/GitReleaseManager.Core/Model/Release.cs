@@ -17,6 +17,8 @@ namespace GitReleaseManager.Core.Model
 
         public string HtmlUrl { get; set; }
 
+        public string UploadUrl { get; set; }
+
         public bool Draft { get; set; }
 
         public bool Prerelease { get; set; }
