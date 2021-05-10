@@ -37,6 +37,12 @@ namespace GitReleaseManager.Core
             _configuration = configuration;
         }
 
+        public async Task<Release> CreateEmptyReleaseAsync(string owner, string repository, string name, string targetCommitish, bool prerelease)
+        {
+            var release = await CreateReleaseAsync(owner, repository, name, name, string.Empty, prerelease, targetCommitish, null).ConfigureAwait(false);
+            return release;
+        }
+
         public async Task<Release> CreateReleaseFromMilestoneAsync(string owner, string repository, string milestone, string releaseName, string targetCommitish, IList<string> assets, bool prerelease, string templateFilePath)
         {
             var templatePath = ReleaseTemplates.DEFAULT_NAME;

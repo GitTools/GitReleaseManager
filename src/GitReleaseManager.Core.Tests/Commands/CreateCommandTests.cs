@@ -27,6 +27,31 @@ namespace GitReleaseManager.Core.Tests.Commands
             _command = new CreateCommand(_vcsService, _logger);
         }
 
+        public async Task Should_Create_Empty_Release()
+        {
+            var options = new CreateSubOptions
+            {
+                RepositoryOwner = "owner",
+                RepositoryName = "repository",
+                TargetCommitish = "target commitish",
+                Prerelease = false,
+                AllowEmpty = true,
+            };
+
+            var releaseName = options.Name ?? options.Milestone;
+
+            _vcsService.CreateEmptyReleaseAsync(options.RepositoryOwner, options.RepositoryName, options.Name, options.TargetCommitish, options.Prerelease)
+                .Returns(_release);
+
+            var result = await _command.Execute(options).ConfigureAwait(false);
+            result.ShouldBe(0);
+
+            await _vcsService.Received(1).CreateEmptyReleaseAsync(options.RepositoryOwner, options.RepositoryName, releaseName, options.TargetCommitish, options.Prerelease).ConfigureAwait(false);
+            _logger.Received(1).Information(Arg.Any<string>());
+            _logger.Received(1).Information(Arg.Any<string>(), _release.HtmlUrl);
+            _logger.Received(1).Verbose(Arg.Any<string>(), _release.Body);
+        }
+
         [TestCase(null, 2)]
         [TestCase("release", 1)]
         public async Task Should_Create_Release_From_Milestone(string name, int logVerboseCount)
