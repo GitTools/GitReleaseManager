@@ -1,4 +1,8 @@
+using System;
+using System.Globalization;
 using System.IO;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 using GitReleaseManager.Core.Commands;
 using GitReleaseManager.Core.Helpers;
@@ -24,7 +28,11 @@ namespace GitReleaseManager.Core.Tests.Commands
             _fileSystem = new FileSystem(Substitute.For<BaseSubOptions>());
             _logger = Substitute.For<ILogger>();
             _command = new InitCommand(_fileSystem, _logger);
-            _targetDirectory = Path.GetTempPath();
+            _targetDirectory = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+            if (!Directory.Exists(_targetDirectory))
+            {
+                Directory.CreateDirectory(_targetDirectory);
+            }
         }
 
         [Test]
@@ -44,6 +52,45 @@ namespace GitReleaseManager.Core.Tests.Commands
             if (configFileExists)
             {
                 File.Delete(configFilePath);
+            }
+        }
+
+        [Test]
+        public async Task Should_Not_Execute_Command_For_Legacy_FileName()
+        {
+            var options = new InitSubOptions { TargetDirectory = _targetDirectory };
+
+            var configFilePath = Path.Combine(_targetDirectory, "GitReleaseManager.yaml");
+            var configNewFilePath = Path.Combine(_targetDirectory, "GitReleaseManager.yml");
+            if (File.Exists(configNewFilePath))
+            {
+                File.Delete(configNewFilePath);
+            }
+
+            File.WriteAllText(configFilePath, "s");
+            var expectedHash = GetHash(configFilePath);
+
+            var result = await _command.Execute(options).ConfigureAwait(false);
+            result.ShouldBe(0); // Should this perhaps return 1
+
+            var actualHash = GetHash(configFilePath);
+            actualHash.ShouldBe(expectedHash);
+            File.Exists(configNewFilePath).ShouldBeFalse();
+        }
+
+        private static string GetHash(string filePath)
+        {
+            using (var sha256 = SHA256.Create())
+            {
+                var bytes = sha256.ComputeHash(File.ReadAllBytes(filePath));
+
+                var builder = new StringBuilder();
+                foreach (var b in bytes)
+                {
+                    builder.AppendFormat(CultureInfo.InvariantCulture, "{0:x2}", b);
+                }
+
+                return builder.ToString();
             }
         }
     }
