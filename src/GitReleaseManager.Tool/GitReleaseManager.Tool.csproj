@@ -1,0 +1,53 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <LangVersion>8.0</LangVersion>
+        <OutputType>Exe</OutputType>
+        <AssemblyName>GitReleaseManager</AssemblyName>
+
+        <PackAsTool>true</PackAsTool>
+        <TargetFrameworks>netcoreapp2.1;netcoreapp3.1</TargetFrameworks>
+        <ToolCommandName>dotnet-gitreleasemanager</ToolCommandName>
+        <PackageId>GitReleaseManager.Tool</PackageId>
+
+        <Title>GitReleaseManager Tool</Title>
+        <Authors>GitTools Contributors</Authors>
+        <PackageProjectUrl>https://github.com/GitTools/GitReleaseManager</PackageProjectUrl>
+        <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+        <PackageTags>github release notes create export</PackageTags>
+        <Description>Tool for creating and exporting releases for software applications from online Version Control Systems</Description>
+        <Copyright>Copyright (c) 2015 - Present - GitTools Contributors</Copyright>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageIcon>package_icon.png</PackageIcon>
+        <PackageReleaseNotes>https://github.com/GitTools/GitReleaseManager/releases</PackageReleaseNotes>
+        <RepositoryType>git</RepositoryType>
+        <RepositoryUrl>https://github.com/GitTools/GitReleaseManager.git</RepositoryUrl>
+        <NoWarn>$(NoWarn);CA1707;</NoWarn>
+    </PropertyGroup>
+    <ItemGroup>
+        <Compile Include="../GitReleaseManager.Cli/**/*.cs" Exclude="../GitReleaseManager.Cli/obj/**/*.*;../GitReleaseManager.Cli/bin/**/*.*" />
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\GitReleaseManager.Core\GitReleaseManager.Core.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="CommandLineParser" Version="2.8.0" />
+        <PackageReference Include="Destructurama.Attributed" Version="2.0.0" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
+        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0">
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="Octokit" Version="0.50.0" />
+        <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
+        <PackageReference Include="Serilog.Sinks.Debug" Version="2.0.0" PrivateAssets="All" />
+        <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
+        <PackageReference Include="seriloganalyzer" Version="0.15.0" />
+    </ItemGroup>
+    <ItemGroup>
+        <None Include="../../icons/package_icon.png">
+            <Pack>True</Pack>
+            <PackagePath></PackagePath>
+        </None>
+    </ItemGroup>
+</Project>

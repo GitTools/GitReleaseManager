@@ -1,10 +1,9 @@
 # GitReleaseManager
 
-![Icon](https://raw.github.com/GitTools/GitReleaseManager/develop/Icons/package_icon_no_credit.png)
+![Icon](https://raw.github.com/GitTools/GitReleaseManager/develop/icons/package_icon_no_credit.png)
 
 [![License](https://img.shields.io/:license-mit-blue.svg)](https://gep13.mit-license.org)
 [![Coverage Status](https://coveralls.io/repos/GitTools/GitReleaseManager/badge.svg?branch=develop)](https://coveralls.io/r/GitTools/GitReleaseManager?branch=develop)
-[![Coverity Scan Build Status](https://scan.coverity.com/projects/5110/badge.svg)](https://scan.coverity.com/projects/5110)
 
 Do you detest creating release notes for your software applications hosted on GitHub? If so, this is the tool for you.
 
@@ -22,18 +21,34 @@ GitReleaseManager allows you to:
 
 ## Installation
 
+### .NET Global Tool
+
+To install GitReleaseManager as a .NET Global tool, execute:
+
+```sh
+dotnet tool install --global GitReleaseManager.Tool
+```
+
+### Chocolatey
+
 You can install GitReleaseManager via Chocolatey by executing:
 
-`choco install gitreleasemanager.portable`
+```sh
+choco install gitreleasemanager.portable
+```
 
 **NOTE:**
 Depending on which version of Chocolatey you are using, you may be required to confirm the installation of the application. You can avoid this prompt using the following command:
 
-`choco install gitreleasemanager.portable -y`
+```sh
+choco install gitreleasemanager.portable -y
+```
 
 If you are interested in trying out the latest pre-release version of GitReleaseManager then you can use the following installation command:
 
-`choco install gitreleasemanager.portable -source https://www.myget.org/F/grm_develop/ -pre`
+```sh
+choco install gitreleasemanager.portable -source https://www.myget.org/F/grm_develop/ -pre
+```
 
 This uses the public GitReleaseManager feed which is hosted on [MyGet.org](https://www.myget.org/)
 
@@ -63,7 +78,7 @@ The documentation for GitReleaseManager can be found on [here](https://gittools.
 
 ## Credits
 
-GitReleaseManager is brought to you by quite a few people and frameworks. See [CREDITS](https://github.com/GitTools/GitReleaseManager/blob/develop/Documentation/Legal/CREDITS.md) for full information.
+GitReleaseManager is brought to you by quite a few people and frameworks. See [CREDITS](https://github.com/GitTools/GitReleaseManager/blob/develop/CREDITS.md) for full information.
 
 Full original credit has to go to the people at [Particular Software](https://www.particular.net/), without whom this project would not have been possible. They originally created the [GitHubReleaseNotes](https://github.com/Particular/GitHubReleaseNotes) project, which GitReleaseManager is based on, and draws a lot of inspiration from.
 

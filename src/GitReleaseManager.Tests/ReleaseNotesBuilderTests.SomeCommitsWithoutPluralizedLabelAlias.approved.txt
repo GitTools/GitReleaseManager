@@ -1,0 +1,6 @@
+As part of this release we had [5 commits](https://github.com/TestUser/FakeRepository/commits/1.2.3) which resulted in [2 issues](https://github.com/gep13/FakeRepository/issues?q=milestone%3A1.2.3?closed=1) being closed.
+
+__Help Wanteds__
+
+- [__#1__](http://example.com/1) Issue 1
+- [__#2__](http://example.com/2) Issue 2

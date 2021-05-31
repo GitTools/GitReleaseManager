@@ -3,6 +3,10 @@
 
 root = true
 
+# Keep this file simple, only basic formatting should be
+# defined here.
+# Code styles should be defined in src/.editorconfig
+
 [*]
 charset = utf-8 # Just for consistency
 # Indentation and spacing

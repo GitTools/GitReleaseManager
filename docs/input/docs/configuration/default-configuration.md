@@ -4,7 +4,7 @@ Title: Default Configuration
 RedirectFrom: docs/yaml/index.html
 ---
 
-GitReleaseManager configuration can be controlled using a GitReleaseManager.yaml
+GitReleaseManager configuration can be controlled using a configuration
 file, which is typically stored at the root of your project.
 
 GitReleaseManager ships with the following default set of configuration (i.e.
@@ -12,11 +12,10 @@ when no yaml file is placed in the root directory):
 
 ```yaml
 create:
+    # Please see
+    # https://gittools.github.io/GitReleaseManager/docs/configuration/template-configuration#editing-the-templates
+    # configuration for configuring footers
     include-footer: false
-    footer-heading: ''
-    footer-content: ''
-    footer-includes-milestone: false
-    milestone-replace-text: ''
     include-sha-section: false
     sha-section-heading: "SHA256 Hashes of the release artifacts"
     sha-section-line-format: "- `{1}\t{0}`"
@@ -37,18 +36,46 @@ close:
     - [GitHub release](https://github.com/{owner}/{repository}/releases/tag/{milestone})
 
     Your **[GitReleaseManager](https://github.com/GitTools/GitReleaseManager)** bot :package::rocket:
+default-branch: master
+labels:
+    - name: Breaking Change
+      description: Functionality breaking changes
+      color: b60205
+    - name: Bug
+      description: Something isn't working
+      color: ee0701
+    - name: Build
+      description: Build pipeline
+      color: 009800
+    - name: Documentation
+      description: Improvements or additions to documentation
+      color: d4c5f9
+    - name: Feature
+      description: Request for a new feature
+      color: 84b6eb
+    - name: Good First Issue
+      description: Good for newcomers
+      color: 7057ff
+    - name: Help Wanted
+      description: Extra attention is needed
+      color: 33aa3f
+    - name: Improvement
+      description: Improvement of an existing feature
+      color: 207de5
+    - name: Question
+      description: Further information is requested
+      color: cc317c
 issue-labels-include:
+    - Breaking Change
     - Bug
-    - Duplicate
-    - Enhancement
+    - Documentation
     - Feature
+    - Good First Issue
     - Help Wanted
     - Improvement
-    - Invalid
     - Question
-    - Wontfix
 issue-labels-exclude:
-    - Internal Refactoring
+    - Build
 issue-labels-alias: []
 ```
 
@@ -80,11 +107,11 @@ control the look and feel of the generated release notes.
         milestone, which should be replaced with the actual milestone value. As an
         example, let's say you want to provide a link to where you can download your
         release, and the URL could be something like
-        <http://mydomain.com/releases/0.1.0>. You don't want to have to hard code the
-        milestone number into your yaml configuration, so instead, you can use a
-        replacement string in your footer-content, which will then be replaced with
-        the actual milestone release number, when the release is created. Default is
-        false.
+        <http://mydomain.com/releases/0.1.0>. You don't want to have to hard code
+        the milestone number into your yaml configuration, so instead, you can use
+        a replacement string in your footer-content, which will then be replaced
+        with the actual milestone release number, when the release is created. Default
+        is false.
 - **milestone-replace-text**
   - A string value which contains the string which should be replaced in the
         footer-content with the actual milestone release number. Default is an empty
@@ -153,6 +180,14 @@ tokenized values, such as milestone, owner, repository, with the actual values.
     - This is a template for what comment should be added to each issue.  Within
       this comment template, it is possible to replace information for example,
       the milestone name, the owner/repository information, etc.
+
+## Default branch
+
+The name of the default branch.
+
+## Labels
+
+Pre-defined issue labels.
 
 ## Issues to include
 

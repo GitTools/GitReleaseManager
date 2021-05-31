@@ -1,0 +1,4 @@
+root = false
+
+[*.cs]
+dotnet_naming_rule.async_method_should_have_async_suffix.severity = none

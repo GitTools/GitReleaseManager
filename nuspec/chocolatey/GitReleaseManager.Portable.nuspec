@@ -10,7 +10,7 @@
         <owners>gep13</owners>
         <licenseUrl>https://github.com/GitTools/GitReleaseManager/blob/develop/LICENSE</licenseUrl>
         <projectUrl>https://github.com/GitTools/GitReleaseManager</projectUrl>
-        <iconUrl>https://cdn.jsdelivr.net/gh/GitTools/GitReleaseManager@9c547452a10afaf83fce1b5833f4762487b017b7/Icons/package_icon.svg</iconUrl>
+        <iconUrl>https://cdn.jsdelivr.net/gh/GitTools/GitReleaseManager@e61a984ddd300e36c9d88ca45696d2f93b631839/icons/package_icon.svg</iconUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>Tool for creating and exporting releases for software applications from online Version Control Systems</description>
         <summary>Tool for creating and exporting releases for software applications</summary>
@@ -19,10 +19,10 @@
         <tags>github release notes create export</tags>
     </metadata>
     <files>
-        <file src="..\..\BuildArtifacts\temp\_PublishedApplications\GitReleaseManager.Cli\net461\*.exe" target="tools" />
-        <file src="..\..\BuildArtifacts\temp\_PublishedApplications\GitReleaseManager.Cli\net461\*.dll" target="tools" exclude="**\Serilog.Sinks.Debug.dll" />
-        <file src="..\..\BuildArtifacts\temp\_PublishedApplications\GitReleaseManager.Cli\net461\*.pdb" target="tools" />
-        <file src="..\..\BuildArtifacts\temp\_PublishedApplications\GitReleaseManager.Cli\net461\*.exe.config" target="tools" />
+        <file src="..\..\BuildArtifacts\temp\_PublishedApplications\GitReleaseManager.Cli\net472\*.exe" target="tools" />
+        <file src="..\..\BuildArtifacts\temp\_PublishedApplications\GitReleaseManager.Cli\net472\*.dll" target="tools" exclude="**\Serilog.Sinks.Debug.dll" />
+        <file src="..\..\BuildArtifacts\temp\_PublishedApplications\GitReleaseManager.Cli\net472\*.pdb" target="tools" />
+        <file src="..\..\BuildArtifacts\temp\_PublishedApplications\GitReleaseManager.Cli\net472\*.exe.config" target="tools" />
         <file src="chocolateyInstall.ps1" target="tools"/>
         <file src="chocolateyUninstall.ps1" target="tools"/>
         <file src="VERIFICATION.TXT" />

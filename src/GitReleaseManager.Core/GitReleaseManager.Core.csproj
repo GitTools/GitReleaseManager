@@ -1,0 +1,49 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <!-- This two imports allow visual studio to transform text templates during building (1 for VS2019, and 1 for VS2017) -->
+    <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v16.0\TextTemplating\Microsoft.TextTemplating.targets" Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v16.0\TextTemplating\Microsoft.TextTemplating.targets')" />
+    <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v15.0\TextTemplating\Microsoft.TextTemplating.targets" Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v15.0\TextTemplating\Microsoft.TextTemplating.targets')" />
+    <PropertyGroup>
+        <LangVersion>8.0</LangVersion>
+        <TargetFrameworks>netstandard2.0</TargetFrameworks>
+        <Title>GitReleaseManager.Core</Title>
+        <Description>Create release notes in markdown given a milestone</Description>
+        <IsPackable>false</IsPackable>
+        <NoWarn>$(NoWarn);CA1707;</NoWarn>
+        <TransformOnBuild>true</TransformOnBuild>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <T4ReferencePath Include="$(VsIdePath)PublicAssemblies\" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="CommandLineParser" Version="2.8.0" />
+        <PackageReference Include="Destructurama.Attributed" Version="2.0.0" />
+        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0">
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+          <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="Octokit" Version="0.50.0" />
+        <PackageReference Include="Scriban" Version="3.6.0" />
+        <PackageReference Include="seriloganalyzer" Version="0.15.0" />
+        <PackageReference Include="YamlDotNet" Version="11.1.1" />
+        <PackageReference Include="AutoMapper" Version="10.1.1" />
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Update="Templates\ReleaseTemplates.g.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>ReleaseTemplates.tt</DependentUpon>
+        </Compile>
+    </ItemGroup>
+    <ItemGroup>
+      <None Update="Templates\ReleaseTemplates.tt">
+        <Generator>TextTemplatingFileGenerator</Generator>
+        <LastGenOutput>ReleaseTemplates.g.cs</LastGenOutput>
+      </None>
+      <None Include="Templates/**/*.sbn" />
+    </ItemGroup>
+    <ItemGroup>
+      <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+    </ItemGroup>
+</Project>

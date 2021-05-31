@@ -9,14 +9,14 @@ that are generated for that milestone. For example, let's say you were doing
 some internal refactoring work. This information is not required for the end
 user, but you as the administrator would want to know when that work was done.
 GitReleaseManager caters for this requirement using the issue-labels-exclude
-section of the GitReleaseManager.yaml file.
+section of the GitReleaseManager configuration file.
 
 Out of the box, GitReleaseManager is configured to exclude issues that are
 tagged with the following labels:
 
 ```yaml
 issue-labels-exclude:
-    - Internal Refactoring
+    - Build
 ```
 
 :::{.alert .alert-info}
@@ -27,6 +27,6 @@ will NOT be included within the generated release notes.
 
 :::{.alert .alert-warning}
 All issues assigned to a milestone have to have a label which matches to one
-listed in the include to exclude sections of the GitReleaseManager.yaml file or
-the default configuration.
+listed in the include to exclude sections of the GitReleaseManager configuration
+file or the default configuration.
 :::

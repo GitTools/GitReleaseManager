@@ -1,0 +1,201 @@
+using System;
+using System.Net;
+using System.Reflection;
+using System.Threading.Tasks;
+using CommandLine;
+using GitReleaseManager.Cli.Logging;
+using GitReleaseManager.Core;
+using GitReleaseManager.Core.Commands;
+using GitReleaseManager.Core.Configuration;
+using GitReleaseManager.Core.Helpers;
+using GitReleaseManager.Core.Options;
+using GitReleaseManager.Core.Provider;
+using GitReleaseManager.Core.ReleaseNotes;
+using GitReleaseManager.Core.Templates;
+using Microsoft.Extensions.DependencyInjection;
+using Octokit;
+using Serilog;
+
+namespace GitReleaseManager.Cli
+{
+    public static class Program
+    {
+        private static IServiceProvider _serviceProvider;
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "The main entry point can not be named with an Async Suffix")]
+        private static async Task<int> Main(string[] args)
+        {
+            // Just add the TLS 1.2 protocol to the Service Point manager until
+            // we've upgraded to latest Octokit.
+            ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
+
+            try
+            {
+                return await Parser.Default.ParseArguments<CreateSubOptions, DiscardSubOptions, AddAssetSubOptions, CloseSubOptions, OpenSubOptions, PublishSubOptions, ExportSubOptions, InitSubOptions, ShowConfigSubOptions, LabelSubOptions>(args)
+                    .WithParsed<BaseSubOptions>(LogConfiguration.ConfigureLogging)
+                    .WithParsed<BaseSubOptions>(CreateFiglet)
+                    .WithParsed<BaseSubOptions>(LogOptions)
+                    .WithParsed<BaseSubOptions>(RegisterServices)
+                    .MapResult(
+                    (CreateSubOptions opts) => ExecuteCommand(opts),
+                    (DiscardSubOptions opts) => ExecuteCommand(opts),
+                    (AddAssetSubOptions opts) => ExecuteCommand(opts),
+                    (CloseSubOptions opts) => ExecuteCommand(opts),
+                    (OpenSubOptions opts) => ExecuteCommand(opts),
+                    (PublishSubOptions opts) => ExecuteCommand(opts),
+                    (ExportSubOptions opts) => ExecuteCommand(opts),
+                    (InitSubOptions opts) => ExecuteCommand(opts),
+                    (ShowConfigSubOptions opts) => ExecuteCommand(opts),
+                    (LabelSubOptions opts) => ExecuteCommand(opts),
+                    errs => Task.FromResult(1)).ConfigureAwait(false);
+            }
+            catch (AggregateException ex)
+            {
+                Log.Fatal("{Message}", ex.Message);
+                foreach (var innerException in ex.InnerExceptions)
+                {
+                    Log.Fatal(innerException, "{Message}", innerException.Message);
+                }
+
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                Log.Fatal(ex, "{Message}", ex.Message);
+                return 1;
+            }
+            finally
+            {
+                Log.CloseAndFlush();
+                DisposeServices();
+            }
+        }
+
+        private static void RegisterServices(BaseSubOptions options)
+        {
+            var fileSystem = new FileSystem(options);
+            var logger = Log.ForContext<VcsService>();
+            var mapper = AutoMapperConfiguration.Configure();
+            var configuration = ConfigurationProvider.Provide(options.TargetDirectory ?? Environment.CurrentDirectory, fileSystem);
+
+            var serviceCollection = new ServiceCollection()
+                .AddSingleton(logger)
+                .AddSingleton(mapper)
+                .AddSingleton(configuration)
+                .AddSingleton(configuration.Export)
+                .AddSingleton<ICommand<AddAssetSubOptions>, AddAssetsCommand>()
+                .AddSingleton<ICommand<CloseSubOptions>, CloseCommand>()
+                .AddSingleton<ICommand<CreateSubOptions>, CreateCommand>()
+                .AddSingleton<ICommand<DiscardSubOptions>, DiscardCommand>()
+                .AddSingleton<ICommand<ExportSubOptions>, ExportCommand>()
+                .AddSingleton<ICommand<InitSubOptions>, InitCommand>()
+                .AddSingleton<ICommand<LabelSubOptions>, LabelCommand>()
+                .AddSingleton<ICommand<OpenSubOptions>, OpenCommand>()
+                .AddSingleton<ICommand<PublishSubOptions>, PublishCommand>()
+                .AddSingleton<ICommand<ShowConfigSubOptions>, ShowConfigCommand>()
+                .AddSingleton<IFileSystem>(fileSystem)
+                .AddSingleton<IReleaseNotesExporter, ReleaseNotesExporter>()
+                .AddSingleton<IReleaseNotesBuilder, ReleaseNotesBuilder>()
+                .AddSingleton<IVcsProvider, GitHubProvider>()
+                .AddSingleton<IVcsService, VcsService>();
+
+            if (options is BaseVcsOptions vcsOptions)
+            {
+                if (string.IsNullOrWhiteSpace(vcsOptions.Token))
+                {
+                    throw new Exception("The token option is not defined");
+                }
+
+                var gitHubClient = new GitHubClient(new ProductHeaderValue("GitReleaseManager")) { Credentials = new Credentials(vcsOptions.Token) };
+                serviceCollection = serviceCollection
+                    .AddSingleton<IGitHubClient>(gitHubClient);
+            }
+
+            serviceCollection = serviceCollection
+                .AddTransient((services) => new TemplateFactory(services.GetRequiredService<IFileSystem>(), services.GetRequiredService<Config>(), TemplateKind.Create));
+
+            _serviceProvider = serviceCollection.BuildServiceProvider();
+        }
+
+        private static void DisposeServices()
+        {
+            if (_serviceProvider is IDisposable serviceProvider)
+            {
+                serviceProvider.Dispose();
+            }
+        }
+
+        private static void CreateFiglet(BaseSubOptions options)
+        {
+            if (options.NoLogo)
+            {
+                return;
+            }
+
+            var version = Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
+#pragma warning disable CA1307 // Specify StringComparison ; Reason, we can't do this because of targeting .NET Framework
+            if (version.Contains("+"))
+#pragma warning restore CA1307 // Specify StringComparison
+            {
+                version = version.Substring(0, version.IndexOf("+", StringComparison.Ordinal));
+            }
+
+            // The following ugly formats is to prevent incorrect indentation
+            // detected by editorconfig formatters.
+            const string shortFormat = "\n   ____ ____  __  __\n"
+                + "  / ___|  _ \\|  \\/  |\n"
+                + " | |  _| |_) | |\\/| |\n"
+                + " | |_| |  _ <| |  | |\n"
+                + "  \\____|_| \\_\\_|  |_|\n"
+                + "{0,21}\n";
+            const string longFormat = "\n   ____ _ _   ____      _                     __  __\n"
+                + "  / ___(_) |_|  _ \\ ___| | ___  __ _ ___  ___|  \\/  | __ _ _ __   __ _  __ _  ___ _ __\n"
+                + " | |  _| | __| |_) / _ \\ |/ _ \\/ _` / __|/ _ \\ |\\/| |/ _` | '_ \\ / _` |/ _` |/ _ \\ '__|\n"
+                + " | |_| | | |_|  _ <  __/ |  __/ (_| \\__ \\  __/ |  | | (_| | | | | (_| | (_| |  __/ |\n"
+                + "  \\____|_|\\__|_| \\_\\___|_|\\___|\\__,_|___/\\___|_|  |_|\\__,_|_| |_|\\__,_|\\__, |\\___|_|\n"
+                + "                                                                       |___/\n"
+                + "{0,87}\n";
+
+            if (GetConsoleWidth() > 87)
+            {
+                Log.Information(longFormat, version);
+            }
+            else
+            {
+                Log.Information(shortFormat, version);
+            }
+        }
+
+        private static int GetConsoleWidth()
+        {
+            try
+            {
+                return Console.WindowWidth;
+            }
+            catch
+            {
+                Log.Verbose("Unable to get the width of the console.");
+            }
+
+            try
+            {
+                return Console.BufferWidth;
+            }
+            catch
+            {
+                Log.Verbose("Unable to get the width of the buffer");
+                return int.MaxValue;
+            }
+        }
+
+        private static Task<int> ExecuteCommand<TOptions>(TOptions options)
+            where TOptions : BaseSubOptions
+        {
+            var command = _serviceProvider.GetRequiredService<ICommand<TOptions>>();
+            return command.Execute(options);
+        }
+
+        private static void LogOptions(BaseSubOptions options)
+            => Log.Debug("{@Options}", options);
+    }
+}

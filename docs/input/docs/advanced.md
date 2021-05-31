@@ -7,8 +7,8 @@ In order to best understand the use case for GitReleaseManager let's take a look
 at an example workflow currently in use by the Chocolatey GUI project.
 
 :::{.alert .alert-info}
-Chocolatey GUI uses a number of concepts, for example, GitFlow, psake build
-script engine, AppVeyor Continuous Integration, as well as using
+Chocolatey GUI uses a number of concepts, for example, GitFlow, Cake Build
+Orchestration script engine, AppVeyor Continuous Integration, as well as using
 GitReleaseManager. In order to understand the usage of GitReleaseManager for
 this project, you sort of have to understand the entire process. As a result,
 this walk-through steps you through the entire end to end process, which as a
@@ -48,20 +48,20 @@ Every build of Chocolatey GUI generates a number of Build Artifacts, these inclu
 - Chocolatey GUI uses [AppVeyor](http://www.appveyor.com/) as it's Continuous Integration Server.
 - Any time a **Pull Request** is created, an AppVeyor build is triggered, but no
     deployment of the build artifacts takes place
-- Any time a commit is made into the **develop **branch, an AppVeyor build is
+- Any time a commit is made into the **develop** branch, an AppVeyor build is
     triggered, and the build artifacts are deployed to the
     [MyGet Develop Feed](https://www.myget.org/feed/Packages/ghrm_develop)
-- Any time a commit is made into the **master **branch, an AppVeyor build is
+- Any time a commit is made into the **master** branch, an AppVeyor build is
     triggered, and the build artifacts are deployed to the
     [MyGet Master Feed](https://www.myget.org/feed/Packages/ghrm_master)
-- Any time a **tag **is applied to the repository, an AppVeyor build is
+- Any time a **tag** is applied to the repository, an AppVeyor build is
     triggered, and the build artifacts are deployed to
     [Chocolatey.org](https://chocolatey.org/) for public consumption.
 
 ### Ok, so where does GitReleaseManager come into play?
 
 The role of GitReleaseManager really comes into play when moving between a
-**release** or **hotfix** branch and the **master **branch.
+**release** or **hotfix** branch and the **master** branch.
 
 Let's say you have done a bunch of work on the develop branch, you want to move
 all of that work into the master branch, via a release branch. When you do
@@ -71,7 +71,7 @@ the issues list, everything that is being included in the release, and now would
 seem like a great time to create some release notes. And this is exactly what
 the build process for Chocolatey GUI does. Let's break this down further...
 
-- A **release **branch is created from **develop **branch
+- A **release** branch is created from **develop** branch
 - The release branch is merged into master branch, triggering a build (with
     deployment to MyGet Master Feed).
 - During this build, GitReleaseManager is executed, using the **create**

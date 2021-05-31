@@ -1,0 +1,31 @@
+{
+    "$schema": "https://raw.githubusercontent.com/DotNetAnalyzers/StyleCopAnalyzers/master/StyleCop.Analyzers/StyleCop.Analyzers/Settings/stylecop.schema.json",
+    "settings": {
+        "documentationRules": {
+            "documentExposedElements": false,
+            "documentInterfaces": false,
+            "documentInternalElements": false,
+            "documentPrivateElements": false,
+            "documentPrivateFields": false,
+            "headerDecoration": "-----------------------------------------------------------------------",
+            "copyrightText": "Copyright (c) 2015 - Present - GitTools Contributors",
+            "companyName": "GitTools Contributors",
+            "xmlHeader": true
+        },
+        "layoutRules": {
+            "newlineAtEndOfFile": "allow",
+            "allowConsecutiveUsings": true
+        },
+        "orderingRules": {
+            "usingDirectivesPlacement": "insideNamespace",
+            "systemUsingDirectivesFirst": true,
+            "elementOrder": [
+              "kind",
+              "accessibility",
+              "constant",
+              "static",
+              "readonly"
+            ]
+        }
+    }
+}

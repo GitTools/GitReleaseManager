@@ -3,8 +3,8 @@ Order: 80
 Title: Init
 ---
 
-The Init command is used to create GitReleaseManager.yaml which controls the
-configurable options of GitReleaseManager
+The Init command is used to create a GitReleaseManager configuration file which
+controls the configurable options of GitReleaseManager
 
 ## **Optional Parameters**
 
@@ -12,20 +12,18 @@ configurable options of GitReleaseManager
     executed. Defaults to current directory.
 - `-l, --logFilePath`: Path to where log file should be created. Defaults to
     logging to console.
-
-## **Notes**
-
-For Authentication use either username and password, or token parameter
+- `--templates`: Extract all embedded resource templates to disk. Defaults to false.
+  (_Will not overwrite existing files_).
 
 ## **Examples**
 
-Create a new GitReleaseManager.yaml file in the current working directory:
+Create a new GitReleaseManager configuration file in the current working directory:
 
 ```bash
 gitreleasemanager.exe init
 ```
 
-Create a new GitReleaseManager.yaml file in a specific directory:
+Create a new GitReleaseManager configuration file in a specific directory:
 
 ```bash
 gitreleasemanager.exe init -d c:\temp

@@ -6,15 +6,15 @@ Title: Create
 This is the main command of GitReleaseManager and it is used to create a draft
 set of release notes based on a milestone, which has been set up in GitHub.
 
-There are two modes of operation when creating a Release. GitReleaseManager can
+There are three modes of operation when creating a Release. GitReleaseManager can
 take as an input the name of the milestone to generate the release notes from.
 Or, it can take as an input the name of a file which contains the release notes
 to include in the Release.
+Or, it can create a release that doesn't contain any release notes, i.e. it is empty.
 
 ## **Required Parameters**
 
-- `--token`: The access token to access GitHub with. This can't be used when
-    using the username and password parameters.
+- `--token`: The access token to access GitHub with.
 - `-o, --owner`: The owner of the repository.
 - `-r, --repository`: The name of the repository.
 
@@ -34,12 +34,17 @@ to include in the Release.
     executed. Defaults to current directory.
 - `-l, --logFilePath`: Path to where log file should be created. Defaults to
     logging to console.
+- `-t, --template`: The path to the file to be used as the template for the
+    release notes.
+- `--allowEmpty`: Allow the creation of an empty set of release notes. In this
+mode, milestone and input file path will be ignored.
 
-<?! Include "_deprecated-args.md /?>
+## **Template**
 
-## **Notes**
-
-<?! Include "_auth-notes.md" /?>
+GitReleaseManager uses the [Scriban](https://github.com/lunet-io/scriban)
+library to parse and render release notes. For more information on how you can
+create your own template, please check the Scriban
+[documentation](https://github.com/lunet-io/scriban/tree/master/doc).
 
 ## **Examples**
 
@@ -50,8 +55,6 @@ Milestone:
 gitreleasemanager.exe create -m 0.1.0 --token fsdfsf67657sdf5s7d5f -o repoOwner -r repo
 
 gitreleasemanager.exe create --milestone 0.1.0 --token fsdfsf67657sdf5s7d5f --owner repoOwner --repository repo
-
-gitreleasemanager.exe create --milestone 0.1.0 --username bob --password password --owner repoOwner --repository repo
 ```
 
 Use GitReleaseManager to create a Release, taking the release notes as an input parameter:
@@ -60,6 +63,10 @@ Use GitReleaseManager to create a Release, taking the release notes as an input 
 gitreleasemanager.exe create -i c:\temp\releasenotes.md -n 0.1.0 --token fsdfsf67657sdf5s7d5f -o repoOwner -r repo
 
 gitreleasemanager.exe create --inputFilePath c:\temp\releasenotes.md --name 0.1.0 --token fsdfsf67657sdf5s7d5f --owner repoOwner --repository repo
+```
 
-gitreleasemanager.exe create --inputFilePath c:\temp\releasenotes.md --name 0.1.0 --username bob --password password --owner repoOwner --repository repo
+Use GitReleaseManager to create an empty release:
+
+```bash
+gitreleasemanager.exe create -n 0.1.0 --token fsdfsf67657sdf5s7d5f -o repoOwner -r repo --allowEmpty
 ```

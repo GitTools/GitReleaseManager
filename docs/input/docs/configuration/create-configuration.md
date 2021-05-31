@@ -4,7 +4,7 @@ Title: Example of Create Configuration
 ---
 
 When creating a release, it is possible to control the look and feel of the
-release notes, using settings within the GitReleaseManager.yaml file.
+release notes, using settings within the GitReleaseManager configuration file.
 
 Out of the box, GitReleaseManager creates a simple list of Issues included
 within a milestone, split into the labels that have been configured. However,
@@ -12,8 +12,15 @@ it is possible to include additional information in the form of a footer, which
 provides additional information, for example, where an installation of the
 release can be located.
 
-Take for example the GitReleaseManager.yaml file which is used by the
+Take for example the GitReleaseManager configuration file which is used by the
 [Chocolatey GUI](https://github.com/chocolatey/ChocolateyGUI) project:
+
+:::{.alert .alert-warning}
+Configuring the footer is no longer recommended. Going forward the recommendation
+is to configure the footer using separate template files.
+Please see [Template Configuration](template-configuration#editing-the-templates)
+for more information.
+:::
 
 ```yaml
 create:
@@ -28,7 +35,7 @@ This would result in the following
 [release notes](https://github.com/chocolatey/ChocolateyGUI/releases/tag/0.13.1)
 being generated:
 
-![Example Release Notes](../images/example-release-notes.png)
+![Example Release Notes](../images/example-release-notes.png){.img-responsive}
 
 :::{.alert .alert-info}
 The generated URL for the link to Chocolatey.org includes the milestone number.

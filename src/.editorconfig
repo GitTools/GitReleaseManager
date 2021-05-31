@@ -1,0 +1,227 @@
+root = false
+
+[*.cs]
+## Formatting
+dotnet_sort_system_directives_first = true
+
+# CA1031: Do not catch general exception types
+dotnet_diagnostic.CA1031.severity = warning
+
+# CA1032: Implement standard exception constructors
+dotnet_diagnostic.CA1032.severity = none
+
+# CA1055: URI-like return values should not be strings
+dotnet_diagnostic.CA1055.severity = warning
+
+# CA1056: URI-like properties should not be strings
+dotnet_diagnostic.CA1056.severity = warning
+
+# CA1062: Validate arguments of public methods
+dotnet_diagnostic.CA1062.severity = warning
+
+# CA1303: Do not pass literals as localized parameters
+dotnet_diagnostic.CA1303.severity = none
+
+# CA1305: Specify IFormatProvider
+dotnet_diagnostic.CA1305.severity = warning
+
+# CA1716: Identifiers should not match keywords
+dotnet_diagnostic.CA1716.severity = warning
+
+# CA1814: Prefer jagged arrays over multidimensional
+dotnet_diagnostic.CA1814.severity = none
+
+# CA1822: Mark members as static
+dotnet_diagnostic.CA1822.severity = warning
+
+# CA1824: Mark assemblies with NeutralResourcesLanguageAttribute
+dotnet_diagnostic.CA1824.severity = warning
+
+# CA1826: Do not use Enumerable methods on indexable collections. Instead use the collection directly
+dotnet_diagnostic.CA1826.severity = none
+
+# CA2227: Collection properties should be read only
+dotnet_diagnostic.CA2227.severity = warning
+
+# IDE0004: Remove Unnecessary Cast
+dotnet_diagnostic.IDE0004.severity = warning
+
+# IDE0005: Using directive is unnecessary
+dotnet_diagnostic.IDE0005.severity = error
+
+# IDE0008: Use explicit type
+csharp_style_var_elsewhere = true:suggestion
+csharp_style_var_for_built_in_types = false:suggestion
+csharp_style_var_when_type_is_apparent = false:suggestion
+
+# IDE0018: Variable declaration can be inlined
+dotnet_diagnostic.IDE0018.severity = warning
+
+# IDE0052: Remove unread private members
+dotnet_diagnostic.IDE0052.severity = warning
+
+# IDE0055: Fix formatting
+dotnet_diagnostic.IDE0055.severity = warning
+
+# IDE0063: Use simple 'using' statement
+csharp_prefer_simple_using_statement = false:warning
+
+# RCS1057: Add empty line between declarations.
+dotnet_diagnostic.RCS1057.severity = none
+
+# RCS1079: Throwing of new NotImplementedException.
+dotnet_diagnostic.RCS1079.severity = warning
+
+# RCS1155: Use StringComparison when comparing strings.
+dotnet_diagnostic.RCS1155.severity = warning
+
+# RCS1163: Unused parameter.
+dotnet_diagnostic.RCS1163.severity = suggestion
+
+# RCS1194: Implement exception constructors.
+dotnet_diagnostic.RCS1194.severity = none
+
+# SA1101: Prefix local calls with this
+dotnet_diagnostic.SA1101.severity = none
+
+# SA1117: Parameters should be on same line or separate lines
+dotnet_diagnostic.SA1117.severity = none
+
+# SA1122: Use string.Empty for empty strings
+dotnet_diagnostic.SA1122.severity = error
+
+# SA1200: Using directive should appear within a namespace declaration
+dotnet_diagnostic.SA1200.severity = none
+
+# SA1201: Elements should appear in the correct order
+dotnet_diagnostic.SA1201.severity = none
+
+# SA1202: Public members should come before private members
+dotnet_diagnostic.SA1202.severity = none
+
+# SA1204: Static members should appear before non-static members
+dotnet_diagnostic.SA1204.severity = none
+
+# SA1210: Using directives should be ordered alphabetically by the namespaces
+dotnet_diagnostic.SA1210.severity = error
+
+# SA1300: Element should begin with an uppercase letter
+dotnet_diagnostic.SA1300.severity = error
+
+# SA1309: Field names should not begin with underscore
+dotnet_diagnostic.SA1309.severity = none
+
+# SA1310: Field names should not contain an underscore
+dotnet_diagnostic.SA1310.severity = none
+
+# SA1402: File may only contain a single type
+dotnet_diagnostic.SA1402.severity = none
+
+# SA1404: Code analysis suppressions should have justification
+dotnet_diagnostic.SA1404.severity = none
+
+# SA1413: Use trailing comma in multi-line initializers
+dotnet_diagnostic.SA1413.severity = error
+
+# SA1507: Code should not contain multiple blank lines in a row
+dotnet_diagnostic.SA1507.severity = error
+
+# SA1516: Elements should be separated by a blank line
+dotnet_diagnostic.SA1516.severity = none
+
+# SA1623: The property's documentation summary text should begin with: 'Gets or sets'
+dotnet_diagnostic.SA1623.severity = warning
+
+# SA1625: Element documenation should not be copied and pasted
+dotnet_diagnostic.SA1625.severity = none
+
+# SA1633: File should have header
+dotnet_diagnostic.SA1633.severity = none
+
+# SA1638: File header file name documentation should match file name
+dotnet_diagnostic.SA1638.severity = error
+
+# SA1649: File name should match first type name
+dotnet_diagnostic.SA1649.severity = none
+
+#### Naming styles ####
+
+## Note, these rules are currently on available in Visual Studio
+## not when building using dotnet
+
+# Naming rules
+
+dotnet_naming_rule.interface_should_be_begins_with_i.severity = error
+dotnet_naming_rule.interface_should_be_begins_with_i.symbols = interface
+dotnet_naming_rule.interface_should_be_begins_with_i.style = begins_with_i
+
+dotnet_naming_rule.types_should_be_pascal_case.severity = error
+dotnet_naming_rule.types_should_be_pascal_case.symbols = types
+dotnet_naming_rule.types_should_be_pascal_case.style = pascal_case
+
+dotnet_naming_rule.non_field_members_should_be_pascal_case.severity = error
+dotnet_naming_rule.non_field_members_should_be_pascal_case.symbols = non_field_members
+dotnet_naming_rule.non_field_members_should_be_pascal_case.style = pascal_case
+
+dotnet_naming_rule.field_members_should_be_camel_case_underscored.severity = error
+dotnet_naming_rule.fields_should_use_camel_case_underscored.symbols = field_members
+dotnet_naming_rule.fields_should_use_camel_case_underscored.style = camel_case_underscore
+
+dotnet_naming_rule.async_method_should_have_async_suffix.severity = error
+dotnet_naming_rule.async_method_should_have_async_suffix.symbols = async_methods_only
+dotnet_naming_rule.async_method_should_have_async_suffix.style = async_pascal_case
+
+dotnet_naming_rule.constant_fields_should_use_all_uppercase.severity = error
+dotnet_naming_rule.constant_fields_should_use_all_uppercase.symbols = constant_field_members
+dotnet_naming_rule.constant_fields_should_use_all_uppercase.style = all_uppercase
+
+# Symbol specifications
+
+dotnet_naming_symbols.interface.applicable_kinds = interface
+dotnet_naming_symbols.interface.applicable_accessibilities = public, internal, private, protected, protected_internal, private_protected
+dotnet_naming_symbols.interface.required_modifiers =
+
+dotnet_naming_symbols.types.applicable_kinds = class, struct, interface, enum
+dotnet_naming_symbols.types.applicable_accessibilities = public, internal, private, protected, protected_internal, private_protected
+dotnet_naming_symbols.non_field_members.required_modifiers =
+
+dotnet_naming_symbols.non_field_members.applicable_kinds = property, event, method
+dotnet_naming_symbols.non_field_members.applicable_accessibilities = public, internal, private, protected, protected_internal, private_protected
+
+dotnet_naming_symbols.field_members.applicable_kinds = field
+dotnet_naming_symbols.field_members.applicable_accessibilities = public, internal, private, protected, protected_internal, private_protected
+
+dotnet_naming_symbols.async_methods_only.applicable_kinds = method
+dotnet_naming_symbols.async_methods_only.applicable_accessibilities = public, internal, private, protected, protected_internal, private_protected
+dotnet_naming_symbols.async_methods_only.required_modifiers = async
+
+dotnet_naming_symbols.constant_field_members.applicable_kinds = field
+dotnet_naming_symbols.constant_field_members.applicable_accessibilities = public, internal, private, protected, protected_internal, private_protected
+dotnet_naming_symbols.constant_field_members.required_modifiers = const
+
+# Naming styles
+
+dotnet_naming_style.pascal_case.required_prefix =
+dotnet_naming_style.pascal_case.required_suffix =
+dotnet_naming_style.pascal_case.word_separator =
+dotnet_naming_style.pascal_case.capitalization = pascal_case
+
+dotnet_naming_style.begins_with_i.required_prefix = I
+dotnet_naming_style.begins_with_i.required_suffix =
+dotnet_naming_style.begins_with_i.word_separator =
+dotnet_naming_style.begins_with_i.capitalization = pascal_case
+
+dotnet_naming_style.camel_case_underscore.required_prefix = _
+dotnet_naming_style.camel_case_underscore.required_suffix =
+dotnet_naming_style.camel_case_underscore.word_separator =
+dotnet_naming_style.camel_case_underscore.capitalization = camel_case
+
+dotnet_naming_style.async_pascal_case.required_prefix =
+dotnet_naming_style.async_pascal_case.required_suffix = Async
+dotnet_naming_style.async_pascal_case.word_separator =
+dotnet_naming_style.async_pascal_case.capitalization = pascal_case
+
+dotnet_naming_style.all_uppercase.required_prefix =
+dotnet_naming_style.all_uppercase.required_suffix =
+dotnet_naming_style.all_uppercase.word_separator = _
+dotnet_naming_style.all_uppercase.capitalization = all_upper

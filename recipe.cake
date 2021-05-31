@@ -1,17 +1,15 @@
-#load nuget:https://www.myget.org/F/cake-contrib/api/v2?package=Cake.Recipe&version=2.0.0-unstable0023&prerelease
+#load nuget:?package=Cake.Recipe&version=2.2.1
+#tool dotnet:?package=dotnet-t4&version=2.0.5
 
-Environment.SetVariableNames(githubUserNameVariable: "GITTOOLS_GITHUB_USERNAME",
-                            githubPasswordVariable: "GITTOOLS_GITHUB_PASSWORD",
-                            githubTokenVariable: "GITTOOLS_GITHUB_TOKEN");
+Environment.SetVariableNames(githubTokenVariable: "GITTOOLS_GITHUB_TOKEN");
 
 BuildParameters.SetParameters(context: Context,
                             buildSystem: BuildSystem,
-                            sourceDirectoryPath: "./Source",
+                            sourceDirectoryPath: "./src",
                             title: "GitReleaseManager",
                             repositoryOwner: "GitTools",
                             repositoryName: "GitReleaseManager",
                             appVeyorAccountName: "GitTools",
-                            shouldRunGitVersion: true,
                             shouldRunDotNetCorePack: true,
                             shouldRunIntegrationTests: true,
                             integrationTestScriptPath: "./tests/integration/tests.cake",
@@ -24,10 +22,12 @@ BuildParameters.PrintParameters(Context);
 
 ToolSettings.SetToolSettings(context: Context,
                             dupFinderExcludePattern: new string[] {
-                                BuildParameters.RootDirectoryPath + "/Source/GitReleaseManager.Tests/*.cs",
-                                BuildParameters.RootDirectoryPath + "/Source/GitReleaseManager.IntegrationTests/*.cs",
-                                BuildParameters.RootDirectoryPath + "/Source/GitReleaseManager/AutoMapperConfiguration.cs" },
-                            testCoverageFilter: "+[GitReleaseManager*]* -[GitReleaseManager.Tests*]*",
+                                BuildParameters.RootDirectoryPath + "/src/GitReleaseManager.Core.Tests/**/*.cs",
+                                BuildParameters.RootDirectoryPath + "/src/GitReleaseManager.Tests/**/*.cs",
+                                BuildParameters.RootDirectoryPath + "/src/GitReleaseManager.IntegrationTests/**/*.cs",
+                                BuildParameters.RootDirectoryPath + "/src/GitReleaseManager/AutoMapperConfiguration.cs",
+                                "**/*.AssemblyInfo.cs" },
+                            testCoverageFilter: "+[GitReleaseManager*]* -[GitReleaseManager.Core.Tests*]* -[GitReleaseManager.Tests*]*",
                             testCoverageExcludeByAttribute: "*.ExcludeFromCodeCoverage*",
                             testCoverageExcludeByFile: "*/*Designer.cs;*/*.g.cs;*/*.g.i.cs");
 
@@ -43,6 +43,18 @@ BuildParameters.Tasks.DotNetCoreBuildTask.Does((context) =>
 
 BuildParameters.Tasks.CreateReleaseNotesTask
     .IsDependentOn(BuildParameters.Tasks.DotNetCoreBuildTask); // We need to be sure that the executable exist, and have been registered before using it
+
+Task("Transform-TextTemplates")
+    .IsDependeeOf(BuildParameters.Tasks.DotNetCoreBuildTask.Task.Name)
+    .Does(() =>
+{
+    var templates = GetFiles("src/**/*.tt");
+
+    foreach (var template in templates)
+    {
+        TransformTemplate(template);
+    }
+});
 
 ((CakeTask)BuildParameters.Tasks.ExportReleaseNotesTask.Task).ErrorHandler = null;
 ((CakeTask)BuildParameters.Tasks.PublishGitHubReleaseTask.Task).ErrorHandler = null;

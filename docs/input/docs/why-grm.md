@@ -8,7 +8,7 @@ GitReleaseManager into your workflow.
 
 :::{.alert .alert-info}
 GitReleaseManager works best when included within an automated Build Process,
-using something like psake, or Octopus Deploy, etc. However, it can also be
+using something like Cake, etc. However, it can also be
 used as a standalone tool, running directly at the command line.
 :::
 

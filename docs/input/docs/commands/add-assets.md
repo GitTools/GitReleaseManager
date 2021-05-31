@@ -8,8 +8,7 @@ additional assets to the release using the addasset command.
 
 ## **Required Parameters**
 
-- `--token`: The access token to access GitHub with. This can't be used when
-    using the username and password parameters.
+- `--token`: The access token to access GitHub with.
 - `-o, --owner`: The owner of the repository.
 - `-r, --repository`: The name of the repository.
 - `-t, --tagName`: The name of the release (Typically this is the generated
@@ -24,18 +23,10 @@ additional assets to the release using the addasset command.
 - `-l, -logFilePath`: Path to where log file should be created. Defaults to
     logging to console.
 
-<?! Include "_deprecated-args.md /?>
-
-## **Notes**
-
-<?! Include "_auth-notes.md" /?>
-
 ## **Examples**
 
 ```bash
 gitreleasemanager.exe addasset -t 0.1.0 -u bob --token fsdfsf67657sdf5s7d5f -r repo -a c:\buildartifacts\setup.exe,c:\buildartifacts\setup.nupkg
 
 gitreleasemanager.exe create --tagName 0.1.0 --token fsdfsf67657sdf5s7d5f --owner repoOwner --repository repo --assets c:\buildartifacts\setup.exe,c:\buildartifacts\setup.nupkg
-
-gitreleasemanager.exe create --tagName 0.1.0 --username bob --password password --owner repoOwner --repository repo --assets c:\buildartifacts\setup.exe,c:\buildartifacts\setup.nupkg
 ```

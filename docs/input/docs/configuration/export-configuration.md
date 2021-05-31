@@ -13,7 +13,7 @@ Out of the box, GitReleaseManager exports all the release notes for a given
 project, exactly as these release notes appear within GitHub. However, there
 are certain things that you might want to add, or remove, for the exported file.
 
-Take for example the GitReleaseManager.yaml file which is used by the
+Take for example the GitReleaseManager configuration file which is used by the
 [Chocolatey GUI](https://github.com/chocolatey/ChocolateyGUI) project:
 
 ```yaml
