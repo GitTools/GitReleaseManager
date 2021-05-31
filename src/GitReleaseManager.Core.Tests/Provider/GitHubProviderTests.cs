@@ -631,30 +631,26 @@ namespace GitReleaseManager.Core.Tests.Provider
             var result = await _gitHubProvider.GetReleaseAsync(OWNER, REPOSITORY, TAG_NAME).ConfigureAwait(false);
             result.ShouldBeSameAs(release);
 
-            await _gitHubClient.Repository.Release.Received(1).Get(OWNER, REPOSITORY, TAG_NAME).ConfigureAwait(false);
+            await _gitHubClient.Repository.Release.Received(1).GetAll(OWNER, REPOSITORY).ConfigureAwait(false);
             _mapper.Received(1).Map<Release>(Arg.Any<object>());
         }
 
         [Test]
-        public async Task Should_Throw_An_Exception_On_Getting_Release_For_Non_Existent_Tag()
+        public async Task Should_Return_Null_On_Getting_Release_For_Non_Existent_Tag()
         {
             _gitHubClient.Repository.Release.Get(OWNER, REPOSITORY, TAG_NAME)
                 .Returns(Task.FromException<Octokit.Release>(_notFoundException));
 
-            var ex = await Should.ThrowAsync<NotFoundException>(() => _gitHubProvider.GetReleaseAsync(OWNER, REPOSITORY, TAG_NAME)).ConfigureAwait(false);
-            ex.Message.ShouldBe(_notFoundException.Message);
-            ex.InnerException.ShouldBe(_notFoundException);
+            var release = await _gitHubProvider.GetReleaseAsync(OWNER, REPOSITORY, TAG_NAME).ConfigureAwait(false);
+
+            release.ShouldBeNull();
         }
 
         [Test]
-        public async Task Should_Throw_An_Exception_On_Getting_Release()
+        public async Task Should_Return_Null_Getting_Release()
         {
-            _gitHubClient.Repository.Release.Get(OWNER, REPOSITORY, TAG_NAME)
-                .Returns(Task.FromException<Octokit.Release>(_exception));
-
-            var ex = await Should.ThrowAsync<ApiException>(() => _gitHubProvider.GetReleaseAsync(OWNER, REPOSITORY, TAG_NAME)).ConfigureAwait(false);
-            ex.Message.ShouldBe(_exception.Message);
-            ex.InnerException.ShouldBe(_exception);
+            var release = await _gitHubProvider.GetReleaseAsync(OWNER, REPOSITORY, TAG_NAME).ConfigureAwait(false);
+            release.ShouldBeNull();
         }
 
         [Test]
