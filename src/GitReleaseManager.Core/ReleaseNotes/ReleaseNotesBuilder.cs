@@ -100,7 +100,7 @@ namespace GitReleaseManager.Core.ReleaseNotes
             var issueLabels = _configuration.IssueLabelsInclude;
             var issuesByLabel = issues
                 .SelectMany(o => o.Labels, (issue, label) => new { Label = label.Name, Issue = issue })
-                .Where(o => issueLabels.Contains(o.Label))
+                .Where(o => issueLabels.Any(il => string.Equals(il, o.Label, StringComparison.OrdinalIgnoreCase)))
                 .GroupBy(o => o.Label, o => o.Issue)
                 .OrderBy(o => o.Key)
                 .ToDictionary(o => GetValidLabel(o.Key, o.Count()), o => o.OrderBy(issue => issue.Number).ToList());

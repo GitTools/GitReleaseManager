@@ -254,7 +254,14 @@ namespace GitReleaseManager.Core.Provider
         {
             return ExecuteAsync(async () =>
             {
-                var release = await _gitHubClient.Repository.Release.Get(owner, repository, tagName).ConfigureAwait(false);
+                // This method wants to return a single Release, that has the tagName that is requested.
+                // The obvious thing to do here would be to use Repository.Release.Get, however, this doesn't
+                // return a release if it hasn't been published yet.  As a result, we have to get all of them,
+                // and then filter down to the required tagName. This isn't very efficient, and would love to
+                // have a better approach, but for now, this does the job.
+                var releases = await _gitHubClient.Repository.Release.GetAll(owner, repository).ConfigureAwait(false);
+
+                var release = releases.FirstOrDefault(r => r.TagName == tagName);
 
                 return _mapper.Map<Release>(release);
             });

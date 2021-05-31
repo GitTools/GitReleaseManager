@@ -111,11 +111,8 @@ namespace GitReleaseManager.Cli
                     .AddSingleton<IGitHubClient>(gitHubClient);
             }
 
-            if (options is CreateSubOptions)
-            {
-                serviceCollection = serviceCollection
-                    .AddTransient((services) => new TemplateFactory(services.GetRequiredService<IFileSystem>(), services.GetRequiredService<Config>(), TemplateKind.Create));
-            }
+            serviceCollection = serviceCollection
+                .AddTransient((services) => new TemplateFactory(services.GetRequiredService<IFileSystem>(), services.GetRequiredService<Config>(), TemplateKind.Create));
 
             _serviceProvider = serviceCollection.BuildServiceProvider();
         }

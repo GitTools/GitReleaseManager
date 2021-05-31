@@ -302,7 +302,7 @@ namespace GitReleaseManager.Core.Tests
                 .Returns(Task.FromResult(RELEASE_NOTES));
 
             _vcsProvider.GetReleaseAsync(OWNER, REPOSITORY, MILESTONE_TITLE)
-                .Returns(Task.FromException<Release>(_notFoundException));
+                .Returns(Task.FromResult<Release>(null));
 
             _vcsProvider.CreateReleaseAsync(OWNER, REPOSITORY, Arg.Any<Release>())
                 .Returns(Task.FromResult(release));
@@ -330,7 +330,7 @@ namespace GitReleaseManager.Core.Tests
                 .Returns(Task.FromResult(RELEASE_NOTES));
 
             _vcsProvider.GetReleaseAsync(OWNER, REPOSITORY, MILESTONE_TITLE)
-                .Returns(Task.FromException<Release>(_notFoundException));
+                .Returns(Task.FromResult<Release>(null));
 
             _vcsProvider.CreateReleaseAsync(OWNER, REPOSITORY, Arg.Any<Release>())
                 .Returns(Task.FromResult(release));
@@ -434,7 +434,7 @@ namespace GitReleaseManager.Core.Tests
             var release = new Release();
 
             _vcsProvider.GetReleaseAsync(OWNER, REPOSITORY, MILESTONE_TITLE)
-                .Returns(Task.FromException<Release>(_notFoundException));
+                .Returns(Task.FromResult<Release>(null));
 
             _vcsProvider.CreateReleaseAsync(OWNER, REPOSITORY, Arg.Any<Release>())
                 .Returns(Task.FromResult(release));
