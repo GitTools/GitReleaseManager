@@ -64,30 +64,32 @@ namespace GitReleaseManager.Core.Configuration
 
             var defaultConfigFilePath = Path.Combine(targetDirectory, "GitReleaseManager.yml");
 
-            if (!fileSystem.Exists(defaultConfigFilePath))
+            foreach (var possiblePaths in new[] { defaultConfigFilePath, Path.Combine(targetDirectory, "GitReleaseManager.yaml") })
             {
-                _logger.Information("Writing sample file to '{ConfigFilePath}'", defaultConfigFilePath);
-
-                // The following try/finally statements is to ensure that
-                // any stream is not disposed more than once.
-                Stream stream = null;
-                try
+                if (fileSystem.Exists(possiblePaths))
                 {
-                    stream = fileSystem.OpenWrite(defaultConfigFilePath);
-                    using (var writer = new StreamWriter(stream))
-                    {
-                        stream = null;
-                        ConfigSerializer.WriteSample(writer);
-                    }
-                }
-                finally
-                {
-                    stream?.Dispose();
+                    _logger.Error("Cannot write sample, '{File}' already exists", possiblePaths);
+                    return;
                 }
             }
-            else
+
+            _logger.Information("Writing sample file to '{ConfigFilePath}'", defaultConfigFilePath);
+
+            // The following try/finally statements is to ensure that
+            // any stream is not disposed more than once.
+            Stream stream = null;
+            try
             {
-                _logger.Error("Cannot write sample, '{File}' already exists", defaultConfigFilePath);
+                stream = fileSystem.OpenWrite(defaultConfigFilePath);
+                using (var writer = new StreamWriter(stream))
+                {
+                    stream = null;
+                    ConfigSerializer.WriteSample(writer);
+                }
+            }
+            finally
+            {
+                stream?.Dispose();
             }
         }
 
