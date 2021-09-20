@@ -3,6 +3,8 @@
 
 Environment.SetVariableNames(githubTokenVariable: "GITTOOLS_GITHUB_TOKEN");
 
+var standardNotificationMessage = "A new version, {0} of {1} has just been released.  Get it from Chocolatey, NuGet, or as a .Net Global Tool.";
+
 BuildParameters.SetParameters(context: Context,
                             buildSystem: BuildSystem,
                             sourceDirectoryPath: "./src",
@@ -13,8 +15,8 @@ BuildParameters.SetParameters(context: Context,
                             shouldRunDotNetCorePack: true,
                             shouldRunIntegrationTests: true,
                             integrationTestScriptPath: "./tests/integration/tests.cake",
-                            twitterMessage: "A new version of GitReleaseManager has just been released.  Get it from Chocolatey, NuGet, or as a .Net Global Tool.",
-                            gitterMessage: "@/all A new version of GitReleaseManager has just been released.  Get it from Chocolatey, NuGet, or as a .Net Global Tool.");
+                            twitterMessage: standardNotificationMessage,
+                            gitterMessage: "@/all " + standardNotificationMessage);
 
 BuildParameters.PackageSources.Add(new PackageSourceData(Context, "GPR", "https://nuget.pkg.github.com/GitTools/index.json", FeedType.NuGet, false));
 
