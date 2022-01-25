@@ -17,7 +17,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ windows-2019 ]
+        os: [ windows-2022 ]
 
     steps:
       - name: Checkout the repository
