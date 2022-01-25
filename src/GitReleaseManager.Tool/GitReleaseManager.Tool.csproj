@@ -6,7 +6,7 @@
         <AssemblyName>GitReleaseManager</AssemblyName>
 
         <PackAsTool>true</PackAsTool>
-        <TargetFrameworks>netcoreapp3.1</TargetFrameworks>
+        <TargetFrameworks>netcoreapp3.1;net6.0</TargetFrameworks>
         <ToolCommandName>dotnet-gitreleasemanager</ToolCommandName>
         <PackageId>GitReleaseManager.Tool</PackageId>
 

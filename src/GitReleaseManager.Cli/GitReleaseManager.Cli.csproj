@@ -3,7 +3,7 @@
         <LangVersion>8.0</LangVersion>
         <OutputType>Exe</OutputType>
         <AssemblyName>GitReleaseManager</AssemblyName>
-        <TargetFrameworks>net472;netcoreapp3.1</TargetFrameworks>
+        <TargetFrameworks>net472;netcoreapp3.1;net6.0</TargetFrameworks>
         <Title>GitReleaseManager.Cli</Title>
         <Description>Create release notes in markdown given a milestone</Description>
         <IsPackable>false</IsPackable>
