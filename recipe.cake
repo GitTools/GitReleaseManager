@@ -14,6 +14,7 @@ BuildParameters.SetParameters(context: Context,
                             appVeyorAccountName: "GitTools",
                             shouldRunDotNetCorePack: true,
                             shouldRunIntegrationTests: true,
+                            shouldRunDupFinder: false,
                             integrationTestScriptPath: "./tests/integration/tests.cake",
                             twitterMessage: standardNotificationMessage,
                             gitterMessage: "@/all " + standardNotificationMessage);
