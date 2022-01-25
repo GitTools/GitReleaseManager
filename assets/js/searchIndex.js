@@ -39,342 +39,48 @@ var searchModule = function() {
     a(
         {
             id:0,
-            title:"AddAssetsCommand",
-            content:"AddAssetsCommand",
+            title:"GitHubProfile",
+            content:"GitHubProfile",
             description:'',
             tags:''
         },
         {
-            url:'/GitReleaseManager/api/GitReleaseManager.Core.Commands/AddAssetsCommand',
-            title:"AddAssetsCommand",
+            url:'/GitReleaseManager/api/GitReleaseManager.Core.MappingProfiles/GitHubProfile',
+            title:"GitHubProfile",
             description:""
         }
     );
     a(
         {
             id:1,
-            title:"VcsService",
-            content:"VcsService",
+            title:"NotFoundException",
+            content:"NotFoundException",
             description:'',
             tags:''
         },
         {
-            url:'/GitReleaseManager/api/GitReleaseManager.Core/VcsService',
-            title:"VcsService",
+            url:'/GitReleaseManager/api/GitReleaseManager.Core.Exceptions/NotFoundException',
+            title:"NotFoundException",
             description:""
         }
     );
     a(
         {
             id:2,
-            title:"LogConfiguration",
-            content:"LogConfiguration",
+            title:"IReleaseNotesBuilder",
+            content:"IReleaseNotesBuilder",
             description:'',
             tags:''
         },
         {
-            url:'/GitReleaseManager/api/GitReleaseManager.Cli.Logging/LogConfiguration',
-            title:"LogConfiguration",
+            url:'/GitReleaseManager/api/GitReleaseManager.Core.ReleaseNotes/IReleaseNotesBuilder',
+            title:"IReleaseNotesBuilder",
             description:""
         }
     );
     a(
         {
             id:3,
-            title:"CreateCommand",
-            content:"CreateCommand",
-            description:'',
-            tags:''
-        },
-        {
-            url:'/GitReleaseManager/api/GitReleaseManager.Core.Commands/CreateCommand',
-            title:"CreateCommand",
-            description:""
-        }
-    );
-    a(
-        {
-            id:4,
-            title:"InitCommand",
-            content:"InitCommand",
-            description:'',
-            tags:''
-        },
-        {
-            url:'/GitReleaseManager/api/GitReleaseManager.Core.Commands/InitCommand',
-            title:"InitCommand",
-            description:""
-        }
-    );
-    a(
-        {
-            id:5,
-            title:"ConfigurationProvider",
-            content:"ConfigurationProvider",
-            description:'',
-            tags:''
-        },
-        {
-            url:'/GitReleaseManager/api/GitReleaseManager.Core.Configuration/ConfigurationProvider',
-            title:"ConfigurationProvider",
-            description:""
-        }
-    );
-    a(
-        {
-            id:6,
-            title:"AutoMapperConfiguration",
-            content:"AutoMapperConfiguration",
-            description:'',
-            tags:''
-        },
-        {
-            url:'/GitReleaseManager/api/GitReleaseManager.Core/AutoMapperConfiguration',
-            title:"AutoMapperConfiguration",
-            description:""
-        }
-    );
-    a(
-        {
-            id:7,
-            title:"IVcsService",
-            content:"IVcsService",
-            description:'',
-            tags:''
-        },
-        {
-            url:'/GitReleaseManager/api/GitReleaseManager.Core/IVcsService',
-            title:"IVcsService",
-            description:""
-        }
-    );
-    a(
-        {
-            id:8,
-            title:"SampleAttribute",
-            content:"SampleAttribute",
-            description:'',
-            tags:''
-        },
-        {
-            url:'/GitReleaseManager/api/GitReleaseManager.Core.Attributes/SampleAttribute',
-            title:"SampleAttribute",
-            description:""
-        }
-    );
-    a(
-        {
-            id:9,
-            title:"Release",
-            content:"Release",
-            description:'',
-            tags:''
-        },
-        {
-            url:'/GitReleaseManager/api/GitReleaseManager.Core.Model/Release',
-            title:"Release",
-            description:""
-        }
-    );
-    a(
-        {
-            id:10,
-            title:"CommentsObjectDescriptor",
-            content:"CommentsObjectDescriptor",
-            description:'',
-            tags:''
-        },
-        {
-            url:'/GitReleaseManager/api/GitReleaseManager.Core.Configuration.CommentSerialization/CommentsObjectDescriptor',
-            title:"CommentsObjectDescriptor",
-            description:""
-        }
-    );
-    a(
-        {
-            id:11,
-            title:"ShowConfigCommand",
-            content:"ShowConfigCommand",
-            description:'',
-            tags:''
-        },
-        {
-            url:'/GitReleaseManager/api/GitReleaseManager.Core.Commands/ShowConfigCommand',
-            title:"ShowConfigCommand",
-            description:""
-        }
-    );
-    a(
-        {
-            id:12,
-            title:"ClientBuilder",
-            content:"ClientBuilder",
-            description:'',
-            tags:''
-        },
-        {
-            url:'/GitReleaseManager/api/GitReleaseManager.IntegrationTests/ClientBuilder',
-            title:"ClientBuilder",
-            description:""
-        }
-    );
-    a(
-        {
-            id:13,
-            title:"Config",
-            content:"Config",
-            description:'',
-            tags:''
-        },
-        {
-            url:'/GitReleaseManager/api/GitReleaseManager.Core.Configuration/Config',
-            title:"Config",
-            description:""
-        }
-    );
-    a(
-        {
-            id:14,
-            title:"DiscardSubOptions",
-            content:"DiscardSubOptions",
-            description:'',
-            tags:''
-        },
-        {
-            url:'/GitReleaseManager/api/GitReleaseManager.Core.Options/DiscardSubOptions',
-            title:"DiscardSubOptions",
-            description:""
-        }
-    );
-    a(
-        {
-            id:15,
-            title:"TemplateFactory",
-            content:"TemplateFactory",
-            description:'',
-            tags:''
-        },
-        {
-            url:'/GitReleaseManager/api/GitReleaseManager.Core.Templates/TemplateFactory',
-            title:"TemplateFactory",
-            description:""
-        }
-    );
-    a(
-        {
-            id:16,
-            title:"AddAssetSubOptions",
-            content:"AddAssetSubOptions",
-            description:'',
-            tags:''
-        },
-        {
-            url:'/GitReleaseManager/api/GitReleaseManager.Core.Options/AddAssetSubOptions',
-            title:"AddAssetSubOptions",
-            description:""
-        }
-    );
-    a(
-        {
-            id:17,
-            title:"IssueComment",
-            content:"IssueComment",
-            description:'',
-            tags:''
-        },
-        {
-            url:'/GitReleaseManager/api/GitReleaseManager.Core.Model/IssueComment',
-            title:"IssueComment",
-            description:""
-        }
-    );
-    a(
-        {
-            id:18,
-            title:"ItemState",
-            content:"ItemState",
-            description:'',
-            tags:''
-        },
-        {
-            url:'/GitReleaseManager/api/GitReleaseManager.Core.Model/ItemState',
-            title:"ItemState",
-            description:""
-        }
-    );
-    a(
-        {
-            id:19,
-            title:"GitHubProvider",
-            content:"GitHubProvider",
-            description:'',
-            tags:''
-        },
-        {
-            url:'/GitReleaseManager/api/GitReleaseManager.Core.Provider/GitHubProvider',
-            title:"GitHubProvider",
-            description:""
-        }
-    );
-    a(
-        {
-            id:20,
-            title:"LabelCommand",
-            content:"LabelCommand",
-            description:'',
-            tags:''
-        },
-        {
-            url:'/GitReleaseManager/api/GitReleaseManager.Core.Commands/LabelCommand',
-            title:"LabelCommand",
-            description:""
-        }
-    );
-    a(
-        {
-            id:21,
-            title:"Label",
-            content:"Label",
-            description:'',
-            tags:''
-        },
-        {
-            url:'/GitReleaseManager/api/GitReleaseManager.Core.Model/Label',
-            title:"Label",
-            description:""
-        }
-    );
-    a(
-        {
-            id:22,
-            title:"ConfigSerializer",
-            content:"ConfigSerializer",
-            description:'',
-            tags:''
-        },
-        {
-            url:'/GitReleaseManager/api/GitReleaseManager.Core.Configuration/ConfigSerializer',
-            title:"ConfigSerializer",
-            description:""
-        }
-    );
-    a(
-        {
-            id:23,
-            title:"ApiException",
-            content:"ApiException",
-            description:'',
-            tags:''
-        },
-        {
-            url:'/GitReleaseManager/api/GitReleaseManager.Core.Exceptions/ApiException',
-            title:"ApiException",
-            description:""
-        }
-    );
-    a(
-        {
-            id:24,
             title:"Program",
             content:"Program",
             description:'',
@@ -388,49 +94,203 @@ var searchModule = function() {
     );
     a(
         {
-            id:25,
-            title:"CreateConfig",
-            content:"CreateConfig",
+            id:4,
+            title:"AddAssetSubOptions",
+            content:"AddAssetSubOptions",
             description:'',
             tags:''
         },
         {
-            url:'/GitReleaseManager/api/GitReleaseManager.Core.Configuration/CreateConfig',
-            title:"CreateConfig",
+            url:'/GitReleaseManager/api/GitReleaseManager.Core.Options/AddAssetSubOptions',
+            title:"AddAssetSubOptions",
             description:""
         }
     );
     a(
         {
-            id:26,
-            title:"CloseSubOptions",
-            content:"CloseSubOptions",
+            id:5,
+            title:"VcsService",
+            content:"VcsService",
             description:'',
             tags:''
         },
         {
-            url:'/GitReleaseManager/api/GitReleaseManager.Core.Options/CloseSubOptions',
-            title:"CloseSubOptions",
+            url:'/GitReleaseManager/api/GitReleaseManager.Core/VcsService',
+            title:"VcsService",
             description:""
         }
     );
     a(
         {
-            id:27,
-            title:"FileSystem",
-            content:"FileSystem",
+            id:6,
+            title:"IVcsProvider",
+            content:"IVcsProvider",
             description:'',
             tags:''
         },
         {
-            url:'/GitReleaseManager/api/GitReleaseManager.Core.Helpers/FileSystem',
-            title:"FileSystem",
+            url:'/GitReleaseManager/api/GitReleaseManager.Core.Provider/IVcsProvider',
+            title:"IVcsProvider",
             description:""
         }
     );
     a(
         {
-            id:28,
+            id:7,
+            title:"SampleAttribute",
+            content:"SampleAttribute",
+            description:'',
+            tags:''
+        },
+        {
+            url:'/GitReleaseManager/api/GitReleaseManager.Core.Attributes/SampleAttribute',
+            title:"SampleAttribute",
+            description:""
+        }
+    );
+    a(
+        {
+            id:8,
+            title:"ExportCommand",
+            content:"ExportCommand",
+            description:'',
+            tags:''
+        },
+        {
+            url:'/GitReleaseManager/api/GitReleaseManager.Core.Commands/ExportCommand',
+            title:"ExportCommand",
+            description:""
+        }
+    );
+    a(
+        {
+            id:9,
+            title:"ClientBuilder",
+            content:"ClientBuilder",
+            description:'',
+            tags:''
+        },
+        {
+            url:'/GitReleaseManager/api/GitReleaseManager.IntegrationTests/ClientBuilder',
+            title:"ClientBuilder",
+            description:""
+        }
+    );
+    a(
+        {
+            id:10,
+            title:"LabelSubOptions",
+            content:"LabelSubOptions",
+            description:'',
+            tags:''
+        },
+        {
+            url:'/GitReleaseManager/api/GitReleaseManager.Core.Options/LabelSubOptions',
+            title:"LabelSubOptions",
+            description:""
+        }
+    );
+    a(
+        {
+            id:11,
+            title:"DiscardSubOptions",
+            content:"DiscardSubOptions",
+            description:'',
+            tags:''
+        },
+        {
+            url:'/GitReleaseManager/api/GitReleaseManager.Core.Options/DiscardSubOptions',
+            title:"DiscardSubOptions",
+            description:""
+        }
+    );
+    a(
+        {
+            id:12,
+            title:"OpenSubOptions",
+            content:"OpenSubOptions",
+            description:'',
+            tags:''
+        },
+        {
+            url:'/GitReleaseManager/api/GitReleaseManager.Core.Options/OpenSubOptions',
+            title:"OpenSubOptions",
+            description:""
+        }
+    );
+    a(
+        {
+            id:13,
+            title:"ShowConfigSubOptions",
+            content:"ShowConfigSubOptions",
+            description:'',
+            tags:''
+        },
+        {
+            url:'/GitReleaseManager/api/GitReleaseManager.Core.Options/ShowConfigSubOptions',
+            title:"ShowConfigSubOptions",
+            description:""
+        }
+    );
+    a(
+        {
+            id:14,
+            title:"PublishSubOptions",
+            content:"PublishSubOptions",
+            description:'',
+            tags:''
+        },
+        {
+            url:'/GitReleaseManager/api/GitReleaseManager.Core.Options/PublishSubOptions',
+            title:"PublishSubOptions",
+            description:""
+        }
+    );
+    a(
+        {
+            id:15,
+            title:"AutoMapperConfiguration",
+            content:"AutoMapperConfiguration",
+            description:'',
+            tags:''
+        },
+        {
+            url:'/GitReleaseManager/api/GitReleaseManager.Core/AutoMapperConfiguration',
+            title:"AutoMapperConfiguration",
+            description:""
+        }
+    );
+    a(
+        {
+            id:16,
+            title:"Release",
+            content:"Release",
+            description:'',
+            tags:''
+        },
+        {
+            url:'/GitReleaseManager/api/GitReleaseManager.Core.Model/Release',
+            title:"Release",
+            description:""
+        }
+    );
+    a(
+        {
+            id:17,
+            title:"LabelAlias",
+            content:"LabelAlias",
+            description:'',
+            tags:''
+        },
+        {
+            url:'/GitReleaseManager/api/GitReleaseManager.Core.Configuration/LabelAlias',
+            title:"LabelAlias",
+            description:""
+        }
+    );
+    a(
+        {
+            id:18,
             title:"ReleaseTemplates",
             content:"ReleaseTemplates",
             description:'',
@@ -444,15 +304,155 @@ var searchModule = function() {
     );
     a(
         {
-            id:29,
-            title:"ShowConfigSubOptions",
-            content:"ShowConfigSubOptions",
+            id:19,
+            title:"ShowConfigCommand",
+            content:"ShowConfigCommand",
             description:'',
             tags:''
         },
         {
-            url:'/GitReleaseManager/api/GitReleaseManager.Core.Options/ShowConfigSubOptions',
-            title:"ShowConfigSubOptions",
+            url:'/GitReleaseManager/api/GitReleaseManager.Core.Commands/ShowConfigCommand',
+            title:"ShowConfigCommand",
+            description:""
+        }
+    );
+    a(
+        {
+            id:20,
+            title:"Milestone",
+            content:"Milestone",
+            description:'',
+            tags:''
+        },
+        {
+            url:'/GitReleaseManager/api/GitReleaseManager.Core.Model/Milestone',
+            title:"Milestone",
+            description:""
+        }
+    );
+    a(
+        {
+            id:21,
+            title:"ReleaseNotesBuilderIntegrationTests",
+            content:"ReleaseNotesBuilderIntegrationTests",
+            description:'',
+            tags:''
+        },
+        {
+            url:'/GitReleaseManager/api/GitReleaseManager.IntegrationTests/ReleaseNotesBuilderIntegrationTests',
+            title:"ReleaseNotesBuilderIntegrationTests",
+            description:""
+        }
+    );
+    a(
+        {
+            id:22,
+            title:"AddAssetsCommand",
+            content:"AddAssetsCommand",
+            description:'',
+            tags:''
+        },
+        {
+            url:'/GitReleaseManager/api/GitReleaseManager.Core.Commands/AddAssetsCommand',
+            title:"AddAssetsCommand",
+            description:""
+        }
+    );
+    a(
+        {
+            id:23,
+            title:"CloseSubOptions",
+            content:"CloseSubOptions",
+            description:'',
+            tags:''
+        },
+        {
+            url:'/GitReleaseManager/api/GitReleaseManager.Core.Options/CloseSubOptions',
+            title:"CloseSubOptions",
+            description:""
+        }
+    );
+    a(
+        {
+            id:24,
+            title:"ItemStateFilter",
+            content:"ItemStateFilter",
+            description:'',
+            tags:''
+        },
+        {
+            url:'/GitReleaseManager/api/GitReleaseManager.Core.Model/ItemStateFilter',
+            title:"ItemStateFilter",
+            description:""
+        }
+    );
+    a(
+        {
+            id:25,
+            title:"LogConfiguration",
+            content:"LogConfiguration",
+            description:'',
+            tags:''
+        },
+        {
+            url:'/GitReleaseManager/api/GitReleaseManager.Cli.Logging/LogConfiguration',
+            title:"LogConfiguration",
+            description:""
+        }
+    );
+    a(
+        {
+            id:26,
+            title:"OctokitExtensions",
+            content:"OctokitExtensions",
+            description:'',
+            tags:''
+        },
+        {
+            url:'/GitReleaseManager/api/GitReleaseManager.Core.Extensions/OctokitExtensions',
+            title:"OctokitExtensions",
+            description:""
+        }
+    );
+    a(
+        {
+            id:27,
+            title:"BaseSubOptions",
+            content:"BaseSubOptions",
+            description:'',
+            tags:''
+        },
+        {
+            url:'/GitReleaseManager/api/GitReleaseManager.Core.Options/BaseSubOptions',
+            title:"BaseSubOptions",
+            description:""
+        }
+    );
+    a(
+        {
+            id:28,
+            title:"InitSubOptions",
+            content:"InitSubOptions",
+            description:'',
+            tags:''
+        },
+        {
+            url:'/GitReleaseManager/api/GitReleaseManager.Core.Options/InitSubOptions',
+            title:"InitSubOptions",
+            description:""
+        }
+    );
+    a(
+        {
+            id:29,
+            title:"IReleaseNotesExporter",
+            content:"IReleaseNotesExporter",
+            description:'',
+            tags:''
+        },
+        {
+            url:'/GitReleaseManager/api/GitReleaseManager.Core.ReleaseNotes/IReleaseNotesExporter',
+            title:"IReleaseNotesExporter",
             description:""
         }
     );
@@ -473,370 +473,6 @@ var searchModule = function() {
     a(
         {
             id:31,
-            title:"ExportConfig",
-            content:"ExportConfig",
-            description:'',
-            tags:''
-        },
-        {
-            url:'/GitReleaseManager/api/GitReleaseManager.Core.Configuration/ExportConfig',
-            title:"ExportConfig",
-            description:""
-        }
-    );
-    a(
-        {
-            id:32,
-            title:"PublishSubOptions",
-            content:"PublishSubOptions",
-            description:'',
-            tags:''
-        },
-        {
-            url:'/GitReleaseManager/api/GitReleaseManager.Core.Options/PublishSubOptions',
-            title:"PublishSubOptions",
-            description:""
-        }
-    );
-    a(
-        {
-            id:33,
-            title:"Issue",
-            content:"Issue",
-            description:'',
-            tags:''
-        },
-        {
-            url:'/GitReleaseManager/api/GitReleaseManager.Core.Model/Issue',
-            title:"Issue",
-            description:""
-        }
-    );
-    a(
-        {
-            id:34,
-            title:"ItemStateFilter",
-            content:"ItemStateFilter",
-            description:'',
-            tags:''
-        },
-        {
-            url:'/GitReleaseManager/api/GitReleaseManager.Core.Model/ItemStateFilter',
-            title:"ItemStateFilter",
-            description:""
-        }
-    );
-    a(
-        {
-            id:35,
-            title:"ReleaseNotesExporter",
-            content:"ReleaseNotesExporter",
-            description:'',
-            tags:''
-        },
-        {
-            url:'/GitReleaseManager/api/GitReleaseManager.Core.ReleaseNotes/ReleaseNotesExporter',
-            title:"ReleaseNotesExporter",
-            description:""
-        }
-    );
-    a(
-        {
-            id:36,
-            title:"GitHubProfile",
-            content:"GitHubProfile",
-            description:'',
-            tags:''
-        },
-        {
-            url:'/GitReleaseManager/api/GitReleaseManager.Core.MappingProfiles/GitHubProfile',
-            title:"GitHubProfile",
-            description:""
-        }
-    );
-    a(
-        {
-            id:37,
-            title:"Helper",
-            content:"Helper",
-            description:'',
-            tags:''
-        },
-        {
-            url:'/GitReleaseManager/api/GitReleaseManager.IntegrationTests/Helper',
-            title:"Helper",
-            description:""
-        }
-    );
-    a(
-        {
-            id:38,
-            title:"ExportSubOptions",
-            content:"ExportSubOptions",
-            description:'',
-            tags:''
-        },
-        {
-            url:'/GitReleaseManager/api/GitReleaseManager.Core.Options/ExportSubOptions',
-            title:"ExportSubOptions",
-            description:""
-        }
-    );
-    a(
-        {
-            id:39,
-            title:"InitSubOptions",
-            content:"InitSubOptions",
-            description:'',
-            tags:''
-        },
-        {
-            url:'/GitReleaseManager/api/GitReleaseManager.Core.Options/InitSubOptions',
-            title:"InitSubOptions",
-            description:""
-        }
-    );
-    a(
-        {
-            id:40,
-            title:"MilestoneExtensions",
-            content:"MilestoneExtensions",
-            description:'',
-            tags:''
-        },
-        {
-            url:'/GitReleaseManager/api/GitReleaseManager.Core.Extensions/MilestoneExtensions',
-            title:"MilestoneExtensions",
-            description:""
-        }
-    );
-    a(
-        {
-            id:41,
-            title:"IReleaseNotesBuilder",
-            content:"IReleaseNotesBuilder",
-            description:'',
-            tags:''
-        },
-        {
-            url:'/GitReleaseManager/api/GitReleaseManager.Core.ReleaseNotes/IReleaseNotesBuilder',
-            title:"IReleaseNotesBuilder",
-            description:""
-        }
-    );
-    a(
-        {
-            id:42,
-            title:"OpenSubOptions",
-            content:"OpenSubOptions",
-            description:'',
-            tags:''
-        },
-        {
-            url:'/GitReleaseManager/api/GitReleaseManager.Core.Options/OpenSubOptions',
-            title:"OpenSubOptions",
-            description:""
-        }
-    );
-    a(
-        {
-            id:43,
-            title:"ReleaseAsset",
-            content:"ReleaseAsset",
-            description:'',
-            tags:''
-        },
-        {
-            url:'/GitReleaseManager/api/GitReleaseManager.Core.Model/ReleaseAsset',
-            title:"ReleaseAsset",
-            description:""
-        }
-    );
-    a(
-        {
-            id:44,
-            title:"TemplateKind",
-            content:"TemplateKind",
-            description:'',
-            tags:''
-        },
-        {
-            url:'/GitReleaseManager/api/GitReleaseManager.Core.Templates/TemplateKind',
-            title:"TemplateKind",
-            description:""
-        }
-    );
-    a(
-        {
-            id:45,
-            title:"OpenCommand",
-            content:"OpenCommand",
-            description:'',
-            tags:''
-        },
-        {
-            url:'/GitReleaseManager/api/GitReleaseManager.Core.Commands/OpenCommand',
-            title:"OpenCommand",
-            description:""
-        }
-    );
-    a(
-        {
-            id:46,
-            title:"ReleaseNotesBuilderIntegrationTests",
-            content:"ReleaseNotesBuilderIntegrationTests",
-            description:'',
-            tags:''
-        },
-        {
-            url:'/GitReleaseManager/api/GitReleaseManager.IntegrationTests/ReleaseNotesBuilderIntegrationTests',
-            title:"ReleaseNotesBuilderIntegrationTests",
-            description:""
-        }
-    );
-    a(
-        {
-            id:47,
-            title:"IFileSystem",
-            content:"IFileSystem",
-            description:'',
-            tags:''
-        },
-        {
-            url:'/GitReleaseManager/api/GitReleaseManager.Core.Helpers/IFileSystem',
-            title:"IFileSystem",
-            description:""
-        }
-    );
-    a(
-        {
-            id:48,
-            title:"CommentsObjectGraphVisitor",
-            content:"CommentsObjectGraphVisitor",
-            description:'',
-            tags:''
-        },
-        {
-            url:'/GitReleaseManager/api/GitReleaseManager.Core.Configuration.CommentSerialization/CommentsObjectGraphVisitor',
-            title:"CommentsObjectGraphVisitor",
-            description:""
-        }
-    );
-    a(
-        {
-            id:49,
-            title:"Ensure",
-            content:"Ensure",
-            description:'',
-            tags:''
-        },
-        {
-            url:'/GitReleaseManager/api/GitReleaseManager.Core/Ensure',
-            title:"Ensure",
-            description:""
-        }
-    );
-    a(
-        {
-            id:50,
-            title:"GitHubProviderIntegrationTests",
-            content:"GitHubProviderIntegrationTests",
-            description:'',
-            tags:''
-        },
-        {
-            url:'/GitReleaseManager/api/GitReleaseManager.IntegrationTests/GitHubProviderIntegrationTests',
-            title:"GitHubProviderIntegrationTests",
-            description:""
-        }
-    );
-    a(
-        {
-            id:51,
-            title:"IVcsProvider",
-            content:"IVcsProvider",
-            description:'',
-            tags:''
-        },
-        {
-            url:'/GitReleaseManager/api/GitReleaseManager.Core.Provider/IVcsProvider',
-            title:"IVcsProvider",
-            description:""
-        }
-    );
-    a(
-        {
-            id:52,
-            title:"BaseSubOptions",
-            content:"BaseSubOptions",
-            description:'',
-            tags:''
-        },
-        {
-            url:'/GitReleaseManager/api/GitReleaseManager.Core.Options/BaseSubOptions',
-            title:"BaseSubOptions",
-            description:""
-        }
-    );
-    a(
-        {
-            id:53,
-            title:"OctokitExtensions",
-            content:"OctokitExtensions",
-            description:'',
-            tags:''
-        },
-        {
-            url:'/GitReleaseManager/api/GitReleaseManager.Core.Extensions/OctokitExtensions',
-            title:"OctokitExtensions",
-            description:""
-        }
-    );
-    a(
-        {
-            id:54,
-            title:"ReleaseNotesBuilder",
-            content:"ReleaseNotesBuilder",
-            description:'',
-            tags:''
-        },
-        {
-            url:'/GitReleaseManager/api/GitReleaseManager.Core.ReleaseNotes/ReleaseNotesBuilder',
-            title:"ReleaseNotesBuilder",
-            description:""
-        }
-    );
-    a(
-        {
-            id:55,
-            title:"ClipBoardHelper",
-            content:"ClipBoardHelper",
-            description:'',
-            tags:''
-        },
-        {
-            url:'/GitReleaseManager/api/GitReleaseManager.IntegrationTests/ClipBoardHelper',
-            title:"ClipBoardHelper",
-            description:""
-        }
-    );
-    a(
-        {
-            id:56,
-            title:"CommentGatheringTypeInspector",
-            content:"CommentGatheringTypeInspector",
-            description:'',
-            tags:''
-        },
-        {
-            url:'/GitReleaseManager/api/GitReleaseManager.Core.Configuration.CommentSerialization/CommentGatheringTypeInspector',
-            title:"CommentGatheringTypeInspector",
-            description:""
-        }
-    );
-    a(
-        {
-            id:57,
             title:"LabelConfig",
             content:"LabelConfig",
             description:'',
@@ -850,133 +486,105 @@ var searchModule = function() {
     );
     a(
         {
-            id:58,
-            title:"CloseConfig",
-            content:"CloseConfig",
+            id:32,
+            title:"IFileSystem",
+            content:"IFileSystem",
             description:'',
             tags:''
         },
         {
-            url:'/GitReleaseManager/api/GitReleaseManager.Core.Configuration/CloseConfig',
-            title:"CloseConfig",
+            url:'/GitReleaseManager/api/GitReleaseManager.Core.Helpers/IFileSystem',
+            title:"IFileSystem",
             description:""
         }
     );
     a(
         {
-            id:59,
-            title:"Milestone",
-            content:"Milestone",
+            id:33,
+            title:"Helper",
+            content:"Helper",
             description:'',
             tags:''
         },
         {
-            url:'/GitReleaseManager/api/GitReleaseManager.Core.Model/Milestone',
-            title:"Milestone",
+            url:'/GitReleaseManager/api/GitReleaseManager.IntegrationTests/Helper',
+            title:"Helper",
             description:""
         }
     );
     a(
         {
-            id:60,
-            title:"LabelSubOptions",
-            content:"LabelSubOptions",
+            id:34,
+            title:"IssueComment",
+            content:"IssueComment",
             description:'',
             tags:''
         },
         {
-            url:'/GitReleaseManager/api/GitReleaseManager.Core.Options/LabelSubOptions',
-            title:"LabelSubOptions",
+            url:'/GitReleaseManager/api/GitReleaseManager.Core.Model/IssueComment',
+            title:"IssueComment",
             description:""
         }
     );
     a(
         {
-            id:61,
-            title:"DiscardCommand",
-            content:"DiscardCommand",
+            id:35,
+            title:"ConfigSerializer",
+            content:"ConfigSerializer",
             description:'',
             tags:''
         },
         {
-            url:'/GitReleaseManager/api/GitReleaseManager.Core.Commands/DiscardCommand',
-            title:"DiscardCommand",
+            url:'/GitReleaseManager/api/GitReleaseManager.Core.Configuration/ConfigSerializer',
+            title:"ConfigSerializer",
             description:""
         }
     );
     a(
         {
-            id:62,
-            title:"ExportCommand",
-            content:"ExportCommand",
+            id:36,
+            title:"CommentGatheringTypeInspector",
+            content:"CommentGatheringTypeInspector",
             description:'',
             tags:''
         },
         {
-            url:'/GitReleaseManager/api/GitReleaseManager.Core.Commands/ExportCommand',
-            title:"ExportCommand",
+            url:'/GitReleaseManager/api/GitReleaseManager.Core.Configuration.CommentSerialization/CommentGatheringTypeInspector',
+            title:"CommentGatheringTypeInspector",
             description:""
         }
     );
     a(
         {
-            id:63,
-            title:"RateLimit",
-            content:"RateLimit",
+            id:37,
+            title:"MilestoneExtensions",
+            content:"MilestoneExtensions",
             description:'',
             tags:''
         },
         {
-            url:'/GitReleaseManager/api/GitReleaseManager.Core.Model/RateLimit',
-            title:"RateLimit",
+            url:'/GitReleaseManager/api/GitReleaseManager.Core.Extensions/MilestoneExtensions',
+            title:"MilestoneExtensions",
             description:""
         }
     );
     a(
         {
-            id:64,
-            title:"IReleaseNotesExporter",
-            content:"IReleaseNotesExporter",
+            id:38,
+            title:"ClipBoardHelper",
+            content:"ClipBoardHelper",
             description:'',
             tags:''
         },
         {
-            url:'/GitReleaseManager/api/GitReleaseManager.Core.ReleaseNotes/IReleaseNotesExporter',
-            title:"IReleaseNotesExporter",
+            url:'/GitReleaseManager/api/GitReleaseManager.IntegrationTests/ClipBoardHelper',
+            title:"ClipBoardHelper",
             description:""
         }
     );
     a(
         {
-            id:65,
-            title:"PublishCommand",
-            content:"PublishCommand",
-            description:'',
-            tags:''
-        },
-        {
-            url:'/GitReleaseManager/api/GitReleaseManager.Core.Commands/PublishCommand',
-            title:"PublishCommand",
-            description:""
-        }
-    );
-    a(
-        {
-            id:66,
-            title:"BaseVcsOptions",
-            content:"BaseVcsOptions",
-            description:'',
-            tags:''
-        },
-        {
-            url:'/GitReleaseManager/api/GitReleaseManager.Core.Options/BaseVcsOptions',
-            title:"BaseVcsOptions",
-            description:""
-        }
-    );
-    a(
-        {
-            id:67,
+            id:39,
             title:"CreateSubOptions",
             content:"CreateSubOptions",
             description:'',
@@ -990,7 +598,385 @@ var searchModule = function() {
     );
     a(
         {
-            id:68,
+            id:40,
+            title:"OpenCommand",
+            content:"OpenCommand",
+            description:'',
+            tags:''
+        },
+        {
+            url:'/GitReleaseManager/api/GitReleaseManager.Core.Commands/OpenCommand',
+            title:"OpenCommand",
+            description:""
+        }
+    );
+    a(
+        {
+            id:41,
+            title:"MainOptions",
+            content:"MainOptions",
+            description:'',
+            tags:''
+        },
+        {
+            url:'/GitReleaseManager/api/GitReleaseManager.Core.Options/MainOptions',
+            title:"MainOptions",
+            description:""
+        }
+    );
+    a(
+        {
+            id:42,
+            title:"CommentsObjectDescriptor",
+            content:"CommentsObjectDescriptor",
+            description:'',
+            tags:''
+        },
+        {
+            url:'/GitReleaseManager/api/GitReleaseManager.Core.Configuration.CommentSerialization/CommentsObjectDescriptor',
+            title:"CommentsObjectDescriptor",
+            description:""
+        }
+    );
+    a(
+        {
+            id:43,
+            title:"CommentsObjectGraphVisitor",
+            content:"CommentsObjectGraphVisitor",
+            description:'',
+            tags:''
+        },
+        {
+            url:'/GitReleaseManager/api/GitReleaseManager.Core.Configuration.CommentSerialization/CommentsObjectGraphVisitor',
+            title:"CommentsObjectGraphVisitor",
+            description:""
+        }
+    );
+    a(
+        {
+            id:44,
+            title:"GitHubProvider",
+            content:"GitHubProvider",
+            description:'',
+            tags:''
+        },
+        {
+            url:'/GitReleaseManager/api/GitReleaseManager.Core.Provider/GitHubProvider',
+            title:"GitHubProvider",
+            description:""
+        }
+    );
+    a(
+        {
+            id:45,
+            title:"TemplateFactory",
+            content:"TemplateFactory",
+            description:'',
+            tags:''
+        },
+        {
+            url:'/GitReleaseManager/api/GitReleaseManager.Core.Templates/TemplateFactory',
+            title:"TemplateFactory",
+            description:""
+        }
+    );
+    a(
+        {
+            id:46,
+            title:"ExportConfig",
+            content:"ExportConfig",
+            description:'',
+            tags:''
+        },
+        {
+            url:'/GitReleaseManager/api/GitReleaseManager.Core.Configuration/ExportConfig',
+            title:"ExportConfig",
+            description:""
+        }
+    );
+    a(
+        {
+            id:47,
+            title:"CreateConfig",
+            content:"CreateConfig",
+            description:'',
+            tags:''
+        },
+        {
+            url:'/GitReleaseManager/api/GitReleaseManager.Core.Configuration/CreateConfig',
+            title:"CreateConfig",
+            description:""
+        }
+    );
+    a(
+        {
+            id:48,
+            title:"CreateCommand",
+            content:"CreateCommand",
+            description:'',
+            tags:''
+        },
+        {
+            url:'/GitReleaseManager/api/GitReleaseManager.Core.Commands/CreateCommand',
+            title:"CreateCommand",
+            description:""
+        }
+    );
+    a(
+        {
+            id:49,
+            title:"PublishCommand",
+            content:"PublishCommand",
+            description:'',
+            tags:''
+        },
+        {
+            url:'/GitReleaseManager/api/GitReleaseManager.Core.Commands/PublishCommand',
+            title:"PublishCommand",
+            description:""
+        }
+    );
+    a(
+        {
+            id:50,
+            title:"TemplateLoader",
+            content:"TemplateLoader",
+            description:'',
+            tags:''
+        },
+        {
+            url:'/GitReleaseManager/api/GitReleaseManager.Core.Templates/TemplateLoader',
+            title:"TemplateLoader",
+            description:""
+        }
+    );
+    a(
+        {
+            id:51,
+            title:"ConfigurationProvider",
+            content:"ConfigurationProvider",
+            description:'',
+            tags:''
+        },
+        {
+            url:'/GitReleaseManager/api/GitReleaseManager.Core.Configuration/ConfigurationProvider',
+            title:"ConfigurationProvider",
+            description:""
+        }
+    );
+    a(
+        {
+            id:52,
+            title:"DiscardCommand",
+            content:"DiscardCommand",
+            description:'',
+            tags:''
+        },
+        {
+            url:'/GitReleaseManager/api/GitReleaseManager.Core.Commands/DiscardCommand',
+            title:"DiscardCommand",
+            description:""
+        }
+    );
+    a(
+        {
+            id:53,
+            title:"ExportSubOptions",
+            content:"ExportSubOptions",
+            description:'',
+            tags:''
+        },
+        {
+            url:'/GitReleaseManager/api/GitReleaseManager.Core.Options/ExportSubOptions',
+            title:"ExportSubOptions",
+            description:""
+        }
+    );
+    a(
+        {
+            id:54,
+            title:"CloseCommand",
+            content:"CloseCommand",
+            description:'',
+            tags:''
+        },
+        {
+            url:'/GitReleaseManager/api/GitReleaseManager.Core.Commands/CloseCommand',
+            title:"CloseCommand",
+            description:""
+        }
+    );
+    a(
+        {
+            id:55,
+            title:"Label",
+            content:"Label",
+            description:'',
+            tags:''
+        },
+        {
+            url:'/GitReleaseManager/api/GitReleaseManager.Core.Model/Label',
+            title:"Label",
+            description:""
+        }
+    );
+    a(
+        {
+            id:56,
+            title:"BaseVcsOptions",
+            content:"BaseVcsOptions",
+            description:'',
+            tags:''
+        },
+        {
+            url:'/GitReleaseManager/api/GitReleaseManager.Core.Options/BaseVcsOptions',
+            title:"BaseVcsOptions",
+            description:""
+        }
+    );
+    a(
+        {
+            id:57,
+            title:"InitCommand",
+            content:"InitCommand",
+            description:'',
+            tags:''
+        },
+        {
+            url:'/GitReleaseManager/api/GitReleaseManager.Core.Commands/InitCommand',
+            title:"InitCommand",
+            description:""
+        }
+    );
+    a(
+        {
+            id:58,
+            title:"ItemState",
+            content:"ItemState",
+            description:'',
+            tags:''
+        },
+        {
+            url:'/GitReleaseManager/api/GitReleaseManager.Core.Model/ItemState',
+            title:"ItemState",
+            description:""
+        }
+    );
+    a(
+        {
+            id:59,
+            title:"Issue",
+            content:"Issue",
+            description:'',
+            tags:''
+        },
+        {
+            url:'/GitReleaseManager/api/GitReleaseManager.Core.Model/Issue',
+            title:"Issue",
+            description:""
+        }
+    );
+    a(
+        {
+            id:60,
+            title:"FileSystem",
+            content:"FileSystem",
+            description:'',
+            tags:''
+        },
+        {
+            url:'/GitReleaseManager/api/GitReleaseManager.Core.Helpers/FileSystem',
+            title:"FileSystem",
+            description:""
+        }
+    );
+    a(
+        {
+            id:61,
+            title:"GitHubProviderIntegrationTests",
+            content:"GitHubProviderIntegrationTests",
+            description:'',
+            tags:''
+        },
+        {
+            url:'/GitReleaseManager/api/GitReleaseManager.IntegrationTests/GitHubProviderIntegrationTests',
+            title:"GitHubProviderIntegrationTests",
+            description:""
+        }
+    );
+    a(
+        {
+            id:62,
+            title:"ReleaseNotesExporter",
+            content:"ReleaseNotesExporter",
+            description:'',
+            tags:''
+        },
+        {
+            url:'/GitReleaseManager/api/GitReleaseManager.Core.ReleaseNotes/ReleaseNotesExporter',
+            title:"ReleaseNotesExporter",
+            description:""
+        }
+    );
+    a(
+        {
+            id:63,
+            title:"ICommand",
+            content:"ICommand",
+            description:'',
+            tags:''
+        },
+        {
+            url:'/GitReleaseManager/api/GitReleaseManager.Core.Commands/ICommand_1',
+            title:"ICommand<TOptions>",
+            description:""
+        }
+    );
+    a(
+        {
+            id:64,
+            title:"TemplateKind",
+            content:"TemplateKind",
+            description:'',
+            tags:''
+        },
+        {
+            url:'/GitReleaseManager/api/GitReleaseManager.Core.Templates/TemplateKind',
+            title:"TemplateKind",
+            description:""
+        }
+    );
+    a(
+        {
+            id:65,
+            title:"ApiException",
+            content:"ApiException",
+            description:'',
+            tags:''
+        },
+        {
+            url:'/GitReleaseManager/api/GitReleaseManager.Core.Exceptions/ApiException',
+            title:"ApiException",
+            description:""
+        }
+    );
+    a(
+        {
+            id:66,
+            title:"RateLimit",
+            content:"RateLimit",
+            description:'',
+            tags:''
+        },
+        {
+            url:'/GitReleaseManager/api/GitReleaseManager.Core.Model/RateLimit',
+            title:"RateLimit",
+            description:""
+        }
+    );
+    a(
+        {
+            id:67,
             title:"ReleaseAssetUpload",
             content:"ReleaseAssetUpload",
             description:'',
@@ -1004,15 +990,29 @@ var searchModule = function() {
     );
     a(
         {
-            id:69,
-            title:"CloseCommand",
-            content:"CloseCommand",
+            id:68,
+            title:"Config",
+            content:"Config",
             description:'',
             tags:''
         },
         {
-            url:'/GitReleaseManager/api/GitReleaseManager.Core.Commands/CloseCommand',
-            title:"CloseCommand",
+            url:'/GitReleaseManager/api/GitReleaseManager.Core.Configuration/Config',
+            title:"Config",
+            description:""
+        }
+    );
+    a(
+        {
+            id:69,
+            title:"CloseConfig",
+            content:"CloseConfig",
+            description:'',
+            tags:''
+        },
+        {
+            url:'/GitReleaseManager/api/GitReleaseManager.Core.Configuration/CloseConfig',
+            title:"CloseConfig",
             description:""
         }
     );
@@ -1033,70 +1033,70 @@ var searchModule = function() {
     a(
         {
             id:71,
-            title:"ICommand",
-            content:"ICommand",
+            title:"Ensure",
+            content:"Ensure",
             description:'',
             tags:''
         },
         {
-            url:'/GitReleaseManager/api/GitReleaseManager.Core.Commands/ICommand_1',
-            title:"ICommand<TOptions>",
+            url:'/GitReleaseManager/api/GitReleaseManager.Core/Ensure',
+            title:"Ensure",
             description:""
         }
     );
     a(
         {
             id:72,
-            title:"MainOptions",
-            content:"MainOptions",
+            title:"ReleaseNotesBuilder",
+            content:"ReleaseNotesBuilder",
             description:'',
             tags:''
         },
         {
-            url:'/GitReleaseManager/api/GitReleaseManager.Core.Options/MainOptions',
-            title:"MainOptions",
+            url:'/GitReleaseManager/api/GitReleaseManager.Core.ReleaseNotes/ReleaseNotesBuilder',
+            title:"ReleaseNotesBuilder",
             description:""
         }
     );
     a(
         {
             id:73,
-            title:"TemplateLoader",
-            content:"TemplateLoader",
+            title:"IVcsService",
+            content:"IVcsService",
             description:'',
             tags:''
         },
         {
-            url:'/GitReleaseManager/api/GitReleaseManager.Core.Templates/TemplateLoader',
-            title:"TemplateLoader",
+            url:'/GitReleaseManager/api/GitReleaseManager.Core/IVcsService',
+            title:"IVcsService",
             description:""
         }
     );
     a(
         {
             id:74,
-            title:"NotFoundException",
-            content:"NotFoundException",
+            title:"LabelCommand",
+            content:"LabelCommand",
             description:'',
             tags:''
         },
         {
-            url:'/GitReleaseManager/api/GitReleaseManager.Core.Exceptions/NotFoundException',
-            title:"NotFoundException",
+            url:'/GitReleaseManager/api/GitReleaseManager.Core.Commands/LabelCommand',
+            title:"LabelCommand",
             description:""
         }
     );
     a(
         {
             id:75,
-            title:"LabelAlias",
-            content:"LabelAlias",
+            title:"ReleaseAsset",
+            content:"ReleaseAsset",
             description:'',
             tags:''
         },
         {
-            url:'/GitReleaseManager/api/GitReleaseManager.Core.Configuration/LabelAlias',
-            title:"LabelAlias",
+            url:'/GitReleaseManager/api/GitReleaseManager.Core.Model/ReleaseAsset',
+            title:"ReleaseAsset",
             description:""
         }
     );
