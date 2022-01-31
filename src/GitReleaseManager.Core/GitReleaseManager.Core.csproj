@@ -18,15 +18,15 @@
 
     <ItemGroup>
         <PackageReference Include="CommandLineParser" Version="2.8.0" />
-        <PackageReference Include="Destructurama.Attributed" Version="2.0.0" />
-        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0">
+        <PackageReference Include="Destructurama.Attributed" Version="3.0.0" />
+        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1">
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
           <PrivateAssets>all</PrivateAssets>
         </PackageReference>
         <PackageReference Include="Octokit" Version="0.50.0" />
-        <PackageReference Include="Scriban" Version="3.6.0" />
+        <PackageReference Include="Scriban" Version="5.0.0" />
         <PackageReference Include="seriloganalyzer" Version="0.15.0" />
-        <PackageReference Include="YamlDotNet" Version="11.1.1" />
+        <PackageReference Include="YamlDotNet" Version="11.2.1" />
         <PackageReference Include="AutoMapper" Version="10.1.1" />
     </ItemGroup>
     <ItemGroup>

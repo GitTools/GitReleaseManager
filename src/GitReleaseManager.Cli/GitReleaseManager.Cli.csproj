@@ -3,7 +3,7 @@
         <LangVersion>8.0</LangVersion>
         <OutputType>Exe</OutputType>
         <AssemblyName>GitReleaseManager</AssemblyName>
-        <TargetFrameworks>net472;netcoreapp2.1;netcoreapp3.1</TargetFrameworks>
+        <TargetFrameworks>net472;netcoreapp3.1;net6.0</TargetFrameworks>
         <Title>GitReleaseManager.Cli</Title>
         <Description>Create release notes in markdown given a milestone</Description>
         <IsPackable>false</IsPackable>
@@ -14,16 +14,16 @@
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="CommandLineParser" Version="2.8.0" />
-        <PackageReference Include="Destructurama.Attributed" Version="2.0.0" />
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
-        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0">
+        <PackageReference Include="Destructurama.Attributed" Version="3.0.0" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
+        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1">
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         <PrivateAssets>all</PrivateAssets>
         </PackageReference>
         <PackageReference Include="Octokit" Version="0.50.0" />
-        <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
+        <PackageReference Include="Serilog.Sinks.Console" Version="4.0.1" />
         <PackageReference Include="Serilog.Sinks.Debug" Version="2.0.0" PrivateAssets="All" />
-        <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
+        <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
         <PackageReference Include="seriloganalyzer" Version="0.15.0" />
     </ItemGroup>
 </Project>

@@ -1,7 +1,9 @@
 #load nuget:?package=Cake.Recipe&version=2.2.1
-#tool dotnet:?package=dotnet-t4&version=2.0.5
+#tool dotnet:?package=dotnet-t4&version=2.2.1
 
 Environment.SetVariableNames(githubTokenVariable: "GITTOOLS_GITHUB_TOKEN");
+
+var standardNotificationMessage = "A new version, {0} of {1} has just been released.  Get it from Chocolatey, NuGet, or as a .Net Global Tool.";
 
 BuildParameters.SetParameters(context: Context,
                             buildSystem: BuildSystem,
@@ -12,9 +14,10 @@ BuildParameters.SetParameters(context: Context,
                             appVeyorAccountName: "GitTools",
                             shouldRunDotNetCorePack: true,
                             shouldRunIntegrationTests: true,
+                            shouldRunDupFinder: false,
                             integrationTestScriptPath: "./tests/integration/tests.cake",
-                            twitterMessage: "A new version of GitReleaseManager has just been released.  Get it from Chocolatey, NuGet, or as a .Net Global Tool.",
-                            gitterMessage: "@/all A new version of GitReleaseManager has just been released.  Get it from Chocolatey, NuGet, or as a .Net Global Tool.");
+                            twitterMessage: standardNotificationMessage,
+                            gitterMessage: "@/all " + standardNotificationMessage);
 
 BuildParameters.PackageSources.Add(new PackageSourceData(Context, "GPR", "https://nuget.pkg.github.com/GitTools/index.json", FeedType.NuGet, false));
 
