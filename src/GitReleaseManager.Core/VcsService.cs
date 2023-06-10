@@ -318,6 +318,13 @@ namespace GitReleaseManager.Core
                     }
                     else
                     {
+                        if (!string.IsNullOrEmpty(label.RenameFrom))
+                        {
+                            _logger.Warning(
+                                "Label '{RenameFrom}' does not exist, creating new label '{Name}' instead",
+                                label.RenameFrom, label.Name);
+                        }
+
                         newLabels.Add(newLabel);
                     }
                 }
