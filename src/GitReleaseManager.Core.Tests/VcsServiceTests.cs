@@ -211,7 +211,7 @@ namespace GitReleaseManager.Core.Tests
             _vcsProvider.CreateLabelAsync(OWNER, REPOSITORY, Arg.Any<Label>())
                 .Returns(Task.CompletedTask);
 
-            await _vcsService.CreateLabelsAsync(OWNER, REPOSITORY).ConfigureAwait(false);
+            await _vcsService.CreateOrUpdateLabelsAsync(OWNER, REPOSITORY).ConfigureAwait(false);
 
             await _vcsProvider.Received(1).GetLabelsAsync(OWNER, REPOSITORY).ConfigureAwait(false);
             await _vcsProvider.Received(labels.Count).DeleteLabelAsync(OWNER, REPOSITORY, Arg.Any<string>()).ConfigureAwait(false);
@@ -227,7 +227,7 @@ namespace GitReleaseManager.Core.Tests
         {
             _configuration.Labels.Clear();
 
-            await _vcsService.CreateLabelsAsync(OWNER, REPOSITORY).ConfigureAwait(false);
+            await _vcsService.CreateOrUpdateLabelsAsync(OWNER, REPOSITORY).ConfigureAwait(false);
 
             _logger.Received(1).Warning(Arg.Any<string>());
         }

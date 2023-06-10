@@ -21,6 +21,8 @@ namespace GitReleaseManager.Core.Provider
         Task<IEnumerable<IssueComment>> GetIssueCommentsAsync(string owner, string repository, int issueNumber);
 
         Task CreateLabelAsync(string owner, string repository, Label label);
+        
+        Task UpdateLabelAsync(string owner, string repository, string existingLabelName,Label label);
 
         Task DeleteLabelAsync(string owner, string repository, string labelName);
 

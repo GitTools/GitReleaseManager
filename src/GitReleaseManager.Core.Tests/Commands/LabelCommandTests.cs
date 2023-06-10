@@ -32,13 +32,13 @@ namespace GitReleaseManager.Core.Tests.Commands
                 RepositoryName = "repository",
             };
 
-            _vcsService.CreateLabelsAsync(options.RepositoryOwner, options.RepositoryName)
+            _vcsService.CreateOrUpdateLabelsAsync(options.RepositoryOwner, options.RepositoryName)
                 .Returns(Task.CompletedTask);
 
             var result = await _command.Execute(options).ConfigureAwait(false);
             result.ShouldBe(0);
 
-            await _vcsService.Received(1).CreateLabelsAsync(options.RepositoryOwner, options.RepositoryName).ConfigureAwait(false);
+            await _vcsService.Received(1).CreateOrUpdateLabelsAsync(options.RepositoryOwner, options.RepositoryName).ConfigureAwait(false);
             _logger.Received(1).Information(Arg.Any<string>());
         }
     }

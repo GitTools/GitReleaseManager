@@ -152,6 +152,16 @@ namespace GitReleaseManager.Core.Provider
             });
         }
 
+        public Task UpdateLabelAsync(string owner, string repository, string originalName, Label label)
+        {
+            return ExecuteAsync(async () =>
+            {
+                var updatedLabel = _mapper.Map<LabelUpdate>(label);
+
+                await _gitHubClient.Issue.Labels.Update(owner, repository, originalName, updatedLabel);
+            });
+        }
+
         public Task DeleteLabelAsync(string owner, string repository, string labelName)
         {
             return ExecuteAsync(async () =>

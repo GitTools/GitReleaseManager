@@ -290,33 +290,58 @@ namespace GitReleaseManager.Core
             }
         }
 
-        public async Task CreateLabelsAsync(string owner, string repository)
+        public async Task CreateOrUpdateLabelsAsync(string owner, string repository)
         {
             if (_configuration.Labels.Any())
             {
                 var newLabels = new List<Label>();
+                var updatedLabels = new List<Tuple<string, Label>>();
 
+                _logger.Verbose("Grabbing all existing labels on '{Owner}/{Repository}'", owner, repository);
+                var existingLabels = await _vcsProvider.GetLabelsAsync(owner, repository).ConfigureAwait(false);
+
+                IEnumerable<Label> existingLabelsEnumerable = existingLabels as Label[] ?? existingLabels.ToArray();
                 foreach (var label in _configuration.Labels)
                 {
-                    newLabels.Add(new Label
+                    var newLabel = new Label
                     {
                         Name = label.Name,
                         Color = label.Color,
                         Description = label.Description,
-                    });
+                    };
+
+                    // Labels that don't exist yet will be created, otherwise they will be updated given RenameFrom matches an existing label
+                    if (!string.IsNullOrEmpty(label.RenameFrom) &&
+                        existingLabelsEnumerable.Any(el => el.Name == label.RenameFrom))
+                    {
+                        updatedLabels.Add(new Tuple<string, Label>(label.RenameFrom, newLabel));
+                    }
+                    else
+                    {
+                        newLabels.Add(newLabel);
+                    }
                 }
 
-                _logger.Verbose("Grabbing all existing labels on '{Owner}/{Repository}'", owner, repository);
-                var labels = await _vcsProvider.GetLabelsAsync(owner, repository).ConfigureAwait(false);
-
+                // Process labels to delete
+                var deletedLabels = existingLabelsEnumerable.Where(el => updatedLabels.All(n => n.Item1 != el.Name))
+                    .ToList();
                 _logger.Verbose("Removing existing labels");
-                _logger.Debug("{@Labels}", labels);
-                var deleteLabelsTasks = labels.Select(label => _vcsProvider.DeleteLabelAsync(owner, repository, label.Name));
+                _logger.Debug("{@Labels}", deletedLabels);
+                var deleteLabelsTasks =
+                    deletedLabels.Select(label => _vcsProvider.DeleteLabelAsync(owner, repository, label.Name));
                 await Task.WhenAll(deleteLabelsTasks).ConfigureAwait(false);
+
+                // Update labels which have a RenameFrom that can be found in the existing labels
+                _logger.Verbose("Updating existing labels");
+                _logger.Debug("{@Labels}", updatedLabels);
+                var updateLabelsTasks = updatedLabels.Select(label =>
+                    _vcsProvider.UpdateLabelAsync(owner, repository, label.Item1, label.Item2));
+                await Task.WhenAll(updateLabelsTasks).ConfigureAwait(false);
 
                 _logger.Verbose("Creating new standard labels");
                 _logger.Debug("{@Labels}", newLabels);
-                var createLabelsTasks = newLabels.Select(label => _vcsProvider.CreateLabelAsync(owner, repository, label));
+                var createLabelsTasks =
+                    newLabels.Select(label => _vcsProvider.CreateLabelAsync(owner, repository, label));
                 await Task.WhenAll(createLabelsTasks).ConfigureAwait(false);
             }
             else
