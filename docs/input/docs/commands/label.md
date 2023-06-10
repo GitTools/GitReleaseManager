@@ -8,14 +8,15 @@ default labels, so that you can have some consistency across your various
 projects.  While GitHub, and other Source Control systems provide a set of
 default labels, they are not always exactly what you want.  This command will
 remove all the current labels configured within a repository, and create a new
-set of them.
+set of them. However, if RenameFrom is specified in the label configuration, the 
+label can be renamed instead of being deleted and recreated.
 
 :::{.alert .alert-info}
 **NOTE:**
 
-The available list of labels that are created is currently hard-coded into
-GitReleaseManager, it is not possible to configure them.  This will come in a
-later version.
+The available list of labels that are created by default is currently hard-coded into
+GitReleaseManager, it is possible to configure them by overriding the list.  See
+[Default Configuration](../configuration/default-configuration.md) for more details.
 :::
 
 ## **Required Parameters**
