@@ -10,10 +10,12 @@ namespace GitReleaseManager.Core.Extensions
     {
         public static string ReplaceMilestoneTitle(this string source, string milestoneKey, string milestoneTitle)
         {
+#pragma warning disable SA1001 // Commas should be spaced correctly
             var dict = new Dictionary<string, object>
             {
-                { milestoneKey.Trim('{','}'), milestoneTitle }
+                { milestoneKey.Trim('{','}'), milestoneTitle },
             };
+#pragma warning restore SA1001 // Commas should be spaced correctly
 
             return source.ReplaceTemplate(dict);
         }
