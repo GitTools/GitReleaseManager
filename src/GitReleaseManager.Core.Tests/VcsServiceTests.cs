@@ -322,6 +322,45 @@ namespace GitReleaseManager.Core.Tests
         }
 
         [Test]
+        public async Task Should_Create_Release_From_Milestone_With_Assets()
+        {
+            var release = new Release { Assets = new List<ReleaseAsset>() };
+
+            var assetsCount = _assets.Count;
+
+            _releaseNotesBuilder.BuildReleaseNotes(OWNER, REPOSITORY, MILESTONE_TITLE, ReleaseTemplates.DEFAULT_NAME)
+                .Returns(Task.FromResult(RELEASE_NOTES));
+
+            _vcsProvider.GetReleaseAsync(OWNER, REPOSITORY, MILESTONE_TITLE)
+                .Returns(Task.FromResult<Release>(null));
+
+            _vcsProvider.CreateReleaseAsync(OWNER, REPOSITORY, Arg.Any<Release>())
+                .Returns(Task.FromResult(release));
+
+            var result = await _vcsService.CreateReleaseFromMilestoneAsync(
+                    OWNER,
+                    REPOSITORY,
+                    MILESTONE_TITLE,
+                    MILESTONE_TITLE,
+                    null,
+                    _assets,
+                    false,
+                    null
+                ).ConfigureAwait(false);
+            result.ShouldBeSameAs(release);
+
+            await _releaseNotesBuilder.Received(1).BuildReleaseNotes(OWNER, REPOSITORY, MILESTONE_TITLE, ReleaseTemplates.DEFAULT_NAME).ConfigureAwait(false);
+            await _vcsProvider.Received(1).GetReleaseAsync(OWNER, REPOSITORY, MILESTONE_TITLE).ConfigureAwait(false);
+            await _vcsProvider.Received(1).CreateReleaseAsync(OWNER, REPOSITORY, Arg.Is<Release>(o =>
+                o.Body == RELEASE_NOTES &&
+                o.Name == MILESTONE_TITLE &&
+                o.TagName == MILESTONE_TITLE)).ConfigureAwait(false);
+
+            _logger.Received(1).Verbose(Arg.Any<string>(), MILESTONE_TITLE, OWNER, REPOSITORY);
+            _logger.Received(1).Debug(Arg.Any<string>(), Arg.Any<Release>());
+        }
+
+        [Test]
         public async Task Should_Create_Release_From_Milestone_Using_Template_File()
         {
             var release = new Release();

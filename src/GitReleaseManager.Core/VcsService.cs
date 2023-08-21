@@ -101,7 +101,7 @@ namespace GitReleaseManager.Core
                 await _vcsProvider.UpdateReleaseAsync(owner, repository, release).ConfigureAwait(false);
             }
 
-            await AddAssetsAsync(owner, repository, tagName, assets).ConfigureAwait(false);
+            await AddAssetsAsync(owner, repository, tagName, assets, release).ConfigureAwait(false);
 
             return release;
         }
@@ -127,13 +127,15 @@ namespace GitReleaseManager.Core
             }
         }
 
-        public async Task AddAssetsAsync(string owner, string repository, string tagName, IList<string> assets)
+        public async Task AddAssetsAsync(string owner, string repository, string tagName, IList<string> assets) => await AddAssetsAsync(owner, repository, tagName, assets, null);
+
+        private async Task AddAssetsAsync(string owner, string repository, string tagName, IList<string> assets, Release currentRelease)
         {
             if (assets?.Any() == true)
             {
                 try
                 {
-                    var release = await _vcsProvider.GetReleaseAsync(owner, repository, tagName).ConfigureAwait(false);
+                    var release = currentRelease ?? await _vcsProvider.GetReleaseAsync(owner, repository, tagName).ConfigureAwait(false);
 
                     foreach (var asset in assets)
                     {
