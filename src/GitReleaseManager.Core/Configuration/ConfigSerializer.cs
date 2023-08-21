@@ -94,6 +94,7 @@ namespace GitReleaseManager.Core.Configuration
                         {
                             property.SetValue(config, null);
                         }
+
                         continue;
                     }
                     else if (yamlMemberAttribute.DefaultValuesHandling == DefaultValuesHandling.OmitNull)

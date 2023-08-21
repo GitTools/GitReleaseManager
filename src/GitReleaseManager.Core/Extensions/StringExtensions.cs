@@ -12,7 +12,7 @@ namespace GitReleaseManager.Core.Extensions
         {
             var dict = new Dictionary<string, object>
             {
-                { milestoneKey.Trim('{','}'), milestoneTitle },
+                { milestoneKey.Trim('{','}'), milestoneTitle }
             };
 
             return source.ReplaceTemplate(dict);
