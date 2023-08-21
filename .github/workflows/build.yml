@@ -38,8 +38,7 @@ jobs:
           script-path: recipe.cake
           target: CI
           verbosity: Normal
-          cake-version: 0.38.5
-          cake-bootstrap: true
+          cake-version: tool-manifest
 
       - name: Upload Issues-Report
         uses: actions/upload-artifact@v2
