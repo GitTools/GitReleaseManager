@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <LangVersion>8.0</LangVersion>
         <TargetFrameworks>net472;netcoreapp3.1;net6.0</TargetFrameworks>
@@ -13,7 +13,7 @@
         <ProjectReference Include="..\GitReleaseManager.Core\GitReleaseManager.Core.csproj" />
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="coverlet.msbuild" Version="3.1.1">
+        <PackageReference Include="coverlet.msbuild" Version="6.0.0">
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
           <PrivateAssets>all</PrivateAssets>
         </PackageReference>
@@ -21,11 +21,11 @@
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
           <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="nunit" Version="3.13.2" />
-        <PackageReference Include="NUnit3TestAdapter" Version="4.2.1" />
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
-        <PackageReference Include="Serilog.Sinks.Console" Version="4.0.1" />
-        <PackageReference Include="Shouldly" Version="4.0.3" />
-        <PackageReference Include="TextCopy" Version="6.1.0" />
+        <PackageReference Include="nunit" Version="3.13.3" />
+        <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.1" />
+        <PackageReference Include="Shouldly" Version="4.2.1" />
+        <PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
+        <PackageReference Include="TextCopy" Version="6.2.1" />
     </ItemGroup>
 </Project>

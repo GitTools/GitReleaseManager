@@ -26,6 +26,13 @@ jobs:
       - name: Fetch all tags and branches
         run: git fetch --prune --unshallow
 
+      - name: Install .NET SDK 3.1.x and 5.0.x
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: |
+            3.1.x
+            5.0.x
+
       - name: Cache Tools
         uses: actions/cache@v2
         with:
@@ -38,8 +45,7 @@ jobs:
           script-path: recipe.cake
           target: CI
           verbosity: Normal
-          cake-version: 0.38.5
-          cake-bootstrap: true
+          cake-version: tool-manifest
 
       - name: Upload Issues-Report
         uses: actions/upload-artifact@v2

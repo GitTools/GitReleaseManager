@@ -1,4 +1,4 @@
-#load nuget:?package=Cake.Recipe&version=2.2.1
+#load nuget:?package=Cake.Recipe&version=3.0.1
 #tool dotnet:?package=dotnet-t4&version=2.2.1
 
 Environment.SetVariableNames(githubTokenVariable: "GITTOOLS_GITHUB_TOKEN");
@@ -14,7 +14,6 @@ BuildParameters.SetParameters(context: Context,
                             appVeyorAccountName: "GitTools",
                             shouldRunDotNetCorePack: true,
                             shouldRunIntegrationTests: true,
-                            shouldRunDupFinder: false,
                             integrationTestScriptPath: "./tests/integration/tests.cake",
                             twitterMessage: standardNotificationMessage,
                             gitterMessage: "@/all " + standardNotificationMessage);
@@ -24,12 +23,6 @@ BuildParameters.PackageSources.Add(new PackageSourceData(Context, "GPR", "https:
 BuildParameters.PrintParameters(Context);
 
 ToolSettings.SetToolSettings(context: Context,
-                            dupFinderExcludePattern: new string[] {
-                                BuildParameters.RootDirectoryPath + "/src/GitReleaseManager.Core.Tests/**/*.cs",
-                                BuildParameters.RootDirectoryPath + "/src/GitReleaseManager.Tests/**/*.cs",
-                                BuildParameters.RootDirectoryPath + "/src/GitReleaseManager.IntegrationTests/**/*.cs",
-                                BuildParameters.RootDirectoryPath + "/src/GitReleaseManager/AutoMapperConfiguration.cs",
-                                "**/*.AssemblyInfo.cs" },
                             testCoverageFilter: "+[GitReleaseManager*]* -[GitReleaseManager.Core.Tests*]* -[GitReleaseManager.Tests*]*",
                             testCoverageExcludeByAttribute: "*.ExcludeFromCodeCoverage*",
                             testCoverageExcludeByFile: "*/*Designer.cs;*/*.g.cs;*/*.g.i.cs");

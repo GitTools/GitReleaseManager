@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29519.181
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33801.468
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GitReleaseManager.Tests", "GitReleaseManager.Tests\GitReleaseManager.Tests.csproj", "{FAD045A3-CF63-48CA-BA49-8F4D79E3EF4F}"
 EndProject
