@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <LangVersion>8.0</LangVersion>
-        <TargetFrameworks>net48;net6.0</TargetFrameworks>
+        <TargetFrameworks>net48;net6.0;net7.0</TargetFrameworks>
         <Title>GitReleaseManager.Core.Tests</Title>
         <Description>Test Project for GitReleaseManager.Core</Description>
         <NoWarn>$(NoWarn);CA1707;Serilog004;</NoWarn>
