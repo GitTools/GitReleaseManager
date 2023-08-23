@@ -1,4 +1,4 @@
-#load nuget:?package=Cake.Recipe&version=3.0.1
+#load nuget:?package=Cake.Recipe&version=3.1.1
 #tool dotnet:?package=dotnet-t4&version=2.2.1
 #addin nuget:?package=Cake.Git&version=0.22.0
 
@@ -27,7 +27,8 @@ BuildParameters.PrintParameters(Context);
 ToolSettings.SetToolSettings(context: Context,
                             testCoverageFilter: "+[GitReleaseManager*]* -[GitReleaseManager.Core.Tests*]* -[GitReleaseManager.Tests*]*",
                             testCoverageExcludeByAttribute: "*.ExcludeFromCodeCoverage*",
-                            testCoverageExcludeByFile: "*/*Designer.cs;*/*.g.cs;*/*.g.i.cs");
+                            testCoverageExcludeByFile: "*/*Designer.cs;*/*.g.cs;*/*.g.i.cs",
+                            kuduSyncIgnore: ".git;CNAME;_git2");
 
 BuildParameters.Tasks.DotNetCoreBuildTask.Does((context) =>
 {
