@@ -11,3 +11,4 @@ then used to create a Release on GitHub.
 In addition to creating a Release, GitReleaseManager can be used to publish a
 release, close a milestone, and also to export the complete set of release notes
 for your application/product.
+Testing build and publish of docs...
