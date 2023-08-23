@@ -43,10 +43,12 @@ jobs:
       - name: Fetch all tags and branches
         run: git fetch --prune --unshallow
 
-      - name: Install .NET SDK 5.0.x
+      - name: Install .NET SDK 2.1.x and 5.0.x
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '5.0.x'
+          dotnet-version: |
+            2.1.x
+            5.0.x
 
       - name: Cache Tools
         uses: actions/cache@v2
