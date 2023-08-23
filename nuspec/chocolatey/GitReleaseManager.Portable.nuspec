@@ -19,10 +19,10 @@
         <tags>github release notes create export</tags>
     </metadata>
     <files>
-        <file src="..\..\BuildArtifacts\temp\_PublishedApplications\GitReleaseManager.Cli\net472\*.exe" target="tools" />
-        <file src="..\..\BuildArtifacts\temp\_PublishedApplications\GitReleaseManager.Cli\net472\*.dll" target="tools" exclude="**\Serilog.Sinks.Debug.dll" />
-        <file src="..\..\BuildArtifacts\temp\_PublishedApplications\GitReleaseManager.Cli\net472\*.pdb" target="tools" />
-        <file src="..\..\BuildArtifacts\temp\_PublishedApplications\GitReleaseManager.Cli\net472\*.exe.config" target="tools" />
+        <file src="..\..\BuildArtifacts\temp\_PublishedApplications\GitReleaseManager.Cli\net48\*.exe" target="tools" />
+        <file src="..\..\BuildArtifacts\temp\_PublishedApplications\GitReleaseManager.Cli\net48\*.dll" target="tools" exclude="**\Serilog.Sinks.Debug.dll" />
+        <file src="..\..\BuildArtifacts\temp\_PublishedApplications\GitReleaseManager.Cli\net48\*.pdb" target="tools" />
+        <file src="..\..\BuildArtifacts\temp\_PublishedApplications\GitReleaseManager.Cli\net48\*.exe.config" target="tools" />
         <file src="chocolateyInstall.ps1" target="tools"/>
         <file src="chocolateyUninstall.ps1" target="tools"/>
         <file src="VERIFICATION.TXT" />

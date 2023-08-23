@@ -19,6 +19,23 @@ jobs:
       matrix:
         os: [ windows-2022 ]
 
+    env:
+      GITTOOLS_GITHUB_TOKEN: ${{ secrets.GITOOLS_GITHUB_TOKEN }}
+      NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+      NUGET_SOURCE: https://api.nuget.org/v3/index.json
+      CHOCOLATEY_API_KEY: ${{ secrets.CHOCOLATEY_API_KEY }}
+      CHOCOLATEY_SOURCE: https://push.chocolatey.org/
+      TWITTER_CONSUMER_KEY: ${{ secrets.TWITTER_CONSUMER_KEY }}
+      TWITTER_CONSUMER_SECRET: ${{ secrets.TWITTER_CONSUMER_SECRET }}
+      TWITTER_ACCESS_TOKEN: ${{ secrets.TWITTER_ACCESS_TOKEN }}
+      TWITTER_ACCESS_TOKEN_SECRET: ${{ secrets.TWITTER_ACCESS_TOKEN_SECRET }}
+      COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
+      WYAM_ACCESS_TOKEN: ${{ secrets.WYAM_ACCESS_TOKEN }}
+      WYAM_DEPLOY_BRANCH: gh-pages
+      WYAM_DEPLOY_REMOTE: https://github.com/GitTools/GitReleaseManager
+      CODECOV_REPO_TOKEN: ${{ secrets.CODECOV_REPO_TOKEN }}
+      GPR_USER: gittools-bot
+      GPR_PASSWORD: ${{ secrets.GPR_PASSWORD }}
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v2
@@ -26,12 +43,14 @@ jobs:
       - name: Fetch all tags and branches
         run: git fetch --prune --unshallow
 
-      - name: Install .NET SDK 3.1.x and 5.0.x
+      - name: Install .NET SDK 2.1.x and 5.0.x
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: |
+            2.1.x
             3.1.x
             5.0.x
+            6.0.x
 
       - name: Cache Tools
         uses: actions/cache@v2

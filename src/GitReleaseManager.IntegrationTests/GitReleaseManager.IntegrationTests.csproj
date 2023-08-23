@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <LangVersion>8.0</LangVersion>
-        <TargetFrameworks>net472;netcoreapp3.1;net6.0</TargetFrameworks>
+        <TargetFrameworks>net48;net6.0;net7.0</TargetFrameworks>
         <Title>GitReleaseManager.IntegrationTests</Title>
         <Description>Integration Test Project for GitReleaseManager</Description>
         <NoWarn>$(NoWarn);CA1707;Serilog004;</NoWarn>
@@ -27,5 +27,6 @@
         <PackageReference Include="Shouldly" Version="4.2.1" />
         <PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
         <PackageReference Include="TextCopy" Version="6.2.1" />
+        <PackageReference Include="System.Net.Http" Version="4.3.4" />
     </ItemGroup>
 </Project>
