@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="shortcut icon" href="/GitReleaseManager/assets/img/favicon.ico" type="image/x-icon">
         <link rel="icon" href="/GitReleaseManager/assets/img/favicon.ico" type="image/x-icon">
-        <title>GitReleaseManager - API - IReleaseNotesBuilder.BuildReleaseNotes(string, string, string, string) Method</title>
+        <title>GitReleaseManager - API - InitCommand.ExecuteAsync(InitSubOptions) Method</title>
         <link href="/GitReleaseManager/assets/css/highlight.css" rel="stylesheet">
         <link href="/GitReleaseManager/assets/css/bootstrap/bootstrap.css" rel="stylesheet">
         <link href="/GitReleaseManager/assets/css/adminlte/AdminLTE.css" rel="stylesheet">
@@ -133,12 +133,14 @@
                     <ul class="sidebar-menu">
                         
 			<li class="header">Namespace</li>
-		<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.ReleaseNotes">GitReleaseManager<wbr>.Core<wbr>.ReleaseNotes</a></li>
+		<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.Commands">GitReleaseManager<wbr>.Core<wbr>.Commands</a></li>
 		<li class="header">Type</li>
-		<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.ReleaseNotes/IReleaseNotesBuilder">IReleaseNotesBuilder</a></li>
+		<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.Commands/InitCommand">InitCommand</a></li>
 		<li role="separator" class="divider"></li>
+			<li class="header">Constructors</li>
+				<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.Commands/InitCommand/8A2714C5">InitCommand<wbr>(IFileSystem, <wbr>ILogger)<wbr></a></li>
 			<li class="header">Method Members</li>
-				<li class="selected"><a href="/GitReleaseManager/api/GitReleaseManager.Core.ReleaseNotes/IReleaseNotesBuilder/9F15E736">BuildReleaseNotes<wbr>(string, <wbr>string, <wbr>string, <wbr>string)<wbr></a></li>
+				<li class="selected"><a href="/GitReleaseManager/api/GitReleaseManager.Core.Commands/InitCommand/D65EE8D7">ExecuteAsync<wbr>(InitSubOptions)<wbr></a></li>
 
 
                     </ul>
@@ -153,8 +155,8 @@
 
 
 <section class="content-header">
-			<h3><a href="/GitReleaseManager/api/GitReleaseManager.Core.ReleaseNotes/IReleaseNotesBuilder">IReleaseNotesBuilder</a>.</h3>
-	<h1>BuildReleaseNotes<wbr>(string, <wbr>string, <wbr>string, <wbr>string)<wbr> <small>Method</small></h1>
+			<h3><a href="/GitReleaseManager/api/GitReleaseManager.Core.Commands/InitCommand">InitCommand</a>.</h3>
+	<h1>ExecuteAsync<wbr>(InitSubOptions)<wbr> <small>Method</small></h1>
 </section>
 <section class="content">
 	
@@ -165,17 +167,17 @@
 				<dl class="dl-horizontal">	
 						
 						<dt>Namespace</dt>
-						<dd><a href="/GitReleaseManager/api/GitReleaseManager.Core.ReleaseNotes">GitReleaseManager<wbr>.Core<wbr>.ReleaseNotes</a></dd>
+						<dd><a href="/GitReleaseManager/api/GitReleaseManager.Core.Commands">GitReleaseManager<wbr>.Core<wbr>.Commands</a></dd>
 					
 						<dt>Containing Type</dt>
-						<dd><a href="/GitReleaseManager/api/GitReleaseManager.Core.ReleaseNotes/IReleaseNotesBuilder">IReleaseNotesBuilder</a></dd>		
+						<dd><a href="/GitReleaseManager/api/GitReleaseManager.Core.Commands/InitCommand">InitCommand</a></dd>		
 					
 				</dl>
   			</div>
 		</div>
 
 	<h1 id="Syntax">Syntax</h1>
-	<pre><code>Task&lt;string&gt; BuildReleaseNotes(string user, string repository, string milestoneTitle, string template)</code></pre>
+	<pre><code>public Task&lt;int&gt; ExecuteAsync(InitSubOptions options)</code></pre>
 
 
 
@@ -193,23 +195,8 @@
 					</tr>
 				</thead>
 					<tbody><tr>
-						<td>user</td>
-						<td>string</td>
-						<td></td>
-					</tr>
-					<tr>
-						<td>repository</td>
-						<td>string</td>
-						<td></td>
-					</tr>
-					<tr>
-						<td>milestoneTitle</td>
-						<td>string</td>
-						<td></td>
-					</tr>
-					<tr>
-						<td>template</td>
-						<td>string</td>
+						<td>options</td>
+						<td><a href="/GitReleaseManager/api/GitReleaseManager.Core.Options/InitSubOptions">InitSubOptions</a></td>
 						<td></td>
 					</tr>
 			</tbody></table>
@@ -227,7 +214,7 @@
 					</tr>
 				</thead>
 				<tbody><tr>
-					<td>Task<wbr>&lt;string&gt;<wbr></td>
+					<td>Task<wbr>&lt;int&gt;<wbr></td>
 					<td></td>
 				</tr>
 			</tbody></table>

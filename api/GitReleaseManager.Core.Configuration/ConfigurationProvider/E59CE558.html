@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="shortcut icon" href="/GitReleaseManager/assets/img/favicon.ico" type="image/x-icon">
         <link rel="icon" href="/GitReleaseManager/assets/img/favicon.ico" type="image/x-icon">
-        <title>GitReleaseManager - API - ReleaseNotesBuilder.BuildReleaseNotes(string, string, string, string) Method</title>
+        <title>GitReleaseManager - API - ConfigurationProvider.GetEffectiveConfigAsString(Config) Method</title>
         <link href="/GitReleaseManager/assets/css/highlight.css" rel="stylesheet">
         <link href="/GitReleaseManager/assets/css/bootstrap/bootstrap.css" rel="stylesheet">
         <link href="/GitReleaseManager/assets/css/adminlte/AdminLTE.css" rel="stylesheet">
@@ -133,14 +133,14 @@
                     <ul class="sidebar-menu">
                         
 			<li class="header">Namespace</li>
-		<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.ReleaseNotes">GitReleaseManager<wbr>.Core<wbr>.ReleaseNotes</a></li>
+		<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.Configuration">GitReleaseManager<wbr>.Core<wbr>.Configuration</a></li>
 		<li class="header">Type</li>
-		<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.ReleaseNotes/ReleaseNotesBuilder">ReleaseNotesBuilder</a></li>
+		<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.Configuration/ConfigurationProvider">Configuration<wbr>Provider</a></li>
 		<li role="separator" class="divider"></li>
-			<li class="header">Constructors</li>
-				<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.ReleaseNotes/ReleaseNotesBuilder/B55EEFC7">ReleaseNotesBuilder<wbr>(IVcsProvider, <wbr>ILogger, <wbr>IFileSystem, <wbr>Config, <wbr>TemplateFactory)<wbr></a></li>
 			<li class="header">Method Members</li>
-				<li class="selected"><a href="/GitReleaseManager/api/GitReleaseManager.Core.ReleaseNotes/ReleaseNotesBuilder/D4592B52">BuildReleaseNotes<wbr>(string, <wbr>string, <wbr>string, <wbr>string)<wbr></a></li>
+				<li class="selected"><a href="/GitReleaseManager/api/GitReleaseManager.Core.Configuration/ConfigurationProvider/E59CE558">Get<wbr>Effective<wbr>Config<wbr>As<wbr>String<wbr>(Config)<wbr></a></li>
+				<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.Configuration/ConfigurationProvider/5C883BAC">Provide<wbr>(string, <wbr>IFileSystem)<wbr></a></li>
+				<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.Configuration/ConfigurationProvider/B9909759">WriteSample<wbr>(string, <wbr>IFileSystem)<wbr></a></li>
 
 
                     </ul>
@@ -155,8 +155,8 @@
 
 
 <section class="content-header">
-			<h3><a href="/GitReleaseManager/api/GitReleaseManager.Core.ReleaseNotes/ReleaseNotesBuilder">ReleaseNotesBuilder</a>.</h3>
-	<h1>BuildReleaseNotes<wbr>(string, <wbr>string, <wbr>string, <wbr>string)<wbr> <small>Method</small></h1>
+			<h3><a href="/GitReleaseManager/api/GitReleaseManager.Core.Configuration/ConfigurationProvider">Configuration<wbr>Provider</a>.</h3>
+	<h1>Get<wbr>Effective<wbr>Config<wbr>As<wbr>String<wbr>(Config)<wbr> <small>Method</small></h1>
 </section>
 <section class="content">
 	
@@ -167,17 +167,17 @@
 				<dl class="dl-horizontal">	
 						
 						<dt>Namespace</dt>
-						<dd><a href="/GitReleaseManager/api/GitReleaseManager.Core.ReleaseNotes">GitReleaseManager<wbr>.Core<wbr>.ReleaseNotes</a></dd>
+						<dd><a href="/GitReleaseManager/api/GitReleaseManager.Core.Configuration">GitReleaseManager<wbr>.Core<wbr>.Configuration</a></dd>
 					
 						<dt>Containing Type</dt>
-						<dd><a href="/GitReleaseManager/api/GitReleaseManager.Core.ReleaseNotes/ReleaseNotesBuilder">ReleaseNotesBuilder</a></dd>		
+						<dd><a href="/GitReleaseManager/api/GitReleaseManager.Core.Configuration/ConfigurationProvider">Configuration<wbr>Provider</a></dd>		
 					
 				</dl>
   			</div>
 		</div>
 
 	<h1 id="Syntax">Syntax</h1>
-	<pre><code>public Task&lt;string&gt; BuildReleaseNotes(string user, string repository, string milestoneTitle, string template)</code></pre>
+	<pre><code>public static string GetEffectiveConfigAsString(Config config)</code></pre>
 
 
 
@@ -195,23 +195,8 @@
 					</tr>
 				</thead>
 					<tbody><tr>
-						<td>user</td>
-						<td>string</td>
-						<td></td>
-					</tr>
-					<tr>
-						<td>repository</td>
-						<td>string</td>
-						<td></td>
-					</tr>
-					<tr>
-						<td>milestoneTitle</td>
-						<td>string</td>
-						<td></td>
-					</tr>
-					<tr>
-						<td>template</td>
-						<td>string</td>
+						<td>config</td>
+						<td><a href="/GitReleaseManager/api/GitReleaseManager.Core.Configuration/Config">Config</a></td>
 						<td></td>
 					</tr>
 			</tbody></table>
@@ -229,7 +214,7 @@
 					</tr>
 				</thead>
 				<tbody><tr>
-					<td>Task<wbr>&lt;string&gt;<wbr></td>
+					<td>string</td>
 					<td></td>
 				</tr>
 			</tbody></table>

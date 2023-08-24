@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="shortcut icon" href="/GitReleaseManager/assets/img/favicon.ico" type="image/x-icon">
         <link rel="icon" href="/GitReleaseManager/assets/img/favicon.ico" type="image/x-icon">
-        <title>GitReleaseManager - API - ShowConfigCommand.ShowConfigCommand(IFileSystem, ILogger) Constructor</title>
+        <title>GitReleaseManager - API - ICommand&lt;TOptions&gt;.ExecuteAsync(TOptions) Method</title>
         <link href="/GitReleaseManager/assets/css/highlight.css" rel="stylesheet">
         <link href="/GitReleaseManager/assets/css/bootstrap/bootstrap.css" rel="stylesheet">
         <link href="/GitReleaseManager/assets/css/adminlte/AdminLTE.css" rel="stylesheet">
@@ -135,12 +135,10 @@
 			<li class="header">Namespace</li>
 		<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.Commands">GitReleaseManager<wbr>.Core<wbr>.Commands</a></li>
 		<li class="header">Type</li>
-		<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.Commands/ShowConfigCommand">ShowConfigCommand</a></li>
+		<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.Commands/ICommand_1">ICommand<wbr>&lt;TOptions&gt;<wbr></a></li>
 		<li role="separator" class="divider"></li>
-			<li class="header">Constructors</li>
-				<li class="selected"><a href="/GitReleaseManager/api/GitReleaseManager.Core.Commands/ShowConfigCommand/C1D54536">ShowConfigCommand<wbr>(IFileSystem, <wbr>ILogger)<wbr></a></li>
 			<li class="header">Method Members</li>
-				<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.Commands/ShowConfigCommand/9E6C61E9">Execute<wbr>(<wbr>Show<wbr>Config<wbr>Sub<wbr>Options)<wbr></a></li>
+				<li class="selected"><a href="/GitReleaseManager/api/GitReleaseManager.Core.Commands/ICommand_1/9307A190">ExecuteAsync<wbr>(TOptions)<wbr></a></li>
 
 
                     </ul>
@@ -155,8 +153,8 @@
 
 
 <section class="content-header">
-			<h3><a href="/GitReleaseManager/api/GitReleaseManager.Core.Commands/ShowConfigCommand">ShowConfigCommand</a>.</h3>
-	<h1>ShowConfigCommand<wbr>(IFileSystem, <wbr>ILogger)<wbr> <small>Constructor</small></h1>
+			<h3><a href="/GitReleaseManager/api/GitReleaseManager.Core.Commands/ICommand_1">ICommand</a><wbr>&lt;<a href="/GitReleaseManager/api/GitReleaseManager.Core.Commands/ICommand_1#typeparam-TOptions">TOptions</a>&gt;<wbr>.</h3>
+	<h1>ExecuteAsync<wbr>(TOptions)<wbr> <small>Method</small></h1>
 </section>
 <section class="content">
 	
@@ -170,14 +168,14 @@
 						<dd><a href="/GitReleaseManager/api/GitReleaseManager.Core.Commands">GitReleaseManager<wbr>.Core<wbr>.Commands</a></dd>
 					
 						<dt>Containing Type</dt>
-						<dd><a href="/GitReleaseManager/api/GitReleaseManager.Core.Commands/ShowConfigCommand">ShowConfigCommand</a></dd>		
+						<dd><a href="/GitReleaseManager/api/GitReleaseManager.Core.Commands/ICommand_1">ICommand</a><wbr>&lt;<a href="/GitReleaseManager/api/GitReleaseManager.Core.Commands/ICommand_1#typeparam-TOptions">TOptions</a>&gt;<wbr></dd>		
 					
 				</dl>
   			</div>
 		</div>
 
 	<h1 id="Syntax">Syntax</h1>
-	<pre><code>public ShowConfigCommand(IFileSystem fileSystem, ILogger logger)</code></pre>
+	<pre><code>Task&lt;int&gt; ExecuteAsync(TOptions options)</code></pre>
 
 
 
@@ -195,13 +193,8 @@
 					</tr>
 				</thead>
 					<tbody><tr>
-						<td>fileSystem</td>
-						<td><a href="/GitReleaseManager/api/GitReleaseManager.Core.Helpers/IFileSystem">IFileSystem</a></td>
-						<td></td>
-					</tr>
-					<tr>
-						<td>logger</td>
-						<td>ILogger</td>
+						<td>options</td>
+						<td><a href="/GitReleaseManager/api/GitReleaseManager.Core.Commands/ICommand_1#typeparam-TOptions">TOptions</a></td>
 						<td></td>
 					</tr>
 			</tbody></table>
@@ -219,7 +212,7 @@
 					</tr>
 				</thead>
 				<tbody><tr>
-					<td>void</td>
+					<td>Task<wbr>&lt;int&gt;<wbr></td>
 					<td></td>
 				</tr>
 			</tbody></table>
