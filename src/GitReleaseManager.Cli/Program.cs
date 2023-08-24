@@ -192,7 +192,7 @@ namespace GitReleaseManager.Cli
             where TOptions : BaseSubOptions
         {
             var command = _serviceProvider.GetRequiredService<ICommand<TOptions>>();
-            return command.Execute(options);
+            return command.ExecuteAsync(options);
         }
 
         private static void LogOptions(BaseSubOptions options)

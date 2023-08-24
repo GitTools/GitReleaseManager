@@ -4,6 +4,6 @@ namespace GitReleaseManager.Core.ReleaseNotes
 {
     public interface IReleaseNotesBuilder
     {
-        Task<string> BuildReleaseNotes(string user, string repository, string milestoneTitle, string template);
+        Task<string> BuildReleaseNotesAsync(string user, string repository, string milestoneTitle, string template);
     }
 }

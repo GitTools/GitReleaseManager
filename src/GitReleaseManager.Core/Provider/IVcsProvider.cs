@@ -10,7 +10,7 @@ namespace GitReleaseManager.Core.Provider
 
         Task UploadAssetAsync(Release release, ReleaseAssetUpload releaseAssetUpload);
 
-        Task<int> GetCommitsCount(string owner, string repository, string @base, string head);
+        Task<int> GetCommitsCountAsync(string owner, string repository, string @base, string head);
 
         string GetCommitsUrl(string owner, string repository, string head, string @base = null);
 

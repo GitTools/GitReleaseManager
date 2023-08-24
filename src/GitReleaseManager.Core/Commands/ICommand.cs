@@ -6,6 +6,6 @@ namespace GitReleaseManager.Core.Commands
     public interface ICommand<TOptions>
         where TOptions : BaseSubOptions
     {
-        Task<int> Execute(TOptions options);
+        Task<int> ExecuteAsync(TOptions options);
     }
 }

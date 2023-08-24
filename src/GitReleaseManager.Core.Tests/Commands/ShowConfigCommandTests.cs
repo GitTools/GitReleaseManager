@@ -29,7 +29,7 @@ namespace GitReleaseManager.Core.Tests.Commands
         {
             var options = new ShowConfigSubOptions();
 
-            var result = await _command.Execute(options).ConfigureAwait(false);
+            var result = await _command.ExecuteAsync(options).ConfigureAwait(false);
             result.ShouldBe(0);
 
             _logger.Received(1).Information(Arg.Any<string>(), Arg.Any<string>());

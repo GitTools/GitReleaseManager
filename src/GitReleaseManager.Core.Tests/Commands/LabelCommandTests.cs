@@ -35,7 +35,7 @@ namespace GitReleaseManager.Core.Tests.Commands
             _vcsService.CreateLabelsAsync(options.RepositoryOwner, options.RepositoryName)
                 .Returns(Task.CompletedTask);
 
-            var result = await _command.Execute(options).ConfigureAwait(false);
+            var result = await _command.ExecuteAsync(options).ConfigureAwait(false);
             result.ShouldBe(0);
 
             await _vcsService.Received(1).CreateLabelsAsync(options.RepositoryOwner, options.RepositoryName).ConfigureAwait(false);

@@ -16,7 +16,7 @@ namespace GitReleaseManager.Core.Commands
             _logger = logger;
         }
 
-        public async Task<int> Execute(CreateSubOptions options)
+        public async Task<int> ExecuteAsync(CreateSubOptions options)
         {
             _logger.Information("Creating release...");
 

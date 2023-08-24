@@ -161,7 +161,7 @@ namespace GitReleaseManager.Core.Tests.Provider
             _gitHubClient.Repository.Commit.Compare(OWNER, REPOSITORY, BASE, HEAD)
                 .Returns(Task.FromResult(new CompareResult(null, null, null, null, null, null, null, null, commitsCount, 0, 0, null, null)));
 
-            var result = await _gitHubProvider.GetCommitsCount(OWNER, REPOSITORY, BASE, HEAD).ConfigureAwait(false);
+            var result = await _gitHubProvider.GetCommitsCountAsync(OWNER, REPOSITORY, BASE, HEAD).ConfigureAwait(false);
             result.ShouldBe(commitsCount);
 
             await _gitHubClient.Repository.Commit.Received(1).Compare(OWNER, REPOSITORY, BASE, HEAD).ConfigureAwait(false);
@@ -173,7 +173,7 @@ namespace GitReleaseManager.Core.Tests.Provider
             _gitHubClient.Repository.Commit.Compare(OWNER, REPOSITORY, BASE, HEAD)
                 .Returns(Task.FromException<CompareResult>(_notFoundException));
 
-            var result = await _gitHubProvider.GetCommitsCount(OWNER, REPOSITORY, BASE, HEAD).ConfigureAwait(false);
+            var result = await _gitHubProvider.GetCommitsCountAsync(OWNER, REPOSITORY, BASE, HEAD).ConfigureAwait(false);
             result.ShouldBe(0);
 
             await _gitHubClient.Repository.Commit.Received(1).Compare(OWNER, REPOSITORY, BASE, HEAD).ConfigureAwait(false);
@@ -185,7 +185,7 @@ namespace GitReleaseManager.Core.Tests.Provider
             _gitHubClient.Repository.Commit.Compare(OWNER, REPOSITORY, BASE, HEAD)
                 .Returns(Task.FromException<CompareResult>(_exception));
 
-            var ex = await Should.ThrowAsync<ApiException>(() => _gitHubProvider.GetCommitsCount(OWNER, REPOSITORY, BASE, HEAD)).ConfigureAwait(false);
+            var ex = await Should.ThrowAsync<ApiException>(() => _gitHubProvider.GetCommitsCountAsync(OWNER, REPOSITORY, BASE, HEAD)).ConfigureAwait(false);
             ex.Message.ShouldContain(_exception.Message);
             ex.InnerException.ShouldBeSameAs(_exception);
         }

@@ -59,7 +59,7 @@ namespace GitReleaseManager.IntegrationTests
 
                 var vcsProvider = new GitHubProvider(_gitHubClient, _mapper);
                 var releaseNotesBuilder = new ReleaseNotesBuilder(vcsProvider, _logger, fileSystem, configuration, new TemplateFactory(fileSystem, configuration, TemplateKind.Create));
-                var result = await releaseNotesBuilder.BuildReleaseNotes("Chocolatey", "ChocolateyGUI", "0.12.4", ReleaseTemplates.DEFAULT_NAME).ConfigureAwait(false);
+                var result = await releaseNotesBuilder.BuildReleaseNotesAsync("Chocolatey", "ChocolateyGUI", "0.12.4", ReleaseTemplates.DEFAULT_NAME).ConfigureAwait(false);
                 Debug.WriteLine(result);
                 ClipBoardHelper.SetClipboard(result);
             }
@@ -81,7 +81,7 @@ namespace GitReleaseManager.IntegrationTests
 
                 var vcsProvider = new GitHubProvider(_gitHubClient, _mapper);
                 var releaseNotesBuilder = new ReleaseNotesBuilder(vcsProvider, _logger, fileSystem, configuration, new TemplateFactory(fileSystem, configuration, TemplateKind.Create));
-                var result = await releaseNotesBuilder.BuildReleaseNotes("Chocolatey", "ChocolateyGUI", "0.13.0", ReleaseTemplates.DEFAULT_NAME).ConfigureAwait(false);
+                var result = await releaseNotesBuilder.BuildReleaseNotesAsync("Chocolatey", "ChocolateyGUI", "0.13.0", ReleaseTemplates.DEFAULT_NAME).ConfigureAwait(false);
                 Debug.WriteLine(result);
                 ClipBoardHelper.SetClipboard(result);
             }

@@ -35,7 +35,7 @@ namespace GitReleaseManager.Core.ReleaseNotes
             _templateFactory = templateFactory;
         }
 
-        public async Task<string> BuildReleaseNotes(string user, string repository, string milestoneTitle, string template)
+        public async Task<string> BuildReleaseNotesAsync(string user, string repository, string milestoneTitle, string template)
         {
             _user = user;
             _repository = repository;
@@ -56,7 +56,7 @@ namespace GitReleaseManager.Core.ReleaseNotes
 
             _logger.Verbose("Getting commit count between base '{Base}' and head '{Head}'", @base, head);
 
-            var numberOfCommits = await _vcsProvider.GetCommitsCount(_user, _repository, @base, head).ConfigureAwait(false);
+            var numberOfCommits = await _vcsProvider.GetCommitsCountAsync(_user, _repository, @base, head).ConfigureAwait(false);
 
             if (issues.Count == 0)
             {

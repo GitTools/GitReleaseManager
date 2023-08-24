@@ -225,7 +225,7 @@ namespace GitReleaseManager.Tests
             }
 
             var vcsProvider = Substitute.For<IVcsProvider>();
-            vcsProvider.GetCommitsCount(owner, repository, Arg.Any<string>(), Arg.Any<string>())
+            vcsProvider.GetCommitsCountAsync(owner, repository, Arg.Any<string>(), Arg.Any<string>())
                 .Returns(Task.FromResult(vcsService.NumberOfCommits));
 
             vcsProvider.GetCommitsUrl(owner, repository, Arg.Any<string>(), Arg.Any<string>())
@@ -238,7 +238,7 @@ namespace GitReleaseManager.Tests
                 .Returns(Task.FromResult((IEnumerable<Milestone>)vcsService.Milestones));
 
             var builder = new ReleaseNotesBuilder(vcsProvider, logger, fileSystem, configuration, new TemplateFactory(fileSystem, configuration, TemplateKind.Create));
-            var notes = builder.BuildReleaseNotes(owner, repository, milestone.Title, ReleaseTemplates.DEFAULT_NAME).Result;
+            var notes = builder.BuildReleaseNotesAsync(owner, repository, milestone.Title, ReleaseTemplates.DEFAULT_NAME).Result;
 
             Approvals.Verify(notes);
         }

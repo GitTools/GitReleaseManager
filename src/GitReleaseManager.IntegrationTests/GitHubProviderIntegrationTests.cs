@@ -101,7 +101,7 @@ namespace GitReleaseManager.IntegrationTests
         [Order(6)]
         public async Task Should_Get_Commits_Count()
         {
-            var result = await _gitHubProvider.GetCommitsCount(OWNER, REPOSITORY, _releaseBaseTag, _releaseHeadTag).ConfigureAwait(false);
+            var result = await _gitHubProvider.GetCommitsCountAsync(OWNER, REPOSITORY, _releaseBaseTag, _releaseHeadTag).ConfigureAwait(false);
             result.ShouldBeGreaterThan(0);
         }
     }

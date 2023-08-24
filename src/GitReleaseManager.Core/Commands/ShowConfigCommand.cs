@@ -18,7 +18,7 @@ namespace GitReleaseManager.Core.Commands
             _logger = logger;
         }
 
-        public Task<int> Execute(ShowConfigSubOptions options)
+        public Task<int> ExecuteAsync(ShowConfigSubOptions options)
         {
             var configuration = ConfigurationProvider.GetEffectiveConfigAsString(options.TargetDirectory ?? Environment.CurrentDirectory, _fileSystem);
             _logger.Information("{Configuration}", configuration);

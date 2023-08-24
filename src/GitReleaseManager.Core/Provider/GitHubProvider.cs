@@ -53,7 +53,7 @@ namespace GitReleaseManager.Core.Provider
             });
         }
 
-        public Task<int> GetCommitsCount(string owner, string repository, string @base, string head)
+        public Task<int> GetCommitsCountAsync(string owner, string repository, string @base, string head)
         {
             return ExecuteAsync(async () =>
             {

@@ -52,7 +52,7 @@ namespace GitReleaseManager.Core
                 templatePath = templateFilePath;
             }
 
-            var releaseNotes = await _releaseNotesBuilder.BuildReleaseNotes(owner, repository, milestone, templatePath).ConfigureAwait(false);
+            var releaseNotes = await _releaseNotesBuilder.BuildReleaseNotesAsync(owner, repository, milestone, templatePath).ConfigureAwait(false);
             var release = await CreateReleaseAsync(owner, repository, releaseName, milestone, releaseNotes, prerelease, targetCommitish, assets).ConfigureAwait(false);
 
             return release;

@@ -40,7 +40,7 @@ namespace GitReleaseManager.Core.Tests.Commands
         {
             var options = new InitSubOptions { TargetDirectory = _targetDirectory };
 
-            var result = await _command.Execute(options).ConfigureAwait(false);
+            var result = await _command.ExecuteAsync(options).ConfigureAwait(false);
             result.ShouldBe(0);
 
             var configFilePath = Path.Combine(_targetDirectory, "GitReleaseManager.yml");
@@ -70,7 +70,7 @@ namespace GitReleaseManager.Core.Tests.Commands
             File.WriteAllText(configFilePath, "s");
             var expectedHash = GetHash(configFilePath);
 
-            var result = await _command.Execute(options).ConfigureAwait(false);
+            var result = await _command.ExecuteAsync(options).ConfigureAwait(false);
             result.ShouldBe(0); // Should this perhaps return 1
 
             var actualHash = GetHash(configFilePath);

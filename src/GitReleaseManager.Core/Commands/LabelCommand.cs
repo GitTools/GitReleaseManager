@@ -15,7 +15,7 @@ namespace GitReleaseManager.Core.Commands
             _logger = logger;
         }
 
-        public async Task<int> Execute(LabelSubOptions options)
+        public async Task<int> ExecuteAsync(LabelSubOptions options)
         {
             _logger.Information("Creating standard labels");
             await _vcsService.CreateLabelsAsync(options.RepositoryOwner, options.RepositoryName).ConfigureAwait(false);

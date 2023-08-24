@@ -16,7 +16,7 @@ namespace GitReleaseManager.Core.Commands
             _logger = logger;
         }
 
-        public async Task<int> Execute(ExportSubOptions options)
+        public async Task<int> ExecuteAsync(ExportSubOptions options)
         {
             _logger.Information("Exporting release {TagName}", options.TagName);
             var releasesContent = await _vcsService.ExportReleasesAsync(options.RepositoryOwner, options.RepositoryName, options.TagName, options.SkipPrereleases).ConfigureAwait(false);

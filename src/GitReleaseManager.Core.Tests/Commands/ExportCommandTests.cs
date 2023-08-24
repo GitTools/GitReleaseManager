@@ -42,7 +42,7 @@ namespace GitReleaseManager.Core.Tests.Commands
             _vcsService.ExportReleasesAsync(options.RepositoryOwner, options.RepositoryName, options.TagName, options.SkipPrereleases)
                 .Returns(releaseText);
 
-            var result = await _command.Execute(options).ConfigureAwait(false);
+            var result = await _command.ExecuteAsync(options).ConfigureAwait(false);
             result.ShouldBe(0);
 
             var exportFileExists = File.Exists(_fileOutputPath);
