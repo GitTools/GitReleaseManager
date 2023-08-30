@@ -37,11 +37,22 @@ namespace GitReleaseManager.Core.Configuration
 
         public static void Write(Config config, TextWriter writer)
         {
+            Write(config, writer, newLine: string.Empty);
+        }
+
+        public static void Write(Config config, TextWriter writer, string newLine)
+        {
             _logger.Debug("Starting serializing yaml configuration...");
             var serializerBuilder = new SerializerBuilder()
                 .WithTypeInspector(inner => new CommentGatheringTypeInspector(inner))
                 .WithEmissionPhaseObjectGraphVisitor(args => new CommentsObjectGraphVisitor(args.InnerVisitor))
                 .WithNamingConvention(HyphenatedNamingConvention.Instance);
+
+            if (!string.IsNullOrEmpty(newLine))
+            {
+                serializerBuilder = serializerBuilder.WithNewLine(newLine);
+            }
+
             var serializer = serializerBuilder.Build();
             serializer.Serialize(writer, config);
             _logger.Verbose("Successfully serialized configuration!");
@@ -67,11 +78,10 @@ namespace GitReleaseManager.Core.Configuration
             var configType = config.GetType();
 
             writer.Write("#");
-            writer.NewLine = Environment.NewLine + "#";
             SetConfigurationSamples(config, configType, writer);
 
             _logger.Verbose("Writing sample");
-            Write(config, writer);
+            Write(config, writer, newLine: Environment.NewLine + "#");
         }
 
         private static void SetConfigurationSamples(object config, Type configType, TextWriter writer)
