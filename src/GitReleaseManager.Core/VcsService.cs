@@ -151,7 +151,15 @@ namespace GitReleaseManager.Core
                         if (existingAsset != null)
                         {
                             _logger.Warning("Requested asset to be uploaded already exists on draft release, replacing with new file: {AssetPath}", asset);
-                            await _vcsProvider.DeleteAssetAsync(owner, repository, existingAsset.Id).ConfigureAwait(false);
+
+                            if (_vcsProvider is GitLabProvider)
+                            {
+                                _logger.Error("Deleting of assets is not currently supported when targetting GitLab.");
+                            }
+                            else
+                            {
+                                await _vcsProvider.DeleteAssetAsync(owner, repository, existingAsset).ConfigureAwait(false);
+                            }
                         }
 
                         var upload = new ReleaseAssetUpload
