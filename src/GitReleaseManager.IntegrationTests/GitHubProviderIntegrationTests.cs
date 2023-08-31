@@ -63,7 +63,7 @@ namespace GitReleaseManager.IntegrationTests
             var result = await _gitHubProvider.GetMilestonesAsync(OWNER, REPOSITORY).ConfigureAwait(false);
             result.Count().ShouldBeGreaterThan(0);
 
-            _milestone = result.OrderByDescending(m => m.Number).First();
+            _milestone = result.OrderByDescending(m => m.PublicNumber).First();
         }
 
         [Test]

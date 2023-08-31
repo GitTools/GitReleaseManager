@@ -20,6 +20,8 @@ namespace GitReleaseManager.Core.MappingProfiles
             CreateMap<Model.Label, Octokit.NewLabel>().ReverseMap();
             CreateMap<Model.Milestone, Octokit.Milestone>();
             CreateMap<Octokit.Milestone, Model.Milestone>()
+                .ForMember(dest => dest.PublicNumber, act => act.MapFrom(src => src.Number))
+                .ForMember(dest => dest.InternalNumber, act => act.MapFrom(src => src.Number))
                 .AfterMap((src, dest) => dest.Version = src.Version());
         }
     }

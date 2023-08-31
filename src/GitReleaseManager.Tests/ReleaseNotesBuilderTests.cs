@@ -249,7 +249,8 @@ namespace GitReleaseManager.Tests
             {
                 Title = version,
                 Description = description,
-                Number = 1,
+                PublicNumber = 1,
+                InternalNumber = 123,
                 HtmlUrl = "https://github.com/gep13/FakeRepository/issues?q=milestone%3A" + version,
                 Version = new Version(version),
             };
