@@ -345,6 +345,11 @@ namespace GitReleaseManager.Core.Provider
             }
         }
 
+        public string GetMilestoneQueryString()
+        {
+            return "closed=1";
+        }
+
         private async Task ExecuteAsync(Func<Task> action)
         {
             try

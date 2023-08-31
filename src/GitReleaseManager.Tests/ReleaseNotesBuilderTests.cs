@@ -237,6 +237,9 @@ namespace GitReleaseManager.Tests
             vcsProvider.GetMilestonesAsync(owner, repository, Arg.Any<ItemStateFilter>())
                 .Returns(Task.FromResult((IEnumerable<Milestone>)vcsService.Milestones));
 
+            vcsProvider.GetMilestoneQueryString()
+                .Returns("closed=1");
+
             var builder = new ReleaseNotesBuilder(vcsProvider, logger, fileSystem, configuration, new TemplateFactory(fileSystem, configuration, TemplateKind.Create));
             var notes = builder.BuildReleaseNotesAsync(owner, repository, milestone.Title, ReleaseTemplates.DEFAULT_NAME).Result;
 

@@ -68,6 +68,8 @@ namespace GitReleaseManager.Core.ReleaseNotes
 
             var issuesDict = GetIssuesDict(issues);
 
+            var milestoneQueryString = _vcsProvider.GetMilestoneQueryString();
+
             var templateModel = new
             {
                 Issues = new
@@ -84,6 +86,7 @@ namespace GitReleaseManager.Core.ReleaseNotes
                 {
                     Target = _targetMilestone,
                     Previous = previousMilestone,
+                    QueryString = milestoneQueryString,
                 },
                 IssueLabels = issuesDict.Keys.ToList(),
             };

@@ -45,5 +45,7 @@ namespace GitReleaseManager.Core.Provider
         Task UpdateReleaseAsync(string owner, string repository, Release release);
 
         RateLimit GetRateLimit();
+
+        string GetMilestoneQueryString();
     }
 }
