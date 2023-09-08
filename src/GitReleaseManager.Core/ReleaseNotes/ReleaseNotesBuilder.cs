@@ -106,7 +106,7 @@ namespace GitReleaseManager.Core.ReleaseNotes
                 .Where(o => issueLabels.Any(il => string.Equals(il, o.Label, StringComparison.OrdinalIgnoreCase)))
                 .GroupBy(o => o.Label, o => o.Issue)
                 .OrderBy(o => o.Key)
-                .ToDictionary(o => GetValidLabel(o.Key, o.Count()), o => o.OrderBy(issue => issue.Number).ToList());
+                .ToDictionary(o => GetValidLabel(o.Key, o.Count()), o => o.OrderBy(issue => issue.PublicNumber).ToList());
 
             return issuesByLabel;
         }

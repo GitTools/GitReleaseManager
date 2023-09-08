@@ -46,7 +46,7 @@ namespace GitReleaseManager.Core.Tests.Provider
         private const bool SKIP_PRERELEASES = false;
 
         private readonly Release _release = new Release { Id = RELEASE_ID };
-        private readonly Issue _issue = new Issue { Number = ISSUE_NUMBER };
+        private readonly Issue _issue = new Issue { PublicNumber = ISSUE_NUMBER };
         private readonly Milestone _milestone = new Milestone { PublicNumber = MILESTONE_PUBLIC_NUMBER, InternalNumber = MILESTONE_INTERNAL_NUMBER };
         private readonly Label _label = new Label { Name = LABEL_NAME };
         private readonly ReleaseAsset _asset = new ReleaseAsset { Id = ASSET_ID };

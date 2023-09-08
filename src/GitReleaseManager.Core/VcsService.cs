@@ -395,7 +395,7 @@ namespace GitReleaseManager.Core
                 }
                 catch (ForbiddenException)
                 {
-                    _logger.Error("Unable to add comment to issue #{IssueNumber}. Insufficient permissions.", issue.Number);
+                    _logger.Error("Unable to add comment to issue #{IssueNumber}. Insufficient permissions.", issue.PublicNumber);
                     break;
                 }
             }
@@ -403,7 +403,7 @@ namespace GitReleaseManager.Core
 
         private async Task<bool> CommentsIncludeStringAsync(string owner, string repository, Issue issue, string comment)
         {
-            _logger.Verbose("Finding issue comment created by GitReleaseManager for issue #{IssueNumber}", issue.Number);
+            _logger.Verbose("Finding issue comment created by GitReleaseManager for issue #{IssueNumber}", issue.PublicNumber);
             var issueComments = await _vcsProvider.GetIssueCommentsAsync(owner, repository, issue).ConfigureAwait(false);
 
             return issueComments.Any(c => c.Body.Contains(comment));

@@ -89,7 +89,7 @@ namespace GitReleaseManager.Core.Provider
         {
             return ExecuteAsync(async () =>
             {
-                await _gitHubClient.Issue.Comment.Create(owner, repository, issue.Number, comment).ConfigureAwait(false);
+                await _gitHubClient.Issue.Comment.Create(owner, repository, issue.PublicNumber, comment).ConfigureAwait(false);
             });
         }
 
@@ -132,7 +132,7 @@ namespace GitReleaseManager.Core.Provider
                 do
                 {
                     var options = GetApiOptions(startPage);
-                    results = await _gitHubClient.Issue.Comment.GetAllForIssue(owner, repository, issue.Number, options).ConfigureAwait(false);
+                    results = await _gitHubClient.Issue.Comment.GetAllForIssue(owner, repository, issue.PublicNumber, options).ConfigureAwait(false);
 
                     comments.AddRange(results);
                     startPage++;

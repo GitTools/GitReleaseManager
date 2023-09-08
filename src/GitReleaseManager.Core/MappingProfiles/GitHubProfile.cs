@@ -7,7 +7,10 @@ namespace GitReleaseManager.Core.MappingProfiles
     {
         public GitHubProfile()
         {
-            CreateMap<Model.Issue, Octokit.Issue>().ReverseMap();
+            CreateMap<Octokit.Issue, Model.Issue>()
+                .ForMember(dest => dest.PublicNumber, act => act.MapFrom(src => src.Number))
+                .ForMember(dest => dest.InternalNumber, act => act.MapFrom(src => src.Id))
+                .ReverseMap();
             CreateMap<Model.IssueComment, Octokit.IssueComment>().ReverseMap();
             CreateMap<Model.ItemState, Octokit.ItemState>().ReverseMap();
             CreateMap<Model.ItemStateFilter, Octokit.ItemStateFilter>().ReverseMap();

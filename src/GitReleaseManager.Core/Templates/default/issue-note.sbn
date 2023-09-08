@@ -1,1 +1,1 @@
-- [__#{{ issue.number }}__]({{ issue.html_url }}) {{ issue.title }}
+- [__#{{ issue.public_number }}__]({{ issue.html_url }}) {{ issue.title }}

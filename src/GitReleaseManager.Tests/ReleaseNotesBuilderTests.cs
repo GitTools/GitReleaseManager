@@ -263,7 +263,7 @@ namespace GitReleaseManager.Tests
         {
             return new Issue
             {
-                Number = number,
+                PublicNumber = number,
                 Labels = labels.Select(l => new Label { Name = l }).ToList(),
                 HtmlUrl = "http://example.com/" + number,
                 Title = "Issue " + number,
