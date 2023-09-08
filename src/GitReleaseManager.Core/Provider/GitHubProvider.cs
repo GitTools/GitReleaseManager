@@ -351,6 +351,11 @@ namespace GitReleaseManager.Core.Provider
             return "closed=1";
         }
 
+        public string GetIssueType(Issue issue)
+        {
+            return issue.IsPullRequest ? "Pull Request" : "Issue";
+        }
+
         private async Task ExecuteAsync(Func<Task> action)
         {
             try

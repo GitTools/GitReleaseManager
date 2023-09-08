@@ -47,5 +47,7 @@ namespace GitReleaseManager.Core.Provider
         RateLimit GetRateLimit();
 
         string GetMilestoneQueryString();
+
+        string GetIssueType(Issue issue);
     }
 }

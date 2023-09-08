@@ -10,6 +10,7 @@ namespace GitReleaseManager.Core.MappingProfiles
             CreateMap<Octokit.Issue, Model.Issue>()
                 .ForMember(dest => dest.PublicNumber, act => act.MapFrom(src => src.Number))
                 .ForMember(dest => dest.InternalNumber, act => act.MapFrom(src => src.Id))
+                .ForMember(dest => dest.IsPullRequest, act => act.MapFrom(src => src.HtmlUrl.Contains("/pull/")))
                 .ReverseMap();
             CreateMap<Model.IssueComment, Octokit.IssueComment>().ReverseMap();
             CreateMap<Model.ItemState, Octokit.ItemState>().ReverseMap();

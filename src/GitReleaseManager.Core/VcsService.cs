@@ -383,14 +383,15 @@ namespace GitReleaseManager.Core
 
                 try
                 {
+                    var issueType = _vcsProvider.GetIssueType(issue);
                     if (!await CommentsIncludeStringAsync(owner, repository, issue, detectionComment).ConfigureAwait(false))
                     {
-                        _logger.Information("Adding release comment for issue #{IssueNumber}", issue.Number);
+                        _logger.Information("Adding release comment for {IssueType} #{IssueNumber}", issueType, issue.PublicNumber);
                         await _vcsProvider.CreateIssueCommentAsync(owner, repository, issue, issueComment).ConfigureAwait(false);
                     }
                     else
                     {
-                        _logger.Information("Issue #{IssueNumber} already contains release comment, skipping...", issue.Number);
+                        _logger.Information("{IssueType} #{IssueNumber} already contains release comment, skipping...", issueType, issue.PublicNumber);
                     }
                 }
                 catch (ForbiddenException)
