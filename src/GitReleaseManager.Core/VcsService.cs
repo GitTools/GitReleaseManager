@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
@@ -141,7 +142,7 @@ namespace GitReleaseManager.Core
                     {
                         if (!File.Exists(asset))
                         {
-                            var message = string.Format("Requested asset to be uploaded doesn't exist: {0}", asset);
+                            var message = string.Format(CultureInfo.InvariantCulture, "Requested asset to be uploaded doesn't exist: {0}", asset);
                             throw new FileNotFoundException(message);
                         }
 
@@ -185,7 +186,7 @@ namespace GitReleaseManager.Core
                         if (!release.Body.Contains(_configuration.Create.ShaSectionHeading))
                         {
                             _logger.Debug("Creating SHA section header");
-                            stringBuilder.AppendLine(string.Format("### {0}", _configuration.Create.ShaSectionHeading));
+                            stringBuilder.AppendLine(string.Format(CultureInfo.InvariantCulture, "### {0}", _configuration.Create.ShaSectionHeading));
                         }
 
                         foreach (var asset in assets)
@@ -199,7 +200,7 @@ namespace GitReleaseManager.Core
 
                             _logger.Debug("Creating SHA checksum for {Name}.", file.Name);
 
-                            stringBuilder.AppendFormat(_configuration.Create.ShaSectionLineFormat, file.Name, ComputeSha256Hash(asset));
+                            stringBuilder.AppendFormat(CultureInfo.InvariantCulture, _configuration.Create.ShaSectionLineFormat, file.Name, ComputeSha256Hash(asset));
                             stringBuilder.AppendLine();
                         }
 
