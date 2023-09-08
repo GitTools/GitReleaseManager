@@ -231,7 +231,7 @@ namespace GitReleaseManager.Tests
             vcsProvider.GetCommitsUrl(owner, repository, Arg.Any<string>(), Arg.Any<string>())
                 .Returns(o => new GitHubProvider(null, null).GetCommitsUrl((string)o[0], (string)o[1], (string)o[2], (string)o[3]));
 
-            vcsProvider.GetIssuesAsync(owner, repository, milestoneNumber, ItemStateFilter.Closed)
+            vcsProvider.GetIssuesAsync(owner, repository, milestone, ItemStateFilter.Closed)
                 .Returns(Task.FromResult((IEnumerable<Issue>)vcsService.Issues));
 
             vcsProvider.GetMilestonesAsync(owner, repository, Arg.Any<ItemStateFilter>())

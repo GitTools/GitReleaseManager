@@ -114,7 +114,7 @@ namespace GitReleaseManager.Core
 
                 if (release.Draft)
                 {
-                    await _vcsProvider.DeleteReleaseAsync(owner, repository, release.Id).ConfigureAwait(false);
+                    await _vcsProvider.DeleteReleaseAsync(owner, repository, release).ConfigureAwait(false);
                 }
                 else
                 {
@@ -246,7 +246,7 @@ namespace GitReleaseManager.Core
                 var milestone = await _vcsProvider.GetMilestoneAsync(owner, repository, milestoneTitle, ItemStateFilter.Open).ConfigureAwait(false);
 
                 _logger.Verbose("Closing milestone '{Title}' on '{Owner}/{Repository}'", milestoneTitle, owner, repository);
-                await _vcsProvider.SetMilestoneStateAsync(owner, repository, milestone.Number, ItemState.Closed).ConfigureAwait(false);
+                await _vcsProvider.SetMilestoneStateAsync(owner, repository, milestone, ItemState.Closed).ConfigureAwait(false);
 
                 if (_configuration.Close.IssueComments)
                 {
@@ -267,7 +267,7 @@ namespace GitReleaseManager.Core
                 var milestone = await _vcsProvider.GetMilestoneAsync(owner, repository, milestoneTitle, ItemStateFilter.Closed).ConfigureAwait(false);
 
                 _logger.Verbose("Opening milestone '{Title}' on '{Owner}/{Repository}'", milestoneTitle, owner, repository);
-                await _vcsProvider.SetMilestoneStateAsync(owner, repository, milestone.Number, ItemState.Open).ConfigureAwait(false);
+                await _vcsProvider.SetMilestoneStateAsync(owner, repository, milestone, ItemState.Open).ConfigureAwait(false);
             }
             catch (NotFoundException)
             {
@@ -284,7 +284,7 @@ namespace GitReleaseManager.Core
                 _logger.Verbose("Publishing release '{TagName}' on '{Owner}/{Repository}'", tagName, owner, repository);
                 _logger.Debug("{@Release}", release);
 
-                await _vcsProvider.PublishReleaseAsync(owner, repository, tagName, release.Id).ConfigureAwait(false);
+                await _vcsProvider.PublishReleaseAsync(owner, repository, tagName, release).ConfigureAwait(false);
             }
             catch (NotFoundException)
             {
@@ -313,7 +313,7 @@ namespace GitReleaseManager.Core
 
                 _logger.Verbose("Removing existing labels");
                 _logger.Debug("{@Labels}", labels);
-                var deleteLabelsTasks = labels.Select(label => _vcsProvider.DeleteLabelAsync(owner, repository, label.Name));
+                var deleteLabelsTasks = labels.Select(label => _vcsProvider.DeleteLabelAsync(owner, repository, label));
                 await Task.WhenAll(deleteLabelsTasks).ConfigureAwait(false);
 
                 _logger.Verbose("Creating new standard labels");
@@ -374,8 +374,8 @@ namespace GitReleaseManager.Core
             const string detectionComment = "<!-- GitReleaseManager release comment -->";
             var issueComment = detectionComment + "\n" + _configuration.Close.IssueCommentFormat.ReplaceTemplate(new { owner, repository, Milestone = milestone.Title });
 
-            _logger.Verbose("Finding issues with milestone: '{Milestone}", milestone.Number);
-            var issues = await _vcsProvider.GetIssuesAsync(owner, repository, milestone.Number, ItemStateFilter.Closed).ConfigureAwait(false);
+            _logger.Verbose("Finding issues with milestone: '{Milestone}", milestone.PublicNumber);
+            var issues = await _vcsProvider.GetIssuesAsync(owner, repository, milestone, ItemStateFilter.Closed).ConfigureAwait(false);
 
             foreach (var issue in issues)
             {
@@ -383,10 +383,10 @@ namespace GitReleaseManager.Core
 
                 try
                 {
-                    if (!await CommentsIncludeStringAsync(owner, repository, issue.Number, detectionComment).ConfigureAwait(false))
+                    if (!await CommentsIncludeStringAsync(owner, repository, issue, detectionComment).ConfigureAwait(false))
                     {
                         _logger.Information("Adding release comment for issue #{IssueNumber}", issue.Number);
-                        await _vcsProvider.CreateIssueCommentAsync(owner, repository, issue.Number, issueComment).ConfigureAwait(false);
+                        await _vcsProvider.CreateIssueCommentAsync(owner, repository, issue, issueComment).ConfigureAwait(false);
                     }
                     else
                     {
@@ -401,10 +401,10 @@ namespace GitReleaseManager.Core
             }
         }
 
-        private async Task<bool> CommentsIncludeStringAsync(string owner, string repository, int issueNumber, string comment)
+        private async Task<bool> CommentsIncludeStringAsync(string owner, string repository, Issue issue, string comment)
         {
-            _logger.Verbose("Finding issue comment created by GitReleaseManager for issue #{IssueNumber}", issueNumber);
-            var issueComments = await _vcsProvider.GetIssueCommentsAsync(owner, repository, issueNumber).ConfigureAwait(false);
+            _logger.Verbose("Finding issue comment created by GitReleaseManager for issue #{IssueNumber}", issue.Number);
+            var issueComments = await _vcsProvider.GetIssueCommentsAsync(owner, repository, issue).ConfigureAwait(false);
 
             return issueComments.Any(c => c.Body.Contains(comment));
         }

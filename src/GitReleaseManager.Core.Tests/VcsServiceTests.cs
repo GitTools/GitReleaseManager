@@ -26,7 +26,8 @@ namespace GitReleaseManager.Core.Tests
     {
         private const string OWNER = "owner";
         private const string REPOSITORY = "repository";
-        private const int MILESTONE_NUMBER = 1;
+        private const int MILESTONE_PUBLIC_NUMBER = 1;
+        private const int MILESTONE_INTERNAL_NUMBER = 123;
         private const string MILESTONE_TITLE = "0.1.0";
         private const string TAG_NAME = "0.1.0";
         private const string RELEASE_NOTES = "Release Notes";
@@ -126,7 +127,7 @@ namespace GitReleaseManager.Core.Tests
             await _vcsService.AddAssetsAsync(OWNER, REPOSITORY, TAG_NAME, _assets).ConfigureAwait(false);
 
             await _vcsProvider.Received(1).GetReleaseAsync(OWNER, REPOSITORY, TAG_NAME).ConfigureAwait(false);
-            await _vcsProvider.DidNotReceive().DeleteAssetAsync(OWNER, REPOSITORY, Arg.Any<int>()).ConfigureAwait(false);
+            await _vcsProvider.DidNotReceive().DeleteAssetAsync(OWNER, REPOSITORY, Arg.Any<ReleaseAsset>()).ConfigureAwait(false);
             await _vcsProvider.Received(assetsCount).UploadAssetAsync(release, Arg.Any<ReleaseAssetUpload>()).ConfigureAwait(false);
 
             _logger.DidNotReceive().Warning(Arg.Any<string>(), Arg.Any<string>());
@@ -149,7 +150,7 @@ namespace GitReleaseManager.Core.Tests
             await _vcsService.AddAssetsAsync(OWNER, REPOSITORY, TAG_NAME, _assets).ConfigureAwait(false);
 
             await _vcsProvider.Received(1).GetReleaseAsync(OWNER, REPOSITORY, TAG_NAME).ConfigureAwait(false);
-            await _vcsProvider.Received(releaseAssetsCount).DeleteAssetAsync(OWNER, REPOSITORY, releaseAsset.Id).ConfigureAwait(false);
+            await _vcsProvider.Received(releaseAssetsCount).DeleteAssetAsync(OWNER, REPOSITORY, releaseAsset).ConfigureAwait(false);
             await _vcsProvider.Received(assetsCount).UploadAssetAsync(release, Arg.Any<ReleaseAssetUpload>()).ConfigureAwait(false);
 
             _logger.Received(releaseAssetsCount).Warning(Arg.Any<string>(), Arg.Any<string>());
@@ -172,7 +173,7 @@ namespace GitReleaseManager.Core.Tests
             ex.Message.ShouldContain(assetFilePath);
 
             await _vcsProvider.Received(1).GetReleaseAsync(OWNER, REPOSITORY, TAG_NAME).ConfigureAwait(false);
-            await _vcsProvider.DidNotReceive().DeleteAssetAsync(OWNER, REPOSITORY, Arg.Any<int>()).ConfigureAwait(false);
+            await _vcsProvider.DidNotReceive().DeleteAssetAsync(OWNER, REPOSITORY, Arg.Any<ReleaseAsset>()).ConfigureAwait(false);
             await _vcsProvider.DidNotReceive().UploadAssetAsync(release, Arg.Any<ReleaseAssetUpload>()).ConfigureAwait(false);
         }
 
@@ -182,7 +183,7 @@ namespace GitReleaseManager.Core.Tests
             await _vcsService.AddAssetsAsync(OWNER, REPOSITORY, TAG_NAME, assets).ConfigureAwait(false);
 
             await _vcsProvider.DidNotReceive().GetReleaseAsync(OWNER, REPOSITORY, TAG_NAME).ConfigureAwait(false);
-            await _vcsProvider.DidNotReceive().DeleteAssetAsync(OWNER, REPOSITORY, Arg.Any<int>()).ConfigureAwait(false);
+            await _vcsProvider.DidNotReceive().DeleteAssetAsync(OWNER, REPOSITORY, Arg.Any<ReleaseAsset>()).ConfigureAwait(false);
             await _vcsProvider.DidNotReceive().UploadAssetAsync(Arg.Any<Release>(), Arg.Any<ReleaseAssetUpload>()).ConfigureAwait(false);
         }
 
@@ -205,7 +206,7 @@ namespace GitReleaseManager.Core.Tests
             _vcsProvider.GetLabelsAsync(OWNER, REPOSITORY)
                 .Returns(Task.FromResult((IEnumerable<Label>)labels));
 
-            _vcsProvider.DeleteLabelAsync(OWNER, REPOSITORY, Arg.Any<string>())
+            _vcsProvider.DeleteLabelAsync(OWNER, REPOSITORY, Arg.Any<Label>())
                 .Returns(Task.CompletedTask);
 
             _vcsProvider.CreateLabelAsync(OWNER, REPOSITORY, Arg.Any<Label>())
@@ -214,7 +215,7 @@ namespace GitReleaseManager.Core.Tests
             await _vcsService.CreateLabelsAsync(OWNER, REPOSITORY).ConfigureAwait(false);
 
             await _vcsProvider.Received(1).GetLabelsAsync(OWNER, REPOSITORY).ConfigureAwait(false);
-            await _vcsProvider.Received(labels.Count).DeleteLabelAsync(OWNER, REPOSITORY, Arg.Any<string>()).ConfigureAwait(false);
+            await _vcsProvider.Received(labels.Count).DeleteLabelAsync(OWNER, REPOSITORY, Arg.Any<Label>()).ConfigureAwait(false);
             await _vcsProvider.Received(_configuration.Labels.Count).CreateLabelAsync(OWNER, REPOSITORY, Arg.Any<Label>()).ConfigureAwait(false);
 
             _logger.Received(1).Verbose(Arg.Any<string>(), OWNER, REPOSITORY);
@@ -235,61 +236,65 @@ namespace GitReleaseManager.Core.Tests
         [Test]
         public async Task Should_Close_Milestone()
         {
-            var milestone = new Milestone { Number = MILESTONE_NUMBER };
+            var milestone = new Milestone { PublicNumber = MILESTONE_PUBLIC_NUMBER, InternalNumber = MILESTONE_INTERNAL_NUMBER };
 
             _vcsProvider.GetMilestoneAsync(OWNER, REPOSITORY, MILESTONE_TITLE, ItemStateFilter.Open)
                 .Returns(Task.FromResult(milestone));
 
-            _vcsProvider.SetMilestoneStateAsync(OWNER, REPOSITORY, milestone.Number, ItemState.Closed)
+            _vcsProvider.SetMilestoneStateAsync(OWNER, REPOSITORY, milestone, ItemState.Closed)
                 .Returns(Task.CompletedTask);
 
             await _vcsService.CloseMilestoneAsync(OWNER, REPOSITORY, MILESTONE_TITLE).ConfigureAwait(false);
 
             await _vcsProvider.Received(1).GetMilestoneAsync(OWNER, REPOSITORY, MILESTONE_TITLE, ItemStateFilter.Open).ConfigureAwait(false);
-            await _vcsProvider.Received(1).SetMilestoneStateAsync(OWNER, REPOSITORY, milestone.Number, ItemState.Closed).ConfigureAwait(false);
+            await _vcsProvider.Received(1).SetMilestoneStateAsync(OWNER, REPOSITORY, milestone, ItemState.Closed).ConfigureAwait(false);
         }
 
         [Test]
         public async Task Should_Log_An_Warning_On_Closing_When_Milestone_Cannot_Be_Found()
         {
+            var milestone = new Milestone { PublicNumber = MILESTONE_PUBLIC_NUMBER, InternalNumber = MILESTONE_INTERNAL_NUMBER };
+
             _vcsProvider.GetMilestoneAsync(OWNER, REPOSITORY, MILESTONE_TITLE, ItemStateFilter.Open)
                 .Returns(Task.FromException<Milestone>(_notFoundException));
 
             await _vcsService.CloseMilestoneAsync(OWNER, REPOSITORY, MILESTONE_TITLE).ConfigureAwait(false);
 
             await _vcsProvider.Received(1).GetMilestoneAsync(OWNER, REPOSITORY, MILESTONE_TITLE, ItemStateFilter.Open).ConfigureAwait(false);
-            await _vcsProvider.DidNotReceive().SetMilestoneStateAsync(OWNER, REPOSITORY, MILESTONE_NUMBER, ItemState.Closed).ConfigureAwait(false);
+            await _vcsProvider.DidNotReceive().SetMilestoneStateAsync(OWNER, REPOSITORY, milestone, ItemState.Closed).ConfigureAwait(false);
             _logger.Received(1).Warning(UNABLE_TO_FOUND_MILESTONE_MESSAGE, "open", MILESTONE_TITLE, OWNER, REPOSITORY);
         }
 
         [Test]
         public async Task Should_Open_Milestone()
         {
-            var milestone = new Milestone { Number = MILESTONE_NUMBER };
+            var milestone = new Milestone { PublicNumber = MILESTONE_PUBLIC_NUMBER, InternalNumber = MILESTONE_INTERNAL_NUMBER };
 
             _vcsProvider.GetMilestoneAsync(OWNER, REPOSITORY, MILESTONE_TITLE, ItemStateFilter.Closed)
                 .Returns(Task.FromResult(milestone));
 
-            _vcsProvider.SetMilestoneStateAsync(OWNER, REPOSITORY, milestone.Number, ItemState.Open)
+            _vcsProvider.SetMilestoneStateAsync(OWNER, REPOSITORY, milestone, ItemState.Open)
                 .Returns(Task.CompletedTask);
 
             await _vcsService.OpenMilestoneAsync(OWNER, REPOSITORY, MILESTONE_TITLE).ConfigureAwait(false);
 
             await _vcsProvider.Received(1).GetMilestoneAsync(OWNER, REPOSITORY, MILESTONE_TITLE, ItemStateFilter.Closed).ConfigureAwait(false);
-            await _vcsProvider.Received(1).SetMilestoneStateAsync(OWNER, REPOSITORY, milestone.Number, ItemState.Open).ConfigureAwait(false);
+            await _vcsProvider.Received(1).SetMilestoneStateAsync(OWNER, REPOSITORY, milestone, ItemState.Open).ConfigureAwait(false);
             _logger.Received(2).Verbose(Arg.Any<string>(), MILESTONE_TITLE, OWNER, REPOSITORY);
         }
 
         [Test]
         public async Task Should_Log_An_Warning_On_Opening_When_Milestone_Cannot_Be_Found()
         {
+            var milestone = new Milestone { PublicNumber = MILESTONE_PUBLIC_NUMBER, InternalNumber = MILESTONE_INTERNAL_NUMBER };
+
             _vcsProvider.GetMilestoneAsync(OWNER, REPOSITORY, MILESTONE_TITLE, ItemStateFilter.Closed)
                 .Returns(Task.FromException<Milestone>(_notFoundException));
 
             await _vcsService.OpenMilestoneAsync(OWNER, REPOSITORY, MILESTONE_TITLE).ConfigureAwait(false);
 
             await _vcsProvider.Received(1).GetMilestoneAsync(OWNER, REPOSITORY, MILESTONE_TITLE, ItemStateFilter.Closed).ConfigureAwait(false);
-            await _vcsProvider.DidNotReceive().SetMilestoneStateAsync(OWNER, REPOSITORY, MILESTONE_NUMBER, ItemState.Open).ConfigureAwait(false);
+            await _vcsProvider.DidNotReceive().SetMilestoneStateAsync(OWNER, REPOSITORY, milestone, ItemState.Open).ConfigureAwait(false);
             _logger.Received(1).Warning(UNABLE_TO_FOUND_MILESTONE_MESSAGE, "closed", MILESTONE_TITLE, OWNER, REPOSITORY);
         }
 
@@ -556,13 +561,13 @@ namespace GitReleaseManager.Core.Tests
             _vcsProvider.GetReleaseAsync(OWNER, REPOSITORY, TAG_NAME)
                 .Returns(Task.FromResult(release));
 
-            _vcsProvider.DeleteReleaseAsync(OWNER, REPOSITORY, release.Id)
+            _vcsProvider.DeleteReleaseAsync(OWNER, REPOSITORY, release)
                 .Returns(Task.CompletedTask);
 
             await _vcsService.DiscardReleaseAsync(OWNER, REPOSITORY, TAG_NAME).ConfigureAwait(false);
 
             await _vcsProvider.Received(1).GetReleaseAsync(OWNER, REPOSITORY, TAG_NAME).ConfigureAwait(false);
-            await _vcsProvider.Received(1).DeleteReleaseAsync(OWNER, REPOSITORY, release.Id).ConfigureAwait(false);
+            await _vcsProvider.Received(1).DeleteReleaseAsync(OWNER, REPOSITORY, release).ConfigureAwait(false);
         }
 
         [Test]
@@ -576,7 +581,7 @@ namespace GitReleaseManager.Core.Tests
             await _vcsService.DiscardReleaseAsync(OWNER, REPOSITORY, TAG_NAME).ConfigureAwait(false);
 
             await _vcsProvider.Received(1).GetReleaseAsync(OWNER, REPOSITORY, TAG_NAME).ConfigureAwait(false);
-            await _vcsProvider.DidNotReceive().DeleteReleaseAsync(OWNER, REPOSITORY, release.Id).ConfigureAwait(false);
+            await _vcsProvider.DidNotReceive().DeleteReleaseAsync(OWNER, REPOSITORY, release).ConfigureAwait(false);
             _logger.Received(1).Warning(Arg.Any<string>(), TAG_NAME);
         }
 
@@ -601,13 +606,13 @@ namespace GitReleaseManager.Core.Tests
             _vcsProvider.GetReleaseAsync(OWNER, REPOSITORY, TAG_NAME)
                 .Returns(Task.FromResult(release));
 
-            _vcsProvider.PublishReleaseAsync(OWNER, REPOSITORY, TAG_NAME, release.Id)
+            _vcsProvider.PublishReleaseAsync(OWNER, REPOSITORY, TAG_NAME, release)
                 .Returns(Task.CompletedTask);
 
             await _vcsService.PublishReleaseAsync(OWNER, REPOSITORY, TAG_NAME).ConfigureAwait(false);
 
             await _vcsProvider.Received(1).GetReleaseAsync(OWNER, REPOSITORY, TAG_NAME).ConfigureAwait(false);
-            await _vcsProvider.Received(1).PublishReleaseAsync(OWNER, REPOSITORY, TAG_NAME, release.Id).ConfigureAwait(false);
+            await _vcsProvider.Received(1).PublishReleaseAsync(OWNER, REPOSITORY, TAG_NAME, release).ConfigureAwait(false);
             _logger.Received(1).Verbose(Arg.Any<string>(), TAG_NAME, OWNER, REPOSITORY);
             _logger.Received(1).Debug(Arg.Any<string>(), Arg.Any<Release>());
         }

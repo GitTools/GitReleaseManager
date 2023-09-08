@@ -70,7 +70,7 @@ namespace GitReleaseManager.IntegrationTests
         [Order(3)]
         public async Task Should_Get_Issues()
         {
-            var result = await _gitHubProvider.GetIssuesAsync(OWNER, REPOSITORY, _milestone.Number).ConfigureAwait(false);
+            var result = await _gitHubProvider.GetIssuesAsync(OWNER, REPOSITORY, _milestone).ConfigureAwait(false);
             result.Count().ShouldBeGreaterThan(0);
 
             _issue = result.First();
@@ -80,7 +80,7 @@ namespace GitReleaseManager.IntegrationTests
         [Order(4)]
         public async Task Should_Get_Issue_Comments()
         {
-            var result = await _gitHubProvider.GetIssueCommentsAsync(OWNER, REPOSITORY, _issue.Number).ConfigureAwait(false);
+            var result = await _gitHubProvider.GetIssueCommentsAsync(OWNER, REPOSITORY, _issue).ConfigureAwait(false);
             result.Count().ShouldBeGreaterThan(0);
         }
 

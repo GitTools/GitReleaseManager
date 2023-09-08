@@ -16,6 +16,7 @@ using Milestone = GitReleaseManager.Core.Model.Milestone;
 using NotFoundException = GitReleaseManager.Core.Exceptions.NotFoundException;
 using RateLimit = GitReleaseManager.Core.Model.RateLimit;
 using Release = GitReleaseManager.Core.Model.Release;
+using ReleaseAsset = GitReleaseManager.Core.Model.ReleaseAsset;
 using ReleaseAssetUpload = GitReleaseManager.Core.Model.ReleaseAssetUpload;
 
 namespace GitReleaseManager.Core.Provider
@@ -34,11 +35,11 @@ namespace GitReleaseManager.Core.Provider
             _mapper = mapper;
         }
 
-        public Task DeleteAssetAsync(string owner, string repository, int id)
+        public Task DeleteAssetAsync(string owner, string repository, ReleaseAsset asset)
         {
             return ExecuteAsync(async () =>
             {
-                await _gitHubClient.Repository.Release.DeleteAsset(owner, repository, id).ConfigureAwait(false);
+                await _gitHubClient.Repository.Release.DeleteAsset(owner, repository, asset.Id).ConfigureAwait(false);
             });
         }
 
@@ -84,21 +85,21 @@ namespace GitReleaseManager.Core.Provider
             return url;
         }
 
-        public Task CreateIssueCommentAsync(string owner, string repository, int issueNumber, string comment)
+        public Task CreateIssueCommentAsync(string owner, string repository, Issue issue, string comment)
         {
             return ExecuteAsync(async () =>
             {
-                await _gitHubClient.Issue.Comment.Create(owner, repository, issueNumber, comment).ConfigureAwait(false);
+                await _gitHubClient.Issue.Comment.Create(owner, repository, issue.Number, comment).ConfigureAwait(false);
             });
         }
 
-        public Task<IEnumerable<Issue>> GetIssuesAsync(string owner, string repository, int milestoneNumber, ItemStateFilter itemStateFilter = ItemStateFilter.All)
+        public Task<IEnumerable<Issue>> GetIssuesAsync(string owner, string repository, Milestone milestone, ItemStateFilter itemStateFilter = ItemStateFilter.All)
         {
             return ExecuteAsync(async () =>
             {
                 var openIssueRequest = new RepositoryIssueRequest
                 {
-                    Milestone = milestoneNumber.ToString(CultureInfo.InvariantCulture),
+                    Milestone = milestone.PublicNumber.ToString(CultureInfo.InvariantCulture),
                     State = (Octokit.ItemStateFilter)itemStateFilter,
                 };
 
@@ -120,7 +121,7 @@ namespace GitReleaseManager.Core.Provider
             });
         }
 
-        public Task<IEnumerable<IssueComment>> GetIssueCommentsAsync(string owner, string repository, int issueNumber)
+        public Task<IEnumerable<IssueComment>> GetIssueCommentsAsync(string owner, string repository, Issue issue)
         {
             return ExecuteAsync(async () =>
             {
@@ -131,7 +132,7 @@ namespace GitReleaseManager.Core.Provider
                 do
                 {
                     var options = GetApiOptions(startPage);
-                    results = await _gitHubClient.Issue.Comment.GetAllForIssue(owner, repository, issueNumber, options).ConfigureAwait(false);
+                    results = await _gitHubClient.Issue.Comment.GetAllForIssue(owner, repository, issue.Number, options).ConfigureAwait(false);
 
                     comments.AddRange(results);
                     startPage++;
@@ -152,11 +153,11 @@ namespace GitReleaseManager.Core.Provider
             });
         }
 
-        public Task DeleteLabelAsync(string owner, string repository, string labelName)
+        public Task DeleteLabelAsync(string owner, string repository, Label label)
         {
             return ExecuteAsync(async () =>
             {
-                await _gitHubClient.Issue.Labels.Delete(owner, repository, labelName).ConfigureAwait(false);
+                await _gitHubClient.Issue.Labels.Delete(owner, repository, label.Name).ConfigureAwait(false);
             });
         }
 
@@ -187,14 +188,14 @@ namespace GitReleaseManager.Core.Provider
             return ExecuteAsync(async () =>
             {
                 var milestones = await GetMilestonesAsync(owner, repository, itemStateFilter).ConfigureAwait(false);
-                var milestone = milestones.FirstOrDefault(m => m.Title == milestoneTitle);
+                var foundMilestone = milestones.FirstOrDefault(m => m.Title == milestoneTitle);
 
-                if (milestone is null)
+                if (foundMilestone is null)
                 {
                     throw new NotFoundException(NOT_FOUND_MESSGAE);
                 }
 
-                return milestone;
+                return foundMilestone;
             });
         }
 
@@ -222,12 +223,12 @@ namespace GitReleaseManager.Core.Provider
             });
         }
 
-        public Task SetMilestoneStateAsync(string owner, string repository, int milestoneNumber, ItemState itemState)
+        public Task SetMilestoneStateAsync(string owner, string repository, Milestone milestone, ItemState itemState)
         {
             return ExecuteAsync(async () =>
             {
                 var update = new MilestoneUpdate { State = (Octokit.ItemState)itemState };
-                await _gitHubClient.Issue.Milestone.Update(owner, repository, milestoneNumber, update).ConfigureAwait(false);
+                await _gitHubClient.Issue.Milestone.Update(owner, repository, milestone.PublicNumber, update).ConfigureAwait(false);
             });
         }
 
@@ -242,11 +243,11 @@ namespace GitReleaseManager.Core.Provider
             });
         }
 
-        public Task DeleteReleaseAsync(string owner, string repository, int id)
+        public Task DeleteReleaseAsync(string owner, string repository, Release release)
         {
             return ExecuteAsync(async () =>
             {
-                await _gitHubClient.Repository.Release.Delete(owner, repository, id).ConfigureAwait(false);
+                await _gitHubClient.Repository.Release.Delete(owner, repository, release.Id).ConfigureAwait(false);
             });
         }
 
@@ -299,7 +300,7 @@ namespace GitReleaseManager.Core.Provider
             });
         }
 
-        public Task PublishReleaseAsync(string owner, string repository, string tagName, int releaseId)
+        public Task PublishReleaseAsync(string owner, string repository, string tagName, Release release)
         {
             return ExecuteAsync(async () =>
             {
@@ -309,7 +310,7 @@ namespace GitReleaseManager.Core.Provider
                     TagName = tagName,
                 };
 
-                await _gitHubClient.Repository.Release.Edit(owner, repository, releaseId, update).ConfigureAwait(false);
+                await _gitHubClient.Repository.Release.Edit(owner, repository, release.Id, update).ConfigureAwait(false);
             });
         }
 

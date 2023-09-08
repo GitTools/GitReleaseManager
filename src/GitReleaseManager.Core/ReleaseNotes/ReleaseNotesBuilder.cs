@@ -184,7 +184,7 @@ namespace GitReleaseManager.Core.ReleaseNotes
 
         private async Task<List<Issue>> GetIssuesAsync(Milestone milestone)
         {
-            var allIssues = await _vcsProvider.GetIssuesAsync(_user, _repository, milestone.Number, ItemStateFilter.Closed).ConfigureAwait(false);
+            var allIssues = await _vcsProvider.GetIssuesAsync(_user, _repository, milestone, ItemStateFilter.Closed).ConfigureAwait(false);
 
             var result = CheckIssuesForValidLabels(allIssues);
 
