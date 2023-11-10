@@ -1,3 +1,4 @@
+using System;
 using AutoMapper;
 using GitReleaseManager.Core.Extensions;
 
@@ -7,7 +8,11 @@ namespace GitReleaseManager.Core.MappingProfiles
     {
         public GitHubProfile()
         {
-            CreateMap<Model.Issue, Octokit.Issue>().ReverseMap();
+            CreateMap<Octokit.Issue, Model.Issue>()
+                .ForMember(dest => dest.PublicNumber, act => act.MapFrom(src => src.Number))
+                .ForMember(dest => dest.InternalNumber, act => act.MapFrom(src => src.Id))
+                .ForMember(dest => dest.IsPullRequest, act => act.MapFrom(src => src.HtmlUrl.IndexOf("/pull/", StringComparison.OrdinalIgnoreCase) >= 0))
+                .ReverseMap();
             CreateMap<Model.IssueComment, Octokit.IssueComment>().ReverseMap();
             CreateMap<Model.ItemState, Octokit.ItemState>().ReverseMap();
             CreateMap<Model.ItemStateFilter, Octokit.ItemStateFilter>().ReverseMap();
@@ -20,6 +25,8 @@ namespace GitReleaseManager.Core.MappingProfiles
             CreateMap<Model.Label, Octokit.NewLabel>().ReverseMap();
             CreateMap<Model.Milestone, Octokit.Milestone>();
             CreateMap<Octokit.Milestone, Model.Milestone>()
+                .ForMember(dest => dest.PublicNumber, act => act.MapFrom(src => src.Number))
+                .ForMember(dest => dest.InternalNumber, act => act.MapFrom(src => src.Number))
                 .AfterMap((src, dest) => dest.Version = src.Version());
         }
     }

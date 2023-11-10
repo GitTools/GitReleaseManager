@@ -8,11 +8,13 @@ using GitReleaseManager.Core;
 using GitReleaseManager.Core.Commands;
 using GitReleaseManager.Core.Configuration;
 using GitReleaseManager.Core.Helpers;
+using GitReleaseManager.Core.Model;
 using GitReleaseManager.Core.Options;
 using GitReleaseManager.Core.Provider;
 using GitReleaseManager.Core.ReleaseNotes;
 using GitReleaseManager.Core.Templates;
 using Microsoft.Extensions.DependencyInjection;
+using NGitLab;
 using Octokit;
 using Serilog;
 
@@ -96,7 +98,6 @@ namespace GitReleaseManager.Cli
                 .AddSingleton<IFileSystem>(fileSystem)
                 .AddSingleton<IReleaseNotesExporter, ReleaseNotesExporter>()
                 .AddSingleton<IReleaseNotesBuilder, ReleaseNotesBuilder>()
-                .AddSingleton<IVcsProvider, GitHubProvider>()
                 .AddSingleton<IVcsService, VcsService>();
 
             if (options is BaseVcsOptions vcsOptions)
@@ -106,9 +107,7 @@ namespace GitReleaseManager.Cli
                     throw new Exception("The token option is not defined");
                 }
 
-                var gitHubClient = new GitHubClient(new ProductHeaderValue("GitReleaseManager")) { Credentials = new Credentials(vcsOptions.Token) };
-                serviceCollection = serviceCollection
-                    .AddSingleton<IGitHubClient>(gitHubClient);
+                RegisterVcsProvider(vcsOptions, serviceCollection);
             }
 
             serviceCollection = serviceCollection
@@ -197,5 +196,23 @@ namespace GitReleaseManager.Cli
 
         private static void LogOptions(BaseSubOptions options)
             => Log.Debug("{@Options}", options);
+
+        private static void RegisterVcsProvider(BaseVcsOptions vcsOptions, IServiceCollection serviceCollection)
+        {
+            Log.Information("Using {Provider} as VCS Provider", vcsOptions.Provider);
+            if (vcsOptions.Provider == VcsProvider.GitLab)
+            {
+                serviceCollection
+                    .AddSingleton<IGitLabClient>((_) => new GitLabClient("https://gitlab.com", vcsOptions.Token))
+                    .AddSingleton<IVcsProvider, GitLabProvider>();
+            }
+            else
+            {
+                // default to Github
+                serviceCollection
+                    .AddSingleton<IGitHubClient>((_) => new GitHubClient(new ProductHeaderValue("GitReleaseManager")) { Credentials = new Credentials(vcsOptions.Token) })
+                    .AddSingleton<IVcsProvider, GitHubProvider>();
+            }
+        }
     }
 }
