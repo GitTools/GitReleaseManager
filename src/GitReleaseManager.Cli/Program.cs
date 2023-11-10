@@ -202,17 +202,15 @@ namespace GitReleaseManager.Cli
             Log.Information("Using {Provider} as VCS Provider", vcsOptions.Provider);
             if (vcsOptions.Provider == VcsProvider.GitLab)
             {
-                var gitlabClient = new GitLabClient("https://gitlab.com", vcsOptions.Token);
                 serviceCollection
-                    .AddSingleton<IVcsProvider, GitLabProvider>()
-                    .AddSingleton<IGitLabClient>(gitlabClient);
+                    .AddSingleton<IGitLabClient>((_) => new GitLabClient("https://gitlab.com", vcsOptions.Token))
+                    .AddSingleton<IVcsProvider, GitLabProvider>();
             }
             else
             {
                 // default to Github
-                var gitHubClient = new GitHubClient(new ProductHeaderValue("GitReleaseManager")) { Credentials = new Credentials(vcsOptions.Token) };
                 serviceCollection
-                    .AddSingleton<IGitHubClient>(gitHubClient)
+                    .AddSingleton<IGitHubClient>((_) => new GitHubClient(new ProductHeaderValue("GitReleaseManager")) { Credentials = new Credentials(vcsOptions.Token) })
                     .AddSingleton<IVcsProvider, GitHubProvider>();
             }
         }
