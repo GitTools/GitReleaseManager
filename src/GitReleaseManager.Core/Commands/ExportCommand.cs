@@ -18,13 +18,13 @@ namespace GitReleaseManager.Core.Commands
 
         public async Task<int> ExecuteAsync(ExportSubOptions options)
         {
-            if (string.IsNullOrEmpty(options.TagName))
+            if (string.IsNullOrWhiteSpace(options.TagName))
             {
-                _logger.Information("Exporting all releases");
+                _logger.Information("Exporting all releases.");
             }
             else
             {
-                _logger.Information("Exporting release {TagName}", options.TagName);
+                _logger.Information("Exporting release {TagName}.", options.TagName);
             }
 
             var releasesContent = await _vcsService.ExportReleasesAsync(options.RepositoryOwner, options.RepositoryName, options.TagName, options.SkipPrereleases).ConfigureAwait(false);

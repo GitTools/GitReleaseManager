@@ -17,13 +17,13 @@ namespace GitReleaseManager.Core.Extensions
             var nameWithoutPrerelease = ver.Title.Split('-')[0];
             if (nameWithoutPrerelease.StartsWith("v", StringComparison.OrdinalIgnoreCase))
             {
-                _logger.Debug("Removing version prefix from {Name}", ver.Title);
+                _logger.Debug("Removing version prefix from {Name}.", ver.Title);
                 nameWithoutPrerelease = nameWithoutPrerelease.Remove(0, 1);
             }
 
             if (!System.Version.TryParse(nameWithoutPrerelease, out Version parsedVersion))
             {
-                _logger.Warning("No valid version was found on {Title}", ver.Title);
+                _logger.Warning("No valid version was found on {Title}.", ver.Title);
                 return new Version(0, 0);
             }
 

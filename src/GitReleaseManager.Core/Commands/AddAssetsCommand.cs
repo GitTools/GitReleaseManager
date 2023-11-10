@@ -21,7 +21,7 @@ namespace GitReleaseManager.Core.Commands
 
             if (vcsOptions?.Provider == Model.VcsProvider.GitLab)
             {
-                _logger.Error("The addasset command is currently not supported when targetting GitLab.");
+                _logger.Error("The 'addasset' command is currently not supported when targeting GitLab.");
                 return 1;
             }
 

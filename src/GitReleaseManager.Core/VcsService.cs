@@ -142,7 +142,7 @@ namespace GitReleaseManager.Core
                     {
                         if (!File.Exists(asset))
                         {
-                            var message = string.Format(CultureInfo.InvariantCulture, "Requested asset to be uploaded doesn't exist: {0}", asset);
+                            var message = string.Format(CultureInfo.CurrentCulture, "The requested asset to be uploaded doesn't exist: {0}", asset);
                             throw new FileNotFoundException(message);
                         }
 
@@ -155,7 +155,7 @@ namespace GitReleaseManager.Core
 
                             if (_vcsProvider is GitLabProvider)
                             {
-                                _logger.Error("Deleting of assets is not currently supported when targetting GitLab.");
+                                _logger.Error("Deleting assets is not currently supported when targeting GitLab.");
                             }
                             else
                             {
@@ -186,7 +186,7 @@ namespace GitReleaseManager.Core
                         if (!release.Body.Contains(_configuration.Create.ShaSectionHeading))
                         {
                             _logger.Debug("Creating SHA section header");
-                            stringBuilder.AppendLine(string.Format(CultureInfo.InvariantCulture, "### {0}", _configuration.Create.ShaSectionHeading));
+                            stringBuilder.AppendFormat(CultureInfo.InvariantCulture, "### {0}", _configuration.Create.ShaSectionHeading).AppendLine();
                         }
 
                         foreach (var asset in assets)
@@ -405,7 +405,7 @@ namespace GitReleaseManager.Core
                 }
                 catch (ForbiddenException)
                 {
-                    _logger.Error("Unable to add comment to issue #{IssueNumber}. Insufficient permissions.", issue.PublicNumber);
+                    _logger.Error("Unable to add a comment to issue #{IssueNumber}. Insufficient permissions.", issue.PublicNumber);
                     break;
                 }
             }
