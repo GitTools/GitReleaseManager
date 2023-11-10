@@ -6,7 +6,6 @@ using GitReleaseManager.Core;
 using GitReleaseManager.Core.Provider;
 using NUnit.Framework;
 using Octokit;
-using Serilog;
 using Shouldly;
 using Issue = GitReleaseManager.Core.Model.Issue;
 using Milestone = GitReleaseManager.Core.Model.Milestone;
@@ -24,7 +23,6 @@ namespace GitReleaseManager.IntegrationTests
         private GitHubProvider _gitHubProvider;
         private IGitHubClient _gitHubClient;
         private IMapper _mapper;
-        private ILogger _logger;
 
         private string _token;
         private string _releaseBaseTag;
@@ -43,7 +41,6 @@ namespace GitReleaseManager.IntegrationTests
             }
 
             _mapper = AutoMapperConfiguration.Configure();
-            _logger = new LoggerConfiguration().WriteTo.Console().CreateLogger();
             _gitHubClient = new GitHubClient(new ProductHeaderValue("GitReleaseManager")) { Credentials = new Credentials(_token) };
             _gitHubProvider = new GitHubProvider(_gitHubClient, _mapper);
         }
