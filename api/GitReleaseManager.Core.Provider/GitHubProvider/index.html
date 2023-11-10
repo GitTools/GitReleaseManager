@@ -135,10 +135,11 @@
 			<li class="header">Namespace</li>
 		<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.Provider">GitReleaseManager<wbr>.Core<wbr>.Provider</a></li>
 		<li role="separator" class="divider"></li>
-			<li class="header">Interface Types</li>
-				<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.Provider/IVcsProvider">IVcsProvider</a></li>
 			<li class="header">Class Types</li>
 				<li class="selected"><a href="/GitReleaseManager/api/GitReleaseManager.Core.Provider/GitHubProvider">GitHubProvider</a></li>
+				<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.Provider/GitLabProvider">GitLabProvider</a></li>
+			<li class="header">Interface Types</li>
+				<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.Provider/IVcsProvider">IVcsProvider</a></li>
 
 
                     </ul>
@@ -243,7 +244,7 @@ class Type type-node
 							</tr>
 						</thead>
 							<tbody><tr>
-								<td><a href="/GitReleaseManager/api/GitReleaseManager.Core.Provider/GitHubProvider/52DED4B9">Create<wbr>Issue<wbr>Comment<wbr>Async<wbr>(string, <wbr>string, <wbr>int, <wbr>string)<wbr></a></td>
+								<td><a href="/GitReleaseManager/api/GitReleaseManager.Core.Provider/GitHubProvider/12245AE3">Create<wbr>Issue<wbr>Comment<wbr>Async<wbr>(string, <wbr>string, <wbr>Issue, <wbr>string)<wbr></a></td>
 								<td>Task</td>
 								<td>
 									<div></div>
@@ -264,21 +265,21 @@ class Type type-node
 								</td>
 							</tr>
 							<tr>
-								<td><a href="/GitReleaseManager/api/GitReleaseManager.Core.Provider/GitHubProvider/47C916E3">DeleteAssetAsync<wbr>(string, <wbr>string, <wbr>int)<wbr></a></td>
+								<td><a href="/GitReleaseManager/api/GitReleaseManager.Core.Provider/GitHubProvider/3E87A96A">DeleteAssetAsync<wbr>(string, <wbr>string, <wbr>ReleaseAsset)<wbr></a></td>
 								<td>Task</td>
 								<td>
 									<div></div>
 								</td>
 							</tr>
 							<tr>
-								<td><a href="/GitReleaseManager/api/GitReleaseManager.Core.Provider/GitHubProvider/55653938">DeleteLabelAsync<wbr>(string, <wbr>string, <wbr>string)<wbr></a></td>
+								<td><a href="/GitReleaseManager/api/GitReleaseManager.Core.Provider/GitHubProvider/D6282545">DeleteLabelAsync<wbr>(string, <wbr>string, <wbr>Label)<wbr></a></td>
 								<td>Task</td>
 								<td>
 									<div></div>
 								</td>
 							</tr>
 							<tr>
-								<td><a href="/GitReleaseManager/api/GitReleaseManager.Core.Provider/GitHubProvider/5AFF77EE">DeleteReleaseAsync<wbr>(string, <wbr>string, <wbr>int)<wbr></a></td>
+								<td><a href="/GitReleaseManager/api/GitReleaseManager.Core.Provider/GitHubProvider/EFE42DD6">DeleteReleaseAsync<wbr>(string, <wbr>string, <wbr>Release)<wbr></a></td>
 								<td>Task</td>
 								<td>
 									<div></div>
@@ -299,15 +300,22 @@ class Type type-node
 								</td>
 							</tr>
 							<tr>
-								<td><a href="/GitReleaseManager/api/GitReleaseManager.Core.Provider/GitHubProvider/0B236911">Get<wbr>Issue<wbr>Comments<wbr>Async<wbr>(string, <wbr>string, <wbr>int)<wbr></a></td>
+								<td><a href="/GitReleaseManager/api/GitReleaseManager.Core.Provider/GitHubProvider/A74AC51D">Get<wbr>Issue<wbr>Comments<wbr>Async<wbr>(string, <wbr>string, <wbr>Issue)<wbr></a></td>
 								<td>Task<wbr>&lt;IEnumerable<wbr>&lt;<a href="/GitReleaseManager/api/GitReleaseManager.Core.Model/IssueComment">IssueComment</a>&gt;<wbr>&gt;<wbr></td>
 								<td>
 									<div></div>
 								</td>
 							</tr>
 							<tr>
-								<td><a href="/GitReleaseManager/api/GitReleaseManager.Core.Provider/GitHubProvider/F95868B4">GetIssuesAsync<wbr>(string, <wbr>string, <wbr>int, <wbr>ItemStateFilter)<wbr></a></td>
+								<td><a href="/GitReleaseManager/api/GitReleaseManager.Core.Provider/GitHubProvider/1943F92C">GetIssuesAsync<wbr>(string, <wbr>string, <wbr>Milestone, <wbr>ItemStateFilter)<wbr></a></td>
 								<td>Task<wbr>&lt;IEnumerable<wbr>&lt;<a href="/GitReleaseManager/api/GitReleaseManager.Core.Model/Issue">Issue</a>&gt;<wbr>&gt;<wbr></td>
+								<td>
+									<div></div>
+								</td>
+							</tr>
+							<tr>
+								<td><a href="/GitReleaseManager/api/GitReleaseManager.Core.Provider/GitHubProvider/729B02E3">GetIssueType<wbr>(Issue)<wbr></a></td>
+								<td>string</td>
 								<td>
 									<div></div>
 								</td>
@@ -322,6 +330,13 @@ class Type type-node
 							<tr>
 								<td><a href="/GitReleaseManager/api/GitReleaseManager.Core.Provider/GitHubProvider/3A26E2CD">GetMilestoneAsync<wbr>(string, <wbr>string, <wbr>string, <wbr>ItemStateFilter)<wbr></a></td>
 								<td>Task<wbr>&lt;<a href="/GitReleaseManager/api/GitReleaseManager.Core.Model/Milestone">Milestone</a>&gt;<wbr></td>
+								<td>
+									<div></div>
+								</td>
+							</tr>
+							<tr>
+								<td><a href="/GitReleaseManager/api/GitReleaseManager.Core.Provider/GitHubProvider/E5810CDE">Get<wbr>Milestone<wbr>Query<wbr>String<wbr>()<wbr></a></td>
+								<td>string</td>
 								<td>
 									<div></div>
 								</td>
@@ -355,14 +370,14 @@ class Type type-node
 								</td>
 							</tr>
 							<tr>
-								<td><a href="/GitReleaseManager/api/GitReleaseManager.Core.Provider/GitHubProvider/2353D852">PublishReleaseAsync<wbr>(string, <wbr>string, <wbr>string, <wbr>int)<wbr></a></td>
+								<td><a href="/GitReleaseManager/api/GitReleaseManager.Core.Provider/GitHubProvider/DF768CE9">PublishReleaseAsync<wbr>(string, <wbr>string, <wbr>string, <wbr>Release)<wbr></a></td>
 								<td>Task</td>
 								<td>
 									<div></div>
 								</td>
 							</tr>
 							<tr>
-								<td><a href="/GitReleaseManager/api/GitReleaseManager.Core.Provider/GitHubProvider/BB707BB7">Set<wbr>Milestone<wbr>State<wbr>Async<wbr>(string, <wbr>string, <wbr>int, <wbr>ItemState)<wbr></a></td>
+								<td><a href="/GitReleaseManager/api/GitReleaseManager.Core.Provider/GitHubProvider/ED042C80">Set<wbr>Milestone<wbr>State<wbr>Async<wbr>(string, <wbr>string, <wbr>Milestone, <wbr>ItemState)<wbr></a></td>
 								<td>Task</td>
 								<td>
 									<div></div>
