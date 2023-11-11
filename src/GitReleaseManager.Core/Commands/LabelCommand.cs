@@ -17,6 +17,14 @@ namespace GitReleaseManager.Core.Commands
 
         public async Task<int> ExecuteAsync(LabelSubOptions options)
         {
+            var vcsOptions = options as BaseVcsOptions;
+
+            if (vcsOptions?.Provider == Model.VcsProvider.GitLab)
+            {
+                _logger.Error("The label command is currently not supported when targeting GitLab.");
+                return 1;
+            }
+
             _logger.Information("Creating standard labels");
             await _vcsService.CreateLabelsAsync(options.RepositoryOwner, options.RepositoryName).ConfigureAwait(false);
 

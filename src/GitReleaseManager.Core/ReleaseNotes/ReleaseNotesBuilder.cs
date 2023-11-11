@@ -60,13 +60,15 @@ namespace GitReleaseManager.Core.ReleaseNotes
 
             if (issues.Count == 0)
             {
-                var logMessage = string.Format("No closed issues have been found for milestone {0}, or all assigned issues are meant to be excluded from release notes, aborting creation of release.", _milestoneTitle);
+                var logMessage = string.Format(CultureInfo.CurrentCulture, "No closed issues have been found for milestone {0}, or all assigned issues are meant to be excluded from release notes, aborting release creation.", _milestoneTitle);
                 throw new InvalidOperationException(logMessage);
             }
 
             var commitsLink = _vcsProvider.GetCommitsUrl(_user, _repository, _targetMilestone?.Title, previousMilestone?.Title);
 
             var issuesDict = GetIssuesDict(issues);
+
+            var milestoneQueryString = _vcsProvider.GetMilestoneQueryString();
 
             var templateModel = new
             {
@@ -84,6 +86,7 @@ namespace GitReleaseManager.Core.ReleaseNotes
                 {
                     Target = _targetMilestone,
                     Previous = previousMilestone,
+                    QueryString = milestoneQueryString,
                 },
                 IssueLabels = issuesDict.Keys.ToList(),
             };
@@ -103,7 +106,7 @@ namespace GitReleaseManager.Core.ReleaseNotes
                 .Where(o => issueLabels.Any(il => string.Equals(il, o.Label, StringComparison.OrdinalIgnoreCase)))
                 .GroupBy(o => o.Label, o => o.Issue)
                 .OrderBy(o => o.Key)
-                .ToDictionary(o => GetValidLabel(o.Key, o.Count()), o => o.OrderBy(issue => issue.Number).ToList());
+                .ToDictionary(o => GetValidLabel(o.Key, o.Count()), o => o.OrderBy(issue => issue.PublicNumber).ToList());
 
             return issuesByLabel;
         }
@@ -181,7 +184,7 @@ namespace GitReleaseManager.Core.ReleaseNotes
 
         private async Task<List<Issue>> GetIssuesAsync(Milestone milestone)
         {
-            var allIssues = await _vcsProvider.GetIssuesAsync(_user, _repository, milestone.Number, ItemStateFilter.Closed).ConfigureAwait(false);
+            var allIssues = await _vcsProvider.GetIssuesAsync(_user, _repository, milestone, ItemStateFilter.Closed).ConfigureAwait(false);
 
             var result = CheckIssuesForValidLabels(allIssues);
 

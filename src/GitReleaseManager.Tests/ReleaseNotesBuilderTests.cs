@@ -231,11 +231,14 @@ namespace GitReleaseManager.Tests
             vcsProvider.GetCommitsUrl(owner, repository, Arg.Any<string>(), Arg.Any<string>())
                 .Returns(o => new GitHubProvider(null, null).GetCommitsUrl((string)o[0], (string)o[1], (string)o[2], (string)o[3]));
 
-            vcsProvider.GetIssuesAsync(owner, repository, milestoneNumber, ItemStateFilter.Closed)
+            vcsProvider.GetIssuesAsync(owner, repository, milestone, ItemStateFilter.Closed)
                 .Returns(Task.FromResult((IEnumerable<Issue>)vcsService.Issues));
 
             vcsProvider.GetMilestonesAsync(owner, repository, Arg.Any<ItemStateFilter>())
                 .Returns(Task.FromResult((IEnumerable<Milestone>)vcsService.Milestones));
+
+            vcsProvider.GetMilestoneQueryString()
+                .Returns("closed=1");
 
             var builder = new ReleaseNotesBuilder(vcsProvider, logger, fileSystem, configuration, new TemplateFactory(fileSystem, configuration, TemplateKind.Create));
             var notes = builder.BuildReleaseNotesAsync(owner, repository, milestone.Title, ReleaseTemplates.DEFAULT_NAME).Result;
@@ -249,7 +252,8 @@ namespace GitReleaseManager.Tests
             {
                 Title = version,
                 Description = description,
-                Number = 1,
+                PublicNumber = 1,
+                InternalNumber = 123,
                 HtmlUrl = "https://github.com/gep13/FakeRepository/issues?q=milestone%3A" + version,
                 Version = new Version(version),
             };
@@ -259,7 +263,7 @@ namespace GitReleaseManager.Tests
         {
             return new Issue
             {
-                Number = number,
+                PublicNumber = number,
                 Labels = labels.Select(l => new Label { Name = l }).ToList(),
                 HtmlUrl = "http://example.com/" + number,
                 Title = "Issue " + number,
