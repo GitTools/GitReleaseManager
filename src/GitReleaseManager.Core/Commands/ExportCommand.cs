@@ -16,9 +16,17 @@ namespace GitReleaseManager.Core.Commands
             _logger = logger;
         }
 
-        public async Task<int> Execute(ExportSubOptions options)
+        public async Task<int> ExecuteAsync(ExportSubOptions options)
         {
-            _logger.Information("Exporting release {TagName}", options.TagName);
+            if (string.IsNullOrWhiteSpace(options.TagName))
+            {
+                _logger.Information("Exporting all releases.");
+            }
+            else
+            {
+                _logger.Information("Exporting release {TagName}.", options.TagName);
+            }
+
             var releasesContent = await _vcsService.ExportReleasesAsync(options.RepositoryOwner, options.RepositoryName, options.TagName, options.SkipPrereleases).ConfigureAwait(false);
 
             using (var sw = new StreamWriter(File.Open(options.FileOutputPath, FileMode.OpenOrCreate)))

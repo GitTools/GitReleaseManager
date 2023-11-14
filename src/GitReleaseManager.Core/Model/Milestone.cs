@@ -8,7 +8,9 @@ namespace GitReleaseManager.Core.Model
 
         public string Description { get; set; }
 
-        public int Number { get; set; }
+        public int PublicNumber { get; set; }
+
+        public int InternalNumber { get; set; }
 
         public string HtmlUrl { get; set; }
 

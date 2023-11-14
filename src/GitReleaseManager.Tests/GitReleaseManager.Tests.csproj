@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <LangVersion>8.0</LangVersion>
-        <TargetFrameworks>net48;net6.0;net7.0</TargetFrameworks>
+        <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
         <Title>GitReleaseManager.Tests</Title>
         <Description>Test Project for GitReleaseManager</Description>
         <NoWarn>$(NoWarn);CA1707;Serilog004;</NoWarn>
@@ -17,15 +17,15 @@
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
           <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.1" />
-        <PackageReference Include="ApprovalTests" Version="5.8.0" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+        <PackageReference Include="ApprovalTests" Version="5.9.0" />
         <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1">
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
           <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="NSubstitute" Version="5.0.0" />
-        <PackageReference Include="NUnit" Version="3.13.3" />
+        <PackageReference Include="NSubstitute" Version="5.1.0" />
+        <PackageReference Include="NUnit" Version="3.14.0" />
         <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
-        <PackageReference Include="Octokit" Version="7.1.0" />
+        <PackageReference Include="Octokit" Version="9.0.0" />
     </ItemGroup>
 </Project>

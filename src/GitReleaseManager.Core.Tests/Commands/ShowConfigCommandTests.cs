@@ -1,5 +1,7 @@
+using System;
 using System.Threading.Tasks;
 using GitReleaseManager.Core.Commands;
+using GitReleaseManager.Core.Configuration;
 using GitReleaseManager.Core.Helpers;
 using GitReleaseManager.Core.Options;
 using NSubstitute;
@@ -21,7 +23,10 @@ namespace GitReleaseManager.Core.Tests.Commands
         {
             _fileSystem = Substitute.For<IFileSystem>();
             _logger = Substitute.For<ILogger>();
-            _command = new ShowConfigCommand(_fileSystem, _logger);
+
+            var currentDirectory = Environment.CurrentDirectory;
+            var configuration = ConfigurationProvider.Provide(currentDirectory, _fileSystem);
+            _command = new ShowConfigCommand(_logger, configuration);
         }
 
         [Test]
@@ -29,7 +34,7 @@ namespace GitReleaseManager.Core.Tests.Commands
         {
             var options = new ShowConfigSubOptions();
 
-            var result = await _command.Execute(options).ConfigureAwait(false);
+            var result = await _command.ExecuteAsync(options).ConfigureAwait(false);
             result.ShouldBe(0);
 
             _logger.Received(1).Information(Arg.Any<string>(), Arg.Any<string>());

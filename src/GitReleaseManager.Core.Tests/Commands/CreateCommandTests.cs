@@ -43,7 +43,7 @@ namespace GitReleaseManager.Core.Tests.Commands
             _vcsService.CreateEmptyReleaseAsync(options.RepositoryOwner, options.RepositoryName, options.Name, options.TargetCommitish, options.Prerelease)
                 .Returns(_release);
 
-            var result = await _command.Execute(options).ConfigureAwait(false);
+            var result = await _command.ExecuteAsync(options).ConfigureAwait(false);
             result.ShouldBe(0);
 
             await _vcsService.Received(1).CreateEmptyReleaseAsync(options.RepositoryOwner, options.RepositoryName, releaseName, options.TargetCommitish, options.Prerelease).ConfigureAwait(false);
@@ -72,7 +72,7 @@ namespace GitReleaseManager.Core.Tests.Commands
             _vcsService.CreateReleaseFromMilestoneAsync(options.RepositoryOwner, options.RepositoryName, options.Milestone, releaseName, options.TargetCommitish, options.AssetPaths, options.Prerelease, options.Template)
                 .Returns(_release);
 
-            var result = await _command.Execute(options).ConfigureAwait(false);
+            var result = await _command.ExecuteAsync(options).ConfigureAwait(false);
             result.ShouldBe(0);
 
             await _vcsService.Received(1).CreateReleaseFromMilestoneAsync(options.RepositoryOwner, options.RepositoryName, options.Milestone, releaseName, options.TargetCommitish, options.AssetPaths, options.Prerelease, options.Template).ConfigureAwait(false);
@@ -98,7 +98,7 @@ namespace GitReleaseManager.Core.Tests.Commands
             _vcsService.CreateReleaseFromInputFileAsync(options.RepositoryOwner, options.RepositoryName, options.Name, options.InputFilePath, options.TargetCommitish, options.AssetPaths, options.Prerelease)
                 .Returns(_release);
 
-            var result = await _command.Execute(options).ConfigureAwait(false);
+            var result = await _command.ExecuteAsync(options).ConfigureAwait(false);
             result.ShouldBe(0);
 
             await _vcsService.Received(1).CreateReleaseFromInputFileAsync(options.RepositoryOwner, options.RepositoryName, options.Name, options.InputFilePath, options.TargetCommitish, options.AssetPaths, options.Prerelease).ConfigureAwait(false);

@@ -15,7 +15,7 @@ namespace GitReleaseManager.Core.Commands
             _logger = logger;
         }
 
-        public async Task<int> Execute(OpenSubOptions options)
+        public async Task<int> ExecuteAsync(OpenSubOptions options)
         {
             _logger.Information("Opening milestone {Milestone}", options.Milestone);
             await _vcsService.OpenMilestoneAsync(options.RepositoryOwner, options.RepositoryName, options.Milestone).ConfigureAwait(false);

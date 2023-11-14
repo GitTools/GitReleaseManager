@@ -20,7 +20,7 @@ namespace GitReleaseManager.Core.Commands
             _logger = logger;
         }
 
-        public Task<int> Execute(InitSubOptions options)
+        public Task<int> ExecuteAsync(InitSubOptions options)
         {
             var directory = options.TargetDirectory ?? Environment.CurrentDirectory;
 

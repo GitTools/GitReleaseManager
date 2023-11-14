@@ -41,9 +41,8 @@ namespace GitReleaseManager.Core.Configuration
             return new Config();
         }
 
-        public static string GetEffectiveConfigAsString(string currentDirectory, IFileSystem fileSystem)
+        public static string GetEffectiveConfigAsString(Config config)
         {
-            var config = Provide(currentDirectory, fileSystem);
             var stringBuilder = new StringBuilder();
             using (var stream = new StringWriter(stringBuilder, CultureInfo.InvariantCulture))
             {

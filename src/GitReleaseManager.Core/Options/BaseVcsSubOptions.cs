@@ -1,5 +1,6 @@
 using CommandLine;
 using Destructurama.Attributed;
+using GitReleaseManager.Core.Model;
 
 namespace GitReleaseManager.Core.Options
 {
@@ -14,5 +15,8 @@ namespace GitReleaseManager.Core.Options
 
         [Option('r', "repository", HelpText = "The name of the repository.", Required = true)]
         public string RepositoryName { get; set; }
+
+        [Option("provider", HelpText = "Version Control System provider", Default = VcsProvider.GitHub)]
+        public VcsProvider Provider { get; set; }
     }
 }

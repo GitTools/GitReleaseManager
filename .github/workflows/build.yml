@@ -20,7 +20,7 @@ jobs:
         os: [ windows-2022 ]
 
     env:
-      GITTOOLS_GITHUB_TOKEN: ${{ secrets.GITOOLS_GITHUB_TOKEN }}
+      GITTOOLS_GITHUB_TOKEN: ${{ secrets.GITTOOLS_GITHUB_TOKEN }}
       NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
       NUGET_SOURCE: https://api.nuget.org/v3/index.json
       CHOCOLATEY_API_KEY: ${{ secrets.CHOCOLATEY_API_KEY }}
@@ -43,7 +43,7 @@ jobs:
       - name: Fetch all tags and branches
         run: git fetch --prune --unshallow
 
-      - name: Install .NET SDK 2.1.x and 5.0.x
+      - name: Install .NET SDK 2.1.x, 3.1.x, 5.0.x, and 6.0.x
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: |

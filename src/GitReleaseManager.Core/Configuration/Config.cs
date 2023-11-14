@@ -12,7 +12,7 @@ The release is available on:
 
 - [GitHub release](https://github.com/{owner}/{repository}/releases/tag/{milestone})
 
-Your **[GitReleaseManager](https://github.com/GitTools/GitReleaseManager)** bot :package::rocket:";
+Your **[GitReleaseManager](https://github.com/GitTools/GitReleaseManager)** bot :package: :rocket:";
 
         public Config()
         {

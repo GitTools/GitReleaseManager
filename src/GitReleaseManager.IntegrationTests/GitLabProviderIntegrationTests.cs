@@ -4,8 +4,9 @@ using System.Threading.Tasks;
 using AutoMapper;
 using GitReleaseManager.Core;
 using GitReleaseManager.Core.Provider;
+using NGitLab;
 using NUnit.Framework;
-using Octokit;
+using Serilog;
 using Shouldly;
 using Issue = GitReleaseManager.Core.Model.Issue;
 using Milestone = GitReleaseManager.Core.Model.Milestone;
@@ -14,15 +15,16 @@ namespace GitReleaseManager.IntegrationTests
 {
     [TestFixture]
     [Explicit]
-    public class GitHubProviderIntegrationTests
+    public class GitLabProviderIntegrationTests
     {
-        private const string OWNER = "GitTools";
-        private const string REPOSITORY = "GitReleaseManager";
+        private const string OWNER = "gep13";
+        private const string REPOSITORY = "grm-test";
         private const bool SKIP_PRERELEASES = false;
 
-        private GitHubProvider _gitHubProvider;
-        private IGitHubClient _gitHubClient;
+        private GitLabProvider _gitLabProvider;
+        private IGitLabClient _gitLabClient;
         private IMapper _mapper;
+        private ILogger _logger;
 
         private string _token;
         private string _releaseBaseTag;
@@ -33,59 +35,52 @@ namespace GitReleaseManager.IntegrationTests
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
-            _token = Environment.GetEnvironmentVariable("GITTOOLS_GITHUB_TOKEN");
+            _token = Environment.GetEnvironmentVariable("GITTOOLS_GITLAB_TOKEN");
 
             if (string.IsNullOrWhiteSpace(_token))
             {
-                Assert.Inconclusive("Unable to locate credentials for accessing GitHub API");
+                Assert.Inconclusive("Unable to locate credentials for accessing GitLab API");
             }
 
             _mapper = AutoMapperConfiguration.Configure();
-            _gitHubClient = new GitHubClient(new ProductHeaderValue("GitReleaseManager")) { Credentials = new Credentials(_token) };
-            _gitHubProvider = new GitHubProvider(_gitHubClient, _mapper);
+            _logger = new LoggerConfiguration().WriteTo.Console().CreateLogger();
+            _gitLabClient = new GitLabClient("https://gitlab.com", _token);
+            _gitLabProvider = new GitLabProvider(_gitLabClient, _mapper, _logger);
         }
 
         [Test]
         [Order(1)]
-        public async Task Should_Get_Labels()
-        {
-            var result = await _gitHubProvider.GetLabelsAsync(OWNER, REPOSITORY).ConfigureAwait(false);
-            result.Count().ShouldBeGreaterThan(0);
-        }
-
-        [Test]
-        [Order(2)]
         public async Task Should_Get_Milestones()
         {
-            var result = await _gitHubProvider.GetMilestonesAsync(OWNER, REPOSITORY).ConfigureAwait(false);
+            var result = await _gitLabProvider.GetMilestonesAsync(OWNER, REPOSITORY).ConfigureAwait(false);
             result.Count().ShouldBeGreaterThan(0);
 
             _milestone = result.OrderByDescending(m => m.PublicNumber).First();
         }
 
         [Test]
-        [Order(3)]
+        [Order(2)]
         public async Task Should_Get_Issues()
         {
-            var result = await _gitHubProvider.GetIssuesAsync(OWNER, REPOSITORY, _milestone).ConfigureAwait(false);
+            var result = await _gitLabProvider.GetIssuesAsync(OWNER, REPOSITORY, _milestone).ConfigureAwait(false);
             result.Count().ShouldBeGreaterThan(0);
 
             _issue = result.First();
         }
 
         [Test]
-        [Order(4)]
+        [Order(3)]
         public async Task Should_Get_Issue_Comments()
         {
-            var result = await _gitHubProvider.GetIssueCommentsAsync(OWNER, REPOSITORY, _issue).ConfigureAwait(false);
+            var result = await _gitLabProvider.GetIssueCommentsAsync(OWNER, REPOSITORY, _issue).ConfigureAwait(false);
             result.Count().ShouldBeGreaterThan(0);
         }
 
         [Test]
-        [Order(5)]
+        [Order(4)]
         public async Task Should_Get_Releases()
         {
-            var result = await _gitHubProvider.GetReleasesAsync(OWNER, REPOSITORY, SKIP_PRERELEASES).ConfigureAwait(false);
+            var result = await _gitLabProvider.GetReleasesAsync(OWNER, REPOSITORY, SKIP_PRERELEASES).ConfigureAwait(false);
             result.Count().ShouldBeGreaterThan(0);
 
             var orderedReleases = result.OrderByDescending(r => r.Id).ToList();
@@ -95,11 +90,14 @@ namespace GitReleaseManager.IntegrationTests
         }
 
         [Test]
-        [Order(6)]
+        [Order(5)]
         public async Task Should_Get_Commits_Count()
         {
-            var result = await _gitHubProvider.GetCommitsCountAsync(OWNER, REPOSITORY, _releaseBaseTag, _releaseHeadTag).ConfigureAwait(false);
-            result.ShouldBeGreaterThan(0);
+            // TODO: This is waiting on a PR being merged...
+            // https://github.com/ubisoft/NGitLab/pull/444
+            // Once it is, we might be able to implement what is necessary here.
+            // var result = await _gitLabProvider.GetCommitsCountAsync(OWNER, REPOSITORY, _releaseBaseTag, _releaseHeadTag).ConfigureAwait(false);
+            // result.ShouldBeGreaterThan(0);
         }
     }
 }

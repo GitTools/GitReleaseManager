@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <LangVersion>8.0</LangVersion>
-        <TargetFrameworks>net48;net6.0;net7.0</TargetFrameworks>
+        <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
         <Title>GitReleaseManager.IntegrationTests</Title>
         <Description>Integration Test Project for GitReleaseManager</Description>
         <NoWarn>$(NoWarn);CA1707;Serilog004;</NoWarn>
@@ -21,9 +21,9 @@
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
           <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="nunit" Version="3.13.3" />
+        <PackageReference Include="nunit" Version="3.14.0" />
         <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.1" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
         <PackageReference Include="Shouldly" Version="4.2.1" />
         <PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
         <PackageReference Include="TextCopy" Version="6.2.1" />
