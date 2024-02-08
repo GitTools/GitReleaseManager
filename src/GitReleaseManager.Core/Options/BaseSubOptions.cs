@@ -1,9 +1,21 @@
+using System;
 using CommandLine;
 
 namespace GitReleaseManager.Core.Options
 {
     public abstract class BaseSubOptions
     {
+        protected BaseSubOptions()
+        {
+            var ciEnvironmentVariable = Environment.GetEnvironmentVariable("CI");
+
+            bool isCiSystem;
+            if (!string.IsNullOrEmpty(ciEnvironmentVariable) && bool.TryParse(ciEnvironmentVariable, out isCiSystem))
+            {
+                IsCISystem = isCiSystem;
+            }
+        }
+
         [Option("debug", HelpText = "Enable debugging console output")]
         public bool Debug { get; set; }
 
@@ -18,5 +30,8 @@ namespace GitReleaseManager.Core.Options
 
         [Option("verbose", HelpText = "Enable verbose console output")]
         public bool Verbose { get; set; }
+
+        [Option("ci", HelpText = "Configure GitReleaseManager to be compatible with CI systems")]
+        public bool IsCISystem { get; set; }
     }
 }

@@ -43,7 +43,7 @@ namespace GitReleaseManager.Cli.Logging
                 .Filter.ByExcluding((logEvent) => !options.Verbose && logEvent.Level == LogEventLevel.Verbose)
                 .WriteTo.Console(
                     outputTemplate: consoleTemplate,
-                    standardErrorFromLevel: LogEventLevel.Warning,
+                    standardErrorFromLevel: options.IsCISystem ? LogEventLevel.Error : LogEventLevel.Warning,
                     theme: consoleTheme));
         }
 
