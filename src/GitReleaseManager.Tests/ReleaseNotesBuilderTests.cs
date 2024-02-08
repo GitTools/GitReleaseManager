@@ -184,6 +184,13 @@ namespace GitReleaseManager.Tests
             Assert.True(true); // Just to make sonarlint happy
         }
 
+        [Test]
+        public void CorrectlyExcludeIssuesWhenBothIncludeAndExcludeLabelIsSet()
+        {
+            AcceptTest(10, CreateIssue(5, "Improvement", "Build"), CreateIssue(3, "Feature"));
+            Assert.True(true);
+        }
+
         private static void AcceptTest(int commits, params Issue[] issues)
         {
             AcceptTest(commits, null, null, issues);
