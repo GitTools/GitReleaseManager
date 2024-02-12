@@ -12,13 +12,13 @@ namespace GitReleaseManager.Core.Options
         [Option('c', "targetcommitish", HelpText = "The commit to tag. Can be a branch or SHA. Defaults to repository's default branch.", Required = false)]
         public string TargetCommitish { get; set; }
 
-        [Option('m', "milestone", HelpText = "The milestone to use.", Required = false)]
+        [Option('m', "milestone", HelpText = "The milestone to use. (Can't be used together with a release notes file path).", Required = false)]
         public string Milestone { get; set; }
 
         [Option('n', "name", HelpText = "The name of the release (Typically this is the generated SemVer Version Number).", Required = false)]
         public string Name { get; set; }
 
-        [Option('i', "inputFilePath", HelpText = "The path to the file to be used as the content of the release notes.", Required = false)]
+        [Option('i', "inputFilePath", HelpText = "The path to the file to be used as the content of the release notes. (Can't be used together with a milestone)", Required = false)]
         public string InputFilePath { get; set; }
 
         [Option('t', "template", HelpText = "The name of the template file to use. Can also be a relative or absolute path (relative paths are resolved from yaml template-dir configuration). Defaults to 'default'")]

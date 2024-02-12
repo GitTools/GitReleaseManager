@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using GitReleaseManager.Core.Commands;
@@ -105,6 +106,29 @@ namespace GitReleaseManager.Core.Tests.Commands
             _logger.Received(1).Information(Arg.Any<string>());
             _logger.Received(1).Information(Arg.Any<string>(), _release.HtmlUrl);
             _logger.Received(1).Verbose(Arg.Any<string>(), _release.Body);
+        }
+
+        [Test]
+        public async Task Throws_Exception_When_Both_Milestone_And_Input_File_Specified()
+        {
+            var options = new CreateSubOptions
+            {
+                RepositoryName = "repository",
+                RepositoryOwner = "owner",
+                InputFilePath = "file.path",
+                TargetCommitish = "target commitish",
+                AssetPaths = new List<string>(),
+                Prerelease = false,
+                Milestone = "0.5.0",
+            };
+
+            Func<Task> action = async () => await _command.ExecuteAsync(options).ConfigureAwait(false);
+
+            var ex = await action.ShouldThrowAsync<InvalidOperationException>().ConfigureAwait(false);
+            ex.Message.ShouldBe("Both a milestone and an input file path have been specified. Only one of these arguments may be used at the same time when creating a release!");
+
+            _vcsService.ReceivedCalls().ShouldBeEmpty();
+            _logger.ReceivedCalls().ShouldHaveSingleItem();
         }
     }
 }
