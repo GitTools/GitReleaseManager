@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using GitReleaseManager.Core.Model;
 using GitReleaseManager.Core.Options;
@@ -29,6 +30,11 @@ namespace GitReleaseManager.Core.Commands
             }
             else if (!string.IsNullOrEmpty(options.Milestone))
             {
+                if (!string.IsNullOrWhiteSpace(options.InputFilePath))
+                {
+                    throw new InvalidOperationException("Both a milestone and an input file path have been specified. Only one of these arguments may be used at the same time when creating a release!");
+                }
+
                 _logger.Verbose("Milestone {Milestone} was specified", options.Milestone);
                 var releaseName = options.Name;
 
