@@ -101,7 +101,10 @@ namespace GitReleaseManager.Core.ReleaseNotes
         private Dictionary<string, List<Issue>> GetIssuesDict(List<Issue> issues)
         {
             var issueLabels = _configuration.IssueLabelsInclude;
+            var excludedIssueLabels = _configuration.IssueLabelsExclude;
+
             var issuesByLabel = issues
+                .Where(o => !o.Labels.Any(l => excludedIssueLabels.Any(eil => string.Equals(eil, l.Name, StringComparison.OrdinalIgnoreCase))))
                 .SelectMany(o => o.Labels, (issue, label) => new { Label = label.Name, Issue = issue })
                 .Where(o => issueLabels.Any(il => string.Equals(il, o.Label, StringComparison.OrdinalIgnoreCase)))
                 .GroupBy(o => o.Label, o => o.Issue)
@@ -136,16 +139,21 @@ namespace GitReleaseManager.Core.ReleaseNotes
             foreach (var issue in issues)
             {
                 var includedIssuesCount = 0;
-                var excludedIssuesCount = 0;
+                var isExcluded = false;
 
                 foreach (var issueLabel in issue.Labels)
                 {
                     includedIssuesCount += _configuration.IssueLabelsInclude.Count(issueToInclude => issueLabel.Name.ToUpperInvariant() == issueToInclude.ToUpperInvariant());
 
-                    excludedIssuesCount += _configuration.IssueLabelsExclude.Count(issueToExclude => issueLabel.Name.ToUpperInvariant() == issueToExclude.ToUpperInvariant());
+                    isExcluded = isExcluded || _configuration.IssueLabelsExclude.Any(issueToExclude => issueLabel.Name.ToUpperInvariant() == issueToExclude.ToUpperInvariant());
                 }
 
-                if (includedIssuesCount + excludedIssuesCount != 1)
+                if (isExcluded)
+                {
+                    continue;
+                }
+
+                if (includedIssuesCount != 1)
                 {
                     var allIssueLabels = _configuration.IssueLabelsInclude.Union(_configuration.IssueLabelsExclude).ToList();
                     var allIssuesExceptLast = allIssueLabels.Take(allIssueLabels.Count - 1);
