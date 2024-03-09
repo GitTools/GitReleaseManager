@@ -6,7 +6,7 @@ namespace GitReleaseManager.Core.Model
     {
         public string Title { get; set; }
 
-        public int InternalNumber { get; set; }
+        public long InternalNumber { get; set; }
 
         public int PublicNumber { get; set; }
 
