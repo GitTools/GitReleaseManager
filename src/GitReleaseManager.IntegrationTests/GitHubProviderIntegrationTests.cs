@@ -101,5 +101,22 @@ namespace GitReleaseManager.IntegrationTests
             var result = await _gitHubProvider.GetCommitsCountAsync(OWNER, REPOSITORY, _releaseBaseTag, _releaseHeadTag).ConfigureAwait(false);
             result.ShouldBeGreaterThan(0);
         }
+
+        [Test]
+        public async Task GetLinkedIssues()
+        {
+            // Assert that issue 43 is linked to pull requests 107 and 108
+            var result1 = await _gitHubProvider.GetLinkedIssuesAsync("jericho", "_testing", new Issue() { PublicNumber = 43 }).ConfigureAwait(false);
+            Assert.IsNotNull(result1);
+            Assert.AreEqual(2, result1.Count());
+            Assert.AreEqual(1, result1.Count(r => r.PublicNumber == 107));
+            Assert.AreEqual(1, result1.Count(r => r.PublicNumber == 108));
+
+            // Assert that pull request 108 is linked to issue 43
+            var result2 = await _gitHubProvider.GetLinkedIssuesAsync("jericho", "_testing", new Issue() { PublicNumber = 108 }).ConfigureAwait(false);
+            Assert.IsNotNull(result2);
+            Assert.AreEqual(1, result2.Count());
+            Assert.AreEqual(1, result2.Count(r => r.PublicNumber == 43));
+        }
     }
 }

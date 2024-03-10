@@ -67,6 +67,15 @@ namespace GitReleaseManager.Core.ReleaseNotes
             var commitsLink = _vcsProvider.GetCommitsUrl(_user, _repository, _targetMilestone?.Title, previousMilestone?.Title);
 
             var issuesDict = GetIssuesDict(issues);
+            var distinctValidIssues = issuesDict.SelectMany(kvp => kvp.Value).DistinctBy(i => i.PublicNumber);
+
+            foreach (var issue in distinctValidIssues)
+            {
+                var linkedIssues = await _vcsProvider.GetLinkedIssuesAsync(_user, _repository, issue).ConfigureAwait(false);
+                issue.LinkedIssues = linkedIssues?.ToList().AsReadOnly() ?? Array.AsReadOnly(Array.Empty<Issue>());
+            }
+
+            var contributors = GetContributors(distinctValidIssues);
 
             var milestoneQueryString = _vcsProvider.GetMilestoneQueryString();
 
@@ -76,6 +85,11 @@ namespace GitReleaseManager.Core.ReleaseNotes
                 {
                     issues.Count,
                     Items = issuesDict,
+                },
+                Contributors = new
+                {
+                    Count = contributors.Count,
+                    Items = contributors,
                 },
                 Commits = new
                 {
@@ -112,6 +126,20 @@ namespace GitReleaseManager.Core.ReleaseNotes
                 .ToDictionary(o => GetValidLabel(o.Key, o.Count()), o => o.OrderBy(issue => issue.PublicNumber).ToList());
 
             return issuesByLabel;
+        }
+
+        private static List<User> GetContributors(IEnumerable<Issue> issues)
+        {
+            var contributors = issues.Select(i => i.User);
+            var linkedContributors = issues.SelectMany(i => i.LinkedIssues).Select(i => i.User);
+
+            var allContributors = contributors
+                .Union(linkedContributors)
+                .Where(u => u != null)
+                .DistinctBy(u => u.Login)
+                .ToList();
+
+            return allContributors;
         }
 
         private string GetValidLabel(string label, int issuesCount)

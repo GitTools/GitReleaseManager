@@ -2,8 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using AutoMapper;
+using GitReleaseManager.Core.Extensions;
+using GraphQL.Client.Abstractions;
+using GraphQL.Client.Http;
+using GraphQL.Client.Serializer.SystemTextJson;
 using Octokit;
 using ApiException = GitReleaseManager.Core.Exceptions.ApiException;
 using ForbiddenException = GitReleaseManager.Core.Exceptions.ForbiddenException;
@@ -26,13 +31,89 @@ namespace GitReleaseManager.Core.Provider
         private const int PAGE_SIZE = 100;
         private const string NOT_FOUND_MESSGAE = "NotFound";
 
+        // This query fragment will be executed for issues and pull requests
+        // because we don't know whether issueNumber refers to an issue or a PR
+        private const string CONNECT_AND_DISCONNECT_EVENTS_GRAPHQL_QUERY_FRAGMENT = @"
+		{0}(number: $issueNumber) {{
+			timelineItems(first: $pageSize, itemTypes: [CONNECTED_EVENT, DISCONNECTED_EVENT]) {{
+				nodes {{
+					__typename,
+					...on ConnectedEvent {{
+						createdAt,
+						id,
+						source {{
+							__typename,
+							... on Issue {{
+  								number
+							}}
+							... on PullRequest {{
+  								number
+							}}
+						}},
+						subject {{
+							__typename 
+							... on Issue {{
+  								number
+							}}
+							... on PullRequest {{
+  								number
+							}}
+						}}
+					}}
+					...on DisconnectedEvent {{
+						createdAt,
+						id,
+						source {{
+							__typename,
+							... on Issue {{
+  								number
+							}}
+							... on PullRequest {{
+  								number,
+                                author {{
+                                    avatarUrl,
+                                    resourcePath,
+                                }}
+							}}
+						}},
+						subject {{
+							__typename 
+							... on Issue {{
+  								number
+							}}
+							... on PullRequest {{
+  								number
+							}}
+						}}
+					}}
+				}}
+			}}
+		}}";
+
+        private const string CONNECT_AND_DISCONNECT_EVENTS_GRAPHQL_QUERY = @"
+query ConnectAndDisconnectEvents($repoName: String!, $repoOwner: String!, $issueNumber: Int!, $pageSize: Int!) {{
+	repository(name: $repoName, owner: $repoOwner) {{
+		{0},
+		{1}
+	}}
+}}";
+
         private readonly IGitHubClient _gitHubClient;
         private readonly IMapper _mapper;
+        private readonly IGraphQLClient _graphQLClient;
 
         public GitHubProvider(IGitHubClient gitHubClient, IMapper mapper)
         {
             _gitHubClient = gitHubClient;
             _mapper = mapper;
+
+            var graphQLClient = new GraphQLHttpClient(new GraphQLHttpClientOptions { EndPoint = new Uri("https://api.github.com/graphql") }, new SystemTextJsonSerializer());
+            if (!string.IsNullOrEmpty(_gitHubClient?.Connection?.Credentials?.Password))
+            {
+                graphQLClient.HttpClient.DefaultRequestHeaders.Add("Authorization", $"bearer {_gitHubClient.Connection.Credentials.Password}");
+            }
+
+            _graphQLClient = graphQLClient;
         }
 
         public Task DeleteAssetAsync(string owner, string repository, ReleaseAsset asset)
@@ -354,6 +435,76 @@ namespace GitReleaseManager.Core.Provider
         public string GetIssueType(Issue issue)
         {
             return issue.IsPullRequest ? "Pull Request" : "Issue";
+        }
+
+        public async Task<IEnumerable<Issue>> GetLinkedIssuesAsync(string owner, string repository, Issue issue)
+        {
+            var graphQLQuery = string.Format(CultureInfo.InvariantCulture, CONNECT_AND_DISCONNECT_EVENTS_GRAPHQL_QUERY,
+                    string.Format(CultureInfo.InvariantCulture, CONNECT_AND_DISCONNECT_EVENTS_GRAPHQL_QUERY_FRAGMENT, "issue"),
+                    string.Format(CultureInfo.InvariantCulture, CONNECT_AND_DISCONNECT_EVENTS_GRAPHQL_QUERY_FRAGMENT, "pullRequest"));
+
+            var request = new GraphQLHttpRequest
+            {
+                Query = graphQLQuery.Replace("\r\n", string.Empty),
+                Variables = new
+                {
+                    pageSize = PAGE_SIZE,
+                    repoName = repository,
+                    repoOwner = owner,
+                    issueNumber = issue.PublicNumber,
+                },
+            };
+
+            var graphQLResponse = await _graphQLClient.SendQueryAsync<dynamic>(request).ConfigureAwait(false);
+
+            var rootNode = (JsonElement)graphQLResponse.Data;
+            var issueNode = rootNode.GetJsonElement("repository.issue");
+            if (issueNode.ValueKind == JsonValueKind.Null || issueNode.ValueKind == JsonValueKind.Undefined)
+            {
+                issueNode = rootNode.GetJsonElement("repository.pullRequest");
+            }
+
+            if (issueNode.ValueKind == JsonValueKind.Null || issueNode.ValueKind == JsonValueKind.Undefined)
+            {
+                throw new NotFoundException($"Unable to find issue/pull request {issue.PublicNumber}");
+            }
+
+            var nodes = issueNode.GetJsonElement("timelineItems.nodes");
+            var sortedNodes = nodes.EnumerateArray().OrderBy(n => n.GetJsonElement("createdAt").GetDateTime());
+            var connectedEvents = sortedNodes.Where(n => n.GetJsonElement("__typename").GetString() == "ConnectedEvent").ToArray();
+            var disconnectedEvents = sortedNodes.Where(n => n.GetJsonElement("__typename").GetString() == "DisconnectedEvent").ToArray();
+
+            if (!connectedEvents.Any())
+            {
+                return Enumerable.Empty<Issue>();
+            }
+
+            var linkedIssues = new List<Issue>();
+            foreach (var connectEvent in connectedEvents)
+            {
+                var linkedIssueNumber = connectEvent.GetJsonElement("subject.number").GetInt32();
+                var correspondingDisconnectEvent = disconnectedEvents
+                    .FirstOrDefault(e =>
+                        e.GetJsonElement("subject.number").GetInt32() == linkedIssueNumber &&
+                        e.GetJsonElement("createdAt").GetDateTime() >= connectEvent.GetJsonElement("createdAt").GetDateTime());
+
+                if (correspondingDisconnectEvent.ValueKind == JsonValueKind.Null || correspondingDisconnectEvent.ValueKind == JsonValueKind.Undefined)
+                {
+                    var linkedIssue = await _gitHubClient.Issue.Get(owner, repository, linkedIssueNumber).ConfigureAwait(false);
+                    linkedIssues.Add(_mapper.Map<Issue>(linkedIssue));
+                }
+                else if (correspondingDisconnectEvent.GetJsonElement("createdAt").GetDateTime() >= connectEvent.GetJsonElement("createdAt").GetDateTime())
+                {
+                    continue;
+                }
+                else
+                {
+                    var linkedIssue = await _gitHubClient.Issue.Get(owner, repository, linkedIssueNumber).ConfigureAwait(false);
+                    linkedIssues.Add(_mapper.Map<Issue>(linkedIssue));
+                }
+            }
+
+            return linkedIssues;
         }
 
         private async Task ExecuteAsync(Func<Task> action)
