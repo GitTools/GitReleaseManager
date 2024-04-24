@@ -27,7 +27,7 @@
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="Roslynator.Analyzers" Version="4.6.2">
+        <PackageReference Include="Roslynator.Analyzers" Version="4.12.2">
             <PrivateAssets>All</PrivateAssets>
         </PackageReference>
     </ItemGroup>
