@@ -20,13 +20,13 @@ namespace GitReleaseManager.Tests
                 var config = ConfigSerializer.Read(stringReader);
 
                 // Then
-                Assert.AreEqual(2, config.LabelAliases.Count);
-                Assert.AreEqual("Bug", config.LabelAliases[0].Name);
-                Assert.AreEqual("Foo", config.LabelAliases[0].Header);
-                Assert.AreEqual("Bar", config.LabelAliases[0].Plural);
-                Assert.AreEqual("Improvement", config.LabelAliases[1].Name);
-                Assert.AreEqual("Baz", config.LabelAliases[1].Header);
-                Assert.AreEqual("Qux", config.LabelAliases[1].Plural);
+                Assert.That(2, Is.EqualTo(config.LabelAliases.Count));
+                Assert.That("Bug", Is.EqualTo(config.LabelAliases[0].Name));
+                Assert.That("Foo", Is.EqualTo(config.LabelAliases[0].Header));
+                Assert.That("Bar", Is.EqualTo(config.LabelAliases[0].Plural));
+                Assert.That("Improvement", Is.EqualTo(config.LabelAliases[1].Name));
+                Assert.That("Baz", Is.EqualTo(config.LabelAliases[1].Header));
+                Assert.That("Qux", Is.EqualTo(config.LabelAliases[1].Plural));
             }
         }
 

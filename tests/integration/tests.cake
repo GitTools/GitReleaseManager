@@ -50,8 +50,8 @@ Task("Export-Release")
         });
 
     // Then
-    Assert.True(FileExists("./output/releasenotes.md"));
-    Assert.True(FileHashEquals("./expected/releasenotes.md", "./output/releasenotes.md"));
+    Assert.That(true, FileExists("./output/releasenotes.md"));
+    Assert.That(true, FileHashEquals("./expected/releasenotes.md", "./output/releasenotes.md"));
 });
 
 Task("Close-Milestone")
