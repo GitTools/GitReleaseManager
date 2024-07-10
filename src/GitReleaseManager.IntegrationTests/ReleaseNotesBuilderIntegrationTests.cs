@@ -20,7 +20,9 @@ namespace GitReleaseManager.IntegrationTests
     public class ReleaseNotesBuilderIntegrationTests
     {
         private IGitHubClient _gitHubClient;
+#pragma warning disable NUnit1032 // An IDisposable field/property should be Disposed in a TearDown method
         private ILogger _logger;
+#pragma warning restore NUnit1032 // An IDisposable field/property should be Disposed in a TearDown method
         private IMapper _mapper;
         private string _token;
 
@@ -41,6 +43,7 @@ namespace GitReleaseManager.IntegrationTests
         public void TearDown()
         {
             Log.CloseAndFlush();
+            (_logger as IDisposable)?.Dispose();
         }
 
         [Test]
