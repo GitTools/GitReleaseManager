@@ -36,6 +36,11 @@ namespace GitReleaseManager.IntegrationTests
             Log.Logger = _logger;
 
             _token = Environment.GetEnvironmentVariable("GITTOOLS_GITHUB_TOKEN");
+            if (string.IsNullOrWhiteSpace(_token))
+            {
+                Assert.Inconclusive("Unable to locate credentials for accessing GitHub API");
+            }
+
             _gitHubClient = new GitHubClient(new ProductHeaderValue("GitReleaseManager")) { Credentials = new Credentials(_token) };
         }
 
@@ -50,44 +55,30 @@ namespace GitReleaseManager.IntegrationTests
         [Explicit]
         public async Task SingleMilestone()
         {
-            if (string.IsNullOrWhiteSpace(_token))
-            {
-                Assert.Inconclusive("Unable to locate credentials for accessing GitHub API");
-            }
-            else
-            {
-                var fileSystem = new FileSystem(new CreateSubOptions());
-                var currentDirectory = Environment.CurrentDirectory;
-                var configuration = ConfigurationProvider.Provide(currentDirectory, fileSystem);
+            var fileSystem = new FileSystem(new CreateSubOptions());
+            var currentDirectory = Environment.CurrentDirectory;
+            var configuration = ConfigurationProvider.Provide(currentDirectory, fileSystem);
 
-                var vcsProvider = new GitHubProvider(_gitHubClient, _mapper);
-                var releaseNotesBuilder = new ReleaseNotesBuilder(vcsProvider, _logger, fileSystem, configuration, new TemplateFactory(fileSystem, configuration, TemplateKind.Create));
-                var result = await releaseNotesBuilder.BuildReleaseNotesAsync("Chocolatey", "ChocolateyGUI", "0.12.4", ReleaseTemplates.DEFAULT_NAME).ConfigureAwait(false);
-                Debug.WriteLine(result);
-                ClipBoardHelper.SetClipboard(result);
-            }
+            var vcsProvider = new GitHubProvider(_gitHubClient, _mapper);
+            var releaseNotesBuilder = new ReleaseNotesBuilder(vcsProvider, _logger, fileSystem, configuration, new TemplateFactory(fileSystem, configuration, TemplateKind.Create));
+            var result = await releaseNotesBuilder.BuildReleaseNotesAsync("Chocolatey", "ChocolateyGUI", "0.12.4", ReleaseTemplates.DEFAULT_NAME).ConfigureAwait(false);
+            Debug.WriteLine(result);
+            ClipBoardHelper.SetClipboard(result);
         }
 
         [Test]
         [Explicit]
         public async Task SingleMilestone3()
         {
-            if (string.IsNullOrWhiteSpace(_token))
-            {
-                Assert.Inconclusive("Unable to locate credentials for accessing GitHub API");
-            }
-            else
-            {
-                var fileSystem = new FileSystem(new CreateSubOptions());
-                var currentDirectory = Environment.CurrentDirectory;
-                var configuration = ConfigurationProvider.Provide(currentDirectory, fileSystem);
+            var fileSystem = new FileSystem(new CreateSubOptions());
+            var currentDirectory = Environment.CurrentDirectory;
+            var configuration = ConfigurationProvider.Provide(currentDirectory, fileSystem);
 
-                var vcsProvider = new GitHubProvider(_gitHubClient, _mapper);
-                var releaseNotesBuilder = new ReleaseNotesBuilder(vcsProvider, _logger, fileSystem, configuration, new TemplateFactory(fileSystem, configuration, TemplateKind.Create));
-                var result = await releaseNotesBuilder.BuildReleaseNotesAsync("Chocolatey", "ChocolateyGUI", "0.13.0", ReleaseTemplates.DEFAULT_NAME).ConfigureAwait(false);
-                Debug.WriteLine(result);
-                ClipBoardHelper.SetClipboard(result);
-            }
+            var vcsProvider = new GitHubProvider(_gitHubClient, _mapper);
+            var releaseNotesBuilder = new ReleaseNotesBuilder(vcsProvider, _logger, fileSystem, configuration, new TemplateFactory(fileSystem, configuration, TemplateKind.Create));
+            var result = await releaseNotesBuilder.BuildReleaseNotesAsync("Chocolatey", "ChocolateyGUI", "0.13.0", ReleaseTemplates.DEFAULT_NAME).ConfigureAwait(false);
+            Debug.WriteLine(result);
+            ClipBoardHelper.SetClipboard(result);
         }
 
         [Test]
