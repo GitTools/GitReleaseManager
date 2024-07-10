@@ -30,6 +30,6 @@
           <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
         </PackageReference>
         <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
-        <PackageReference Include="Octokit" Version="12.0.0" />
+        <PackageReference Include="Octokit" Version="13.0.1" />
     </ItemGroup>
 </Project>
