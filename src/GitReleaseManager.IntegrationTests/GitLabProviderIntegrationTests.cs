@@ -24,7 +24,9 @@ namespace GitReleaseManager.IntegrationTests
         private GitLabProvider _gitLabProvider;
         private IGitLabClient _gitLabClient;
         private IMapper _mapper;
+#pragma warning disable NUnit1032 // An IDisposable field/property should be Disposed in a TearDown method
         private ILogger _logger;
+#pragma warning restore NUnit1032 // An IDisposable field/property should be Disposed in a TearDown method
 
         private string _token;
         private string _releaseBaseTag;
@@ -46,6 +48,12 @@ namespace GitReleaseManager.IntegrationTests
             _logger = new LoggerConfiguration().WriteTo.Console().CreateLogger();
             _gitLabClient = new GitLabClient("https://gitlab.com", _token);
             _gitLabProvider = new GitLabProvider(_gitLabClient, _mapper, _logger);
+        }
+
+        [OneTimeTearDown]
+        public void OneTimeTearDown()
+        {
+            (_logger as IDisposable)?.Dispose();
         }
 
         [Test]

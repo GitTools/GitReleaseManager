@@ -5,7 +5,7 @@ namespace GitReleaseManager.Core.Model
         /// <summary>
         /// Gets or sets the issue comment Id.
         /// </summary>
-        public int Id { get; set; }
+        public long Id { get; set; }
 
         /// <summary>
         /// Gets or sets details about the issue comment.

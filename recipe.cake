@@ -18,7 +18,8 @@ BuildParameters.SetParameters(context: Context,
                             integrationTestScriptPath: "./tests/integration/tests.cake",
                             twitterMessage: standardNotificationMessage,
                             preferredBuildProviderType: BuildProviderType.GitHubActions,
-                            gitterMessage: "@/all " + standardNotificationMessage);
+                            gitterMessage: "@/all " + standardNotificationMessage,
+                            shouldRunCodecov: false);
 
 BuildParameters.PackageSources.Add(new PackageSourceData(Context, "GPR", "https://nuget.pkg.github.com/GitTools/index.json", FeedType.NuGet, false));
 
