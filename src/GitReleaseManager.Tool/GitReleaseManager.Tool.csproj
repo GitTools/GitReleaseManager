@@ -38,7 +38,7 @@
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="NGitLab" Version="6.51.1" />
+        <PackageReference Include="NGitLab" Version="6.53.0" />
         <PackageReference Include="Octokit" Version="12.0.0" />
         <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
         <PackageReference Include="Serilog.Sinks.Debug" Version="2.0.0" PrivateAssets="All" />
