@@ -35,6 +35,9 @@ namespace GitReleaseManager.Core.Configuration
         [YamlMember(Alias = "allow-update-to-published")]
         public bool AllowUpdateToPublishedRelease { get; set; }
 
+        [YamlMember(Alias = "allow-milestone-without-issues")]
+        public bool AllowMilestonesWithoutIssues { get; set; }
+
         [YamlMember(Alias = "include-contributors")]
         public bool IncludeContributors { get; set; }
     }
