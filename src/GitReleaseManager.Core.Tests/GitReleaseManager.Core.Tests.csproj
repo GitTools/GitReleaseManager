@@ -25,7 +25,7 @@
         </PackageReference>
         <PackageReference Include="NSubstitute" Version="5.1.0" />
         <PackageReference Include="NUnit" Version="4.1.0" />
-        <PackageReference Include="NUnit.Analyzers" Version="4.2.0">
+        <PackageReference Include="NUnit.Analyzers" Version="4.3.0">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
         </PackageReference>
