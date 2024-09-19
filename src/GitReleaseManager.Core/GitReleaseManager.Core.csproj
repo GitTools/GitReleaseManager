@@ -23,7 +23,7 @@
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
           <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="NGitLab" Version="6.51.1" />
+        <PackageReference Include="NGitLab" Version="6.55.0" />
         <PackageReference Include="Octokit" Version="12.0.0" />
         <PackageReference Include="Scriban" Version="5.10.0" />
         <PackageReference Include="seriloganalyzer" Version="0.15.0" />
