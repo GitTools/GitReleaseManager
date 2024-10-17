@@ -47,6 +47,7 @@ namespace GitReleaseManager.Core.Tests
         private IReleaseNotesBuilder _releaseNotesBuilder;
         private ILogger _logger;
         private IVcsProvider _vcsProvider;
+        private IReleasesProvider _releaseProvider;
         private Config _configuration;
         private VcsService _vcsService;
 
@@ -110,8 +111,9 @@ namespace GitReleaseManager.Core.Tests
             _releaseNotesBuilder = Substitute.For<IReleaseNotesBuilder>();
             _logger = Substitute.For<ILogger>();
             _vcsProvider = Substitute.For<IVcsProvider>();
+            _releaseProvider = Substitute.For<IVcsProvider>();
             _configuration = new Config();
-            _vcsService = new VcsService(_vcsProvider, _logger, _releaseNotesBuilder, _releaseNotesExporter, _configuration);
+            _vcsService = new VcsService(_vcsProvider, _releaseProvider, _logger, _releaseNotesBuilder, _releaseNotesExporter, _configuration);
         }
 
         [Test]
@@ -121,12 +123,12 @@ namespace GitReleaseManager.Core.Tests
 
             var assetsCount = _assets.Count;
 
-            _vcsProvider.GetReleaseAsync(OWNER, REPOSITORY, TAG_NAME)
+            _releaseProvider.GetReleaseAsync(OWNER, REPOSITORY, TAG_NAME)
                 .Returns(release);
 
             await _vcsService.AddAssetsAsync(OWNER, REPOSITORY, TAG_NAME, _assets).ConfigureAwait(false);
 
-            await _vcsProvider.Received(1).GetReleaseAsync(OWNER, REPOSITORY, TAG_NAME).ConfigureAwait(false);
+            await _releaseProvider.Received(1).GetReleaseAsync(OWNER, REPOSITORY, TAG_NAME).ConfigureAwait(false);
             await _vcsProvider.DidNotReceive().DeleteAssetAsync(OWNER, REPOSITORY, Arg.Any<ReleaseAsset>()).ConfigureAwait(false);
             await _vcsProvider.Received(assetsCount).UploadAssetAsync(release, Arg.Any<ReleaseAssetUpload>()).ConfigureAwait(false);
 
@@ -144,12 +146,12 @@ namespace GitReleaseManager.Core.Tests
             var releaseAssetsCount = release.Assets.Count;
             var assetsCount = _assets.Count;
 
-            _vcsProvider.GetReleaseAsync(OWNER, REPOSITORY, TAG_NAME)
+            _releaseProvider.GetReleaseAsync(OWNER, REPOSITORY, TAG_NAME)
                 .Returns(release);
 
             await _vcsService.AddAssetsAsync(OWNER, REPOSITORY, TAG_NAME, _assets).ConfigureAwait(false);
 
-            await _vcsProvider.Received(1).GetReleaseAsync(OWNER, REPOSITORY, TAG_NAME).ConfigureAwait(false);
+            await _releaseProvider.Received(1).GetReleaseAsync(OWNER, REPOSITORY, TAG_NAME).ConfigureAwait(false);
             await _vcsProvider.Received(releaseAssetsCount).DeleteAssetAsync(OWNER, REPOSITORY, releaseAsset).ConfigureAwait(false);
             await _vcsProvider.Received(assetsCount).UploadAssetAsync(release, Arg.Any<ReleaseAssetUpload>()).ConfigureAwait(false);
 
@@ -166,13 +168,13 @@ namespace GitReleaseManager.Core.Tests
 
             _assets[0] = assetFilePath;
 
-            _vcsProvider.GetReleaseAsync(OWNER, REPOSITORY, TAG_NAME)
+            _releaseProvider.GetReleaseAsync(OWNER, REPOSITORY, TAG_NAME)
                 .Returns(release);
 
             var ex = await Should.ThrowAsync<FileNotFoundException>(() => _vcsService.AddAssetsAsync(OWNER, REPOSITORY, TAG_NAME, _assets)).ConfigureAwait(false);
             ex.Message.ShouldContain(assetFilePath);
 
-            await _vcsProvider.Received(1).GetReleaseAsync(OWNER, REPOSITORY, TAG_NAME).ConfigureAwait(false);
+            await _releaseProvider.Received(1).GetReleaseAsync(OWNER, REPOSITORY, TAG_NAME).ConfigureAwait(false);
             await _vcsProvider.DidNotReceive().DeleteAssetAsync(OWNER, REPOSITORY, Arg.Any<ReleaseAsset>()).ConfigureAwait(false);
             await _vcsProvider.DidNotReceive().UploadAssetAsync(release, Arg.Any<ReleaseAssetUpload>()).ConfigureAwait(false);
         }
@@ -182,7 +184,7 @@ namespace GitReleaseManager.Core.Tests
         {
             await _vcsService.AddAssetsAsync(OWNER, REPOSITORY, TAG_NAME, assets).ConfigureAwait(false);
 
-            await _vcsProvider.DidNotReceive().GetReleaseAsync(OWNER, REPOSITORY, TAG_NAME).ConfigureAwait(false);
+            await _releaseProvider.DidNotReceive().GetReleaseAsync(OWNER, REPOSITORY, TAG_NAME).ConfigureAwait(false);
             await _vcsProvider.DidNotReceive().DeleteAssetAsync(OWNER, REPOSITORY, Arg.Any<ReleaseAsset>()).ConfigureAwait(false);
             await _vcsProvider.DidNotReceive().UploadAssetAsync(Arg.Any<Release>(), Arg.Any<ReleaseAssetUpload>()).ConfigureAwait(false);
         }
@@ -306,18 +308,18 @@ namespace GitReleaseManager.Core.Tests
             _releaseNotesBuilder.BuildReleaseNotesAsync(OWNER, REPOSITORY, MILESTONE_TITLE, ReleaseTemplates.DEFAULT_NAME)
                 .Returns(Task.FromResult(RELEASE_NOTES));
 
-            _vcsProvider.GetReleaseAsync(OWNER, REPOSITORY, MILESTONE_TITLE)
+            _releaseProvider.GetReleaseAsync(OWNER, REPOSITORY, MILESTONE_TITLE)
                 .Returns(Task.FromResult<Release>(null));
 
-            _vcsProvider.CreateReleaseAsync(OWNER, REPOSITORY, Arg.Any<Release>())
+            _releaseProvider.CreateReleaseAsync(OWNER, REPOSITORY, Arg.Any<Release>())
                 .Returns(Task.FromResult(release));
 
             var result = await _vcsService.CreateReleaseFromMilestoneAsync(OWNER, REPOSITORY, MILESTONE_TITLE, MILESTONE_TITLE, null, null, false, null).ConfigureAwait(false);
             result.ShouldBeSameAs(release);
 
             await _releaseNotesBuilder.Received(1).BuildReleaseNotesAsync(OWNER, REPOSITORY, MILESTONE_TITLE, ReleaseTemplates.DEFAULT_NAME).ConfigureAwait(false);
-            await _vcsProvider.Received(1).GetReleaseAsync(OWNER, REPOSITORY, MILESTONE_TITLE).ConfigureAwait(false);
-            await _vcsProvider.Received(1).CreateReleaseAsync(OWNER, REPOSITORY, Arg.Is<Release>(o =>
+            await _releaseProvider.Received(1).GetReleaseAsync(OWNER, REPOSITORY, MILESTONE_TITLE).ConfigureAwait(false);
+            await _releaseProvider.Received(1).CreateReleaseAsync(OWNER, REPOSITORY, Arg.Is<Release>(o =>
                 o.Body == RELEASE_NOTES &&
                 o.Name == MILESTONE_TITLE &&
                 o.TagName == MILESTONE_TITLE)).ConfigureAwait(false);
@@ -336,10 +338,10 @@ namespace GitReleaseManager.Core.Tests
             _releaseNotesBuilder.BuildReleaseNotesAsync(OWNER, REPOSITORY, MILESTONE_TITLE, ReleaseTemplates.DEFAULT_NAME)
                 .Returns(Task.FromResult(RELEASE_NOTES));
 
-            _vcsProvider.GetReleaseAsync(OWNER, REPOSITORY, MILESTONE_TITLE)
+            _releaseProvider.GetReleaseAsync(OWNER, REPOSITORY, MILESTONE_TITLE)
                 .Returns(Task.FromResult<Release>(null));
 
-            _vcsProvider.CreateReleaseAsync(OWNER, REPOSITORY, Arg.Any<Release>())
+            _releaseProvider.CreateReleaseAsync(OWNER, REPOSITORY, Arg.Any<Release>())
                 .Returns(Task.FromResult(release));
 
             var result = await _vcsService.CreateReleaseFromMilestoneAsync(
@@ -355,8 +357,8 @@ namespace GitReleaseManager.Core.Tests
             result.ShouldBeSameAs(release);
 
             await _releaseNotesBuilder.Received(1).BuildReleaseNotesAsync(OWNER, REPOSITORY, MILESTONE_TITLE, ReleaseTemplates.DEFAULT_NAME).ConfigureAwait(false);
-            await _vcsProvider.Received(1).GetReleaseAsync(OWNER, REPOSITORY, MILESTONE_TITLE).ConfigureAwait(false);
-            await _vcsProvider.Received(1).CreateReleaseAsync(OWNER, REPOSITORY, Arg.Is<Release>(o =>
+            await _releaseProvider.Received(1).GetReleaseAsync(OWNER, REPOSITORY, MILESTONE_TITLE).ConfigureAwait(false);
+            await _releaseProvider.Received(1).CreateReleaseAsync(OWNER, REPOSITORY, Arg.Is<Release>(o =>
                 o.Body == RELEASE_NOTES &&
                 o.Name == MILESTONE_TITLE &&
                 o.TagName == MILESTONE_TITLE)).ConfigureAwait(false);
@@ -373,18 +375,18 @@ namespace GitReleaseManager.Core.Tests
             _releaseNotesBuilder.BuildReleaseNotesAsync(OWNER, REPOSITORY, MILESTONE_TITLE, _releaseNotesTemplate)
                 .Returns(Task.FromResult(RELEASE_NOTES));
 
-            _vcsProvider.GetReleaseAsync(OWNER, REPOSITORY, MILESTONE_TITLE)
+            _releaseProvider.GetReleaseAsync(OWNER, REPOSITORY, MILESTONE_TITLE)
                 .Returns(Task.FromResult<Release>(null));
 
-            _vcsProvider.CreateReleaseAsync(OWNER, REPOSITORY, Arg.Any<Release>())
+            _releaseProvider.CreateReleaseAsync(OWNER, REPOSITORY, Arg.Any<Release>())
                 .Returns(Task.FromResult(release));
 
             var result = await _vcsService.CreateReleaseFromMilestoneAsync(OWNER, REPOSITORY, MILESTONE_TITLE, MILESTONE_TITLE, null, null, false, _releaseNotesTemplateFilePath).ConfigureAwait(false);
             result.ShouldBeSameAs(release);
 
             await _releaseNotesBuilder.Received(1).BuildReleaseNotesAsync(OWNER, REPOSITORY, MILESTONE_TITLE, _releaseNotesTemplate).ConfigureAwait(false);
-            await _vcsProvider.Received(1).GetReleaseAsync(OWNER, REPOSITORY, MILESTONE_TITLE).ConfigureAwait(false);
-            await _vcsProvider.Received(1).CreateReleaseAsync(OWNER, REPOSITORY, Arg.Is<Release>(o =>
+            await _releaseProvider.Received(1).GetReleaseAsync(OWNER, REPOSITORY, MILESTONE_TITLE).ConfigureAwait(false);
+            await _releaseProvider.Received(1).CreateReleaseAsync(OWNER, REPOSITORY, Arg.Is<Release>(o =>
                 o.Body == RELEASE_NOTES &&
                 o.Name == MILESTONE_TITLE &&
                 o.TagName == MILESTONE_TITLE)).ConfigureAwait(false);
@@ -397,7 +399,7 @@ namespace GitReleaseManager.Core.Tests
         [Ignore("This may be handled by the TemplateLoader instead")]
         public async Task Should_Throw_Exception_On_Creating_Release_With_Empty_Template()
         {
-            _vcsProvider.GetReleaseAsync(OWNER, REPOSITORY, TAG_NAME)
+            _releaseProvider.GetReleaseAsync(OWNER, REPOSITORY, TAG_NAME)
                 .Returns(Task.FromException<Release>(_notFoundException));
 
             await Should.ThrowAsync<ArgumentException>(() => _vcsService.CreateReleaseFromMilestoneAsync(OWNER, REPOSITORY, MILESTONE_TITLE, MILESTONE_TITLE, null, null, false, _releaseNotesEmptyTemplateFilePath)).ConfigureAwait(false);
@@ -409,7 +411,7 @@ namespace GitReleaseManager.Core.Tests
         [Ignore("This may be handled by the TemplateLoader instead")]
         public async Task Should_Throw_Exception_On_Creating_Release_With_Invalid_Template_File_Path()
         {
-            _vcsProvider.GetReleaseAsync(OWNER, REPOSITORY, TAG_NAME)
+            _releaseProvider.GetReleaseAsync(OWNER, REPOSITORY, TAG_NAME)
                 .Returns(Task.FromException<Release>(_notFoundException));
 
             var fileName = "InvalidReleaseNotesTemplate.txt";
@@ -434,18 +436,18 @@ namespace GitReleaseManager.Core.Tests
             _releaseNotesBuilder.BuildReleaseNotesAsync(OWNER, REPOSITORY, MILESTONE_TITLE, ReleaseTemplates.DEFAULT_NAME)
                 .Returns(Task.FromResult(RELEASE_NOTES));
 
-            _vcsProvider.GetReleaseAsync(OWNER, REPOSITORY, MILESTONE_TITLE)
+            _releaseProvider.GetReleaseAsync(OWNER, REPOSITORY, MILESTONE_TITLE)
                 .Returns(Task.FromResult(release));
 
-            _vcsProvider.UpdateReleaseAsync(OWNER, REPOSITORY, release)
+            _releaseProvider.UpdateReleaseAsync(OWNER, REPOSITORY, release)
                 .Returns(Task.FromResult(new Release()));
 
             var result = await _vcsService.CreateReleaseFromMilestoneAsync(OWNER, REPOSITORY, MILESTONE_TITLE, MILESTONE_TITLE, null, null, false, null).ConfigureAwait(false);
             result.ShouldBeSameAs(release);
 
             await _releaseNotesBuilder.Received(1).BuildReleaseNotesAsync(OWNER, REPOSITORY, MILESTONE_TITLE, ReleaseTemplates.DEFAULT_NAME).ConfigureAwait(false);
-            await _vcsProvider.Received(1).GetReleaseAsync(OWNER, REPOSITORY, MILESTONE_TITLE).ConfigureAwait(false);
-            await _vcsProvider.Received(1).UpdateReleaseAsync(OWNER, REPOSITORY, release).ConfigureAwait(false);
+            await _releaseProvider.Received(1).GetReleaseAsync(OWNER, REPOSITORY, MILESTONE_TITLE).ConfigureAwait(false);
+            await _releaseProvider.Received(1).UpdateReleaseAsync(OWNER, REPOSITORY, release).ConfigureAwait(false);
 
             _logger.Received(1).Warning(Arg.Any<string>(), MILESTONE_TITLE);
             _logger.Received(1).Verbose(Arg.Any<string>(), MILESTONE_TITLE, OWNER, REPOSITORY);
@@ -462,14 +464,14 @@ namespace GitReleaseManager.Core.Tests
             _releaseNotesBuilder.BuildReleaseNotesAsync(OWNER, REPOSITORY, MILESTONE_TITLE, ReleaseTemplates.DEFAULT_NAME)
                 .Returns(Task.FromResult(RELEASE_NOTES));
 
-            _vcsProvider.GetReleaseAsync(OWNER, REPOSITORY, MILESTONE_TITLE)
+            _releaseProvider.GetReleaseAsync(OWNER, REPOSITORY, MILESTONE_TITLE)
                 .Returns(Task.FromResult(release));
 
             var ex = await Should.ThrowAsync<InvalidOperationException>(() => _vcsService.CreateReleaseFromMilestoneAsync(OWNER, REPOSITORY, MILESTONE_TITLE, MILESTONE_TITLE, null, null, false, null)).ConfigureAwait(false);
             ex.Message.ShouldBe($"Release with tag '{MILESTONE_TITLE}' not in draft state, so not updating");
 
             await _releaseNotesBuilder.Received(1).BuildReleaseNotesAsync(OWNER, REPOSITORY, MILESTONE_TITLE, ReleaseTemplates.DEFAULT_NAME).ConfigureAwait(false);
-            await _vcsProvider.Received(1).GetReleaseAsync(OWNER, REPOSITORY, MILESTONE_TITLE).ConfigureAwait(false);
+            await _releaseProvider.Received(1).GetReleaseAsync(OWNER, REPOSITORY, MILESTONE_TITLE).ConfigureAwait(false);
         }
 
         [Test]
@@ -477,17 +479,17 @@ namespace GitReleaseManager.Core.Tests
         {
             var release = new Release();
 
-            _vcsProvider.GetReleaseAsync(OWNER, REPOSITORY, MILESTONE_TITLE)
+            _releaseProvider.GetReleaseAsync(OWNER, REPOSITORY, MILESTONE_TITLE)
                 .Returns(Task.FromResult<Release>(null));
 
-            _vcsProvider.CreateReleaseAsync(OWNER, REPOSITORY, Arg.Any<Release>())
+            _releaseProvider.CreateReleaseAsync(OWNER, REPOSITORY, Arg.Any<Release>())
                 .Returns(Task.FromResult(release));
 
             var result = await _vcsService.CreateReleaseFromInputFileAsync(OWNER, REPOSITORY, MILESTONE_TITLE, _releaseNotesFilePath, null, null, false).ConfigureAwait(false);
             result.ShouldBeSameAs(release);
 
-            await _vcsProvider.Received(1).GetReleaseAsync(OWNER, REPOSITORY, MILESTONE_TITLE).ConfigureAwait(false);
-            await _vcsProvider.Received(1).CreateReleaseAsync(OWNER, REPOSITORY, Arg.Is<Release>(o =>
+            await _releaseProvider.Received(1).GetReleaseAsync(OWNER, REPOSITORY, MILESTONE_TITLE).ConfigureAwait(false);
+            await _releaseProvider.Received(1).CreateReleaseAsync(OWNER, REPOSITORY, Arg.Is<Release>(o =>
                 o.Body == RELEASE_NOTES &&
                 o.Name == MILESTONE_TITLE &&
                 o.TagName == MILESTONE_TITLE)).ConfigureAwait(false);
@@ -505,17 +507,17 @@ namespace GitReleaseManager.Core.Tests
 
             _configuration.Create.AllowUpdateToPublishedRelease = updatePublishedRelease;
 
-            _vcsProvider.GetReleaseAsync(OWNER, REPOSITORY, MILESTONE_TITLE)
+            _releaseProvider.GetReleaseAsync(OWNER, REPOSITORY, MILESTONE_TITLE)
                 .Returns(Task.FromResult(release));
 
-            _vcsProvider.UpdateReleaseAsync(OWNER, REPOSITORY, release)
+            _releaseProvider.UpdateReleaseAsync(OWNER, REPOSITORY, release)
                 .Returns(Task.FromResult(new Release()));
 
             var result = await _vcsService.CreateReleaseFromInputFileAsync(OWNER, REPOSITORY, MILESTONE_TITLE, _releaseNotesFilePath, null, null, false).ConfigureAwait(false);
             result.ShouldBeSameAs(release);
 
-            await _vcsProvider.Received(1).GetReleaseAsync(OWNER, REPOSITORY, MILESTONE_TITLE).ConfigureAwait(false);
-            await _vcsProvider.Received(1).UpdateReleaseAsync(OWNER, REPOSITORY, release).ConfigureAwait(false);
+            await _releaseProvider.Received(1).GetReleaseAsync(OWNER, REPOSITORY, MILESTONE_TITLE).ConfigureAwait(false);
+            await _releaseProvider.Received(1).UpdateReleaseAsync(OWNER, REPOSITORY, release).ConfigureAwait(false);
 
             _logger.Received(1).Warning(Arg.Any<string>(), MILESTONE_TITLE);
             _logger.Received(1).Verbose(Arg.Any<string>(), MILESTONE_TITLE, OWNER, REPOSITORY);
@@ -529,13 +531,13 @@ namespace GitReleaseManager.Core.Tests
 
             _configuration.Create.AllowUpdateToPublishedRelease = false;
 
-            _vcsProvider.GetReleaseAsync(OWNER, REPOSITORY, MILESTONE_TITLE)
+            _releaseProvider.GetReleaseAsync(OWNER, REPOSITORY, MILESTONE_TITLE)
                 .Returns(Task.FromResult(release));
 
             var ex = await Should.ThrowAsync<InvalidOperationException>(() => _vcsService.CreateReleaseFromInputFileAsync(OWNER, REPOSITORY, MILESTONE_TITLE, _releaseNotesFilePath, null, null, false)).ConfigureAwait(false);
             ex.Message.ShouldBe($"Release with tag '{MILESTONE_TITLE}' not in draft state, so not updating");
 
-            await _vcsProvider.Received(1).GetReleaseAsync(OWNER, REPOSITORY, MILESTONE_TITLE).ConfigureAwait(false);
+            await _releaseProvider.Received(1).GetReleaseAsync(OWNER, REPOSITORY, MILESTONE_TITLE).ConfigureAwait(false);
         }
 
         [Test]
@@ -558,16 +560,16 @@ namespace GitReleaseManager.Core.Tests
                 Draft = true,
             };
 
-            _vcsProvider.GetReleaseAsync(OWNER, REPOSITORY, TAG_NAME)
+            _releaseProvider.GetReleaseAsync(OWNER, REPOSITORY, TAG_NAME)
                 .Returns(Task.FromResult(release));
 
-            _vcsProvider.DeleteReleaseAsync(OWNER, REPOSITORY, release)
+            _releaseProvider.DeleteReleaseAsync(OWNER, REPOSITORY, release)
                 .Returns(Task.CompletedTask);
 
             await _vcsService.DiscardReleaseAsync(OWNER, REPOSITORY, TAG_NAME).ConfigureAwait(false);
 
-            await _vcsProvider.Received(1).GetReleaseAsync(OWNER, REPOSITORY, TAG_NAME).ConfigureAwait(false);
-            await _vcsProvider.Received(1).DeleteReleaseAsync(OWNER, REPOSITORY, release).ConfigureAwait(false);
+            await _releaseProvider.Received(1).GetReleaseAsync(OWNER, REPOSITORY, TAG_NAME).ConfigureAwait(false);
+            await _releaseProvider.Received(1).DeleteReleaseAsync(OWNER, REPOSITORY, release).ConfigureAwait(false);
         }
 
         [Test]
@@ -575,26 +577,26 @@ namespace GitReleaseManager.Core.Tests
         {
             var release = new Release { Id = 1 };
 
-            _vcsProvider.GetReleaseAsync(OWNER, REPOSITORY, TAG_NAME)
+            _releaseProvider.GetReleaseAsync(OWNER, REPOSITORY, TAG_NAME)
                 .Returns(Task.FromResult(release));
 
             await _vcsService.DiscardReleaseAsync(OWNER, REPOSITORY, TAG_NAME).ConfigureAwait(false);
 
-            await _vcsProvider.Received(1).GetReleaseAsync(OWNER, REPOSITORY, TAG_NAME).ConfigureAwait(false);
-            await _vcsProvider.DidNotReceive().DeleteReleaseAsync(OWNER, REPOSITORY, release).ConfigureAwait(false);
+            await _releaseProvider.Received(1).GetReleaseAsync(OWNER, REPOSITORY, TAG_NAME).ConfigureAwait(false);
+            await _releaseProvider.DidNotReceive().DeleteReleaseAsync(OWNER, REPOSITORY, release).ConfigureAwait(false);
             _logger.Received(1).Warning(Arg.Any<string>(), TAG_NAME);
         }
 
         [Test]
         public async Task Should_Log_An_Warning_On_Deleting_Release_For_Non_Existing_Tag()
         {
-            _vcsProvider.GetReleaseAsync(OWNER, REPOSITORY, TAG_NAME)
+            _releaseProvider.GetReleaseAsync(OWNER, REPOSITORY, TAG_NAME)
                 .Returns(Task.FromException<Release>(_notFoundException));
 
             await _vcsService.DiscardReleaseAsync(OWNER, REPOSITORY, TAG_NAME).ConfigureAwait(false);
 
-            await _vcsProvider.Received().GetReleaseAsync(OWNER, REPOSITORY, TAG_NAME).ConfigureAwait(false);
-            await _vcsProvider.DidNotReceiveWithAnyArgs().DeleteReleaseAsync(OWNER, REPOSITORY, default).ConfigureAwait(false);
+            await _releaseProvider.Received().GetReleaseAsync(OWNER, REPOSITORY, TAG_NAME).ConfigureAwait(false);
+            await _releaseProvider.DidNotReceiveWithAnyArgs().DeleteReleaseAsync(OWNER, REPOSITORY, default).ConfigureAwait(false);
             _logger.Received(1).Warning(UNABLE_TO_FOUND_RELEASE_MESSAGE, TAG_NAME, OWNER, REPOSITORY);
         }
 
@@ -603,16 +605,16 @@ namespace GitReleaseManager.Core.Tests
         {
             var release = new Release { Id = 1 };
 
-            _vcsProvider.GetReleaseAsync(OWNER, REPOSITORY, TAG_NAME)
+            _releaseProvider.GetReleaseAsync(OWNER, REPOSITORY, TAG_NAME)
                 .Returns(Task.FromResult(release));
 
-            _vcsProvider.PublishReleaseAsync(OWNER, REPOSITORY, TAG_NAME, release)
+            _releaseProvider.PublishReleaseAsync(OWNER, REPOSITORY, TAG_NAME, release)
                 .Returns(Task.CompletedTask);
 
             await _vcsService.PublishReleaseAsync(OWNER, REPOSITORY, TAG_NAME).ConfigureAwait(false);
 
-            await _vcsProvider.Received(1).GetReleaseAsync(OWNER, REPOSITORY, TAG_NAME).ConfigureAwait(false);
-            await _vcsProvider.Received(1).PublishReleaseAsync(OWNER, REPOSITORY, TAG_NAME, release).ConfigureAwait(false);
+            await _releaseProvider.Received(1).GetReleaseAsync(OWNER, REPOSITORY, TAG_NAME).ConfigureAwait(false);
+            await _releaseProvider.Received(1).PublishReleaseAsync(OWNER, REPOSITORY, TAG_NAME, release).ConfigureAwait(false);
             _logger.Received(1).Verbose(Arg.Any<string>(), TAG_NAME, OWNER, REPOSITORY);
             _logger.Received(1).Debug(Arg.Any<string>(), Arg.Any<Release>());
         }
@@ -620,13 +622,13 @@ namespace GitReleaseManager.Core.Tests
         [Test]
         public async Task Should_Log_An_Warning_On_Publishing_Release_For_Non_Existing_Tag()
         {
-            _vcsProvider.GetReleaseAsync(OWNER, REPOSITORY, TAG_NAME)
+            _releaseProvider.GetReleaseAsync(OWNER, REPOSITORY, TAG_NAME)
                 .Returns(Task.FromException<Release>(_notFoundException));
 
             await _vcsService.PublishReleaseAsync(OWNER, REPOSITORY, TAG_NAME).ConfigureAwait(false);
 
-            await _vcsProvider.Received().GetReleaseAsync(OWNER, REPOSITORY, TAG_NAME).ConfigureAwait(false);
-            await _vcsProvider.DidNotReceiveWithAnyArgs().PublishReleaseAsync(OWNER, REPOSITORY, TAG_NAME, default).ConfigureAwait(false);
+            await _releaseProvider.Received().GetReleaseAsync(OWNER, REPOSITORY, TAG_NAME).ConfigureAwait(false);
+            await _releaseProvider.DidNotReceiveWithAnyArgs().PublishReleaseAsync(OWNER, REPOSITORY, TAG_NAME, default).ConfigureAwait(false);
             _logger.Received(1).Warning(Arg.Any<string>(), TAG_NAME, OWNER, REPOSITORY);
         }
 
@@ -636,7 +638,7 @@ namespace GitReleaseManager.Core.Tests
             var releases = Enumerable.Empty<Release>();
             var releaseNotes = "Release Notes";
 
-            _vcsProvider.GetReleasesAsync(OWNER, REPOSITORY, SKIP_PRERELEASES)
+            _releaseProvider.GetReleasesAsync(OWNER, REPOSITORY, SKIP_PRERELEASES)
                 .Returns(Task.FromResult(releases));
 
             _releaseNotesExporter.ExportReleaseNotes(Arg.Any<IEnumerable<Release>>())
@@ -645,8 +647,8 @@ namespace GitReleaseManager.Core.Tests
             var result = await _vcsService.ExportReleasesAsync(OWNER, REPOSITORY, null, SKIP_PRERELEASES).ConfigureAwait(false);
             result.ShouldBeSameAs(releaseNotes);
 
-            await _vcsProvider.DidNotReceive().GetReleaseAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>()).ConfigureAwait(false);
-            await _vcsProvider.Received(1).GetReleasesAsync(OWNER, REPOSITORY, SKIP_PRERELEASES).ConfigureAwait(false);
+            await _releaseProvider.DidNotReceive().GetReleaseAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>()).ConfigureAwait(false);
+            await _releaseProvider.Received(1).GetReleasesAsync(OWNER, REPOSITORY, SKIP_PRERELEASES).ConfigureAwait(false);
             _logger.Received(1).Verbose(Arg.Any<string>(), OWNER, REPOSITORY);
             _releaseNotesExporter.Received(1).ExportReleaseNotes(Arg.Any<IEnumerable<Release>>());
         }
@@ -656,7 +658,7 @@ namespace GitReleaseManager.Core.Tests
         {
             var release = new Release();
 
-            _vcsProvider.GetReleaseAsync(OWNER, REPOSITORY, TAG_NAME)
+            _releaseProvider.GetReleaseAsync(OWNER, REPOSITORY, TAG_NAME)
                 .Returns(Task.FromResult(release));
 
             _releaseNotesExporter.ExportReleaseNotes(Arg.Any<IEnumerable<Release>>())
@@ -665,8 +667,8 @@ namespace GitReleaseManager.Core.Tests
             var result = await _vcsService.ExportReleasesAsync(OWNER, REPOSITORY, TAG_NAME, SKIP_PRERELEASES).ConfigureAwait(false);
             result.ShouldBeSameAs(RELEASE_NOTES);
 
-            await _vcsProvider.Received(1).GetReleaseAsync(OWNER, REPOSITORY, TAG_NAME).ConfigureAwait(false);
-            await _vcsProvider.DidNotReceive().GetReleasesAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<bool>()).ConfigureAwait(false);
+            await _releaseProvider.Received(1).GetReleaseAsync(OWNER, REPOSITORY, TAG_NAME).ConfigureAwait(false);
+            await _releaseProvider.DidNotReceive().GetReleasesAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<bool>()).ConfigureAwait(false);
             _logger.Received(1).Verbose(Arg.Any<string>(), OWNER, REPOSITORY, TAG_NAME);
             _releaseNotesExporter.Received(1).ExportReleaseNotes(Arg.Any<IEnumerable<Release>>());
         }
@@ -674,7 +676,7 @@ namespace GitReleaseManager.Core.Tests
         [Test]
         public async Task Should_Get_Default_Release_Notes_For_Non_Existent_Tag()
         {
-            _vcsProvider.GetReleaseAsync(OWNER, REPOSITORY, TAG_NAME)
+            _releaseProvider.GetReleaseAsync(OWNER, REPOSITORY, TAG_NAME)
                 .Returns(Task.FromException<Release>(_notFoundException));
 
             _releaseNotesExporter.ExportReleaseNotes(Arg.Any<IEnumerable<Release>>())
@@ -683,7 +685,7 @@ namespace GitReleaseManager.Core.Tests
             var result = await _vcsService.ExportReleasesAsync(OWNER, REPOSITORY, TAG_NAME, SKIP_PRERELEASES).ConfigureAwait(false);
             result.ShouldBeSameAs(RELEASE_NOTES);
 
-            await _vcsProvider.Received(1).GetReleaseAsync(OWNER, REPOSITORY, TAG_NAME).ConfigureAwait(false);
+            await _releaseProvider.Received(1).GetReleaseAsync(OWNER, REPOSITORY, TAG_NAME).ConfigureAwait(false);
             _logger.Received(1).Warning(UNABLE_TO_FOUND_RELEASE_MESSAGE, TAG_NAME, OWNER, REPOSITORY);
             _releaseNotesExporter.Received(1).ExportReleaseNotes(Arg.Any<IEnumerable<Release>>());
         }
