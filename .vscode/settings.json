@@ -13,5 +13,6 @@
         "showconfig"
     ],
     "omnisharp.enableEditorConfigSupport": true,
-    "omnisharp.enableRoslynAnalyzers": true
+    "omnisharp.enableRoslynAnalyzers": true,
+    "files.autoSave": "onWindowChange"
 }
