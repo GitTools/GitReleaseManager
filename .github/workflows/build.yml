@@ -44,7 +44,7 @@ jobs:
         run: git fetch --prune --unshallow
 
       - name: Install .NET SDK 2.1.x, 3.1.x, 5.0.x, and 6.0.x
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: |
             2.1.x
