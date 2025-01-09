@@ -10,7 +10,7 @@ namespace GitReleaseManager.Core.Model
 
         public int PublicNumber { get; set; }
 
-        public int InternalNumber { get; set; }
+        public long InternalNumber { get; set; }
 
         public string HtmlUrl { get; set; }
 
