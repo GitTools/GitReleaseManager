@@ -38,7 +38,7 @@ jobs:
       GPR_PASSWORD: ${{ secrets.NUGET_GITHUB_TOKEN }}
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Fetch all tags and branches
         run: git fetch --prune --unshallow
