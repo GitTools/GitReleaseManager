@@ -2,10 +2,27 @@ version: 2
 updates:
 - package-ecosystem: github-actions
   directory: "/"
+  labels:
+    - "Build"
   schedule:
     interval: daily
 - package-ecosystem: nuget
   directory: "/src"
+  labels:
+    - "Build"
+  groups:
+    analyzers:
+      patterns:
+      - "*Analyzers"
+    serilog:
+      patterns:
+        - "Serilog.*"
+    tests:
+      patterns:
+      - "NUnit.*"
+      - "Microsoft.NET.Test.Sdk"
+      - "NSubstitute"
+      - "coverlet.msbuild"
   schedule:
     interval: daily
   open-pull-requests-limit: 10
