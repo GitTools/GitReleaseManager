@@ -128,7 +128,7 @@ namespace GitReleaseManager.Core
             }
         }
 
-        public async Task AddAssetsAsync(string owner, string repository, string tagName, IList<string> assets) => await AddAssetsAsync(owner, repository, tagName, assets, null);
+        public async Task AddAssetsAsync(string owner, string repository, string tagName, IList<string> assets) => await AddAssetsAsync(owner, repository, tagName, assets, null).ConfigureAwait(false);
 
         private async Task AddAssetsAsync(string owner, string repository, string tagName, IList<string> assets, Release currentRelease)
         {
