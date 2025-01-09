@@ -15,7 +15,7 @@ indent_style = space
 tab_width = 4
 
 # New line preferences
-end_of_line = crlf
+end_of_line = unset
 insert_final_newline = false
 trim_trailing_whitespace = true
 
@@ -24,8 +24,17 @@ end_of_line = lf
 
 [*.sln]
 # Visual studio defaults
+end_of_line = crlf
 insert_final_newline = true
 indent_style = tab
+
+[*.csproj]
+# Visual studio defaults
+end_of_line = crlf
+insert_final_newline = true
+indent_style = space
+tab_width = 4
+indent_size = 4
 
 [*.md]
 trim_trailing_whitespace = false
@@ -36,6 +45,7 @@ indent_size = 2 # Incorrect indentation happens when this is not 2
 indent_size = 2 # Incorrect indentation happens when this is not 2
 
 [*.ps1]
+end_of_line = crlf
 charset = utf-8-bom
 indent_style = space
 indent_size = 2
@@ -43,3 +53,7 @@ indent_size = 2
 [*.js]
 indent_style = tab
 indent_size = 2
+
+[*.{bat,cmd}]
+end_of_line = crlf
+charset = latin1
