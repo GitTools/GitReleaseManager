@@ -34,7 +34,7 @@ namespace GitReleaseManager.Core.Provider
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
 
-        private int? _projectId;
+        private long? _projectId;
 
         public GitLabProvider(IGitLabClient gitLabClient, IMapper mapper, ILogger logger)
         {
@@ -391,7 +391,7 @@ namespace GitReleaseManager.Core.Provider
             return issue.IsPullRequest ? "Merge Request" : "Issue";
         }
 
-        private int GetGitLabProjectId(string owner, string repository)
+        private long GetGitLabProjectId(string owner, string repository)
         {
             if (_projectId.HasValue)
             {
