@@ -35,7 +35,7 @@ jobs:
       WYAM_DEPLOY_REMOTE: https://github.com/GitTools/GitReleaseManager
       CODECOV_REPO_TOKEN: ${{ secrets.CODECOV_REPO_TOKEN }}
       GPR_USER: gittools-bot
-      GPR_PASSWORD: ${{ secrets.GPR_PASSWORD }}
+      GPR_PASSWORD: ${{ secrets.NUGET_GITHUB_TOKEN }}
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v2
