@@ -27,7 +27,7 @@
         <PackageReference Include="Octokit" Version="12.0.0" />
         <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
         <PackageReference Include="Serilog.Sinks.Debug" Version="2.0.0" PrivateAssets="All" />
-        <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
+        <PackageReference Include="Serilog.Sinks.File" Version="6.0.0" />
         <PackageReference Include="seriloganalyzer" Version="0.15.0" />
     </ItemGroup>
 </Project>
