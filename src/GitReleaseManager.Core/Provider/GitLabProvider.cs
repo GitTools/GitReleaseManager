@@ -405,7 +405,7 @@ namespace GitReleaseManager.Core.Provider
             return _projectId.Value;
         }
 
-        private async Task ExecuteAsync(Func<Task> action)
+        private static async Task ExecuteAsync(Func<Task> action)
         {
             try
             {
@@ -421,7 +421,7 @@ namespace GitReleaseManager.Core.Provider
             }
         }
 
-        private async Task<T> ExecuteAsync<T>(Func<Task<T>> action)
+        private static async Task<T> ExecuteAsync<T>(Func<Task<T>> action)
         {
             try
             {

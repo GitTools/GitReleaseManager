@@ -20,7 +20,7 @@ using Milestone = GitReleaseManager.Core.Model.Milestone;
 using NotFoundException = GitReleaseManager.Core.Exceptions.NotFoundException;
 using RateLimit = GitReleaseManager.Core.Model.RateLimit;
 using Release = GitReleaseManager.Core.Model.Release;
-using ReleaseAsset= GitReleaseManager.Core.Model.ReleaseAsset;
+using ReleaseAsset = GitReleaseManager.Core.Model.ReleaseAsset;
 using ReleaseAssetUpload = GitReleaseManager.Core.Model.ReleaseAssetUpload;
 
 namespace GitReleaseManager.Core.Tests.Provider

@@ -9,8 +9,7 @@ namespace GitReleaseManager.Core.Options
         {
             var ciEnvironmentVariable = Environment.GetEnvironmentVariable("CI");
 
-            bool isCiSystem;
-            if (!string.IsNullOrEmpty(ciEnvironmentVariable) && bool.TryParse(ciEnvironmentVariable, out isCiSystem))
+            if (!string.IsNullOrEmpty(ciEnvironmentVariable) && bool.TryParse(ciEnvironmentVariable, out bool isCiSystem))
             {
                 IsCISystem = isCiSystem;
             }
