@@ -16,18 +16,18 @@
         <ProjectReference Include="..\GitReleaseManager.Core\GitReleaseManager.Core.csproj" />
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="CommandLineParser" Version="2.9.1" />
-        <PackageReference Include="Destructurama.Attributed" Version="4.0.0" />
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
-        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0">
-        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        <PrivateAssets>all</PrivateAssets>
+        <PackageReference Include="CommandLineParser" />
+        <PackageReference Include="Destructurama.Attributed" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
+        <PackageReference Include="Microsoft.SourceLink.GitHub">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="NGitLab" Version="7.0.1" />
-        <PackageReference Include="Octokit" Version="12.0.0" />
-        <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
-        <PackageReference Include="Serilog.Sinks.Debug" Version="3.0.0" PrivateAssets="All" />
-        <PackageReference Include="Serilog.Sinks.File" Version="6.0.0" />
-        <PackageReference Include="seriloganalyzer" Version="0.15.0" />
+        <PackageReference Include="NGitLab" />
+        <PackageReference Include="Octokit" />
+        <PackageReference Include="Serilog.Sinks.Console" />
+        <PackageReference Include="Serilog.Sinks.Debug" PrivateAssets="All" />
+        <PackageReference Include="Serilog.Sinks.File" />
+        <PackageReference Include="seriloganalyzer" />
     </ItemGroup>
 </Project>
