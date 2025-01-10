@@ -9,7 +9,7 @@
     <PackageVersion Include="AutoMapper" Version="13.0.1" />
     <PackageVersion Include="CommandLineParser" Version="2.9.1" />
     <PackageVersion Include="coverlet.msbuild" Version="6.0.3" />
-    <PackageVersion Include="Destructurama.Attributed" Version="4.0.0" />
+    <PackageVersion Include="Destructurama.Attributed" Version="5.1.0" />
     <PackageVersion Include="IDisposableAnalyzers" Version="4.0.8" />
     <PackageVersion Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="9.0.0" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="9.0.0" />
