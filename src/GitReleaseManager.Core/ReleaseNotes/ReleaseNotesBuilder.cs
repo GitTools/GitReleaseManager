@@ -143,9 +143,9 @@ namespace GitReleaseManager.Core.ReleaseNotes
 
                 foreach (var issueLabel in issue.Labels)
                 {
-                    includedIssuesCount += _configuration.IssueLabelsInclude.Count(issueToInclude => issueLabel.Name.ToUpperInvariant() == issueToInclude.ToUpperInvariant());
+                    includedIssuesCount += _configuration.IssueLabelsInclude.Count(issueToInclude => string.Equals(issueLabel.Name, issueToInclude, StringComparison.InvariantCultureIgnoreCase));
 
-                    isExcluded = isExcluded || _configuration.IssueLabelsExclude.Any(issueToExclude => issueLabel.Name.ToUpperInvariant() == issueToExclude.ToUpperInvariant());
+                    isExcluded = isExcluded || _configuration.IssueLabelsExclude.Any(issueToExclude => string.Equals(issueLabel.Name, issueToExclude, StringComparison.InvariantCultureIgnoreCase));
                 }
 
                 if (isExcluded)

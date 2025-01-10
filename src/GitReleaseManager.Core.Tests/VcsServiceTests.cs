@@ -350,8 +350,7 @@ namespace GitReleaseManager.Core.Tests
                     null,
                     _assets,
                     false,
-                    null
-                ).ConfigureAwait(false);
+                    null).ConfigureAwait(false);
             result.ShouldBeSameAs(release);
 
             await _releaseNotesBuilder.Received(1).BuildReleaseNotesAsync(OWNER, REPOSITORY, MILESTONE_TITLE, ReleaseTemplates.DEFAULT_NAME).ConfigureAwait(false);
