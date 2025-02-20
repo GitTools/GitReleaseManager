@@ -141,7 +141,7 @@ control the look and feel of the generated release notes.
       in the release notes. A contributor is defined as someone who opened an issue
       or submitted a PR. **NOTE:** This configuration option was added in version
       0.19.0 of GitReleaseManager .
- 
+
 See the [example create configuration section](create-configuration) to see an
 example of how a footer can be configured.
 
@@ -182,8 +182,8 @@ tokenized values, such as milestone, owner, repository, with the actual values.
   - A boolean value which indicates whether or not comments are added to any
       closed issues that are included within a milestone, when it is being
       closed.
-  - **issue-comment**
-    - This is a template for what comment should be added to each issue.  Within
+- **issue-comment**
+  - This is a template for what comment should be added to each issue.  Within
       this comment template, it is possible to replace information for example,
       the milestone name, the owner/repository information, etc.
 
