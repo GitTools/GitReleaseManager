@@ -29,6 +29,7 @@ export:
     multiline-regex: false
 close:
   use-issue-comments: false
+  set-due-date: false
   issue-comment: |-
     :tada: This issue has been resolved in version {milestone} :tada:
 
@@ -186,6 +187,12 @@ tokenized values, such as milestone, owner, repository, with the actual values.
   - This is a template for what comment should be added to each issue.  Within
       this comment template, it is possible to replace information for example,
       the milestone name, the owner/repository information, etc.
+- **set-due-date**
+  - A boolean value which indicates whether or not to set the due date of the
+      milestone when closing it. The date which it is set to, is the same as the
+      date at which the command was run, it is not possible to provide a
+      different date. **NOTE:** This configuration option was added in version
+      0.19.0 of GitReleaseManager.
 
 ## Default branch
 
