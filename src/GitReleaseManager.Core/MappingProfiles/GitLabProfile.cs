@@ -23,12 +23,14 @@ namespace GitReleaseManager.Core.MappingProfiles
                 .ForMember(dest => dest.PublicNumber, act => act.MapFrom(src => src.IssueId))
                 .ForMember(dest => dest.HtmlUrl, act => act.MapFrom(src => src.WebUrl))
                 .ForMember(dest => dest.IsPullRequest, act => act.MapFrom(src => false))
+                .ForMember(dest => dest.User, act => act.MapFrom(src => src.Author))
                 .ReverseMap();
             CreateMap<NGitLab.Models.MergeRequest, Model.Issue>()
                 .ForMember(dest => dest.InternalNumber, act => act.MapFrom(src => src.Id))
                 .ForMember(dest => dest.PublicNumber, act => act.MapFrom(src => src.Iid))
                 .ForMember(dest => dest.HtmlUrl, act => act.MapFrom(src => src.WebUrl))
                 .ForMember(dest => dest.IsPullRequest, act => act.MapFrom(src => true))
+                .ForMember(dest => dest.User, act => act.MapFrom(src => src.Author))
                 .ReverseMap();
             CreateMap<string, Model.Label>().ForMember(dest => dest.Name, act => act.MapFrom(src => src));
             CreateMap<Model.Release, NGitLab.Models.ReleaseCreate>()
@@ -42,6 +44,16 @@ namespace GitReleaseManager.Core.MappingProfiles
                 .ForMember(dest => dest.Id, act => act.MapFrom(src => src.NoteId))
                 .ReverseMap();
             CreateMap<NGitLab.Models.MergeRequestComment, Model.IssueComment>()
+                .ReverseMap();
+            CreateMap<Model.User, NGitLab.Models.User>()
+                .ForMember(dest => dest.Username, act => act.MapFrom(src => src.Login))
+                .ForMember(dest => dest.WebURL, act => act.MapFrom(src => src.HtmlUrl))
+                .ForMember(dest => dest.AvatarURL, act => act.MapFrom(src => src.AvatarUrl))
+                .ReverseMap();
+            CreateMap<Model.User, NGitLab.Models.Author>()
+                .ForMember(dest => dest.Username, act => act.MapFrom(src => src.Login))
+                .ForMember(dest => dest.WebUrl, act => act.MapFrom(src => src.HtmlUrl))
+                .ForMember(dest => dest.AvatarUrl, act => act.MapFrom(src => src.AvatarUrl))
                 .ReverseMap();
         }
     }

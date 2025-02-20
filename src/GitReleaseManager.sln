@@ -2,9 +2,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33801.468
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GitReleaseManager.Tests", "GitReleaseManager.Tests\GitReleaseManager.Tests.csproj", "{FAD045A3-CF63-48CA-BA49-8F4D79E3EF4F}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GitReleaseManager.Cli", "GitReleaseManager.Cli\GitReleaseManager.Cli.csproj", "{F1163F09-3D4E-4F95-AF46-24C15AB297FB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GitReleaseManager.Tests", "GitReleaseManager.Tests\GitReleaseManager.Tests.csproj", "{FAD045A3-CF63-48CA-BA49-8F4D79E3EF4F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GitReleaseManager.Core", "GitReleaseManager.Core\GitReleaseManager.Core.csproj", "{B02A026E-CA3A-48F4-BBA9-EB337B0A2035}"
 EndProject
@@ -14,6 +14,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Directory.Build.props = Directory.Build.props
 		Directory.Build.targets = Directory.Build.targets
 		stylecop.json = stylecop.json
+		Directory.Packages.props = Directory.Packages.props
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GitReleaseManager.IntegrationTests", "GitReleaseManager.IntegrationTests\GitReleaseManager.IntegrationTests.csproj", "{53D8DA02-2BF8-454A-997C-B6BE62F90F9E}"

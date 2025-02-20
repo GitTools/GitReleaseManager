@@ -7,29 +7,30 @@
         <NoWarn>$(NoWarn);CA1707;Serilog004;</NoWarn>
     </PropertyGroup>
     <ItemGroup>
-      <Compile Include="..\GlobalSuppressions.cs" Link="GlobalSuppressions.cs" />
+        <Compile Include="..\GlobalSuppressions.cs" Link="GlobalSuppressions.cs" />
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\GitReleaseManager.Core\GitReleaseManager.Core.csproj" />
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="coverlet.msbuild" Version="6.0.0">
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-          <PrivateAssets>all</PrivateAssets>
+        <PackageReference Include="coverlet.msbuild">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
-        <PackageReference Include="ApprovalTests" Version="6.0.0" />
-        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0">
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-          <PrivateAssets>all</PrivateAssets>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" />
+        <PackageReference Include="ApprovalTests" />
+        <PackageReference Include="Microsoft.SourceLink.GitHub">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="NSubstitute" Version="5.1.0" />
-        <PackageReference Include="NUnit" Version="4.1.0" />
-        <PackageReference Include="NUnit.Analyzers" Version="4.2.0">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+        <PackageReference Include="NGitLab" />
+        <PackageReference Include="NSubstitute" />
+        <PackageReference Include="NUnit" />
+        <PackageReference Include="NUnit.Analyzers">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
-        <PackageReference Include="Octokit" Version="12.0.0" />
+        <PackageReference Include="NUnit3TestAdapter" />
+        <PackageReference Include="Octokit" />
     </ItemGroup>
 </Project>

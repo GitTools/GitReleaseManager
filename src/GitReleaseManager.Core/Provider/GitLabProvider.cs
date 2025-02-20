@@ -34,7 +34,7 @@ namespace GitReleaseManager.Core.Provider
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
 
-        private int? _projectId;
+        private long? _projectId;
 
         public GitLabProvider(IGitLabClient gitLabClient, IMapper mapper, ILogger logger)
         {
@@ -267,6 +267,11 @@ namespace GitReleaseManager.Core.Provider
                 }
                 else if (itemState == ItemState.Closed)
                 {
+                    if (milestone.DueOn.HasValue)
+                    {
+                        mileStoneClient.Update(milestone.InternalNumber, new MilestoneUpdate { DueDate = milestone.DueOn.Value.ToString("o", CultureInfo.InvariantCulture) });
+                    }
+
                     mileStoneClient.Close(milestone.InternalNumber);
                 }
 
@@ -391,7 +396,26 @@ namespace GitReleaseManager.Core.Provider
             return issue.IsPullRequest ? "Merge Request" : "Issue";
         }
 
-        private int GetGitLabProjectId(string owner, string repository)
+        public Task<Issue[]> GetLinkedIssuesAsync(string owner, string repository, Issue issue)
+        {
+            return ExecuteAsync(() =>
+            {
+                if (issue.IsPullRequest)
+                {
+                    var closes = _gitLabClient.MergeRequests.ClosesIssues(issue.PublicNumber);
+                    var issues = _mapper.Map<IEnumerable<Issue>>(closes);
+                    return Task.FromResult(issues.ToArray());
+                }
+                else
+                {
+                    var relatedTo = _gitLabClient.Issues.RelatedTo(GetGitLabProjectId(owner, repository), issue.PublicNumber);
+                    var issues = _mapper.Map<IEnumerable<Issue>>(relatedTo);
+                    return Task.FromResult(issues.ToArray());
+                }
+            });
+        }
+
+        private long GetGitLabProjectId(string owner, string repository)
         {
             if (_projectId.HasValue)
             {
@@ -405,7 +429,7 @@ namespace GitReleaseManager.Core.Provider
             return _projectId.Value;
         }
 
-        private async Task ExecuteAsync(Func<Task> action)
+        private static async Task ExecuteAsync(Func<Task> action)
         {
             try
             {
@@ -421,7 +445,7 @@ namespace GitReleaseManager.Core.Provider
             }
         }
 
-        private async Task<T> ExecuteAsync<T>(Func<Task<T>> action)
+        private static async Task<T> ExecuteAsync<T>(Func<Task<T>> action)
         {
             try
             {

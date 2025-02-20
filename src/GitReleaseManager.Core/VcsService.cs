@@ -46,7 +46,9 @@ namespace GitReleaseManager.Core
 
         public async Task<Release> CreateReleaseFromMilestoneAsync(string owner, string repository, string milestone, string releaseName, string targetCommitish, IList<string> assets, bool prerelease, string templateFilePath)
         {
-            var templatePath = ReleaseTemplates.DEFAULT_NAME;
+            var templatePath = _configuration.Create.IncludeContributors
+                ? ReleaseTemplates.CONTRIBUTORS_NAME
+                : ReleaseTemplates.DEFAULT_NAME;
 
             if (!string.IsNullOrWhiteSpace(templateFilePath))
             {
@@ -128,7 +130,7 @@ namespace GitReleaseManager.Core
             }
         }
 
-        public async Task AddAssetsAsync(string owner, string repository, string tagName, IList<string> assets) => await AddAssetsAsync(owner, repository, tagName, assets, null);
+        public async Task AddAssetsAsync(string owner, string repository, string tagName, IList<string> assets) => await AddAssetsAsync(owner, repository, tagName, assets, null).ConfigureAwait(false);
 
         private async Task AddAssetsAsync(string owner, string repository, string tagName, IList<string> assets, Release currentRelease)
         {
@@ -253,6 +255,9 @@ namespace GitReleaseManager.Core
             {
                 _logger.Verbose("Finding open milestone with title '{Title}' on '{Owner}/{Repository}'", milestoneTitle, owner, repository);
                 var milestone = await _vcsProvider.GetMilestoneAsync(owner, repository, milestoneTitle, ItemStateFilter.Open).ConfigureAwait(false);
+
+                // Set the due date only if configured to do so
+                milestone.DueOn = _configuration.Close.SetDueDate ? DateTimeOffset.UtcNow : (DateTimeOffset?)null;
 
                 _logger.Verbose("Closing milestone '{Title}' on '{Owner}/{Repository}'", milestoneTitle, owner, repository);
                 await _vcsProvider.SetMilestoneStateAsync(owner, repository, milestone, ItemState.Closed).ConfigureAwait(false);

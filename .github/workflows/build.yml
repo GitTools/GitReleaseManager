@@ -35,31 +35,32 @@ jobs:
       WYAM_DEPLOY_REMOTE: https://github.com/GitTools/GitReleaseManager
       CODECOV_REPO_TOKEN: ${{ secrets.CODECOV_REPO_TOKEN }}
       GPR_USER: gittools-bot
-      GPR_PASSWORD: ${{ secrets.GPR_PASSWORD }}
+      GPR_PASSWORD: ${{ secrets.NUGET_GITHUB_TOKEN }}
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Fetch all tags and branches
         run: git fetch --prune --unshallow
 
-      - name: Install .NET SDK 2.1.x, 3.1.x, 5.0.x, and 6.0.x
-        uses: actions/setup-dotnet@v3
+      - name: Install .NET SDK 2.1.x, 3.1.x, 5.0.x, 6.0.x, and 7.0.x
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: |
             2.1.x
             3.1.x
             5.0.x
             6.0.x
+            7.0.x
 
       - name: Cache Tools
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: tools
           key: ${{ runner.os }}-tools-${{ hashFiles('recipe.cake') }}
 
       - name: Build project
-        uses: cake-build/cake-action@v1
+        uses: cake-build/cake-action@v3
         with:
           script-path: recipe.cake
           target: CI
@@ -67,14 +68,14 @@ jobs:
           cake-version: tool-manifest
 
       - name: Upload Issues-Report
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           if-no-files-found: warn
           name: ${{ matrix.os }} issues
           path: BuildArtifacts/report.html
 
       - name: Upload Packages
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         if: runner.os == 'Windows'
         with:
           if-no-files-found: warn

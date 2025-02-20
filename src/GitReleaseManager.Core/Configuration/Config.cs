@@ -27,6 +27,7 @@ Your **[GitReleaseManager](https://github.com/GitTools/GitReleaseManager)** bot 
                 ShaSectionHeading = "SHA256 Hashes of the release artifacts",
                 ShaSectionLineFormat = "- `{1}\t{0}`",
                 AllowUpdateToPublishedRelease = false,
+                IncludeContributors = false,
             };
 
             Export = new ExportConfig
@@ -42,6 +43,7 @@ Your **[GitReleaseManager](https://github.com/GitTools/GitReleaseManager)** bot 
             {
                 IssueComments = false,
                 IssueCommentFormat = ISSUE_COMMENT_FORMAT,
+                SetDueDate = false, // by default, do not set the due date to match previous behavior
             };
 
             DefaultBranch = "master";
