@@ -43,7 +43,7 @@ jobs:
       - name: Fetch all tags and branches
         run: git fetch --prune --unshallow
 
-      - name: Install .NET SDK 2.1.x, 3.1.x, 5.0.x, and 6.0.x
+      - name: Install .NET SDK 2.1.x, 3.1.x, 5.0.x, 6.0.x, and 7.0.x
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: |
@@ -51,6 +51,7 @@ jobs:
             3.1.x
             5.0.x
             6.0.x
+            7.0.x
 
       - name: Cache Tools
         uses: actions/cache@v4
