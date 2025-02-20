@@ -35,7 +35,7 @@ namespace GitReleaseManager.Core.ReleaseNotes
             _templateFactory = templateFactory;
         }
 
-        public async Task<string> BuildReleaseNotesAsync(string user, string repository, string milestoneTitle, string template)
+        public async Task<string> BuildReleaseNotesAsync(string user, string repository, string milestoneTitle, string customTemplate)
         {
             _user = user;
             _repository = repository;
@@ -62,6 +62,25 @@ namespace GitReleaseManager.Core.ReleaseNotes
             {
                 var logMessage = string.Format(CultureInfo.CurrentCulture, "No closed issues have been found for milestone {0}, or all assigned issues are meant to be excluded from release notes, aborting release creation.", _milestoneTitle);
                 throw new InvalidOperationException(logMessage);
+            }
+
+            // By default we use the custom template, if it was provided.
+            // Otherwise, we determine which template we should use.
+            var template = customTemplate;
+            if (string.IsNullOrWhiteSpace(template))
+            {
+                if (issues.Count == 0)
+                {
+                    template = ReleaseTemplates.NO_ISSUES_NAME;
+                }
+                else if (_configuration.Create.IncludeContributors)
+                {
+                    template = ReleaseTemplates.CONTRIBUTORS_NAME;
+                }
+                else
+                {
+                    template = ReleaseTemplates.DEFAULT_NAME;
+                }
             }
 
             var commitsLink = _vcsProvider.GetCommitsUrl(_user, _repository, _targetMilestone?.Title, previousMilestone?.Title);
