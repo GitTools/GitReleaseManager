@@ -150,6 +150,7 @@
 				<li class="selected"><a href="/GitReleaseManager/api/GitReleaseManager.Core.Provider/IVcsProvider/7F3FE744">GetIssuesAsync<wbr>(string, <wbr>string, <wbr>Milestone, <wbr>ItemStateFilter)<wbr></a></li>
 				<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.Provider/IVcsProvider/180D2221">GetIssueType<wbr>(Issue)<wbr></a></li>
 				<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.Provider/IVcsProvider/2878A48E">GetLabelsAsync<wbr>(string, <wbr>string)<wbr></a></li>
+				<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.Provider/IVcsProvider/513057DC">GetLinkedIssuesAsync<wbr>(string, <wbr>string, <wbr>Issue)<wbr></a></li>
 				<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.Provider/IVcsProvider/B4CFA27B">GetMilestoneAsync<wbr>(string, <wbr>string, <wbr>string, <wbr>ItemStateFilter)<wbr></a></li>
 				<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.Provider/IVcsProvider/571EA272">Get<wbr>Milestone<wbr>Query<wbr>String<wbr>()<wbr></a></li>
 				<li><a href="/GitReleaseManager/api/GitReleaseManager.Core.Provider/IVcsProvider/2522BD04">GetMilestonesAsync<wbr>(string, <wbr>string, <wbr>ItemStateFilter)<wbr></a></li>
@@ -196,7 +197,7 @@
 		</div>
 
 	<h1 id="Syntax">Syntax</h1>
-	<pre><code>Task&lt;IEnumerable&lt;Issue&gt;&gt; GetIssuesAsync(string owner, string repository, Milestone milstone, ItemStateFilter itemStateFilter = All)</code></pre>
+	<pre><code>Task&lt;IEnumerable&lt;Issue&gt;&gt; GetIssuesAsync(string owner, string repository, Milestone milestone, ItemStateFilter itemStateFilter = All)</code></pre>
 
 
 
@@ -224,7 +225,7 @@
 						<td></td>
 					</tr>
 					<tr>
-						<td>milstone</td>
+						<td>milestone</td>
 						<td><a href="/GitReleaseManager/api/GitReleaseManager.Core.Model/Milestone">Milestone</a></td>
 						<td></td>
 					</tr>

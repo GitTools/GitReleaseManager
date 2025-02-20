@@ -180,6 +180,7 @@ when no yaml file is placed in the root directory):</p>
     sha-section-heading: "SHA256 Hashes of the release artifacts"
     sha-section-line-format: "- `{1}\t{0}`"
     allow-update-to-published: false
+    include-contributors: false
 export:
     include-created-date-in-title: false
     created-date-string-format: ''
@@ -188,6 +189,7 @@ export:
     multiline-regex: false
 close:
   use-issue-comments: false
+  set-due-date: false
   issue-comment: |-
     :tada: This issue has been resolved in version {milestone} :tada:
 
@@ -317,6 +319,14 @@ published releases. The default value is false. <strong>NOTE:</strong> This
 configuration option was added in version 0.11.0 of GitReleaseManager.</li>
 </ul>
 </li>
+<li><strong>include-contributors</strong>
+<ul>
+<li>A boolean value which indicates whether the list of contributors is included
+in the release notes. A contributor is defined as someone who opened an issue
+or submitted a PR. <strong>NOTE:</strong> This configuration option was added in version
+0.19.0 of GitReleaseManager.</li>
+</ul>
+</li>
 </ul>
 <p>See the <a href="create-configuration">example create configuration section</a> to see an
 example of how a footer can be configured.</p>
@@ -371,6 +381,8 @@ tokenized values, such as milestone, owner, repository, with the actual values.<
 <li>A boolean value which indicates whether or not comments are added to any
 closed issues that are included within a milestone, when it is being
 closed.</li>
+</ul>
+</li>
 <li><strong>issue-comment</strong>
 <ul>
 <li>This is a template for what comment should be added to each issue.  Within
@@ -378,6 +390,13 @@ this comment template, it is possible to replace information for example,
 the milestone name, the owner/repository information, etc.</li>
 </ul>
 </li>
+<li><strong>set-due-date</strong>
+<ul>
+<li>A boolean value which indicates whether or not to set the due date of the
+milestone when closing it. The date which it is set to, is the same as the
+date at which the command was run, it is not possible to provide a
+different date. <strong>NOTE:</strong> This configuration option was added in version
+0.19.0 of GitReleaseManager.</li>
 </ul>
 </li>
 </ul>
