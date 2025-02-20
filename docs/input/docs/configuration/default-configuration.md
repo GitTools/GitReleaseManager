@@ -141,7 +141,7 @@ control the look and feel of the generated release notes.
   - A boolean value which indicates whether the list of contributors is included
       in the release notes. A contributor is defined as someone who opened an issue
       or submitted a PR. **NOTE:** This configuration option was added in version
-      0.19.0 of GitReleaseManager .
+      0.19.0 of GitReleaseManager.
 
 See the [example create configuration section](create-configuration) to see an
 example of how a footer can be configured.
