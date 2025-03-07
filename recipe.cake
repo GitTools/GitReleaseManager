@@ -35,9 +35,9 @@ BuildParameters.Tasks.DotNetCoreBuildTask.Does((context) =>
 {
     var buildDir = BuildParameters.Paths.Directories.PublishedApplications;
 
-    var grmExecutable = context.GetFiles(buildDir + "/**/*.exe").First();
+    var grmExecutable = context.GetFiles(buildDir + "/GitReleaseManager.Tool/**/*.exe").First();
 
-    context.Information("Registering Built GRM executable...");
+    context.Information("Registering Built GRM executable... {0}", grmExecutable.FullPath);
     context.Tools.RegisterFile(grmExecutable);
 });
 
