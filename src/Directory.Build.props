@@ -1,7 +1,6 @@
 <Project>
     <PropertyGroup>
         <LangVersion>8.0</LangVersion>
-        <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
 
         <Authors>GitTools Contributors</Authors>
         <PackageProjectUrl>https://github.com/GitTools/GitReleaseManager</PackageProjectUrl>
