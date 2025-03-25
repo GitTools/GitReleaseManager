@@ -19,7 +19,8 @@ BuildParameters.SetParameters(context: Context,
                             twitterMessage: standardNotificationMessage,
                             preferredBuildProviderType: BuildProviderType.GitHubActions,
                             gitterMessage: "@/all " + standardNotificationMessage,
-                            shouldRunCodecov: false);
+                            shouldRunCodecov: false,
+                            shouldGenerateDocumentation: false);
 
 BuildParameters.PackageSources.Add(new PackageSourceData(Context, "GPR", "https://nuget.pkg.github.com/GitTools/index.json", FeedType.NuGet, false));
 
