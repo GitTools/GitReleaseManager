@@ -27,6 +27,7 @@ namespace GitReleaseManager.Tests
         }
 
         [Test]
+        [NonParallelizable]
         public void NoCommitsSomeIssues()
         {
             AcceptTest(0, CreateIssue(1, "Bug"), CreateIssue(2, "Feature"), CreateIssue(3, "Improvement"));
@@ -55,6 +56,7 @@ namespace GitReleaseManager.Tests
         }
 
         [Test]
+        [NonParallelizable]
         public void SingularCommitsSomeIssues()
         {
             AcceptTest(1, CreateIssue(1, "Bug"), CreateIssue(2, "Feature"), CreateIssue(3, "Improvement"));
@@ -62,6 +64,7 @@ namespace GitReleaseManager.Tests
         }
 
         [Test]
+        [NonParallelizable]
         public void SingularCommitsSingularIssues()
         {
             AcceptTest(1, CreateIssue(1, "Bug"));
@@ -69,6 +72,7 @@ namespace GitReleaseManager.Tests
         }
 
         [Test]
+        [NonParallelizable]
         public void NoCommitsSingularIssues()
         {
             AcceptTest(0, CreateIssue(1, "Bug"));
@@ -83,6 +87,7 @@ namespace GitReleaseManager.Tests
         }
 
         [Test]
+        [NonParallelizable]
         public void SingularCommitsWithHeaderLabelAlias()
         {
             var config = new Config();
@@ -97,6 +102,7 @@ namespace GitReleaseManager.Tests
         }
 
         [Test]
+        [NonParallelizable]
         public void SingularCommitsWithMilestoneDescription()
         {
             AcceptTest(1, CreateMilestone("2.4.2", "I am some awesome milestone description."), CreateIssue(5, "Feature"));
@@ -125,6 +131,7 @@ namespace GitReleaseManager.Tests
         }
 
         [Test]
+        [NonParallelizable]
         public void CorrectlyUseFooterWhenEnabled()
         {
             var config = new Config();
@@ -136,6 +143,7 @@ namespace GitReleaseManager.Tests
         }
 
         [Test]
+        [NonParallelizable]
         public void CorrectlyUseFooterWithMilestoneWhenEnabled()
         {
             var config = new Config();
@@ -178,6 +186,7 @@ namespace GitReleaseManager.Tests
         }
 
         [Test]
+        [NonParallelizable]
         public void CorrectlyExcludeIssues()
         {
             AcceptTest(5, CreateIssue(1, "Build"), CreateIssue(2, "Bug"));
@@ -185,6 +194,7 @@ namespace GitReleaseManager.Tests
         }
 
         [Test]
+        [NonParallelizable]
         public void CorrectlyExcludeIssuesWhenBothIncludeAndExcludeLabelIsSet()
         {
             AcceptTest(10, CreateIssue(5, "Improvement", "Build"), CreateIssue(3, "Feature"));

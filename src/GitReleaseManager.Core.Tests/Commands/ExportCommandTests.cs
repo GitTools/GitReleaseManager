@@ -27,6 +27,7 @@ namespace GitReleaseManager.Core.Tests.Commands
         }
 
         [Test]
+        [NonParallelizable]
         public async Task Should_Execute_Command()
         {
             var options = new ExportSubOptions
