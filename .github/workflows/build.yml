@@ -20,7 +20,7 @@ jobs:
         os: [ windows-2022 ]
 
     env:
-      GITTOOLS_GITHUB_TOKEN: ${{ secrets.GITTOOLS_GITHUB_TOKEN }}
+      GITTOOLS_GITHUB_TOKEN: ${{ secrets.NUGET_GITHUB_TOKEN }}
       NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
       NUGET_SOURCE: https://api.nuget.org/v3/index.json
       CHOCOLATEY_API_KEY: ${{ secrets.CHOCOLATEY_API_KEY }}
