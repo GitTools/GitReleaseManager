@@ -20,9 +20,9 @@
         <tags>github release notes create export</tags>
     </metadata>
     <files>
-        <file src="..\..\BuildArtifacts\temp\_PublishedApplications\GitReleaseManager.Cli\net6.0\*.exe" target="tools" />
-        <file src="..\..\BuildArtifacts\temp\_PublishedApplications\GitReleaseManager.Cli\net6.0\*.xml" target="tools" />
-        <file src="..\..\BuildArtifacts\temp\_PublishedApplications\GitReleaseManager.Cli\net6.0\*.pdb" target="tools" />
+        <file src="..\..\BuildArtifacts\temp\_PublishedApplications\GitReleaseManager.Cli\net8.0\*.exe" target="tools" />
+        <file src="..\..\BuildArtifacts\temp\_PublishedApplications\GitReleaseManager.Cli\net8.0\*.xml" target="tools" />
+        <file src="..\..\BuildArtifacts\temp\_PublishedApplications\GitReleaseManager.Cli\net8.0\*.pdb" target="tools" />
         <file src="..\..\icons\package_icon.png" target="" />
     </files>
 </package>
