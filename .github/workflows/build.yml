@@ -30,9 +30,6 @@ jobs:
       TWITTER_ACCESS_TOKEN: ${{ secrets.TWITTER_ACCESS_TOKEN }}
       TWITTER_ACCESS_TOKEN_SECRET: ${{ secrets.TWITTER_ACCESS_TOKEN_SECRET }}
       COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
-      WYAM_ACCESS_TOKEN: ${{ secrets.WYAM_ACCESS_TOKEN }}
-      WYAM_DEPLOY_BRANCH: gh-pages
-      WYAM_DEPLOY_REMOTE: https://github.com/GitTools/GitReleaseManager
       CODECOV_REPO_TOKEN: ${{ secrets.CODECOV_REPO_TOKEN }}
       GPR_USER: gittools-bot
       GPR_PASSWORD: ${{ secrets.NUGET_GITHUB_TOKEN }}
