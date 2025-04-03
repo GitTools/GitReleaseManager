@@ -74,17 +74,38 @@ namespace GitReleaseManager.IntegrationTests
                 var configuration = ConfigurationProvider.Provide(currentDirectory, fileSystem);
                 configuration.IssueLabelsExclude.Add("Internal Refactoring"); // This is necessary to generate the release notes for GitReleaseManager version 0.12.0
 
-                // Indicate whether you want to include the 'Contributors' section in the release notes
+                // Indicate that we want to include the 'Contributors' section in the release notes
                 configuration.Create.IncludeContributors = true;
-
-                // Pick the template based on whether you want to include the 'Contributors' section in the release notes
-                var templatePath = configuration.Create.IncludeContributors
-                    ? ReleaseTemplates.CONTRIBUTORS_NAME
-                    : ReleaseTemplates.DEFAULT_NAME;
 
                 var vcsProvider = new GitHubProvider(_gitHubClient, _mapper, _graphQlClient);
                 var releaseNotesBuilder = new ReleaseNotesBuilder(vcsProvider, _logger, fileSystem, configuration, new TemplateFactory(fileSystem, configuration, TemplateKind.Create));
-                var result = await releaseNotesBuilder.BuildReleaseNotesAsync("GitTools", "GitReleaseManager", "0.12.0", templatePath).ConfigureAwait(false); // 0.12.0 contains a mix of issues and PRs
+                var result = await releaseNotesBuilder.BuildReleaseNotesAsync("GitTools", "GitReleaseManager", "0.12.0", string.Empty).ConfigureAwait(false); // 0.12.0 contains a mix of issues and PRs
+                Debug.WriteLine(result);
+                ClipBoardHelper.SetClipboard(result);
+            }
+        }
+
+        [Test]
+        [Explicit]
+        public async Task MilestoneWithoutIssues()
+        {
+            if (string.IsNullOrWhiteSpace(_token))
+            {
+                Assert.Inconclusive("Unable to locate credentials for accessing GitHub API");
+            }
+            else
+            {
+                var fileSystem = new FileSystem(new CreateSubOptions());
+                var currentDirectory = Environment.CurrentDirectory;
+
+                var configuration = ConfigurationProvider.Provide(currentDirectory, fileSystem);
+
+                // Indicate that we allow milestones without issues
+                configuration.Create.AllowMilestonesWithoutIssues = true;
+
+                var vcsProvider = new GitHubProvider(_gitHubClient, _mapper, _graphQlClient);
+                var releaseNotesBuilder = new ReleaseNotesBuilder(vcsProvider, _logger, fileSystem, configuration, new TemplateFactory(fileSystem, configuration, TemplateKind.Create));
+                var result = await releaseNotesBuilder.BuildReleaseNotesAsync("jericho", "_testing", "0.1.0", string.Empty).ConfigureAwait(false); // There are no issues associated with milestone 0.1.0 in my testing repo.
                 Debug.WriteLine(result);
                 ClipBoardHelper.SetClipboard(result);
             }

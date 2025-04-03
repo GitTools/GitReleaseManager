@@ -13,7 +13,6 @@ using GitReleaseManager.Core.Extensions;
 using GitReleaseManager.Core.Model;
 using GitReleaseManager.Core.Provider;
 using GitReleaseManager.Core.ReleaseNotes;
-using GitReleaseManager.Core.Templates;
 using Serilog;
 
 namespace GitReleaseManager.Core
@@ -46,16 +45,7 @@ namespace GitReleaseManager.Core
 
         public async Task<Release> CreateReleaseFromMilestoneAsync(string owner, string repository, string milestone, string releaseName, string targetCommitish, IList<string> assets, bool prerelease, string templateFilePath)
         {
-            var templatePath = _configuration.Create.IncludeContributors
-                ? ReleaseTemplates.CONTRIBUTORS_NAME
-                : ReleaseTemplates.DEFAULT_NAME;
-
-            if (!string.IsNullOrWhiteSpace(templateFilePath))
-            {
-                templatePath = templateFilePath;
-            }
-
-            var releaseNotes = await _releaseNotesBuilder.BuildReleaseNotesAsync(owner, repository, milestone, templatePath).ConfigureAwait(false);
+            var releaseNotes = await _releaseNotesBuilder.BuildReleaseNotesAsync(owner, repository, milestone, templateFilePath).ConfigureAwait(false);
             var release = await CreateReleaseAsync(owner, repository, releaseName, milestone, releaseNotes, prerelease, targetCommitish, assets).ConfigureAwait(false);
 
             return release;
@@ -67,7 +57,7 @@ namespace GitReleaseManager.Core
 
             _logger.Verbose("Reading release notes from: '{FilePath}'", inputFilePath);
 
-            var releaseNotes = File.ReadAllText(inputFilePath);
+            var releaseNotes = await File.ReadAllTextAsync(inputFilePath).ConfigureAwait(false);
             var release = await CreateReleaseAsync(owner, repository, name, name, releaseNotes, prerelease, targetCommitish, assets).ConfigureAwait(false);
 
             return release;
