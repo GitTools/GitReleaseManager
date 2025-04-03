@@ -1,0 +1,1 @@
+#tool dotnet:?package=GitVersion.Tool&version=5.6.7
