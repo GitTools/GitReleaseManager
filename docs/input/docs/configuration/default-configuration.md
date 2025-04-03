@@ -21,6 +21,7 @@ create:
     sha-section-line-format: "- `{1}\t{0}`"
     allow-update-to-published: false
     include-contributors: false
+    allow-milestone-without-issues: false
 export:
     include-created-date-in-title: false
     created-date-string-format: ''
@@ -142,6 +143,11 @@ control the look and feel of the generated release notes.
       in the release notes. A contributor is defined as someone who opened an issue
       or submitted a PR. **NOTE:** This configuration option was added in version
       0.19.0 of GitReleaseManager.
+- **allow-milestone-without-issues**
+  - A boolean value which indicates whether an empty release will be created, when
+      no issues are found to be associated with a milestone. The contents of the
+      empty release can be controlled via the associated Scriban template.
+      **NOTE:** This configuration option was added in version 0.20.0 of GitReleaseManager.
 
 See the [example create configuration section](create-configuration) to see an
 example of how a footer can be configured.

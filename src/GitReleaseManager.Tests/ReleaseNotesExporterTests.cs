@@ -34,6 +34,7 @@ namespace GitReleaseManager.Tests
         }
 
         [Test]
+        [NonParallelizable]
         public void SingleReleaseExcludeCreatedDateInTitle()
         {
             var configuration = ConfigurationProvider.Provide(_currentDirectory, _fileSystem);
@@ -44,6 +45,7 @@ namespace GitReleaseManager.Tests
         }
 
         [Test]
+        [NonParallelizable]
         public void SingleReleaseExcludeRegexRemoval()
         {
             var configuration = ConfigurationProvider.Provide(_currentDirectory, _fileSystem);
