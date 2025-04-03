@@ -181,6 +181,7 @@ when no yaml file is placed in the root directory):</p>
     sha-section-line-format: "- `{1}\t{0}`"
     allow-update-to-published: false
     include-contributors: false
+    allow-milestone-without-issues: false
 export:
     include-created-date-in-title: false
     created-date-string-format: ''
@@ -325,6 +326,14 @@ configuration option was added in version 0.11.0 of GitReleaseManager.</li>
 in the release notes. A contributor is defined as someone who opened an issue
 or submitted a PR. <strong>NOTE:</strong> This configuration option was added in version
 0.19.0 of GitReleaseManager.</li>
+</ul>
+</li>
+<li><strong>allow-milestone-without-issues</strong>
+<ul>
+<li>A boolean value which indicates whether an empty release will be created, when
+no issues are found to be associated with a milestone. The contents of the
+empty release can be controlled via the associated Scriban template.
+<strong>NOTE:</strong> This configuration option was added in version 0.20.0 of GitReleaseManager.</li>
 </ul>
 </li>
 </ul>
