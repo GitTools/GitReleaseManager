@@ -147,13 +147,34 @@ namespace GitReleaseManager.Core.ReleaseNotes
             var issueLabels = _configuration.IssueLabelsInclude;
             var excludedIssueLabels = _configuration.IssueLabelsExclude;
 
+            Func<SortIssuesBy, string> getSortPropertyName = (sortBy) =>
+            {
+                return sortBy switch
+                {
+                    SortIssuesBy.Title => "Title",
+                    SortIssuesBy.Id => "PublicNumber",
+                    _ => throw new NotSupportedException($"'{sortBy}' is an unknown sort property."),
+                };
+            };
+
+            Func<Issue, object?> keySelector = (i) => typeof(Issue).GetProperty(getSortPropertyName(_configuration.Create.SortIssuesBy)).GetValue(i, null);
+
             var issuesByLabel = issues
                 .Where(o => !o.Labels.Any(l => excludedIssueLabels.Any(eil => string.Equals(eil, l.Name, StringComparison.OrdinalIgnoreCase))))
                 .SelectMany(o => o.Labels, (issue, label) => new { Label = label.Name, Issue = issue })
                 .Where(o => issueLabels.Any(il => string.Equals(il, o.Label, StringComparison.OrdinalIgnoreCase)))
                 .GroupBy(o => o.Label, o => o.Issue)
-                .OrderBy(o => o.Key)
-                .ToDictionary(o => GetValidLabel(o.Key, o.Count()), o => o.OrderBy(issue => issue.PublicNumber).ToList());
+                .OrderBy(o => o.Key) // Sort the labels alphabetically
+                .ToDictionary(o => GetValidLabel(o.Key, o.Count()), o =>
+                {
+                    // Sort the issues within each group based on configuration
+                    return _configuration.Create.SortIssuesDirection switch
+                    {
+                        SortDirection.Ascending => o.OrderBy(i => keySelector(i)).ToList(),
+                        SortDirection.Descending => o.OrderByDescending(i => keySelector(i)).ToList(),
+                        _ => throw new NotSupportedException($"'{_configuration.Create.SortIssuesDirection}' is an unknown sort direction."),
+                    };
+                });
 
             return issuesByLabel;
         }

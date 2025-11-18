@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Text;
 using GitReleaseManager.Core.Configuration;
+using GitReleaseManager.Core.Model;
 using NUnit.Framework;
 
 namespace GitReleaseManager.Tests
@@ -126,6 +127,46 @@ namespace GitReleaseManager.Tests
                 "#    The release is available on:{0}",
                 Environment.NewLine);
             Assert.That(text, Contains.Substring(expectedText));
+        }
+
+        [Test]
+        [TestCase(SortIssuesBy.Id, "Id")]
+        [TestCase(SortIssuesBy.Title, "Title")]
+        public void Should_Write_SortIssuesBy_Values(SortIssuesBy sortBy, string expected)
+        {
+            // Given
+            var config = new Config();
+            config.Create.SortIssuesBy = sortBy;
+
+            // When
+            var builder = new StringBuilder();
+            using (var writer = new StringWriter(builder))
+            {
+                ConfigSerializer.Write(config, writer);
+            }
+
+            // Then
+            Assert.That(builder.ToString(), Contains.Substring($"sort-issues-by: {expected}"));
+        }
+
+        [Test]
+        [TestCase(SortDirection.Ascending, "Ascending")]
+        [TestCase(SortDirection.Descending, "Descending")]
+        public void Should_Write_SortIssuesDirection_Values(SortDirection sortDirection, string expected)
+        {
+            // Given
+            var config = new Config();
+            config.Create.SortIssuesDirection = sortDirection;
+
+            // When
+            var builder = new StringBuilder();
+            using (var writer = new StringWriter(builder))
+            {
+                ConfigSerializer.Write(config, writer);
+            }
+
+            // Then
+            Assert.That(builder.ToString(), Contains.Substring($"sort-issues-direction: {expected}"));
         }
     }
 }
