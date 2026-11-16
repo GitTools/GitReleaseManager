@@ -29,6 +29,8 @@ Your **[GitReleaseManager](https://github.com/GitTools/GitReleaseManager)** bot 
                 AllowUpdateToPublishedRelease = false,
                 AllowMilestonesWithoutIssues = false,
                 IncludeContributors = false,
+                SortIssuesBy = Model.SortIssuesBy.Id,
+                SortIssuesDirection = Model.SortDirection.Ascending,
             };
 
             Export = new ExportConfig

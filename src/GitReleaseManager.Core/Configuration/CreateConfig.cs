@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using GitReleaseManager.Core.Attributes;
+using GitReleaseManager.Core.Model;
 using YamlDotNet.Serialization;
 
 namespace GitReleaseManager.Core.Configuration
@@ -40,5 +41,11 @@ namespace GitReleaseManager.Core.Configuration
 
         [YamlMember(Alias = "include-contributors")]
         public bool IncludeContributors { get; set; }
+
+        [YamlMember(Alias = "sort-issues-by")]
+        public SortIssuesBy SortIssuesBy { get; set; }
+
+        [YamlMember(Alias = "sort-issues-direction")]
+        public SortDirection SortIssuesDirection { get; set; }
     }
 }

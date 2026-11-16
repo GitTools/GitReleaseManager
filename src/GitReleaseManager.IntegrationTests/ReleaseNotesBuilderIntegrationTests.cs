@@ -77,6 +77,10 @@ namespace GitReleaseManager.IntegrationTests
                 // Indicate that we want to include the 'Contributors' section in the release notes
                 configuration.Create.IncludeContributors = true;
 
+                // Configure sorting
+                configuration.Create.SortIssuesBy = Core.Model.SortIssuesBy.Title;
+                configuration.Create.SortIssuesDirection = Core.Model.SortDirection.Descending;
+
                 var vcsProvider = new GitHubProvider(_gitHubClient, _mapper, _graphQlClient);
                 var releaseNotesBuilder = new ReleaseNotesBuilder(vcsProvider, _logger, fileSystem, configuration, new TemplateFactory(fileSystem, configuration, TemplateKind.Create));
                 var result = await releaseNotesBuilder.BuildReleaseNotesAsync("GitTools", "GitReleaseManager", "0.12.0", string.Empty).ConfigureAwait(false); // 0.12.0 contains a mix of issues and PRs

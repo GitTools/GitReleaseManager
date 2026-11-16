@@ -148,6 +148,14 @@ control the look and feel of the generated release notes.
       no issues are found to be associated with a milestone. The contents of the
       empty release can be controlled via the associated Scriban template.
       **NOTE:** This configuration option was added in version 0.20.0 of GitReleaseManager.
+- **sort-issues-by**
+  - A string value which indicates the name of the field used to sort the issues. The
+      possible values are: Title, Id.
+      **NOTE:** This configuration option was added in version 0.21.0 of GitReleaseManager.
+- **sort-issues-direction**
+  - A string value which indicates how the issues are sorted. The posible values are:
+      Ascending, Descending.
+      **NOTE:** This configuration option was added in version 0.21.0 of GitReleaseManager.
 
 See the [example create configuration section](create-configuration) to see an
 example of how a footer can be configured.
