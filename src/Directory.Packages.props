@@ -34,6 +34,6 @@
     <PackageVersion Include="StyleCop.Analyzers" Version="1.3.180" />
     <PackageVersion Include="System.Net.Http" Version="4.3.4" />
     <PackageVersion Include="TextCopy" Version="6.2.1" />
-    <PackageVersion Include="YamlDotNet" Version="13.7.1" />
+    <PackageVersion Include="YamlDotNet" Version="18.1.0" />
   </ItemGroup>
 </Project>
