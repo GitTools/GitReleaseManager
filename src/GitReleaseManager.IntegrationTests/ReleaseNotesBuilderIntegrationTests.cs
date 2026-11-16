@@ -118,6 +118,7 @@ namespace GitReleaseManager.IntegrationTests
             var fileSystem = new FileSystem(new CreateSubOptions());
             var currentDirectory = Environment.CurrentDirectory;
             var configuration = ConfigurationProvider.Provide(currentDirectory, fileSystem);
+            configuration.IssueLabelsInclude.Add("Enhancement"); // This is necessary because several issues in milestone 0.13.0 have the "Enhancement" label
 
             var vcsProvider = new GitHubProvider(_gitHubClient, _mapper, _graphQlClient);
             var releaseNotesBuilder = new ReleaseNotesBuilder(vcsProvider, _logger, fileSystem, configuration, new TemplateFactory(fileSystem, configuration, TemplateKind.Create));
